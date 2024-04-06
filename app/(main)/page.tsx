@@ -1,7 +1,21 @@
+import { Suspense } from "react";
+import { getSongs } from "@/actions/getSongs";
 import Header from "@/components/Header";
 import ListItem from "@/components/ListItem";
+import Loader from "@/components/Loader";
+import PageContent from "./components/PageContent";
 
-export default function Home() {
+async function GetSongs() {
+  const songs = await getSongs();
+
+  return (
+    <div className="px-6">
+      <PageContent songs={songs} />
+    </div>
+  );
+}
+
+export default async function Home() {
   return (
     <main className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
       <Header>
@@ -22,9 +36,11 @@ export default function Home() {
         <div className="flex justify-between items-center">
           <h1 className="text-white text-2xl font-semibold">Newest Songs</h1>
         </div>
-
-        <div>List of songs</div>
       </div>
+
+      <Suspense fallback={<Loader />}>
+        <GetSongs />
+      </Suspense>
     </main>
   );
 }
