@@ -59,6 +59,8 @@ const UploadModal = () => {
 
         const uniqueId = crypto.randomUUID();
 
+        toast.success("This process might take a while. Please wait...");
+
         // Upload song
         const { data: songData, error: songError } =
           await supabaseClient.storage

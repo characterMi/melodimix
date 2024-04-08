@@ -39,6 +39,22 @@ body {
   mask-composite: subtract;
   animation: loader 1s infinite linear;
 }
+
+.scroll-animation__container:hover .child_1,
+.scroll-animation__container:hover .child_2 {
+  animation-play-state: paused;
+}
+
+.scroll-animation {
+  animation: scroll 10s linear 2s infinite;
+}
+
+@keyframes scroll {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
 @keyframes loader {
   to {
     transform: rotate(1turn);

@@ -5,6 +5,7 @@ import { UserProvider } from "@/providers/UserProvider";
 import { ModalProvider } from "@/providers/ModalProvider";
 import { ToasterProvider } from "@/providers/ToasterProvider";
 import Sidebar from "@/components/Sidebar";
+import Player from "@/components/Player";
 
 import "./globals.css";
 
@@ -15,6 +16,8 @@ export const metadata: Metadata = {
   description:
     "MelodiMix: Your Ultimate Music Destination. Discover personalized playlists, seamless streaming, and a vibrant music community. Join us today for the perfect soundtrack to every moment.",
 };
+
+export const revalidate = 0;
 
 export default function RootLayout({
   children,
@@ -29,6 +32,7 @@ export default function RootLayout({
           <UserProvider>
             <ModalProvider />
             <Sidebar>{children}</Sidebar>
+            <Player />
           </UserProvider>
         </SupabaseProvider>
       </body>

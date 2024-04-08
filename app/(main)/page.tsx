@@ -38,7 +38,11 @@ export default async function Home() {
         </div>
       </div>
 
-      <Suspense fallback={<Loader />}>
+      <Suspense
+        fallback={
+          <Loader className="p-0 flex justify-center md:px-6 md:justify-start" />
+        }
+      >
         <GetSongs />
       </Suspense>
     </main>

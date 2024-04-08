@@ -1,8 +1,9 @@
-import { FC } from "react";
+import { FC, Suspense } from "react";
 import { getSongsByTitle } from "@/actions/getSongsByTitle";
 import Header from "@/components/Header";
 import SearchInput from "@/components/SearchInput";
 import SearchContent from "@/components/SearchContent";
+import Loader from "@/components/Loader";
 
 interface SearchPageProps {
   searchParams: {
@@ -10,9 +11,13 @@ interface SearchPageProps {
   };
 }
 
-const SearchPage: FC<SearchPageProps> = async ({ searchParams: { title } }) => {
+async function GetSongs({ title }: { title: string }) {
   const songs = await getSongsByTitle(title);
 
+  return <SearchContent songs={songs} />;
+}
+
+const SearchPage: FC<SearchPageProps> = ({ searchParams: { title } }) => {
   return (
     <section className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
       <Header className="from-bg-neutral-900">
@@ -23,7 +28,13 @@ const SearchPage: FC<SearchPageProps> = async ({ searchParams: { title } }) => {
         </div>
       </Header>
 
-      <SearchContent songs={songs} />
+      <Suspense
+        fallback={
+          <Loader className="p-0 flex justify-center md:px-6 md:justify-start" />
+        }
+      >
+        <GetSongs title={title} />
+      </Suspense>
     </section>
   );
 };

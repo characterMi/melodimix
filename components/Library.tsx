@@ -1,48 +1,21 @@
+"use client";
+
 import type { Song } from "@/types/types";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import { AiOutlinePlus } from "react-icons/ai";
 import { TbPlaylist } from "react-icons/tb";
-import { getSongsByUserId } from "@/actions/getSongsByUserId";
+import { RxReload } from "react-icons/rx";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useUploadModal } from "@/hooks/useUploadModal";
 import { useUser } from "@/hooks/useUser";
-import Loader from "./Loader";
 import SongItem from "./SongItem";
+import useOnPlay from "@/hooks/useOnPlay";
 
-function GetUserSongs() {
-  const [songs, setSongs] = useState<Song[] | null>([]);
+const Library = ({ songs }: { songs: Song[] }) => {
+  const onPlay = useOnPlay(songs);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const data = await getSongsByUserId();
+  const router = useRouter();
 
-        data.length === 0 ? setSongs(null) : setSongs(data);
-      } catch (error) {
-        toast.error("Failed to fetch");
-      }
-    })();
-  }, []);
-
-  if (songs === null) {
-    return <h1 className="text-neutral-400 text-xl m-4">No song here !</h1>;
-  }
-
-  if (songs.length === 0) {
-    return <Loader className="m-auto mt-5" />;
-  }
-
-  return (
-    <div className="flex flex-col gap-y-2 mt-4 px-3">
-      {songs.map((song) => (
-        <SongItem onClick={() => {}} key={song.id} data={song} />
-      ))}
-    </div>
-  );
-}
-
-const Library = () => {
   const authModal = useAuthModal();
 
   const uploadModal = useUploadModal();
@@ -54,6 +27,21 @@ const Library = () => {
 
     return uploadModal.onOpen();
   };
+
+  if (songs.length === 0) {
+    return (
+      <div className="flex gap-x-2 items-center text-neutral-400 m-4">
+        <h1 className="flex flex-col gap-y-2">No song here !</h1>
+        <button
+          className="flex items-center gap-x-1 underline"
+          onClick={() => router.refresh()}
+        >
+          Refresh
+          <RxReload />
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col">
@@ -71,7 +59,11 @@ const Library = () => {
         />
       </div>
 
-      <GetUserSongs />
+      <div className="flex flex-col gap-y-2 mt-4 px-3">
+        {songs.map((song) => (
+          <SongItem onClick={(id) => onPlay(id)} key={song.id} data={song} />
+        ))}
+      </div>
     </div>
   );
 };

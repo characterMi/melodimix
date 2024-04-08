@@ -5,9 +5,10 @@ import { useLoadImage } from "@/hooks/useLoadImage";
 interface Props {
   data: Song;
   onClick?: (id: string) => void;
+  player?: boolean;
 }
 
-const SongItem = ({ data, onClick }: Props) => {
+const SongItem = ({ data, onClick, player }: Props) => {
   const imageUrl = useLoadImage(data);
 
   const handleClick = () => {
@@ -30,8 +31,30 @@ const SongItem = ({ data, onClick }: Props) => {
         />
       </div>
 
-      <div className="flex flex-col gap-y-1 overflow-hidden">
-        <h1 className="text-white text-lg truncate">{data.title}</h1>
+      <div className="flex flex-col gap-y-1 overflow-hidden w-full">
+        <div
+          className={`flex items-center shrink-0 text-lg scroll-animation__container ${
+            player && "w-[200%]"
+          }`}
+        >
+          <h1
+            className={`text-white whitespace-nowrap select-none truncate ${
+              player && "scroll-animation w-full child_1"
+            }`}
+          >
+            {data.title}
+          </h1>
+
+          {player && (
+            <h1
+              className="text-white whitespace-nowrap select-none truncate w-full scroll-animation child_2"
+              aria-hidden="true"
+            >
+              {data.title}
+            </h1>
+          )}
+        </div>
+
         <p className="text-neutral-400 text-sm truncate">{data.author}</p>
       </div>
     </div>
