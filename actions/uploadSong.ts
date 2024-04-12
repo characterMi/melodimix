@@ -59,5 +59,5 @@ export const uploadSongToStorage = async (
     return { error: "Supabase Error => " + supabaseError.message };
   }
 
-  revalidatePath("/");
+  revalidatePath("/", "layout");
 };

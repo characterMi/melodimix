@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import toast from "react-hot-toast";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
+import { likeSong } from "@/actions/likeSong";
 
 const LikedButton = ({ songId }: { songId: string }) => {
   const [isLiked, setIsLiked] = useState(false);
+
+  const [pending, startTransition] = useTransition();
 
   const router = useRouter();
 
@@ -22,17 +25,19 @@ const LikedButton = ({ songId }: { songId: string }) => {
       return;
     }
 
-    const fetchData = async () => {
-      const { data, error } = await supabaseClient
-        .from("liked_songs")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq("song_id", songId)
-        .single();
+    const fetchData = () => {
+      startTransition(async () => {
+        const { data, error } = await supabaseClient
+          .from("liked_songs")
+          .select("*")
+          .eq("user_id", user.id)
+          .eq("song_id", songId)
+          .single();
 
-      if (!error && data) {
-        setIsLiked(true);
-      }
+        if (!error && data) {
+          setIsLiked(true);
+        }
+      });
     };
 
     fetchData();
@@ -45,38 +50,27 @@ const LikedButton = ({ songId }: { songId: string }) => {
       return authModal.onOpen();
     }
 
-    if (isLiked) {
-      const { error } = await supabaseClient
-        .from("liked_songs")
-        .delete()
-        .eq("user_id", user.id)
-        .eq("song_id", songId);
+    const likeInformation = await likeSong(isLiked, user.id, songId);
 
-      if (error) {
-        toast.error(error.message);
-      } else {
-        setIsLiked(false);
-      }
-    } else {
-      const { error } = await supabaseClient.from("liked_songs").insert({
-        song_id: songId,
-        user_id: user.id,
-      });
+    setIsLiked(likeInformation.isLiked);
 
-      if (error) {
-        toast.error(error.message);
-      } else {
-        setIsLiked(true);
+    if (likeInformation.error) {
+      toast.error(likeInformation.error);
+    }
 
-        toast.success("Liked !");
-      }
+    if (likeInformation.message) {
+      toast.success(likeInformation.message);
     }
 
     router.refresh();
   };
 
   return (
-    <button className="hover:opacity-75 transition" onClick={handleLike}>
+    <button
+      className="hover:opacity-75 transition disabled:opacity-5 disabled:cursor-not-allowed"
+      onClick={handleLike}
+      disabled={pending}
+    >
       <Icon color={isLiked ? "#22c55e" : "white"} size={25} />
     </button>
   );
