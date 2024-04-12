@@ -5,6 +5,11 @@ import SearchInput from "@/components/SearchInput";
 import SearchContent from "@/components/SearchContent";
 import Loader from "@/components/Loader";
 
+export const metadata = {
+  title: "MelodiMix | Search",
+  description: "Search for the music You want to Listen to !",
+};
+
 interface SearchPageProps {
   searchParams: {
     title: string;

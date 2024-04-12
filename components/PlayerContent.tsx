@@ -6,6 +6,7 @@ import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { IoShuffleOutline } from "react-icons/io5";
 import { RxLoop } from "react-icons/rx";
 import { BiArrowToRight } from "react-icons/bi";
+// @ts-expect-error
 import useSound from "use-sound";
 import { usePlayer } from "@/hooks/usePlayer";
 import SongItem from "./SongItem";

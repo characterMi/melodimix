@@ -19,10 +19,8 @@
     "query-string": "^9.0.0",
     "react": "^18",
     "react-dom": "^18",
-    "react-hook-form": "^7.51.2",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.0.1",
-    "stripe": "^14.23.0",
     "tailwind-merge": "^2.2.2",
     "use-sound": "^4.0.1",
     "zustand": "^4.5.2"

@@ -5,6 +5,11 @@ import Header from "@/components/Header";
 import Loader from "@/components/Loader";
 import { LikedContent } from "./components/LikedContent";
 
+export const metadata = {
+  title: "MelodiMix | Liked Songs",
+  description: "Browse between Your liked Songs !",
+};
+
 async function GetSongs() {
   const songs = await getLikedSongs();
 

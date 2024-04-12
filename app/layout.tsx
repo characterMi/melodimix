@@ -12,12 +12,10 @@ import "./globals.css";
 const figtree = Figtree({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MelodiMix",
+  title: "MelodiMix | Home page",
   description:
     "MelodiMix: Your Ultimate Music Destination. Discover personalized playlists, seamless streaming, and a vibrant music community. Join us today for the perfect soundtrack to every moment.",
 };
-
-export const revalidate = 0;
 
 export default function RootLayout({
   children,

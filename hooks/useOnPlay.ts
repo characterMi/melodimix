@@ -10,7 +10,7 @@ export const useOnPlay = (songs: Song[]) => {
     setIds: state.setIds,
   }));
   const authModal = useAuthModal();
-  const { subscription, user } = useUser();
+  const { user } = useUser();
 
   const onPlay = (id: string) => {
     if (!user) {

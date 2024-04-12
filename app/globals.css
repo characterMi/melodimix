@@ -46,11 +46,16 @@ body {
 }
 
 .scroll-animation {
-  animation: scroll 10s linear 2s infinite;
+  animation: scroll 12s linear infinite;
 }
 
 @keyframes scroll {
-  to {
+  0%,
+  20% {
+    transform: translateX(0);
+  }
+
+  100% {
     transform: translateX(-100%);
   }
 }
