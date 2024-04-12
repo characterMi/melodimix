@@ -31,7 +31,7 @@ const SearchContent = ({ songs }: { songs: Song[] }) => {
     <div className="flex flex-col gap-y-2 w-full px-6">
       {songs.map((song) => (
         <div key={song.id} className="flex items-center gap-x-4 w-full">
-          <div className="flex-1">
+          <div className="flex-1 overflow-hidden">
             <SongItem onClick={(id) => onPlay(id)} data={song} />
           </div>
 

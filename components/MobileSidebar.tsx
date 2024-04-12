@@ -2,7 +2,6 @@
 
 import type { Song } from "@/types/types";
 import { useState } from "react";
-import { HiOutlineMenu } from "react-icons/hi";
 import Library from "./Library";
 
 const MobileSidebar = ({ songs }: { songs: Song[] }) => {
@@ -10,22 +9,32 @@ const MobileSidebar = ({ songs }: { songs: Song[] }) => {
 
   return (
     <>
+      <div
+        className="fixed top-1/3 right-0 bg-neutral-900 size-14 flex flex-col gap-y-[6px] justify-center items-end pr-2 rounded-l-xl z-50 md:hidden cursor-pointer"
+        onClick={() => setIsActive((prev) => !prev)}
+      >
+        <div
+          className={`h-1 rounded-full w-[60%] bg-white transition ${
+            isActive && "opacity-0"
+          }`}
+        />
+        <div
+          className={`h-1 rounded-full w-[85%] bg-white transition ${
+            isActive && "rotate-45 -mb-[10px]"
+          }`}
+        />
+        <div
+          className={`h-1 rounded-full w-[85%] bg-white transition ${
+            isActive && "-rotate-45 mb-[10px]"
+          }`}
+        />
+      </div>
+
       <aside
-        className={`fixed bg-neutral-900 flex flex-col z-50 transition ${
+        className={`fixed bg-neutral-900 flex flex-col z-50 transition overflow-auto ${
           isActive ? "translate-x-0" : "-translate-x-full"
         } left-0 top-0 h-screen w-[200px] min-[360px]:w-[300px] sm:w-[360px] md:hidden`}
       >
-        <div
-          className="fixed top-1/3 left-full bg-neutral-900 size-14 flex justify-center items-center rounded-r-md z-50 md:hidden cursor-pointer"
-          onClick={() => setIsActive((prev) => !prev)}
-        >
-          {isActive ? (
-            <h1 className="text-3xl">X</h1>
-          ) : (
-            <HiOutlineMenu size={28} />
-          )}
-        </div>
-
         <Library songs={songs} />
       </aside>
 
