@@ -170,7 +170,7 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
             className="flex items-center justify-center size-10 rounded-full bg-white p-1 cursor-pointer overflow-hidden"
           >
             {isLoading ? (
-              <div className="size-6 rounded-full border-4 animate-spin border-black relative after:size-4 after:bg-white after:absolute after:bottom-3/4 after:rotate-45" />
+              <div className="size-6 rounded-full border-4 animate-spin border-black relative after:size-3 after:bg-white after:absolute after:bottom-3/4 after:rotate-45" />
             ) : (
               <Icon size={30} className="text-black" />
             )}

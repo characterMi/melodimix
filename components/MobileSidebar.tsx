@@ -3,10 +3,7 @@
 import type { Song } from "@/types/types";
 import { useState } from "react";
 import { HiOutlineMenu } from "react-icons/hi";
-import { routes } from "@/constants";
 import Library from "./Library";
-import Box from "./Box";
-import SidebarItem from "./SidebarItem";
 
 const MobileSidebar = ({ songs }: { songs: Song[] }) => {
   const [isActive, setIsActive] = useState(false);
@@ -28,14 +25,6 @@ const MobileSidebar = ({ songs }: { songs: Song[] }) => {
             <HiOutlineMenu size={28} />
           )}
         </div>
-
-        <Box>
-          <div className="flex flex-col gap-y-4 px-5 py-4">
-            {routes.map((route) => (
-              <SidebarItem key={route.label} {...route} />
-            ))}
-          </div>
-        </Box>
 
         <Library songs={songs} />
       </aside>

@@ -11,6 +11,8 @@ import { useAuthModal } from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
 import Button from "./Button";
 import toast from "react-hot-toast";
+import { FiLogOut } from "react-icons/fi";
+import Link from "next/link";
 
 const Header = ({
   children,
@@ -64,29 +66,30 @@ const Header = ({
         </div>
 
         <div className="flex md:hidden gap-x-2 items-center">
-          <button className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-35 transition">
+          <Link
+            href="/"
+            className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-35 transition"
+          >
             <HiHome size={20} className="text-black" />
-          </button>
+          </Link>
 
-          <button className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-35 transition">
+          <Link
+            href="/search"
+            className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-35 transition"
+          >
             <BiSearch size={20} className="text-black" />
-          </button>
+          </Link>
         </div>
 
         <div className="flex justify-between items-center gap-x-4">
           {user ? (
-            <div className="flex gap-x-4 items-center">
-              <Button onClick={handleLogOut} className="bg-white px-6 py-2">
-                Logout
-              </Button>
-
-              <Button
-                onClick={() => router.push("/account")}
-                className="bg-white"
-              >
-                <FaUserAlt />
-              </Button>
-            </div>
+            <Button
+              onClick={handleLogOut}
+              className="bg-white px-6 py-2 flex gap-x-2 items-center"
+            >
+              Logout
+              <FiLogOut />
+            </Button>
           ) : (
             <>
               <div>
