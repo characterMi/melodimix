@@ -1,20 +1,21 @@
+import Player from "@/components/Player";
+import Sidebar from "@/components/Sidebar";
+import { ModalProvider } from "@/providers/ModalProvider";
+import { SupabaseProvider } from "@/providers/SupabaseProvider";
+import { ToasterProvider } from "@/providers/ToasterProvider";
+import { UserProvider } from "@/providers/UserProvider";
 import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
-import { SupabaseProvider } from "@/providers/SupabaseProvider";
-import { UserProvider } from "@/providers/UserProvider";
-import { ModalProvider } from "@/providers/ModalProvider";
-import { ToasterProvider } from "@/providers/ToasterProvider";
-import Sidebar from "@/components/Sidebar";
-import Player from "@/components/Player";
 
 import "./globals.css";
 
 const figtree = Figtree({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MelodiMix | Home page",
-  description:
-    "MelodiMix: Your Ultimate Music Destination. Discover personalized playlists, seamless streaming, and a vibrant music community. Join us today for the perfect soundtrack to every moment.",
+  title: {
+    default: "Home page",
+    template: "MelodiMix | %s",
+  },
 };
 
 export default function RootLayout({

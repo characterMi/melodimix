@@ -1,12 +1,12 @@
-import { FC, Suspense } from "react";
 import { getSongsByTitle } from "@/actions/getSongsByTitle";
 import Header from "@/components/Header";
-import SearchInput from "@/components/SearchInput";
-import SearchContent from "@/components/SearchContent";
 import Loader from "@/components/Loader";
+import SearchContent from "@/components/SearchContent";
+import SearchInput from "@/components/SearchInput";
+import { FC, Suspense } from "react";
 
 export const metadata = {
-  title: "MelodiMix | Search",
+  title: "Search",
   description: "Search for the music You want to Listen to !",
 };
 

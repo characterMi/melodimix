@@ -1,16 +1,19 @@
-import { useTransition } from "react";
+import { revalidatePath } from "@/actions/revalidatePath";
 import { useUploadModal } from "@/hooks/useUploadModal";
 import { useUser } from "@/hooks/useUser";
-import Modal from "./Modal";
-import Input from "./Input";
-import Button from "./Button";
-import { uploadSongToStorage } from "@/actions/uploadSong";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useTransition } from "react";
 import toast from "react-hot-toast";
+import Button from "./Button";
+import Input from "./Input";
+import Modal from "./Modal";
 
 const UploadModal = () => {
   const [isLoading, startTransition] = useTransition();
 
   const uploadModal = useUploadModal();
+
+  const supabaseClient = useSupabaseClient();
 
   const { user } = useUser();
 
@@ -21,25 +24,74 @@ const UploadModal = () => {
       return;
     }
 
-    startTransition(() => {
-      uploadSongToStorage(formData, user.id)
-        .then((res) => {
-          if (res?.error) {
-            toast.error(res.error);
+    startTransition(async () => {
+      try {
+        const imageFile = formData.get("img");
+        const songFile = formData.get("song");
+        const title = formData.get("title") as string;
+        const author = formData.get("author") as string;
 
-            console.error(res.error);
+        if (!imageFile || !songFile || !title.trim() || !author.trim()) {
+          toast.error("Missing fields !");
+          return;
+        }
 
-            return;
-          }
+        const uniqueId = crypto.randomUUID();
 
-          toast.success("Song successfully created !");
-          uploadModal.onClose();
-        })
-        .catch((err) => {
-          console.error(err);
+        // Upload song
+        const { data: songData, error: songError } =
+          await supabaseClient.storage
+            .from("songs")
+            .upload(`song-${title.trim()}-${uniqueId}`, songFile);
 
-          toast.error("Something went wrong. Please check Your connection.");
-        });
+        if (songError) {
+          console.error("Song Error => ", songError);
+
+          toast.error("Upload song failed !");
+
+          return;
+        }
+
+        // Upload image
+        const { data: imageData, error: imageError } =
+          await supabaseClient.storage
+            .from("images")
+            .upload(`image-${title.trim()}-${uniqueId}`, imageFile);
+
+        if (imageError) {
+          console.error("Image Error => ", imageError);
+
+          toast.error("Upload image failed !");
+
+          return;
+        }
+
+        const { error: supabaseError } = await supabaseClient
+          .from("songs")
+          .insert({
+            user_id: user.id,
+            title: title.trim(),
+            author: author.trim(),
+            img_path: imageData.path,
+            song_path: songData.path,
+          });
+
+        if (supabaseError) {
+          console.error("Supabase Error => ", supabaseError);
+
+          toast.error("Something went wrong while uploading the song !");
+
+          return;
+        }
+
+        toast.success("Song created!");
+        revalidatePath();
+        uploadModal.onClose();
+      } catch (error: any) {
+        console.error(error?.message);
+
+        toast.error("Something went wrong ! Please try again.");
+      }
     });
   };
 

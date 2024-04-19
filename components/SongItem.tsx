@@ -1,6 +1,6 @@
+import { useLoadImage } from "@/hooks/useLoadImage";
 import type { Song } from "@/types/types";
 import Image from "next/image";
-import { useLoadImage } from "@/hooks/useLoadImage";
 
 interface Props {
   data: Song;
@@ -27,7 +27,7 @@ const SongItem = ({ data, onClick, player }: Props) => {
           alt={data.title}
           width={50}
           height={50}
-          className="object-cover h-full w-full"
+          className="object-cover h-full"
         />
       </div>
 

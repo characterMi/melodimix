@@ -1,9 +1,15 @@
-import { Suspense } from "react";
 import { getSongs } from "@/actions/getSongs";
 import Header from "@/components/Header";
 import ListItem from "@/components/ListItem";
 import Loader from "@/components/Loader";
+import { Suspense } from "react";
 import PageContent from "./components/PageContent";
+
+export const metadata = {
+  title: "Home page",
+  description:
+    "MelodiMix: Your Ultimate Music Destination. Discover personalized playlists, seamless streaming, and a vibrant music community. Join us today for the perfect soundtrack to every moment.",
+};
 
 async function GetSongs() {
   const songs = await getSongs();

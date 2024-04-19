@@ -3,6 +3,7 @@
 import LikedButton from "@/components/LikedButton";
 import SongItem from "@/components/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
+import { usePlayer } from "@/hooks/usePlayer";
 import { useUser } from "@/hooks/useUser";
 import type { Song } from "@/types/types";
 import { redirect, useRouter } from "next/navigation";
@@ -11,6 +12,8 @@ import { RxReload } from "react-icons/rx";
 
 export const LikedContent = ({ songs }: { songs: Song[] }) => {
   const onPlay = useOnPlay(songs);
+
+  const activeId = usePlayer((state) => state.activeId);
 
   const { isLoading, user } = useUser();
 
@@ -38,7 +41,11 @@ export const LikedContent = ({ songs }: { songs: Song[] }) => {
   }
 
   return (
-    <div className="flex flex-col gap-y-2 p-2 sm:p-6 w-full">
+    <div
+      className={`flex flex-col gap-y-2 p-2 sm:p-6 w-full ${
+        activeId && "mb-28"
+      }`}
+    >
       {songs.map((song) => (
         <div key={song.id} className="flex items-center gap-x-4 w-full">
           <div className="flex-1 overflow-hidden">

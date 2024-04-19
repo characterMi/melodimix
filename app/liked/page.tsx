@@ -6,7 +6,7 @@ import Loader from "@/components/Loader";
 import { LikedContent } from "./components/LikedContent";
 
 export const metadata = {
-  title: "MelodiMix | Liked Songs",
+  title: "Liked Songs",
   description: "Browse between Your liked Songs !",
 };
 

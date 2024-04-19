@@ -1,18 +1,18 @@
+import { usePlayer } from "@/hooks/usePlayer";
 import type { Song } from "@/types/types";
 import { useEffect, useState } from "react";
-import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
+import { BiArrowToRight } from "react-icons/bi";
+import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { IoShuffleOutline } from "react-icons/io5";
 import { RxLoop } from "react-icons/rx";
-import { BiArrowToRight } from "react-icons/bi";
 // @ts-expect-error
 import useSound from "use-sound";
-import { usePlayer } from "@/hooks/usePlayer";
-import SongItem from "./SongItem";
+import Duration from "./Duration";
 import LikedButton from "./LikedButton";
 import Slider from "./Slider";
-import Duration from "./Duration";
+import SongItem from "./SongItem";
 
 const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
   const { ids, playType, setId, setPlayType, setVolume, volume, activeId } =
@@ -94,13 +94,9 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
       volume,
       onplay: () => setIsPlaying(true),
       onend: () => {
-        if (playType === "loop") {
-          setIsPlaying(false);
-
-          return;
+        if (playType !== "loop") {
+          onPlaySong("next");
         }
-
-        onPlaySong("next");
       },
       onpause: () => setIsPlaying(false),
       format: ["mp3"],
