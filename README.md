@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🎵 MelodiMix (spotify clone)
 
-## Getting Started
+### MelodiMix, a music web application where users can listen to songs uploaded by others and also upload their own tracks. With its stunning user interface, MelodiMix allows us to like songs, curating a personalized collection accessible on the Liked page. This application features an advanced music player system, providing access to comprehensive song information and offering various additional functionalities. Moreover, it includes a powerful search system where users can easily find songs by typing their titles. MelodiMix revolutionizes the way we discover and enjoy music. (اگه ایران هستید از فیلترشکن استفاده کنید)
 
-First, run the development server:
+## Link 🔗 [https://melodi-mix.vercel.app](https://melodi-mix.vercel.app)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+<br />
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Preview
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+<img src="./preview_images/melodi-mix_first.png" alt="first" />
+<img src="./preview_images/melodi-mix_second.png" alt="second" />
+<img src="./preview_images/melodi-mix_third.png" alt="third" />
+<img src="./preview_images/melodi-mix_fourth.png" alt="fourth" />
+<img src="./preview_images/melodi-mix_fifth.png" alt="fifth" />
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+<br />
 
-## Learn More
+# Mobile Responsive
 
-To learn more about Next.js, take a look at the following resources:
+<img src="./preview_images/melodi-mix_responsive.png" alt="responsive" />
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Technologies
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+<br />
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+<ul>
+    <li>
+        <img src="https://github.com/characterMi/characterMi/raw/main/images/technologies/icons8-html.svg" alt="HTML" />
+    </li>
+    <li>
+        <img src="https://github.com/characterMi/characterMi/raw/main/images/technologies/icons8-css.svg" alt="Css" />
+    </li>
+    <li>
+        <img src="https://github.com/characterMi/characterMi/raw/main/images/technologies/icons8-typescript.svg" alt="TS" />
+    </li>
+    <li>
+        <img src="https://github.com/characterMi/characterMi/raw/main/images/technologies/icons8-react-native.svg" width="46" height="46" alt="React" />
+    </li>
+    <li>
+        <img src="https://github.com/characterMi/characterMi/raw/main/images/technologies/tailwind.svg" width="46" height="46" alt="Tailwind" />
+    </li>
+    <li>
+        <img src="https://github.com/characterMi/characterMi/raw/main/images/technologies/nextjs-original.svg" width="46" height="46" alt="Next.js" />
+    </li>
+    <li>
+        <img src="https://github.com/characterMi/characterMi/raw/main/images/technologies/supabase-icon.png" width="180" height="46" alt="Next.js" />
+    </li>
+</ul>

@@ -100,7 +100,7 @@ const UploadModal = () => {
       title="Add a song"
       description="Upload an mp3 file."
       isOpen={uploadModal.isOpen}
-      handleChange={() => !open && uploadModal.onClose()}
+      handleChange={(open) => !open && uploadModal.onClose()}
     >
       <form action={handleSubmit} className="flex flex-col gap-y-4">
         <Input
