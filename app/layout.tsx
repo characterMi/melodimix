@@ -4,7 +4,7 @@ import { ModalProvider } from "@/providers/ModalProvider";
 import { SupabaseProvider } from "@/providers/SupabaseProvider";
 import { ToasterProvider } from "@/providers/ToasterProvider";
 import { UserProvider } from "@/providers/UserProvider";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Figtree } from "next/font/google";
 
 import "./globals.css";
@@ -16,6 +16,20 @@ export const metadata: Metadata = {
     default: "Home page",
     template: "MelodiMix | %s",
   },
+  icons: {
+    apple: "/icons/melodimix-192.png",
+    icon: "/icons/melodimix-192.png",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#065f46",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  colorScheme: "dark",
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

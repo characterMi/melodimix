@@ -44,6 +44,9 @@
         <img src="https://github.com/characterMi/characterMi/raw/main/images/technologies/nextjs-original.svg" width="46" height="46" alt="Next.js" />
     </li>
     <li>
-        <img src="https://github.com/characterMi/characterMi/raw/main/images/technologies/supabase-icon.png" width="180" height="46" alt="Next.js" />
+        <img src="https://github.com/characterMi/characterMi/raw/main/images/technologies/supabase-icon.png" width="180" height="46" alt="Supabase" />
+    </li>
+    <li>
+        <img src="https://github.com/characterMi/characterMi/raw/main/images/technologies/pwa.png" width="90" height="30" alt="PWA" />
     </li>
 </ul>
