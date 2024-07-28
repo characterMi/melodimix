@@ -65,3 +65,19 @@ body {
     transform: rotate(1turn);
   }
 }
+
+@media (display-mode: standalone) {
+  * {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .player {
+    padding: env(safe-area-inset-top), env(safe-area-inset-right),
+      env(safe-area-inset-bottom), env(safe-area-inset-left);
+  }
+
+  .download-btn {
+    display: none;
+  }
+}

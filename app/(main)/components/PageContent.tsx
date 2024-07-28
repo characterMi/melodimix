@@ -1,11 +1,11 @@
 "use client";
 
-import type { Song } from "@/types/types";
-import { useRouter } from "next/navigation";
-import { RxReload } from "react-icons/rx";
 import SongCard from "@/components/SongCard";
 import { useOnPlay } from "@/hooks/useOnPlay";
 import { usePlayer } from "@/hooks/usePlayer";
+import type { Song } from "@/types/types";
+import { useRouter } from "next/navigation";
+import { RxReload } from "react-icons/rx";
 
 const PageContent = ({ songs }: { songs: Song[] }) => {
   const onPlay = useOnPlay(songs);

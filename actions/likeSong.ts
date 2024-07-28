@@ -1,17 +1,14 @@
 "use server";
 
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export const likeSong = async (
   isLiked: boolean,
   userId: string,
   songId: string
 ) => {
-  const supabaseClient = createServerComponentClient({
-    cookies,
-  });
+  const supabaseClient = createClientComponentClient();
 
   if (isLiked) {
     const { error } = await supabaseClient
@@ -25,7 +22,7 @@ export const likeSong = async (
     } else {
       revalidatePath("/", "layout");
 
-      return { message: "Unlike !", isLiked: false };
+      return { isLiked: false };
     }
   } else {
     const { error } = await supabaseClient.from("liked_songs").insert({

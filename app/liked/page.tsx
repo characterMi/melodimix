@@ -1,8 +1,8 @@
-import { Suspense } from "react";
-import Image from "next/image";
 import { getLikedSongs } from "@/actions/getLikedSongs";
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
+import Image from "next/image";
+import { Suspense } from "react";
 import { LikedContent } from "./components/LikedContent";
 
 export const metadata = {
@@ -34,7 +34,9 @@ const LikedSongsPage = () => {
             <div className="flex flex-col gap-y-2 mt-4 md:mt-0">
               <p className="hidden md:block font-semibold text-sm">Playlist</p>
 
-              <h1 className="text-white text-4xl sm:text-7xl">Liked Songs</h1>
+              <h1 className="text-white text-4xl sm:text-7xl md:text-5xl lg:text-7xl">
+                Liked Songs
+              </h1>
             </div>
           </div>
         </div>

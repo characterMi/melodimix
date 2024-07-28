@@ -1,20 +1,12 @@
-import { FC, Suspense } from "react";
 import { routes } from "@/constants";
-import { getSongsByUserId } from "@/actions/getSongsByUserId";
+import { FC } from "react";
 import Box from "./Box";
+import DownloadApplication from "./DownloadApplication";
+import GetUserSongs from "./GetUserSongs";
 import SidebarItem from "./SidebarItem";
-import Library from "./Library";
-import Loader from "./Loader";
-import MobileSidebar from "./MobileSidebar";
 
 interface SidebarProps {
   children: React.ReactNode;
-}
-
-async function GetUserSongs({ isMobile }: { isMobile?: boolean }) {
-  const songs = await getSongsByUserId();
-
-  return isMobile ? <MobileSidebar songs={songs} /> : <Library songs={songs} />;
 }
 
 const Sidebar: FC<SidebarProps> = ({ children }) => {
@@ -28,14 +20,12 @@ const Sidebar: FC<SidebarProps> = ({ children }) => {
             {routes.map((route) => (
               <SidebarItem key={route.label} {...route} />
             ))}
+
+            <DownloadApplication />
           </div>
         </Box>
         <Box className="overflow-y-auto h-full" isLibrary>
-          <Suspense
-            fallback={<Loader className="flex justify-center w-full mt-5" />}
-          >
-            <GetUserSongs />
-          </Suspense>
+          <GetUserSongs />
         </Box>
       </div>
       <main className="h-full py-2 overflow-y-auto flex-1">{children}</main>

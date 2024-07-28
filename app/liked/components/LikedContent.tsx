@@ -6,8 +6,7 @@ import useOnPlay from "@/hooks/useOnPlay";
 import { usePlayer } from "@/hooks/usePlayer";
 import { useUser } from "@/hooks/useUser";
 import type { Song } from "@/types/types";
-import { redirect, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { RxReload } from "react-icons/rx";
 
 export const LikedContent = ({ songs }: { songs: Song[] }) => {
@@ -19,11 +18,14 @@ export const LikedContent = ({ songs }: { songs: Song[] }) => {
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      redirect("/");
-    }
-  }, [isLoading, user]);
+  if (!isLoading && !user) {
+    return (
+      <h1 className="flex flex-col gap-y-2 m-4">
+        Seems like you didn't sign-in 🤔 if that's true, Please first sign-in to
+        Your account.
+      </h1>
+    );
+  }
 
   if (songs.length === 0) {
     return (

@@ -2,6 +2,8 @@
 
 import type { Song } from "@/types/types";
 import { useState } from "react";
+import Box from "./Box";
+import DownloadApplication from "./DownloadApplication";
 import Library from "./Library";
 
 const MobileSidebar = ({ songs }: { songs: Song[] }) => {
@@ -36,12 +38,20 @@ const MobileSidebar = ({ songs }: { songs: Song[] }) => {
         </div>
 
         <div className="overflow-y-auto">
+          <div className="download-btn">
+            <Box className="m-4">
+              <DownloadApplication />
+            </Box>
+
+            <hr className="border-neutral-600" />
+          </div>
+
           <Library songs={songs} />
         </div>
       </aside>
 
       <div
-        className={`layout fixed w-screen h-screen top-0 left-0 bg-black/35 backdrop-blur-sm transition ${
+        className={`layout md:hidden fixed w-screen h-screen top-0 left-0 bg-black/35 backdrop-blur-sm transition ${
           isActive ? "z-40 opacity-100" : "-z-10 opacity-0"
         }`}
       />

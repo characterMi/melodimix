@@ -1,28 +1,23 @@
-import { getSongsByTitle } from "@/actions/getSongsByTitle";
+import { getSongs } from "@/actions/getSongs";
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
-import SearchContent from "@/components/SearchContent";
 import SearchInput from "@/components/SearchInput";
-import { FC, Suspense } from "react";
+import { Suspense } from "react";
+import PageContent from "./PageContent";
 
 export const metadata = {
   title: "Search",
   description: "Search for the music You want to Listen to !",
 };
 
-interface SearchPageProps {
-  searchParams: {
-    title: string;
-  };
+async function GetSongs() {
+  // i could get the search term with query params and use the getSongByTitle function to get the searched song, and i should do that in a large scale project, but in this case, i don't have lots of musics, so i just store the search term in a zustand context and i filter out all songs using the searchValue state. this way, we improved the performance by not calling the database every time user searches for something.
+  const songs = await getSongs();
+
+  return <PageContent songs={songs} />;
 }
 
-async function GetSongs({ title }: { title: string }) {
-  const songs = await getSongsByTitle(title);
-
-  return <SearchContent songs={songs} />;
-}
-
-const SearchPage: FC<SearchPageProps> = ({ searchParams: { title } }) => {
+const SearchPage = () => {
   return (
     <section className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
       <Header className="from-bg-neutral-900">
@@ -38,7 +33,7 @@ const SearchPage: FC<SearchPageProps> = ({ searchParams: { title } }) => {
           <Loader className="p-0 flex justify-center md:px-6 md:justify-start" />
         }
       >
-        <GetSongs title={title} />
+        <GetSongs />
       </Suspense>
     </section>
   );

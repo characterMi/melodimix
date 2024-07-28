@@ -1,11 +1,11 @@
 "use client";
 
-import { FC } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { twMerge } from "tailwind-merge";
+import { FC } from "react";
 import { BiSearch } from "react-icons/bi";
 import { HiHome } from "react-icons/hi";
+import { twMerge } from "tailwind-merge";
 
 interface SidebarItemProps {
   label: string;

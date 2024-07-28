@@ -18,7 +18,7 @@ const Player = () => {
   }
 
   return (
-    <div className="fixed bottom-0 bg-black w-full py-2 rounded-t-2xl px-4">
+    <div className="fixed bottom-0 bg-black w-full py-2 rounded-t-2xl px-4 player">
       <section className="h-full w-full relative">
         <PlayerContent song={song} songUrl={songUrl} key={songUrl} />
         {isLoading && (

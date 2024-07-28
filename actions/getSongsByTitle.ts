@@ -1,13 +1,10 @@
 "use server";
 
-import { cookies } from "next/headers";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { getSongs } from "./getSongs";
 
 export const getSongsByTitle = async (title: string | null) => {
-  const supabase = createServerComponentClient({
-    cookies: cookies,
-  });
+  const supabase = createClientComponentClient();
 
   if (!title) {
     const allSongs = await getSongs();
