@@ -17,8 +17,9 @@ const MobileSidebar = ({ songs }: { songs: Song[] }) => {
         } left-0 top-0 h-screen w-[200px] min-[360px]:w-[300px] sm:w-[360px] md:hidden`}
       >
         <div
-          className="fixed top-1/2 -translate-y-1/2 left-full bg-neutral-900 size-14 flex flex-col gap-y-[6px] justify-center items-end pr-2 rounded-r-xl z-50 md:hidden cursor-pointer"
+          className="fixed top-[40%] -translate-y-[40%] left-full bg-neutral-900 size-14 flex flex-col gap-y-[6px] justify-center items-end pl-2 rounded-r-xl z-50 md:hidden cursor-pointer"
           onClick={() => setIsActive((prev) => !prev)}
+          style={{ direction: "rtl" }}
         >
           <div
             className={`h-1 rounded-full w-[60%] bg-white transition ${

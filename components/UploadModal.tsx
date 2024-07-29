@@ -18,6 +18,8 @@ const UploadModal = () => {
   const { user } = useUser();
 
   const handleSubmit = (formData: FormData) => {
+    if (!uploadModal.isOpen) return;
+
     if (!user) {
       toast.error("Unauthenticated User.");
 
@@ -88,9 +90,9 @@ const UploadModal = () => {
         revalidatePath();
         uploadModal.onClose();
       } catch (error: any) {
-        console.error(error?.message);
+        console.error(error);
 
-        toast.error("Something went wrong ! Please try again.");
+        toast.error("Something's wrong with the Server...'");
       }
     });
   };
