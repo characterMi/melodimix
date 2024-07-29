@@ -1,14 +1,17 @@
 "use server";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 export const likeSong = async (
   isLiked: boolean,
   userId: string,
   songId: string
 ) => {
-  const supabaseClient = createClientComponentClient();
+  const supabaseClient = createServerComponentClient({
+    cookies,
+  });
 
   if (isLiked) {
     const { error } = await supabaseClient
@@ -19,11 +22,11 @@ export const likeSong = async (
 
     if (error) {
       return { error: error.message, isLiked: true };
-    } else {
-      revalidatePath("/", "layout");
-
-      return { isLiked: false };
     }
+
+    revalidatePath("/");
+
+    return { isLiked: false };
   } else {
     const { error } = await supabaseClient.from("liked_songs").insert({
       song_id: songId,
@@ -32,10 +35,10 @@ export const likeSong = async (
 
     if (error) {
       return { error: error.message, isLiked: false };
-    } else {
-      revalidatePath("/", "layout");
-
-      return { message: "Liked !", isLiked: true };
     }
+
+    revalidatePath("/");
+
+    return { message: "Liked !", isLiked: true };
   }
 };

@@ -28,10 +28,10 @@ const UploadModal = () => {
       try {
         const imageFile = formData.get("img");
         const songFile = formData.get("song");
-        const title = formData.get("title") as string;
-        const author = formData.get("author") as string;
+        const title = (formData.get("title") as string).trim();
+        const author = (formData.get("author") as string).trim();
 
-        if (!imageFile || !songFile || !title.trim() || !author.trim()) {
+        if (!imageFile || !songFile || !title || !author) {
           toast.error("Missing fields !");
           return;
         }
@@ -42,7 +42,7 @@ const UploadModal = () => {
         const { data: songData, error: songError } =
           await supabaseClient.storage
             .from("songs")
-            .upload(`song-${title.trim()}-${uniqueId}`, songFile);
+            .upload(`song-${title}-${uniqueId}`, songFile);
 
         if (songError) {
           console.error("Song Error => ", songError);
@@ -56,7 +56,7 @@ const UploadModal = () => {
         const { data: imageData, error: imageError } =
           await supabaseClient.storage
             .from("images")
-            .upload(`image-${title.trim()}-${uniqueId}`, imageFile);
+            .upload(`image-${title}-${uniqueId}`, imageFile);
 
         if (imageError) {
           console.error("Image Error => ", imageError);
@@ -70,8 +70,8 @@ const UploadModal = () => {
           .from("songs")
           .insert({
             user_id: user.id,
-            title: title.trim(),
-            author: author.trim(),
+            title,
+            author,
             img_path: imageData.path,
             song_path: songData.path,
           });

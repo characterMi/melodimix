@@ -1,10 +1,13 @@
 "use server";
 
 import type { Song } from "@/types/types";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 
 export const getLikedSongs = async (): Promise<Song[]> => {
-  const supabase = createClientComponentClient();
+  const supabase = createServerComponentClient({
+    cookies,
+  });
 
   const {
     data: { user },

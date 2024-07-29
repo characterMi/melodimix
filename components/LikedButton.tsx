@@ -1,11 +1,11 @@
-import { useEffect, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { useSessionContext } from "@supabase/auth-helpers-react";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import toast from "react-hot-toast";
+import { likeSong } from "@/actions/likeSong";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
-import { likeSong } from "@/actions/likeSong";
+import { useSessionContext } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
+import toast from "react-hot-toast";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 const LikedButton = ({ songId }: { songId: string }) => {
   const [isLiked, setIsLiked] = useState(false);
@@ -16,14 +16,12 @@ const LikedButton = ({ songId }: { songId: string }) => {
 
   const { supabaseClient } = useSessionContext();
 
-  const authModal = useAuthModal();
+  const { onOpen: onAuthModalOpen } = useAuthModal();
 
   const { user } = useUser();
 
   useEffect(() => {
-    if (!user?.id) {
-      return;
-    }
+    if (!user?.id) return;
 
     const fetchData = () => {
       startTransition(async () => {
@@ -41,33 +39,35 @@ const LikedButton = ({ songId }: { songId: string }) => {
     };
 
     fetchData();
-  }, [songId, supabaseClient, user?.id]);
+  }, [songId, user?.id]);
 
   const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
 
   const handleLike = async () => {
-    if (!user) {
-      return authModal.onOpen();
-    }
+    if (pending) return;
 
-    const likeInformation = await likeSong(isLiked, user.id, songId);
+    if (!user) return onAuthModalOpen();
 
-    setIsLiked(likeInformation.isLiked);
+    startTransition(async () => {
+      const likeInformation = await likeSong(isLiked, user.id, songId);
 
-    if (likeInformation.error) {
-      toast.error(likeInformation.error);
-    }
+      setIsLiked(likeInformation.isLiked);
 
-    if (likeInformation.message) {
-      toast.success(likeInformation.message);
-    }
+      router.refresh();
 
-    router.refresh();
+      if (likeInformation.error) {
+        toast.error(likeInformation.error);
+      }
+
+      if (likeInformation.message) {
+        toast.success(likeInformation.message);
+      }
+    });
   };
 
   return (
     <button
-      className="hover:opacity-75 transition disabled:opacity-5 disabled:cursor-not-allowed"
+      className="hover:opacity-75 transition disabled:opacity-50 disabled:cursor-not-allowed active:scale-90"
       onClick={handleLike}
       disabled={pending}
     >
