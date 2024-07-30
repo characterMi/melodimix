@@ -5,6 +5,8 @@ import SearchInput from "@/components/SearchInput";
 import { Suspense } from "react";
 import PageContent from "./PageContent";
 
+export const revalidate = 60 * 60 * 24;
+
 export const metadata = {
   title: "Search",
   description: "Search for the music You want to Listen to !",

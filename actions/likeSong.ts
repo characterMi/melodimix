@@ -37,7 +37,7 @@ export const likeSong = async (
       return { error: error.message, isLiked: false };
     }
 
-    revalidatePath("/");
+    revalidatePath("/liked");
 
     return { message: "Liked !", isLiked: true };
   }

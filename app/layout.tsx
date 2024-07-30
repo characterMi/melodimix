@@ -20,6 +20,7 @@ export const metadata: Metadata = {
     apple: "/icons/melodimix-192.png",
     icon: "/icons/melodimix-192.png",
   },
+  keywords: ["melodimix", "song", "spotify", "spotify clone", "music player"],
 };
 
 export const viewport: Viewport = {

@@ -5,6 +5,8 @@ import Loader from "@/components/Loader";
 import { Suspense } from "react";
 import PageContent from "./components/PageContent";
 
+export const revalidate = 60 * 60 * 24;
+
 export const metadata = {
   title: "Home page",
   description:

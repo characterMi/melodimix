@@ -1,18 +1,18 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { twMerge } from "tailwind-merge";
-import { BiSearch } from "react-icons/bi";
-import { HiHome } from "react-icons/hi";
-import { FaUserAlt } from "react-icons/fa";
-import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
-import Button from "./Button";
-import toast from "react-hot-toast";
-import { FiLogOut } from "react-icons/fi";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { BiSearch } from "react-icons/bi";
+import { FiLogOut } from "react-icons/fi";
+import { HiHome } from "react-icons/hi";
+import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
+import { twMerge } from "tailwind-merge";
+import Button from "./Button";
+import Loader from "./Loader";
 
 const Header = ({
   children,
@@ -25,7 +25,7 @@ const Header = ({
 
   const supabaseClient = useSupabaseClient();
 
-  const { user } = useUser();
+  const { user, isLoading: isUserLoading } = useUser();
 
   const handleLogOut = async () => {
     const { error } = await supabaseClient.auth.signOut();
@@ -40,6 +40,33 @@ const Header = ({
   };
 
   const { onOpen } = useAuthModal();
+
+  const AuthButtons = user ? (
+    <Button
+      onClick={handleLogOut}
+      className="bg-white px-6 py-2 flex gap-x-2 items-center"
+    >
+      Logout
+      <FiLogOut />
+    </Button>
+  ) : (
+    <>
+      <div>
+        <Button
+          className="bg-transparent text-neutral-300 font-medium"
+          onClick={onOpen}
+        >
+          Sign up
+        </Button>
+      </div>
+
+      <div>
+        <Button className="bg-white px-6 py-2" onClick={onOpen}>
+          Login
+        </Button>
+      </div>
+    </>
+  );
 
   return (
     <header
@@ -82,31 +109,10 @@ const Header = ({
         </div>
 
         <div className="flex justify-between items-center gap-x-4">
-          {user ? (
-            <Button
-              onClick={handleLogOut}
-              className="bg-white px-6 py-2 flex gap-x-2 items-center"
-            >
-              Logout
-              <FiLogOut />
-            </Button>
+          {isUserLoading ? (
+            <Loader className="scale-75 m-0 p-0" />
           ) : (
-            <>
-              <div>
-                <Button
-                  className="bg-transparent text-neutral-300 font-medium"
-                  onClick={onOpen}
-                >
-                  Sign up
-                </Button>
-              </div>
-
-              <div>
-                <Button className="bg-white px-6 py-2" onClick={onOpen}>
-                  Login
-                </Button>
-              </div>
-            </>
+            AuthButtons
           )}
         </div>
       </nav>
