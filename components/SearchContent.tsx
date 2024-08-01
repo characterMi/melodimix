@@ -38,7 +38,7 @@ const SearchContent = ({ songs }: { songs: Song[] }) => {
             <SongItem onClick={(id) => onPlay(id)} data={song} />
           </div>
 
-          <LikedButton songId={song.id} />
+          <LikedButton songId={song.id} songTitle={song.title} />
         </div>
       ))}
     </div>

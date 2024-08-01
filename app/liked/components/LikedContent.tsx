@@ -54,7 +54,7 @@ export const LikedContent = ({ songs }: { songs: Song[] }) => {
             <SongItem data={song} onClick={(id) => onPlay(id)} />
           </div>
 
-          <LikedButton songId={song.id} />
+          <LikedButton songId={song.id} songTitle={song.title} />
         </div>
       ))}
     </div>

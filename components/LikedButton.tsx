@@ -7,7 +7,13 @@ import { useEffect, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
-const LikedButton = ({ songId }: { songId: string }) => {
+const LikedButton = ({
+  songId,
+  songTitle,
+}: {
+  songId: string;
+  songTitle: string;
+}) => {
   const [isLiked, setIsLiked] = useState(false);
 
   const [pending, startTransition] = useTransition();
@@ -70,6 +76,7 @@ const LikedButton = ({ songId }: { songId: string }) => {
       className="hover:opacity-75 transition disabled:opacity-50 disabled:cursor-not-allowed active:scale-90"
       onClick={handleLike}
       disabled={pending}
+      aria-label={`Like the ${songTitle} song`}
     >
       <Icon color={isLiked ? "#22c55e" : "white"} size={25} />
     </button>
