@@ -96,6 +96,7 @@ const Header = ({
           <Link
             href="/"
             className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-35 transition"
+            aria-label="Go to home page"
           >
             <HiHome size={20} className="text-black" />
           </Link>
@@ -103,6 +104,7 @@ const Header = ({
           <Link
             href="/search"
             className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-35 transition"
+            aria-label="Go to search page"
           >
             <BiSearch size={20} className="text-black" />
           </Link>

@@ -1,7 +1,7 @@
+import { useLoadImage } from "@/hooks/useLoadImage";
 import type { Song } from "@/types/types";
 import Image from "next/image";
-import { useLoadImage } from "@/hooks/useLoadImage";
-import PlayButton from "./PlayButton";
+import { FaPlay } from "react-icons/fa";
 
 interface Props {
   data: Song;
@@ -33,7 +33,12 @@ const SongCard = ({ data, onClick }: Props) => {
       </div>
 
       <div className="absolute bottom-24 right-5">
-        <PlayButton />
+        <button
+          className="opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md transition translate-y-1/4 group-hover:opacity-100 group-hover:translate-y-0 hover:scale-105"
+          aria-label={`Play the ${data.title} song`}
+        >
+          <FaPlay className="text-black" />
+        </button>
       </div>
     </div>
   );
