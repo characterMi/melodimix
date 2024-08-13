@@ -20,8 +20,8 @@ const SongCard = ({ data, onClick }: Props) => {
           className="object-cover w-full h-full"
           src={imagePath || "/images/liked.png"}
           alt={data.title}
-          width={200}
-          height={200}
+          width={130}
+          height={130}
         />
       </div>
 

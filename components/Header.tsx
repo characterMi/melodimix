@@ -80,6 +80,7 @@ const Header = ({
           <button
             onClick={() => router.back()}
             className="rounded-full bg-black flex items-center justify-center hover:opacity-35 transition"
+            aria-label="Go back to the previous page (from browser's history)"
           >
             <RxCaretLeft size={35} className="text-white" />
           </button>
@@ -87,6 +88,7 @@ const Header = ({
           <button
             onClick={() => router.forward()}
             className="rounded-full bg-black flex items-center justify-center hover:opacity-35 transition"
+            aria-label="Go to the next page (from browser's history)"
           >
             <RxCaretRight size={35} className="text-white" />
           </button>

@@ -26,8 +26,9 @@ const LikedSongsPage = () => {
               <Image
                 src="/images/liked.png"
                 alt="Liked Songs"
-                fill
-                className="object-cover"
+                width={100}
+                height={100}
+                className="object-cover size-32 lg:size-44"
               />
             </div>
 
