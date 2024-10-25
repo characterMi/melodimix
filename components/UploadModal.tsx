@@ -26,6 +26,8 @@ const UploadModal = () => {
       return;
     }
 
+    toast.success("this process might take a while, be patient.");
+
     startTransition(async () => {
       try {
         const imageFile = formData.get("img");
@@ -81,7 +83,7 @@ const UploadModal = () => {
         if (supabaseError) {
           console.error("Supabase Error => ", supabaseError);
 
-          toast.error("Something went wrong while uploading the song !");
+          toast.error("Something went wrong while uploading the song!");
 
           return;
         }

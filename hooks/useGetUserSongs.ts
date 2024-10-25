@@ -10,19 +10,14 @@ export function useGetUserSongs(songs: Song[]) {
   if (!isUserLoading && !user) return { songs: [], isLoading: false };
 
   const [userSongs, setUserSongs] = useState<Song[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     (() => {
-      setIsLoading(true);
-
       const userSongs = songs.filter((song) => song.user_id === user?.id);
 
       setUserSongs(userSongs);
-
-      setIsLoading(false);
     })();
   }, [user]);
 
-  return { songs: userSongs, isLoading };
+  return { songs: userSongs };
 }

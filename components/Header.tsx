@@ -114,7 +114,7 @@ const Header = ({
 
         <div className="flex justify-between items-center gap-x-4">
           {isUserLoading ? (
-            <Loader className="scale-75 m-0 p-0" />
+            <Loader className="scale-[.65] m-0 p-0" />
           ) : (
             AuthButtons
           )}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Slider from "./Slider";
 
 interface DurationProps {
@@ -6,62 +6,74 @@ interface DurationProps {
   duration: number;
 }
 
+interface SongDuration {
+  minutes: string;
+  seconds: string;
+}
+
 function Duration({ duration, sound }: DurationProps) {
-  const [currentDuration, setCurrentDuration] = useState(0);
+  const songDuration = useRef<SongDuration>({
+    minutes: "00",
+    seconds: "00",
+  });
+  const currentDuration = useRef<SongDuration>({
+    minutes: "00",
+    seconds: "00",
+  });
+  const [currentDurationPercentage, setCurrentDurationPercentage] = useState(0);
 
   useEffect(() => {
-    let interval: any;
+    let interval: NodeJS.Timeout | undefined;
+    const DURATION_IN_SECOND = duration / 1000;
 
     if (sound) {
       interval = setInterval(() => {
-        setCurrentDuration((sound.seek() / (duration / 1000)) * 100);
+        // sound.seek gives us the current duration (in second)
+        setCurrentDurationPercentage((sound.seek() / DURATION_IN_SECOND) * 100);
       }, 1000);
+
+      const seconds = Math.round((duration / 1000) % 60);
+      const minutes = Math.round((duration / 1000 - seconds) / 60);
+
+      songDuration.current.seconds =
+        seconds < 10 ? `0${seconds}` : seconds.toString();
+      songDuration.current.minutes =
+        minutes < 10 ? `0${minutes}` : minutes.toString();
     }
 
     return () => clearInterval(interval);
   }, [sound]);
 
-  let currentSeconds;
+  useEffect(() => {
+    if (sound) {
+      const currentSeconds = Math.round(sound.seek() % 60);
 
-  let currentMinutes;
+      const currentMinutes = Math.round((sound.seek() - currentSeconds) / 60);
 
-  let seconds;
+      currentDuration.current.seconds =
+        currentSeconds < 10 ? `0${currentSeconds}` : currentSeconds.toString();
 
-  let minutes;
+      currentDuration.current.minutes =
+        currentMinutes < 10 ? `0${currentMinutes}` : currentMinutes.toString();
+    }
+  }, [currentDurationPercentage]);
 
-  if (sound) {
-    currentSeconds = Math.round(sound.seek() % 60);
-
-    currentMinutes = Math.round((sound.seek() - currentSeconds) / 60);
-
-    seconds = Math.round((duration / 1000) % 60);
-
-    minutes = Math.round((duration / 1000 - seconds) / 60);
-
-    currentSeconds =
-      currentSeconds < 10 ? `0${currentSeconds}` : currentSeconds;
-
-    currentMinutes =
-      currentMinutes < 10 ? `0${currentMinutes}` : currentMinutes;
-
-    seconds = seconds < 10 ? `0${seconds}` : seconds;
-
-    minutes = minutes < 10 ? `0${minutes}` : minutes;
-  }
+  const { minutes, seconds } = songDuration.current;
+  const { minutes: currentMinutes, seconds: currentSeconds } =
+    currentDuration.current;
 
   return (
     <div className="w-full h-10 flex items-center justify-center">
-      <p className="relative bg-black px-2 after:w-5 after:h-full after:absolute after:left-full after:top-0 after:bg-gradient-to-r after:from-black z-[1] whitespace-nowrap">
-        {!currentMinutes ? "00" : currentMinutes} :{" "}
-        {!currentSeconds ? "00" : currentSeconds}
+      <p className="relative bg-black px-2 after:w-5 after:h-full after:absolute after:left-full after:top-0 after:bg-gradient-to-r after:from-black z-[1] whitespace-nowrap duration-el">
+        {currentMinutes} : {currentSeconds}
       </p>
 
       <Slider
         bgColor="bg-emerald-600"
-        value={currentDuration}
+        value={currentDurationPercentage}
         onChange={(value) => {
           if (sound) {
-            setCurrentDuration(value);
+            setCurrentDurationPercentage(value);
             sound.seek(((value / 100) * duration) / 1000);
           }
         }}
@@ -69,8 +81,8 @@ function Duration({ duration, sound }: DurationProps) {
         step={1}
       />
 
-      <p className="relative bg-black px-2 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black whitespace-nowrap">
-        {!minutes ? "00" : minutes} : {!seconds ? "00" : seconds}
+      <p className="relative bg-black px-2 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black whitespace-nowrap duration-el">
+        {minutes} : {seconds}
       </p>
     </div>
   );

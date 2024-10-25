@@ -26,6 +26,11 @@ body {
   margin: auto;
 }
 
+.duration-el {
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+}
+
 .loader {
   width: 50px;
   padding: 8px;

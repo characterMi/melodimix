@@ -8,6 +8,7 @@ import type { Metadata, Viewport } from "next";
 import { Figtree } from "next/font/google";
 
 import "./globals.css";
+import Root from "./root";
 
 const figtree = Figtree({ subsets: ["latin"] });
 
@@ -38,17 +39,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={figtree.className}>
-        <ToasterProvider />
-        <SupabaseProvider>
-          <UserProvider>
-            <ModalProvider />
-            <Sidebar>{children}</Sidebar>
-            <Player />
-          </UserProvider>
-        </SupabaseProvider>
-      </body>
-    </html>
+    <Root>
+      <html lang="en">
+        <body className={figtree.className}>
+          <ToasterProvider />
+          <SupabaseProvider>
+            <UserProvider>
+              <ModalProvider />
+              <Sidebar>{children}</Sidebar>
+              <Player />
+            </UserProvider>
+          </SupabaseProvider>
+        </body>
+      </html>
+    </Root>
   );
 }

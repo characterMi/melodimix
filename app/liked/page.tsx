@@ -1,6 +1,7 @@
 import { getLikedSongs } from "@/actions/getLikedSongs";
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
+import LikedImage from "@/public/images/liked.png";
 import Image from "next/image";
 import { Suspense } from "react";
 import { LikedContent } from "./components/LikedContent";
@@ -24,11 +25,12 @@ const LikedSongsPage = () => {
           <div className="flex flex-col md:flex-row items-center gap-x-4">
             <div className="relative size-32 lg:size-44">
               <Image
-                src="/images/liked.png"
+                src={LikedImage}
                 alt="Liked Songs"
                 width={100}
                 height={100}
                 className="object-cover size-32 lg:size-44"
+                placeholder="blur"
               />
             </div>
 
