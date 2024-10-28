@@ -7,7 +7,6 @@ import { BiArrowToRight } from "react-icons/bi";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { IoShuffleOutline } from "react-icons/io5";
-import { TfiLoop } from "react-icons/tfi";
 import useSound from "use-sound";
 import Duration from "./Duration";
 import LikedButton from "./LikedButton";
@@ -15,12 +14,12 @@ import Slider from "./Slider";
 import SongItem from "./SongItem";
 
 const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
-  const { ids, playerType, setId, setPlayType, setVolume, volume, activeId } =
+  const { ids, playerType, setId, setPlayerType, setVolume, volume, activeId } =
     usePlayer((state) => ({
       ids: state.ids,
       playerType: state.playerType,
       setId: state.setId,
-      setPlayType: state.setPlayType,
+      setPlayerType: state.setPlayerType,
       setVolume: state.setVolume,
       volume: state.volume,
       activeId: state.activeId,
@@ -41,38 +40,20 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
   const PauseOrPlayIcon = isMusicPlaying ? BsPauseFill : BsPlayFill;
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
   const PlayerTypeIcon =
-    playerType === "next-song"
-      ? BiArrowToRight
-      : playerType === "shuffle"
-      ? IoShuffleOutline
-      : TfiLoop;
+    playerType === "next-song" ? BiArrowToRight : IoShuffleOutline;
 
   function handleChangePlayerType() {
     if (playerType === "next-song") {
-      setPlayType("shuffle");
+      setPlayerType("shuffle");
       toast.success('Change the type to "Shuffle"');
-    }
-
-    if (playerType === "shuffle") {
-      setPlayType("loop");
-      toast.success('Change the type to "Loop"');
-    }
-
-    if (playerType === "loop") {
-      setPlayType("next-song");
+    } else {
+      setPlayerType("next-song");
       toast.success('Change the type to "Next song"');
     }
   }
 
   function onPlaySong(type: "next" | "previous" = "next") {
     if (ids.length <= 1) return;
-
-    if (playerType === "loop") {
-      sound?.seek(0);
-      sound?.pause();
-      setIsMusicPlaying(false);
-      return;
-    }
 
     const currentIndex = ids.findIndex((id) => id === activeId);
 
@@ -140,7 +121,7 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
             <div className="flex items-center gap-x-2 w-max bg-black h-full absolute top-0 right-0 pl-1 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black">
               <LikedButton songId={song.id} songTitle={song.title} />
               <PlayerTypeIcon
-                size={playerType === "loop" ? 28 : 32}
+                size={32}
                 className="cursor-pointer"
                 onClick={handleChangePlayerType}
               />

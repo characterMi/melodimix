@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type PlayType = "next-song" | "shuffle" | "loop";
+type PlayType = "next-song" | "shuffle";
 
 interface PlayerStore {
   ids: string[];
@@ -9,7 +9,7 @@ interface PlayerStore {
   setIds: (ids: string[]) => void;
   reset: () => void;
   playerType: PlayType;
-  setPlayType: (type: PlayType) => void;
+  setPlayerType: (type: PlayType) => void;
   volume: number;
   setVolume: (volume: number) => void;
 }
@@ -21,7 +21,7 @@ export const usePlayer = create<PlayerStore>((set) => ({
   setIds: (ids: string[]) => set({ ids }),
   reset: () => set({ ids: [], activeId: undefined }),
   playerType: "next-song",
-  setPlayType: (type) => set({ playerType: type }),
+  setPlayerType: (type) => set({ playerType: type }),
   volume: 1,
   setVolume: (volume) => set({ volume }),
 }));
