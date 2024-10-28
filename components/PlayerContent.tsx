@@ -1,13 +1,13 @@
 import { usePlayer } from "@/hooks/usePlayer";
 import type { Song } from "@/types/types";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BiArrowToRight } from "react-icons/bi";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { IoShuffleOutline } from "react-icons/io5";
-import { RxLoop } from "react-icons/rx";
-// @ts-expect-error
+import { TfiLoop } from "react-icons/tfi";
 import useSound from "use-sound";
 import Duration from "./Duration";
 import LikedButton from "./LikedButton";
@@ -15,10 +15,10 @@ import Slider from "./Slider";
 import SongItem from "./SongItem";
 
 const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
-  const { ids, playType, setId, setPlayType, setVolume, volume, activeId } =
+  const { ids, playerType, setId, setPlayType, setVolume, volume, activeId } =
     usePlayer((state) => ({
       ids: state.ids,
-      playType: state.playType,
+      playerType: state.playerType,
       setId: state.setId,
       setPlayType: state.setPlayType,
       setVolume: state.setVolume,
@@ -26,92 +26,89 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
       activeId: state.activeId,
     }));
 
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [isMusicLoading, setIsMusicLoading] = useState(true);
 
-  const Icon = isPlaying ? BsPauseFill : BsPlayFill;
+  const [play, { pause, sound, duration /* to ms */ }] = useSound(songUrl, {
+    volume,
+    format: ["mp3"],
+    onplay: () => setIsMusicPlaying(true),
+    onend: onPlaySong,
+    onpause: () => setIsMusicPlaying(false),
+    onload: () => setIsMusicLoading(false),
+  });
+
+  const PauseOrPlayIcon = isMusicPlaying ? BsPauseFill : BsPlayFill;
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
-  const PlayTypeIcon =
-    playType === "next-song" ? (
-      <BiArrowToRight
-        className="cursor-pointer"
-        size={32}
-        onClick={() => setPlayType("shuffle")}
-      />
-    ) : playType === "shuffle" ? (
-      <IoShuffleOutline
-        className="cursor-pointer"
-        size={32}
-        onClick={() => setPlayType("loop")}
-      />
-    ) : (
-      <RxLoop
-        className="cursor-pointer"
-        size={28}
-        onClick={() => setPlayType("next-song")}
-      />
-    );
+  const PlayerTypeIcon =
+    playerType === "next-song"
+      ? BiArrowToRight
+      : playerType === "shuffle"
+      ? IoShuffleOutline
+      : TfiLoop;
 
-  const generateNextSongIndex = (currentIndex: number): number => {
-    const nextSongIndex = Math.floor(Math.random() * ids.length);
-    if (ids.length === 1) return 0; // if the length of our playlist is 1, we don't want to play a random music, but instead we want to play the current music
-
-    if (nextSongIndex === currentIndex) {
-      return generateNextSongIndex(currentIndex); // if the nextSongIndex === currentIndexIndex, we want to generate another index
+  function handleChangePlayerType() {
+    if (playerType === "next-song") {
+      setPlayType("shuffle");
+      toast.success('Change the type to "Shuffle"');
     }
 
-    return nextSongIndex;
-  };
+    if (playerType === "shuffle") {
+      setPlayType("loop");
+      toast.success('Change the type to "Loop"');
+    }
 
-  const onPlaySong = (type: "next" | "previous") => {
-    if (ids.length === 0) {
+    if (playerType === "loop") {
+      setPlayType("next-song");
+      toast.success('Change the type to "Next song"');
+    }
+  }
+
+  function onPlaySong(type: "next" | "previous" = "next") {
+    if (ids.length <= 1) return;
+
+    if (playerType === "loop") {
+      sound?.seek(0);
+      sound?.pause();
+      setIsMusicPlaying(false);
       return;
     }
 
     const currentIndex = ids.findIndex((id) => id === activeId);
 
-    let nextSongToPlay;
+    let nextSongToPlay = ids[currentIndex];
 
-    if (playType === "next-song" || playType === "loop") {
+    if (playerType === "next-song") {
       nextSongToPlay =
         type === "next" ? ids[currentIndex + 1] : ids[currentIndex - 1];
 
       if (!nextSongToPlay) {
-        return type === "next" ? setId(ids[0]) : setId(ids[ids.length - 1]);
+        nextSongToPlay = type === "next" ? ids[0] : ids[ids.length - 1];
       }
-
-      setId(nextSongToPlay);
-    } else if (playType === "shuffle") {
-      nextSongToPlay = generateNextSongIndex(currentIndex);
-
-      setId(ids[nextSongToPlay]);
     }
+
+    if (playerType === "shuffle") {
+      const randomId = generateNextSongIndex(currentIndex);
+
+      nextSongToPlay = ids[randomId];
+    }
+
+    setId(nextSongToPlay);
+  }
+
+  const generateNextSongIndex = (currentIndex: number): number => {
+    if (ids.length === 1) return 0; // if the length of our playlist is 1, we don't want to play a random music, but instead we want to play the current music
+
+    const nextSongIndex = Math.floor(Math.random() * ids.length);
+
+    if (nextSongIndex === currentIndex)
+      return generateNextSongIndex(currentIndex);
+
+    return nextSongIndex;
   };
 
-  const [play, { pause, sound, duration /* time to ms */ }] = useSound(
-    songUrl,
-    {
-      volume,
-      onplay: () => setIsPlaying(true),
-      onend: () => {
-        if (playType !== "loop") {
-          onPlaySong("next");
-        }
-      },
-      onpause: () => setIsPlaying(false),
-      format: ["mp3"],
-      onload: () => setIsLoading(false),
-    }
-  );
-
-  useEffect(() => {
-    sound?.play();
-
-    return () => sound?.unload();
-  }, [sound]);
-
   const handlePlay = () => {
-    if (!isPlaying) {
+    if (!isMusicPlaying) {
       play();
     } else {
       pause();
@@ -126,9 +123,15 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
     }
   };
 
+  useEffect(() => {
+    sound?.play();
+
+    return () => sound?.unload();
+  }, [sound]);
+
   return (
     <>
-      <Duration duration={duration} sound={sound} />
+      <Duration duration={duration!} sound={sound} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 h-full relative">
         <div className="flex w-full justify-start relative">
@@ -136,7 +139,11 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
             <SongItem player data={song} />
             <div className="flex items-center gap-x-2 w-max bg-black h-full absolute top-0 right-0 pl-1 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black">
               <LikedButton songId={song.id} songTitle={song.title} />
-              {PlayTypeIcon}
+              <PlayerTypeIcon
+                size={playerType === "loop" ? 28 : 32}
+                className="cursor-pointer"
+                onClick={handleChangePlayerType}
+              />
             </div>
           </div>
         </div>
@@ -146,10 +153,10 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
             onClick={handlePlay}
             className="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer overflow-hidden"
           >
-            {isLoading ? (
+            {isMusicLoading ? (
               <div className="size-6 rounded-full border-4 animate-spin border-black relative after:size-3 after:bg-white after:absolute after:bottom-3/4 after:rotate-45" />
             ) : (
-              <Icon size={30} className="text-black" />
+              <PauseOrPlayIcon size={30} className="text-black" />
             )}
           </div>
         </div>
@@ -165,10 +172,10 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
             onClick={handlePlay}
             className="flex items-center justify-center size-10 rounded-full bg-white p-1 cursor-pointer overflow-hidden"
           >
-            {isLoading ? (
+            {isMusicLoading ? (
               <div className="size-6 rounded-full border-4 animate-spin border-black relative after:size-3 after:bg-white after:absolute after:bottom-3/4 after:rotate-45" />
             ) : (
-              <Icon size={30} className="text-black" />
+              <PauseOrPlayIcon size={30} className="text-black" />
             )}
           </div>
 

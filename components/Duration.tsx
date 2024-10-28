@@ -64,7 +64,7 @@ function Duration({ duration, sound }: DurationProps) {
 
   return (
     <div className="w-full h-10 flex items-center justify-center">
-      <p className="relative bg-black px-2 after:w-5 after:h-full after:absolute after:left-full after:top-0 after:bg-gradient-to-r after:from-black z-[1] whitespace-nowrap duration-el">
+      <p className="relative bg-black px-2 after:w-5 after:h-full after:absolute after:left-full after:top-0 after:bg-gradient-to-r after:from-black after:pointer-events-none z-[1] whitespace-nowrap duration-el">
         {currentMinutes} : {currentSeconds}
       </p>
 
@@ -81,7 +81,7 @@ function Duration({ duration, sound }: DurationProps) {
         step={1}
       />
 
-      <p className="relative bg-black px-2 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black whitespace-nowrap duration-el">
+      <p className="relative bg-black px-2 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:pointer-events-none whitespace-nowrap duration-el">
         {minutes} : {seconds}
       </p>
     </div>

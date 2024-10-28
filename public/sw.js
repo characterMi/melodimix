@@ -1,4 +1,4 @@
-const assets = ["/", "/logo.svg", "/images/liked.png"];
+const assets = ["/", "/search", "/logo.svg", "/images/liked.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -9,6 +9,18 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  const eventUrl = new URL(event.request.url);
+
+  if (
+    eventUrl.hostname === "ibmcmrwzbejntporrerq.supabase.co" &&
+    (eventUrl.pathname.startsWith("/rest/v1/users") ||
+      eventUrl.pathname.startsWith("/rest/v1/liked_songs") ||
+      eventUrl.pathname.startsWith("/auth/v1"))
+  ) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((response) => {
       // Even if the response is in the cache, we fetch it

@@ -3,11 +3,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "./useUser";
 
 export function useGetUserSongs(songs: Song[]) {
-  const { isLoading: isUserLoading, user } = useUser();
-
-  if (isUserLoading) return { songs: [], isLoading: true };
-
-  if (!isUserLoading && !user) return { songs: [], isLoading: false };
+  const { isLoading, user } = useUser();
 
   const [userSongs, setUserSongs] = useState<Song[]>([]);
 
@@ -18,6 +14,10 @@ export function useGetUserSongs(songs: Song[]) {
       setUserSongs(userSongs);
     })();
   }, [user]);
+
+  if (isLoading) return { songs: [], isLoading: true };
+
+  if (!isLoading && !user) return { songs: [], isLoading: false };
 
   return { songs: userSongs };
 }
