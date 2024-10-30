@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type PlayType = "next-song" | "shuffle";
+type PlayerType = "next-song" | "shuffle";
 
 interface PlayerStore {
   ids: string[];
@@ -8,8 +8,8 @@ interface PlayerStore {
   setId: (id: string) => void;
   setIds: (ids: string[]) => void;
   reset: () => void;
-  playerType: PlayType;
-  setPlayerType: (type: PlayType) => void;
+  playerType: PlayerType;
+  setPlayerType: (type: PlayerType) => void;
   volume: number;
   setVolume: (volume: number) => void;
 }

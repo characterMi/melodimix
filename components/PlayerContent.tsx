@@ -2,14 +2,13 @@ import { usePlayer } from "@/hooks/usePlayer";
 import type { Song } from "@/types/types";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BiArrowToRight } from "react-icons/bi";
-import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { IoShuffleOutline } from "react-icons/io5";
 import useSound from "use-sound";
 import Duration from "./Duration";
 import LikedButton from "./LikedButton";
+import PlayerControls from "./PlayerControls";
 import Slider from "./Slider";
 import SongItem from "./SongItem";
 
@@ -37,7 +36,6 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
     onload: () => setIsMusicLoading(false),
   });
 
-  const PauseOrPlayIcon = isMusicPlaying ? BsPauseFill : BsPlayFill;
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
   const PlayerTypeIcon =
     playerType === "next-song" ? BiArrowToRight : IoShuffleOutline;
@@ -129,43 +127,12 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
           </div>
         </div>
 
-        <div className="flex sm:hidden absolute -top-full -translate-y-1/4 right-0">
-          <div
-            onClick={handlePlay}
-            className="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer overflow-hidden"
-          >
-            {isMusicLoading ? (
-              <div className="size-6 rounded-full border-4 animate-spin border-black relative after:size-3 after:bg-white after:absolute after:bottom-3/4 after:rotate-45" />
-            ) : (
-              <PauseOrPlayIcon size={30} className="text-black" />
-            )}
-          </div>
-        </div>
-
-        <div className="hidden z-10 h-full sm:flex sm:justify-end md:justify-center items-center w-full max-w-[722px] gap-x-6">
-          <AiFillStepBackward
-            onClick={() => onPlaySong("previous")}
-            size={30}
-            className="text-neutral-400 cursor-pointer hover:text-white transition"
-          />
-
-          <div
-            onClick={handlePlay}
-            className="flex items-center justify-center size-10 rounded-full bg-white p-1 cursor-pointer overflow-hidden"
-          >
-            {isMusicLoading ? (
-              <div className="size-6 rounded-full border-4 animate-spin border-black relative after:size-3 after:bg-white after:absolute after:bottom-3/4 after:rotate-45" />
-            ) : (
-              <PauseOrPlayIcon size={30} className="text-black" />
-            )}
-          </div>
-
-          <AiFillStepForward
-            onClick={() => onPlaySong("next")}
-            size={30}
-            className="text-neutral-400 cursor-pointer hover:text-white transition"
-          />
-        </div>
+        <PlayerControls
+          onPlaySong={onPlaySong}
+          handlePlay={handlePlay}
+          isMusicLoading={isMusicLoading}
+          isMusicPlaying={isMusicPlaying}
+        />
 
         <div className="hidden md:flex w-full justify-end pr-2">
           <div className="flex items-center gap-x-2 w-[120px]">
