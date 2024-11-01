@@ -7,7 +7,7 @@ import { useEffect, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
-const LikedButton = ({
+const LikeButton = ({
   songId,
   songTitle,
 }: {
@@ -83,4 +83,4 @@ const LikedButton = ({
   );
 };
 
-export default LikedButton;
+export default LikeButton;

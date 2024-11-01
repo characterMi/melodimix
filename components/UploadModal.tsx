@@ -112,6 +112,7 @@ const UploadModal = () => {
           disabled={isLoading}
           placeholder="Song title"
           required
+          aria-label="Enter the song title"
         />
 
         <Input
@@ -119,22 +120,28 @@ const UploadModal = () => {
           disabled={isLoading}
           placeholder="Song author"
           required
+          aria-label="Enter the author's name"
         />
 
         <div>
-          <h3 className="pb-1">Select a song file</h3>
+          <h3 className="pb-1" id="select-song">
+            Select a song file
+          </h3>
 
           <Input
             name="song"
             disabled={isLoading}
             type="file"
             accept=".mp3"
+            aria-labelledby="select-song"
             required
           />
         </div>
 
         <div>
-          <h3 className="pb-1">Select an image</h3>
+          <h3 className="pb-1" id="select-image">
+            Select an image
+          </h3>
 
           <Input
             name="img"
@@ -142,6 +149,7 @@ const UploadModal = () => {
             type="file"
             accept="image/*"
             required
+            aria-labelledby="select-image"
           />
         </div>
 

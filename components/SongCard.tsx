@@ -14,12 +14,14 @@ const SongCard = ({ data, onClick }: Props) => {
     <div
       onClick={() => onClick(data.id)}
       className="relative group flex flex-col items-center justify-center rounded-md overflow-hidden gap-x-4 bg-neutral-400/5 cursor-pointer hover:bg-neutral-400/10 transition p-3"
+      role="button"
+      aria-label={"Play the " + data.title + " song"}
     >
       <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
         <Image
           className="object-cover w-full h-full"
           src={imagePath || "/images/liked.png"}
-          alt={data.title}
+          alt={data.title + " poster"}
           width={130}
           height={130}
         />
@@ -32,11 +34,8 @@ const SongCard = ({ data, onClick }: Props) => {
         </p>
       </div>
 
-      <div className="absolute bottom-24 right-5">
-        <button
-          className="opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md transition translate-y-1/4 group-hover:opacity-100 group-hover:translate-y-0 hover:scale-105"
-          aria-label={`Play the ${data.title} song`}
-        >
+      <div className="absolute bottom-24 right-5" aria-hidden>
+        <button className="opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md transition translate-y-1/4 group-hover:opacity-100 group-hover:translate-y-0 hover:scale-105">
           <FaPlay className="text-black" />
         </button>
       </div>

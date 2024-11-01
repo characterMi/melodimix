@@ -47,24 +47,20 @@ const Header = ({
       className="bg-white px-6 py-2 flex gap-x-2 items-center"
     >
       Logout
-      <FiLogOut />
+      <FiLogOut aria-hidden />
     </Button>
   ) : (
     <>
-      <div>
-        <Button
-          className="bg-transparent text-neutral-300 font-medium"
-          onClick={onOpen}
-        >
-          Sign up
-        </Button>
-      </div>
+      <Button
+        className="bg-transparent text-neutral-300 font-medium"
+        onClick={onOpen}
+      >
+        Sign up
+      </Button>
 
-      <div>
-        <Button className="bg-white px-6 py-2" onClick={onOpen}>
-          Login
-        </Button>
-      </div>
+      <Button className="bg-white px-6 py-2" onClick={onOpen}>
+        Login
+      </Button>
     </>
   );
 
@@ -100,7 +96,7 @@ const Header = ({
             className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-35 transition"
             aria-label="Go to home page"
           >
-            <HiHome size={20} className="text-black" />
+            <HiHome size={20} className="text-black" aria-hidden />
           </Link>
 
           <Link
@@ -108,7 +104,7 @@ const Header = ({
             className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-35 transition"
             aria-label="Go to search page"
           >
-            <BiSearch size={20} className="text-black" />
+            <BiSearch size={20} className="text-black" aria-hidden />
           </Link>
         </div>
 

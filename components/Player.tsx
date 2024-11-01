@@ -13,12 +13,13 @@ const Player = () => {
 
   const songUrl = useLoadSongUrl(song!);
 
-  if (!song || !songUrl || !activeId) {
-    return null;
-  }
+  if (!song || !songUrl || !activeId) return null;
 
   return (
-    <div className="fixed bottom-0 bg-black w-full py-2 rounded-t-2xl px-4 player">
+    <div
+      className="fixed bottom-0 bg-black w-full py-2 pt-5 sm:pt-0 rounded-t-2xl px-4 player"
+      aria-label="Song Player"
+    >
       <section className="h-full w-full relative">
         <PlayerContent song={song} songUrl={songUrl} key={songUrl} />
         {isLoading && (

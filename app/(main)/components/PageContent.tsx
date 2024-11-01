@@ -1,33 +1,17 @@
 "use client";
 
+import NoSongFallback from "@/components/NoSongFallback";
 import SongCard from "@/components/SongCard";
 import { useOnPlay } from "@/hooks/useOnPlay";
 import { usePlayer } from "@/hooks/usePlayer";
 import type { Song } from "@/types/types";
-import { useRouter } from "next/navigation";
-import { RxReload } from "react-icons/rx";
 
 const PageContent = ({ songs }: { songs: Song[] }) => {
   const onPlay = useOnPlay(songs);
 
   const activeId = usePlayer((state) => state.activeId);
 
-  const router = useRouter();
-
-  if (songs.length === 0) {
-    return (
-      <div className="flex gap-x-2 items-center text-neutral-400 px-6 text-xl mt-4">
-        <h1>No song available.</h1>
-        <button
-          className="flex items-center gap-x-1 underline"
-          onClick={() => router.refresh()}
-        >
-          Refresh
-          <RxReload />
-        </button>
-      </div>
-    );
-  }
+  if (songs.length === 0) return <NoSongFallback className="px-6 text-xl" />;
 
   return (
     <section

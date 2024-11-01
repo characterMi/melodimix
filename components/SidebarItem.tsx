@@ -14,6 +14,7 @@ interface SidebarItemProps {
 
 const SidebarItem: FC<SidebarItemProps> = ({ href, label }) => {
   const pathName = usePathname();
+  const iconProps = { size: 26, "aria-hidden": true };
 
   return (
     <Link
@@ -22,8 +23,13 @@ const SidebarItem: FC<SidebarItemProps> = ({ href, label }) => {
         "flex flex-row h-auto items-center w-full gap-x-4 text-sm font-medium cursor-pointer hover:text-white transition text-neutral-400 py-1",
         pathName === href ? "text-white" : ""
       )}
+      aria-label={"Go to " + label + " page"}
     >
-      {label === "Home" ? <HiHome size={26} /> : <BiSearch size={26} />}
+      {label === "Home" ? (
+        <HiHome {...iconProps} />
+      ) : (
+        <BiSearch {...iconProps} />
+      )}
       <p className="truncate w-full">{label}</p>
     </Link>
   );

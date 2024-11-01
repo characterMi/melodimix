@@ -2,13 +2,14 @@ import { usePlayer } from "@/hooks/usePlayer";
 import type { Song } from "@/types/types";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BiArrowToRight } from "react-icons/bi";
+import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { IoShuffleOutline } from "react-icons/io5";
 import useSound from "use-sound";
 import Duration from "./Duration";
-import LikedButton from "./LikedButton";
-import PlayerControls from "./PlayerControls";
+import LikedButton from "./LikeButton";
 import Slider from "./Slider";
 import SongItem from "./SongItem";
 
@@ -39,6 +40,7 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
   const PlayerTypeIcon =
     playerType === "next-song" ? BiArrowToRight : IoShuffleOutline;
+  const PauseOrPlayIcon = isMusicPlaying ? BsPauseFill : BsPlayFill;
 
   function handleChangePlayerType() {
     if (playerType === "next-song") {
@@ -122,17 +124,47 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
                 size={32}
                 className="cursor-pointer"
                 onClick={handleChangePlayerType}
+                aria-label={
+                  "Change the type of player to " +
+                  (playerType === "next-song" ? "Shuffle" : "Next song")
+                }
+                role="button"
               />
             </div>
           </div>
         </div>
 
-        <PlayerControls
-          onPlaySong={onPlaySong}
-          handlePlay={handlePlay}
-          isMusicLoading={isMusicLoading}
-          isMusicPlaying={isMusicPlaying}
-        />
+        <div className="z-10 sm:h-full flex sm:justify-end md:justify-center items-center sm:w-full max-w-[722px] gap-x-2 sm:gap-x-6 absolute sm:relative -top-full sm:top-0 -translate-y-1/4 sm:translate-y-0 right-0">
+          <AiFillStepBackward
+            onClick={() => onPlaySong("previous")}
+            className="text-black sm:text-neutral-400 size-[28px] sm:size-[30px] p-1 sm:p-0 rounded-full bg-white sm:bg-transparent cursor-pointer hover:opacity-75 sm:hover:text-white transition"
+            aria-label="Change the song (backward)"
+            role="button"
+          />
+
+          <div
+            onClick={handlePlay}
+            className="flex items-center justify-center size-10 rounded-full bg-white p-1 cursor-pointer overflow-hidden"
+            aria-label={(isMusicPlaying ? "Pause " : "Play ") + "the song"}
+            role="button"
+          >
+            {isMusicLoading ? (
+              <div
+                className="size-6 rounded-full border-4 animate-spin border-black relative after:size-3 after:bg-white after:absolute after:bottom-3/4 after:rotate-45"
+                aria-label="Loading the song..."
+              />
+            ) : (
+              <PauseOrPlayIcon size={30} className="text-black" aria-hidden />
+            )}
+          </div>
+
+          <AiFillStepForward
+            onClick={() => onPlaySong("next")}
+            className="text-black sm:text-neutral-400 size-[28px] sm:size-[30px] p-1 sm:p-0 rounded-full bg-white sm:bg-transparent cursor-pointer hover:opacity-75 sm:hover:text-white transition"
+            aria-label="Change the song (forward)"
+            role="button"
+          />
+        </div>
 
         <div className="hidden md:flex w-full justify-end pr-2">
           <div className="flex items-center gap-x-2 w-[120px]">
@@ -140,6 +172,8 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
               onClick={toggleMute}
               className="cursor-pointer"
               size={34}
+              aria-label={volume === 0 ? "unmute" : "mute"}
+              role="button"
             />
 
             <Slider
@@ -148,6 +182,7 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
               bgColor="bg-white"
               max={1}
               step={0.1}
+              label="Volume"
             />
           </div>
         </div>

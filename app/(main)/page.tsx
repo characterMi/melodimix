@@ -28,7 +28,7 @@ async function GetSongs() {
 
 export default async function Home() {
   return (
-    <main className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
+    <section className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
       <Header>
         <div className="mb-2">
           <h1 className="text-white text-3xl font-semibold">Welcome back</h1>
@@ -38,7 +38,7 @@ export default async function Home() {
               href={"/liked"}
               className="relative group flex items-center rounded-md overflow-hidden gap-x-4 bg-neutral-100/10 hover:bg-neutral-100/20 transition pr-4"
             >
-              <div className="relative min-h-[64px] min-w-[64px]">
+              <div className="relative min-h-[64px] min-w-[64px]" aria-hidden>
                 <Image
                   src={LikedImage}
                   alt="Liked musics"
@@ -51,7 +51,10 @@ export default async function Home() {
 
               <p className="font-medium truncate py-5">Liked Songs</p>
 
-              <div className="absolute transition opacity-0 rounded-full flex items-center justify-center bg-green-500 p-4 drop-shadow-md right-5 group-hover:opacity-100 hover:scale-105">
+              <div
+                className="absolute transition opacity-0 rounded-full flex items-center justify-center bg-green-500 p-4 drop-shadow-md right-5 group-hover:opacity-100 hover:scale-105"
+                aria-hidden
+              >
                 <FaPlay className="text-black" />
               </div>
             </Link>
@@ -72,6 +75,6 @@ export default async function Home() {
       >
         <GetSongs />
       </Suspense>
-    </main>
+    </section>
   );
 }
