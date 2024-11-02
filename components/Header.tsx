@@ -52,13 +52,13 @@ const Header = ({
   ) : (
     <>
       <Button
-        className="bg-transparent text-neutral-300 font-medium"
+        className="bg-transparent text-neutral-300 font-medium text-nowrap"
         onClick={onOpen}
       >
         Sign up
       </Button>
 
-      <Button className="bg-white px-6 py-2" onClick={onOpen}>
+      <Button className="bg-white px-6 py-2 text-nowrap" onClick={onOpen}>
         Login
       </Button>
     </>
