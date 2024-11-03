@@ -35,7 +35,7 @@ const Modal = ({
           <Dialog.Close asChild>
             <button
               className="text-neutral-400 hover:text-white absolute top-[10px] inline-flex h-[25px] w-[25px] right-[10px] items-center justify-center appearance-none rounded-full focus:outline-none"
-              aria-label="Close the modal"
+              aria-label="Close"
             >
               <IoMdClose aria-hidden />
             </button>

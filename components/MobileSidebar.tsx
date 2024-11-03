@@ -12,7 +12,6 @@ const MobileSidebar = ({ songs }: { songs: Song[] }) => {
   return (
     <>
       <div
-        aria-label="Sidebar container"
         className={`fixed bg-neutral-900 flex flex-col z-50 transition ${
           isActive ? "translate-x-0" : "-translate-x-full"
         } left-0 top-0 h-screen w-[200px] min-[360px]:w-[300px] sm:w-[360px] md:hidden`}
@@ -24,7 +23,7 @@ const MobileSidebar = ({ songs }: { songs: Song[] }) => {
           role="button"
           aria-controls="sidebar"
           aria-expanded={isActive}
-          id="menu-toggle"
+          aria-label="Menu toggle button"
         >
           <span
             className={`h-1 rounded-full w-[60%] bg-white transition ${
@@ -43,13 +42,7 @@ const MobileSidebar = ({ songs }: { songs: Song[] }) => {
           />
         </div>
 
-        <aside
-          id="sidebar"
-          aria-labelledby="menu-toggle"
-          role="menu"
-          className="overflow-y-auto"
-          aria-hidden={!isActive}
-        >
+        <aside id="sidebar" className="overflow-y-auto" aria-hidden={!isActive}>
           <div className="download-btn">
             <Box className="m-4">
               <DownloadApplication />
@@ -63,6 +56,7 @@ const MobileSidebar = ({ songs }: { songs: Song[] }) => {
       </div>
 
       <div
+        onClick={() => setIsActive(false)}
         aria-hidden
         className={`layout md:hidden fixed w-screen h-screen top-0 left-0 bg-black/35 backdrop-blur-sm transition ${
           isActive ? "z-40 opacity-100" : "-z-10 opacity-0"
