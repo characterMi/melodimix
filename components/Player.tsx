@@ -3,6 +3,7 @@
 import { useGetSongById } from "@/hooks/useGetSongById";
 import { useLoadSongUrl } from "@/hooks/useLoadSongUrl";
 import { usePlayer } from "@/hooks/usePlayer";
+import { useEffect } from "react";
 import Loader from "./Loader";
 import PlayerContent from "./PlayerContent";
 
@@ -12,6 +13,19 @@ const Player = () => {
   const { song, isLoading } = useGetSongById(activeId);
 
   const songUrl = useLoadSongUrl(song!);
+
+  useEffect(() => {
+    if (!("setAppBadge" in navigator) && !("clearAppBadge" in navigator))
+      return;
+
+    if (song && songUrl && activeId) {
+      navigator.setAppBadge(1);
+    }
+
+    return () => {
+      navigator.clearAppBadge();
+    };
+  }, [song, songUrl, activeId]);
 
   if (!song || !songUrl || !activeId) return null;
 

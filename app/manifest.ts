@@ -52,5 +52,49 @@ export default function manifest(): Manifest {
         type: "image/png",
       },
     ],
+    shortcuts: [
+      {
+        name: "Explore",
+        short_name: "Explore",
+        description: "Explore",
+        url: "/",
+        icons: [
+          {
+            src: "/icons/melodimix-192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "/icons/melodimix-512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+        ],
+      },
+      {
+        name: "Liked Songs",
+        short_name: "Liked Songs",
+        description: "Liked Songs",
+        url: "/liked",
+        icons: [
+          {
+            src: "/icons/melodimix-192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "/icons/melodimix-512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+        ],
+      },
+    ],
+    protocol_handlers: [
+      {
+        protocol: "web+melodimix-atb",
+        url: "/search?song_title=%s",
+      },
+    ],
   };
 }
