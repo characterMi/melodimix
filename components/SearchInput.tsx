@@ -4,18 +4,17 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { useEffect, useState } from "react";
 
 import { useSearchMusic } from "@/hooks/useSearch";
-import { useSearchParams } from "next/navigation";
 import Input from "./Input";
 
 const SearchInput = () => {
-  const searchParams = useSearchParams();
-
   const [value, setValue] = useState<string>();
   const { setSearchValue } = useSearchMusic();
 
   const debouncedValue = useDebounce(value, 1000);
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+
     if (searchParams.get("song_title")) {
       setValue(searchParams.get("song_title")!);
     }
