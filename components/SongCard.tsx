@@ -1,7 +1,8 @@
 import { useLoadImage } from "@/hooks/useLoadImage";
 import type { Song } from "@/types/types";
 import Image from "next/image";
-import { FaPlay } from "react-icons/fa";
+import toast from "react-hot-toast";
+import { FaPlay, FaShareAlt } from "react-icons/fa";
 
 interface Props {
   data: Song;
@@ -10,6 +11,22 @@ interface Props {
 
 const SongCard = ({ data, onClick }: Props) => {
   const imagePath = useLoadImage(data);
+
+  function handleShare(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    e.stopPropagation();
+
+    if (!navigator.share) {
+      toast.error("Share not supported on your browser");
+      return;
+    }
+
+    navigator.share({
+      title: `Melodimix | ${data.title}`,
+      text: "Melodimix - Your Ultimate Music Destination.",
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/search?song_title=${data.title}`,
+    });
+  }
+
   return (
     <div
       onClick={() => onClick(data.id)}
@@ -34,8 +51,19 @@ const SongCard = ({ data, onClick }: Props) => {
         </p>
       </div>
 
-      <div className="absolute bottom-24 right-5" aria-hidden>
-        <div className="opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md transition translate-y-1/4 group-hover:opacity-100 group-hover:translate-y-0 hover:scale-105">
+      <div className="absolute bottom-24 right-5">
+        <div
+          className="opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md delay-75 transition translate-y-2/4 group-hover:opacity-100 group-hover:-translate-y-2/4 hover:scale-105"
+          aria-label="Share the song"
+          onClick={handleShare}
+        >
+          <FaShareAlt className="text-black" />
+        </div>
+
+        <div
+          className="opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md transition translate-y-1/4 group-hover:opacity-100 group-hover:-translate-y-1/4 hover:scale-105"
+          aria-hidden
+        >
           <FaPlay className="text-black" />
         </div>
       </div>

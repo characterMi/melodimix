@@ -15,17 +15,14 @@ const Player = () => {
   const songUrl = useLoadSongUrl(song!);
 
   useEffect(() => {
-    if (!("setAppBadge" in navigator) && !("clearAppBadge" in navigator))
-      return;
-
-    if (song && songUrl && activeId) {
-      navigator.setAppBadge(1);
+    if (activeId) {
+      navigator.setAppBadge?.(1);
     }
 
     return () => {
-      navigator.clearAppBadge();
+      navigator.clearAppBadge?.();
     };
-  }, [song, songUrl, activeId]);
+  }, [activeId]);
 
   if (!song || !songUrl || !activeId) return null;
 

@@ -40,16 +40,35 @@ export default function manifest(): Manifest {
     background_color: "#171717",
     screenshots: [
       {
-        src: "/images/melodi-mix_first.png",
-        sizes: "800x500",
+        src: "/images/d1.png",
+        sizes: "1440x900",
         type: "image/png",
         // @ts-ignore
         form_factor: "wide",
       },
       {
-        src: "/images/melodi-mix_responsive.png",
-        sizes: "380x825",
+        src: "/images/d2.png",
+        sizes: "1440x900",
         type: "image/png",
+        // @ts-ignore
+        form_factor: "wide",
+      },
+      {
+        src: "/images/d3.png",
+        sizes: "1440x900",
+        type: "image/png",
+        // @ts-ignore
+        form_factor: "wide",
+      },
+      {
+        src: "/images/1.jpg",
+        sizes: "1080x2258",
+        type: "image/jpg",
+      },
+      {
+        src: "/images/2.jpg",
+        sizes: "1080x2256",
+        type: "image/jpg",
       },
     ],
     shortcuts: [
@@ -64,11 +83,6 @@ export default function manifest(): Manifest {
             sizes: "192x192",
             type: "image/png",
           },
-          {
-            src: "/icons/melodimix-512.png",
-            sizes: "512x512",
-            type: "image/png",
-          },
         ],
       },
       {
@@ -78,13 +92,8 @@ export default function manifest(): Manifest {
         url: "/liked",
         icons: [
           {
-            src: "/icons/melodimix-192.png",
+            src: "/icons/liked-192.png",
             sizes: "192x192",
-            type: "image/png",
-          },
-          {
-            src: "/icons/melodimix-512.png",
-            sizes: "512x512",
             type: "image/png",
           },
         ],
@@ -92,7 +101,7 @@ export default function manifest(): Manifest {
     ],
     protocol_handlers: [
       {
-        protocol: "web+melodimix-atb",
+        protocol: "web+melodimixatb",
         url: "/search?song_title=%s",
       },
     ],

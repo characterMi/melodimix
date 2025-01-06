@@ -3,7 +3,7 @@ import { useAuthModal } from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
@@ -14,8 +14,9 @@ const LikeButton = ({
   songId: string;
   songTitle: string;
 }) => {
-  const [isLiked, setIsLiked] = useState(false);
+  const btnRef = useRef<HTMLButtonElement>(null);
 
+  const [isLiked, setIsLiked] = useState(false);
   const [pending, startTransition] = useTransition();
 
   const router = useRouter();
@@ -61,6 +62,10 @@ const LikeButton = ({
 
       router.refresh();
 
+      if (likeInformation.isLiked)
+        btnRef.current?.classList.add("like-button-animation");
+      else btnRef.current?.classList.remove("like-button-animation");
+
       if (likeInformation.error) {
         toast.error(likeInformation.error);
       }
@@ -73,10 +78,11 @@ const LikeButton = ({
 
   return (
     <button
-      className="hover:opacity-75 transition disabled:opacity-50 disabled:cursor-not-allowed active:scale-90"
+      className="hover:opacity-75 transition disabled:opacity-50 disabled:cursor-not-allowed active:scale-90 relative duration-200 ease-out"
       onClick={handleLike}
       disabled={pending}
       aria-label={`Like the ${songTitle} song`}
+      ref={btnRef}
     >
       <Icon color={isLiked ? "#22c55e" : "white"} size={25} />
     </button>
