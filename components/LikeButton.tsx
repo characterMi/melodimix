@@ -27,18 +27,18 @@ const LikeButton = ({
 
   const { supabaseClient } = useSessionContext();
 
+  function checkIfSongIsInLikedPlaylist() {
+    const likedSongsSet = new Set(likedSongs);
+
+    // faster than .includes array method...
+    return likedSongsSet.has(songId);
+  }
+
   useEffect(() => {
     if (!user?.id) return;
 
-    const likedSongsSet = new Set(likedSongs);
-
-    if (likedSongsSet.has(songId)) {
+    if (checkIfSongIsInLikedPlaylist()) {
       setIsLiked(true);
-      return;
-    }
-
-    if (isLiked) {
-      setIsLiked(false);
       return;
     }
 
@@ -57,7 +57,15 @@ const LikeButton = ({
         }
       });
     })();
-  }, [user?.id, likedSongs]);
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (checkIfSongIsInLikedPlaylist()) {
+      setIsLiked(true);
+    } else {
+      setIsLiked(false);
+    }
+  }, [likedSongs]);
 
   const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
 
