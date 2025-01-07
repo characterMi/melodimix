@@ -69,7 +69,6 @@ const LikeButton = ({
     startTransition(async () => {
       const likeInformation = await likeSong(isLiked, user.id, songId);
 
-      setIsLiked(likeInformation.isLiked);
       (likeInformation.isLiked ? setLikedSongs : removeIdFromLikedSongs)(
         songId
       );
