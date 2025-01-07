@@ -37,7 +37,10 @@ const LikeButton = ({
       return;
     }
 
-    setIsLiked(false);
+    if (isLiked) {
+      setIsLiked(false);
+      return;
+    }
 
     (() => {
       startTransition(async () => {
