@@ -2,17 +2,19 @@
 
 import useOnPlay from "@/hooks/useOnPlay";
 import { usePlayer } from "@/hooks/usePlayer";
+import { useSearchSong } from "@/hooks/useSearchSong";
 import type { Song } from "@/types/types";
 import { twMerge } from "tailwind-merge";
-import LikeButton from "./LikeButton";
-import NoSongFallback from "./NoSongFallback";
-import SongItem from "./SongItem";
+import LikeButton from "../../components/LikeButton";
+import NoSongFallback from "../../components/NoSongFallback";
+import SongItem from "../../components/SongItem";
 
 const SearchContent = ({ songs }: { songs: Song[] }) => {
   const onPlay = useOnPlay(songs);
   const activeId = usePlayer((state) => state.activeId);
+  const filteredSongs = useSearchSong(songs);
 
-  if (songs.length === 0) return <NoSongFallback className="px-6" />;
+  if (filteredSongs.length === 0) return <NoSongFallback className="px-6" />;
 
   return (
     <div
@@ -21,7 +23,7 @@ const SearchContent = ({ songs }: { songs: Song[] }) => {
         activeId && "mb-28"
       )}
     >
-      {songs.map((song) => (
+      {filteredSongs.map((song) => (
         <div key={song.id} className="flex items-center gap-x-4 w-full">
           <div className="flex-1 overflow-hidden">
             <SongItem onClick={(id) => onPlay(id)} data={song} />
@@ -33,4 +35,5 @@ const SearchContent = ({ songs }: { songs: Song[] }) => {
     </div>
   );
 };
+
 export default SearchContent;

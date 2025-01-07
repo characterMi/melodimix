@@ -45,12 +45,12 @@ body {
   animation: loader 1s infinite linear;
 }
 
-.like-button-animation:before,
-.like-button-animation:after {
+.like-button-animation::before,
+.like-button-animation::after {
   position: absolute;
   content: "";
   width: 150%;
-  top: 25%;
+  top: 15%;
   left: 50%;
   height: 150%;
   transform: translateX(-50%);
@@ -58,8 +58,8 @@ body {
   background-repeat: no-repeat;
 }
 
-.like-button-animation:before {
-  top: -40%;
+.like-button-animation::before {
+  top: -60%;
   background-image: radial-gradient(circle, #22c55e 20%, transparent 20%),
     radial-gradient(circle, transparent 20%, #22c55e 20%, transparent 30%),
     radial-gradient(circle, #22c55e 20%, transparent 20%),
@@ -69,42 +69,33 @@ body {
     radial-gradient(circle, #22c55e 20%, transparent 20%),
     radial-gradient(circle, #22c55e 20%, transparent 20%),
     radial-gradient(circle, #22c55e 20%, transparent 20%);
-  background-size: 30% 30%, 20% 40%, 15% 35%, 20% 40%, 28% 18%, 10% 10%, 15% 15%,
+  background-size: 30% 30%, 20% 40%, 15% 35%, 20% 40%, 28% 68%, 50% 20%, 15% 45%,
     10% 40%, 18% 38%;
   background-position: 50% 120%;
   animation: greentopBubbles 0.6s ease forwards;
 }
 
-@keyframes greentopBubbles {
-  0% {
-    background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%,
-      40% 90%, 55% 90%, 70% 90%;
-  }
-
-  50% {
-    background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%,
-      50% 50%, 65% 20%, 90% 30%;
-  }
-
-  100% {
-    background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%,
-      50% 40%, 65% 10%, 90% 20%;
-    background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
-  }
+.like-button-animation::after {
+  bottom: -40%;
+  background-image: radial-gradient(circle, #22c55e 20%, transparent 20%),
+    radial-gradient(circle, #22c55e 20%, transparent 20%),
+    radial-gradient(circle, transparent 10%, #22c55e 15%, transparent 20%),
+    radial-gradient(circle, #22c55e 20%, transparent 20%),
+    radial-gradient(circle, #22c55e 20%, transparent 20%),
+    radial-gradient(circle, #22c55e 20%, transparent 20%),
+    radial-gradient(circle, #22c55e 20%, transparent 20%);
+  background-size: 25% 35%, 20% 40%, 18% 58%, 20% 60%, 15% 35%, 20% 50%, 18% 38%;
+  background-position: 50% 0%;
+  animation: greenbottomBubbles 0.6s ease forwards;
 }
 
-.button:hover::after {
-  bottom: -70%;
-  background-image: radial-gradient(circle, #7d2ae8 20%, transparent 20%),
-    radial-gradient(circle, #7d2ae8 20%, transparent 20%),
-    radial-gradient(circle, transparent 10%, #7d2ae8 15%, transparent 20%),
-    radial-gradient(circle, #7d2ae8 20%, transparent 20%),
-    radial-gradient(circle, #7d2ae8 20%, transparent 20%),
-    radial-gradient(circle, #7d2ae8 20%, transparent 20%),
-    radial-gradient(circle, #7d2ae8 20%, transparent 20%);
-  background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 20% 20%, 18% 18%;
-  background-position: 50% 0%;
-  animation: greenbottomBubbles 0.6s ease;
+.scroll-animation__container:hover .child_1,
+.scroll-animation__container:hover .child_2 {
+  animation-play-state: paused;
+}
+
+.scroll-animation {
+  animation: scroll 12s linear infinite;
 }
 
 @keyframes greenbottomBubbles {
@@ -125,13 +116,22 @@ body {
   }
 }
 
-.scroll-animation__container:hover .child_1,
-.scroll-animation__container:hover .child_2 {
-  animation-play-state: paused;
-}
+@keyframes greentopBubbles {
+  0% {
+    background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%,
+      40% 90%, 55% 90%, 70% 90%;
+  }
 
-.scroll-animation {
-  animation: scroll 12s linear infinite;
+  50% {
+    background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%,
+      50% 50%, 65% 20%, 90% 30%;
+  }
+
+  100% {
+    background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%,
+      50% 40%, 65% 10%, 90% 20%;
+    background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+  }
 }
 
 @keyframes scroll {

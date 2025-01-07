@@ -1,5 +1,6 @@
 import { likeSong } from "@/actions/likeSong";
 import { useAuthModal } from "@/hooks/useAuthModal";
+import { useLikedSongs } from "@/hooks/useLikedSongs";
 import { useUser } from "@/hooks/useUser";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
@@ -15,22 +16,28 @@ const LikeButton = ({
   songTitle: string;
 }) => {
   const btnRef = useRef<HTMLButtonElement>(null);
-
   const [isLiked, setIsLiked] = useState(false);
+  const { likedSongs, setLikedSongs, removeIdFromLikedSongs } = useLikedSongs();
+  const { onOpen: onAuthModalOpen } = useAuthModal();
   const [pending, startTransition] = useTransition();
 
   const router = useRouter();
 
-  const { supabaseClient } = useSessionContext();
-
-  const { onOpen: onAuthModalOpen } = useAuthModal();
-
   const { user } = useUser();
+
+  const { supabaseClient } = useSessionContext();
 
   useEffect(() => {
     if (!user?.id) return;
 
-    const fetchData = () => {
+    const likedSongsSet = new Set(likedSongs);
+
+    if (likedSongsSet.has(songId)) {
+      setIsLiked(true);
+      return;
+    }
+
+    (() => {
       startTransition(async () => {
         const { data, error } = await supabaseClient
           .from("liked_songs")
@@ -40,13 +47,12 @@ const LikeButton = ({
           .single();
 
         if (!error && data) {
+          setLikedSongs(songId);
           setIsLiked(true);
         }
       });
-    };
-
-    fetchData();
-  }, [songId, user?.id]);
+    })();
+  }, [user?.id]);
 
   const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
 
@@ -59,6 +65,9 @@ const LikeButton = ({
       const likeInformation = await likeSong(isLiked, user.id, songId);
 
       setIsLiked(likeInformation.isLiked);
+      (likeInformation.isLiked ? setLikedSongs : removeIdFromLikedSongs)(
+        songId
+      );
 
       router.refresh();
 

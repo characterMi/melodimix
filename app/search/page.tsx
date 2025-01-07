@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Loader from "@/components/Loader";
 import SearchInput from "@/components/SearchInput";
 import { Suspense } from "react";
-import PageContent from "./PageContent";
+import SearchContent from "./SearchContent";
 
 export const revalidate = 60 * 60 * 24;
 
@@ -16,7 +16,7 @@ async function GetSongs() {
   // i could get the search term with query params and use the getSongByTitle function to get the searched song, and i should do that in a large scale project, but in this case, i don't have lots of musics, so i just store the search term in a zustand context and i filter out all songs using the searchValue state. this way, we improved the performance by not calling the database every time user searches for something.
   const songs = await getSongs();
 
-  return <PageContent songs={songs} />;
+  return <SearchContent songs={songs} />;
 }
 
 const SearchPage = () => {
