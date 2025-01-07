@@ -37,6 +37,8 @@ const LikeButton = ({
       return;
     }
 
+    setIsLiked(false);
+
     (() => {
       startTransition(async () => {
         const { data, error } = await supabaseClient
@@ -52,7 +54,7 @@ const LikeButton = ({
         }
       });
     })();
-  }, [user?.id]);
+  }, [user?.id, likedSongs]);
 
   const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
 
