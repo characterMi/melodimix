@@ -1,4 +1,5 @@
 import { revalidatePath } from "@/actions/revalidatePath";
+import { useUploadedSongs } from "@/hooks/useUploadedSongs";
 import { useUploadModal } from "@/hooks/useUploadModal";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -10,11 +11,9 @@ import Modal from "./Modal";
 
 const UploadModal = () => {
   const [isLoading, startTransition] = useTransition();
-
+  const setUploadedSongs = useUploadedSongs((state) => state.setUploadedSongs);
   const uploadModal = useUploadModal();
-
   const supabaseClient = useSupabaseClient();
-
   const { user } = useUser();
 
   const handleSubmit = (formData: FormData) => {
@@ -89,6 +88,7 @@ const UploadModal = () => {
         }
 
         toast.success("Song created!");
+        setUploadedSongs(title);
         revalidatePath();
         uploadModal.onClose();
       } catch (error: any) {

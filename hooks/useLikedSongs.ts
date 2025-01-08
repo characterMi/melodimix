@@ -4,6 +4,7 @@ interface LikedSongs {
   likedSongs: string[];
   setLikedSongs: (songId: string) => void;
   removeIdFromLikedSongs: (songId: string) => void;
+  clearLikedSongs: () => void;
 }
 
 export const useLikedSongs = create<LikedSongs>((setState) => ({
@@ -14,4 +15,5 @@ export const useLikedSongs = create<LikedSongs>((setState) => ({
     setState((state) => ({
       likedSongs: state.likedSongs.filter((id) => id !== songId),
     })),
+  clearLikedSongs: () => setState({ likedSongs: [] }),
 }));

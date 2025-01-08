@@ -1,9 +1,11 @@
 import { Song } from "@/types/types";
 import { useEffect, useState } from "react";
+import { useUploadedSongs } from "./useUploadedSongs";
 import { useUser } from "./useUser";
 
 export function useGetUserSongs(songs: Song[]) {
   const { isLoading, user } = useUser();
+  const uploadedSongs = useUploadedSongs((state) => state.uploadedSongs);
 
   const [userSongs, setUserSongs] = useState<Song[]>([]);
 
@@ -13,7 +15,7 @@ export function useGetUserSongs(songs: Song[]) {
 
       setUserSongs(userSongs);
     })();
-  }, [user]);
+  }, [user, uploadedSongs]);
 
   if (isLoading) return { songs: [], isLoading: true };
 

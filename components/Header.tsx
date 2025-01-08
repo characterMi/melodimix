@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuthModal } from "@/hooks/useAuthModal";
+import { useLikedSongs } from "@/hooks/useLikedSongs";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Link from "next/link";
@@ -21,10 +22,9 @@ const Header = ({
   children: React.ReactNode;
   className?: string;
 }) => {
+  const clearLikedSongs = useLikedSongs((state) => state.clearLikedSongs);
   const router = useRouter();
-
   const supabaseClient = useSupabaseClient();
-
   const { user, isLoading: isUserLoading } = useUser();
 
   const handleLogOut = async () => {
@@ -34,9 +34,11 @@ const Header = ({
 
     if (error) {
       toast.error(error.message);
-    } else {
-      toast.success("Logged out !");
+      return;
     }
+
+    toast.success("Logged out !");
+    clearLikedSongs();
   };
 
   const { onOpen } = useAuthModal();

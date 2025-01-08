@@ -24,21 +24,21 @@ export const likeSong = async (
       return { error: error.message, isLiked: true };
     }
 
-    revalidatePath("/");
-
-    return { isLiked: false };
-  } else {
-    const { error } = await supabaseClient.from("liked_songs").insert({
-      song_id: songId,
-      user_id: userId,
-    });
-
-    if (error) {
-      return { error: error.message, isLiked: false };
-    }
-
     revalidatePath("/liked");
 
-    return { message: "Liked !", isLiked: true };
+    return { isLiked: false };
   }
+
+  const { error } = await supabaseClient.from("liked_songs").insert({
+    song_id: songId,
+    user_id: userId,
+  });
+
+  if (error) {
+    return { error: error.message, isLiked: false };
+  }
+
+  revalidatePath("/liked");
+
+  return { message: "Liked !", isLiked: true };
 };
