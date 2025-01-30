@@ -4,13 +4,13 @@ import NoSongFallback from "@/components/NoSongFallback";
 import SongCard from "@/components/SongCard";
 import useOnPlay from "@/hooks/useOnPlay";
 import { useUser } from "@/hooks/useUser";
-import { usePlayer } from "@/store/usePlayerStore";
+import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types/types";
 
 export const LikedContent = ({ songs }: { songs: Song[] }) => {
   const onPlay = useOnPlay(songs);
 
-  const activeId = usePlayer((state) => state.activeId);
+  const activeId = usePlayerStore((state) => state.activeId);
 
   const { isLoading, user } = useUser();
 

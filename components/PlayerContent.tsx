@@ -7,7 +7,7 @@ import Slider from "./Slider";
 import SongItem from "./SongItem";
 
 const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
-  const { handlers, icons, sound, state } = usePlayer(songUrl);
+  const { handlers, icons, sound, state } = usePlayer(song, songUrl);
   const { handleChangePlayerType, handlePlay, onPlaySong, toggleMute } =
     handlers;
   const { PauseOrPlayIcon, PlayerTypeIcon, VolumeIcon } = icons;
@@ -15,7 +15,7 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
 
   return (
     <>
-      <Duration duration={sound.duration!} song={sound.song} />
+      <Duration duration={sound.duration || 0} song={sound.song} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 h-full relative">
         <div className="flex w-full justify-start relative">

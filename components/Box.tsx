@@ -1,6 +1,6 @@
 "use client";
 
-import { usePlayer } from "@/store/usePlayerStore";
+import { usePlayerStore } from "@/store/usePlayerStore";
 import { FC } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -11,7 +11,7 @@ interface BoxProps {
 }
 
 const Box: FC<BoxProps> = ({ children, className, isLibrary }) => {
-  const activeId = usePlayer((state) => state.activeId);
+  const activeId = usePlayerStore((state) => state.activeId);
 
   return (
     <div

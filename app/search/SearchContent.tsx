@@ -2,7 +2,7 @@
 
 import useOnPlay from "@/hooks/useOnPlay";
 import { useSearchSong } from "@/hooks/useSearchSong";
-import { usePlayer } from "@/store/usePlayerStore";
+import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types/types";
 import { twMerge } from "tailwind-merge";
 import LikeButton from "../../components/LikeButton";
@@ -11,7 +11,7 @@ import SongItem from "../../components/SongItem";
 
 const SearchContent = ({ songs }: { songs: Song[] }) => {
   const onPlay = useOnPlay(songs);
-  const activeId = usePlayer((state) => state.activeId);
+  const activeId = usePlayerStore((state) => state.activeId);
   const filteredSongs = useSearchSong(songs);
 
   if (filteredSongs.length === 0) return <NoSongFallback className="px-6" />;

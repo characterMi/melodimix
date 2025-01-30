@@ -1,7 +1,7 @@
 import { revalidatePath } from "@/actions/revalidatePath";
-import { useUploadedSongs } from "@/hooks/useUploadedSongs";
-import { useUploadModal } from "@/hooks/useUploadModal";
 import { useUser } from "@/hooks/useUser";
+import { useUploadedSongs } from "@/store/useUploadedSongs";
+import { useUploadModal } from "@/store/useUploadModal";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useTransition } from "react";
 import toast from "react-hot-toast";

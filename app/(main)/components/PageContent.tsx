@@ -3,13 +3,13 @@
 import NoSongFallback from "@/components/NoSongFallback";
 import SongCard from "@/components/SongCard";
 import { useOnPlay } from "@/hooks/useOnPlay";
-import { usePlayer } from "@/store/usePlayerStore";
+import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types/types";
 
 const PageContent = ({ songs }: { songs: Song[] }) => {
   const onPlay = useOnPlay(songs);
 
-  const activeId = usePlayer((state) => state.activeId);
+  const activeId = usePlayerStore((state) => state.activeId);
 
   if (songs.length === 0) return <NoSongFallback className="px-6 text-xl" />;
 

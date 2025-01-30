@@ -1,4 +1,5 @@
 import { usePlayerStore } from "@/store/usePlayerStore";
+import { Song } from "@/types/types";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { BiArrowToRight } from "react-icons/bi";
@@ -6,8 +7,10 @@ import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { IoShuffleOutline } from "react-icons/io5";
 import useSound from "use-sound";
+import { useLoadImage } from "./useLoadImage";
 
-export function usePlayer(songUrl: string) {
+export function usePlayer(song: Song, songUrl: string) {
+  const songImageUrl = useLoadImage(song);
   const { ids, playerType, setId, setPlayerType, setVolume, volume, activeId } =
     usePlayerStore((state) => ({
       ids: state.ids,
@@ -25,9 +28,15 @@ export function usePlayer(songUrl: string) {
   const [play, { pause, sound, duration /* to ms */ }] = useSound(songUrl, {
     volume,
     format: ["mp3"],
-    onplay: () => setIsMusicPlaying(true),
-    onend: onPlaySong,
-    onpause: () => setIsMusicPlaying(false),
+    onplay: () => {
+      setIsMusicPlaying(true);
+      navigator.setAppBadge?.(1);
+    },
+    onend: () => onPlaySong("next"),
+    onpause: () => {
+      setIsMusicPlaying(false);
+      navigator.clearAppBadge?.();
+    },
     onload: () => setIsMusicLoading(false),
   });
 
@@ -46,7 +55,7 @@ export function usePlayer(songUrl: string) {
     }
   }
 
-  function onPlaySong(type: "next" | "previous" = "next") {
+  function onPlaySong(type: "next" | "previous") {
     if (ids.length <= 1) return;
 
     const currentIndex = ids.findIndex((id) => id === activeId);
@@ -85,7 +94,50 @@ export function usePlayer(songUrl: string) {
   useEffect(() => {
     sound?.play();
 
-    return () => sound?.unload();
+    if (navigator.mediaSession && sound) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: song.title,
+        artist: song.author,
+        album: "Unknown",
+        artwork: [
+          {
+            src: songImageUrl || "/images/liked.png",
+            type: "image/*",
+          },
+        ],
+      });
+      navigator.mediaSession.setActionHandler("play", () => play());
+      navigator.mediaSession.setActionHandler("pause", () => pause());
+      navigator.mediaSession.setActionHandler("nexttrack", () =>
+        onPlaySong("next")
+      );
+      navigator.mediaSession.setActionHandler("previoustrack", () =>
+        onPlaySong("previous")
+      );
+      navigator.mediaSession.setActionHandler("seekforward", () => {
+        sound.seek(sound?.seek() + 10);
+      });
+      navigator.mediaSession.setActionHandler("seekbackward", () => {
+        sound.seek(sound?.seek() - 10);
+      });
+      navigator.mediaSession.setActionHandler("seekto", (newTime) => {
+        sound.seek(newTime);
+      });
+      navigator.mediaSession.setActionHandler("stop", () => {
+        sound.unload();
+        setId();
+      });
+      navigator.mediaSession.setPositionState({
+        duration: sound.duration(),
+        position: sound.seek(),
+        playbackRate: 1.0,
+      });
+    }
+
+    return () => {
+      sound?.unload();
+      navigator.mediaSession.metadata = null;
+    };
   }, [sound]);
 
   return {
