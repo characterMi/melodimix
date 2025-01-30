@@ -3,7 +3,7 @@
 import { useDebounce } from "@/hooks/useDebounce";
 import { useEffect, useState } from "react";
 
-import { useSearchMusic } from "@/hooks/useSearch";
+import { useSearchMusic } from "@/store/useSearch";
 import Input from "./Input";
 
 const SearchInput = () => {

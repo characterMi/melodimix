@@ -1,7 +1,7 @@
 import { likeSong } from "@/actions/likeSong";
-import { useAuthModal } from "@/hooks/useAuthModal";
-import { useLikedSongs } from "@/hooks/useLikedSongs";
 import { useUser } from "@/hooks/useUser";
+import { useAuthModal } from "@/store/useAuthModal";
+import { useLikedSongs } from "@/store/useLikedSongs";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";

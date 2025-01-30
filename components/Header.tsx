@@ -1,8 +1,8 @@
 "use client";
 
-import { useAuthModal } from "@/hooks/useAuthModal";
-import { useLikedSongs } from "@/hooks/useLikedSongs";
 import { useUser } from "@/hooks/useUser";
+import { useAuthModal } from "@/store/useAuthModal";
+import { useLikedSongs } from "@/store/useLikedSongs";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

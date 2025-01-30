@@ -1,6 +1,6 @@
-import { useAuthModal } from "@/hooks/useAuthModal";
-import { useUploadModal } from "@/hooks/useUploadModal";
 import { useUser } from "@/hooks/useUser";
+import { useAuthModal } from "@/store/useAuthModal";
+import { useUploadModal } from "@/store/useUploadModal";
 import { AiOutlinePlus } from "react-icons/ai";
 import { TbPlaylist } from "react-icons/tb";
 

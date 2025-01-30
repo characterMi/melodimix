@@ -1,8 +1,8 @@
 "use client";
 
 import useOnPlay from "@/hooks/useOnPlay";
-import { usePlayer } from "@/hooks/usePlayer";
 import { useSearchSong } from "@/hooks/useSearchSong";
+import { usePlayer } from "@/store/usePlayerStore";
 import type { Song } from "@/types/types";
 import { twMerge } from "tailwind-merge";
 import LikeButton from "../../components/LikeButton";

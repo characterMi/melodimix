@@ -1,6 +1,6 @@
 "use client";
 
-import { usePlayer } from "@/hooks/usePlayer";
+import { usePlayer } from "@/store/usePlayerStore";
 import { FC } from "react";
 import { twMerge } from "tailwind-merge";
 

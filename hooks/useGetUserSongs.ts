@@ -1,6 +1,6 @@
 import { Song } from "@/types/types";
 import { useEffect, useState } from "react";
-import { useUploadedSongs } from "./useUploadedSongs";
+import { useUploadedSongs } from "../store/useUploadedSongs";
 import { useUser } from "./useUser";
 
 export function useGetUserSongs(songs: Song[]) {

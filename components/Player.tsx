@@ -2,7 +2,7 @@
 
 import { useGetSongById } from "@/hooks/useGetSongById";
 import { useLoadSongUrl } from "@/hooks/useLoadSongUrl";
-import { usePlayer } from "@/hooks/usePlayer";
+import { usePlayer } from "@/store/usePlayerStore";
 import { useEffect } from "react";
 import Loader from "./Loader";
 import PlayerContent from "./PlayerContent";

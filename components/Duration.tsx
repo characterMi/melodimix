@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Slider from "./Slider";
 
 interface DurationProps {
-  sound: any;
+  song: any;
   duration: number;
 }
 
@@ -11,7 +11,7 @@ interface SongDuration {
   seconds: string;
 }
 
-function Duration({ duration, sound }: DurationProps) {
+function Duration({ duration, song }: DurationProps) {
   const songDuration = useRef<SongDuration>({
     minutes: "00",
     seconds: "00",
@@ -26,10 +26,10 @@ function Duration({ duration, sound }: DurationProps) {
     let interval: NodeJS.Timeout | undefined;
     const DURATION_IN_SECOND = duration / 1000;
 
-    if (sound) {
+    if (song) {
       interval = setInterval(() => {
-        // sound.seek gives us the current duration (in second)
-        setCurrentDurationPercentage((sound.seek() / DURATION_IN_SECOND) * 100);
+        // song.seek gives us the current duration (in second)
+        setCurrentDurationPercentage((song.seek() / DURATION_IN_SECOND) * 100);
       }, 1000);
 
       const seconds = Math.round((duration / 1000) % 60);
@@ -42,13 +42,13 @@ function Duration({ duration, sound }: DurationProps) {
     }
 
     return () => clearInterval(interval);
-  }, [sound]);
+  }, [song]);
 
   useEffect(() => {
-    if (sound) {
-      const currentSeconds = Math.round(sound.seek() % 60);
+    if (song) {
+      const currentSeconds = Math.round(song.seek() % 60);
 
-      const currentMinutes = Math.round((sound.seek() - currentSeconds) / 60);
+      const currentMinutes = Math.round((song.seek() - currentSeconds) / 60);
 
       currentDuration.current.seconds =
         currentSeconds < 10 ? `0${currentSeconds}` : currentSeconds.toString();
@@ -72,9 +72,9 @@ function Duration({ duration, sound }: DurationProps) {
         bgColor="bg-emerald-600"
         value={currentDurationPercentage}
         onChange={(value) => {
-          if (sound) {
+          if (song) {
             setCurrentDurationPercentage(value);
-            sound.seek(((value / 100) * duration) / 1000);
+            song.seek(((value / 100) * duration) / 1000);
           }
         }}
         max={100}

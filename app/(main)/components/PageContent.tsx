@@ -3,7 +3,7 @@
 import NoSongFallback from "@/components/NoSongFallback";
 import SongCard from "@/components/SongCard";
 import { useOnPlay } from "@/hooks/useOnPlay";
-import { usePlayer } from "@/hooks/usePlayer";
+import { usePlayer } from "@/store/usePlayerStore";
 import type { Song } from "@/types/types";
 
 const PageContent = ({ songs }: { songs: Song[] }) => {

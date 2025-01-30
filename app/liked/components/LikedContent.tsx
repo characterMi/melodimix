@@ -3,8 +3,8 @@
 import NoSongFallback from "@/components/NoSongFallback";
 import SongCard from "@/components/SongCard";
 import useOnPlay from "@/hooks/useOnPlay";
-import { usePlayer } from "@/hooks/usePlayer";
 import { useUser } from "@/hooks/useUser";
+import { usePlayer } from "@/store/usePlayerStore";
 import type { Song } from "@/types/types";
 
 export const LikedContent = ({ songs }: { songs: Song[] }) => {

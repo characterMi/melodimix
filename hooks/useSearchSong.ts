@@ -1,6 +1,6 @@
 import { Song } from "@/types/types";
 import { useLayoutEffect, useState } from "react";
-import { useSearchMusic } from "./useSearch";
+import { useSearchMusic } from "../store/useSearch";
 
 export function useSearchSong(songs: Song[]) {
   const { searchValue } = useSearchMusic();

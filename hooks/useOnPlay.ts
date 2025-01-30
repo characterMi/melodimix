@@ -1,6 +1,6 @@
 import { Song } from "@/types/types";
 
-import { usePlayer } from "./usePlayer";
+import { usePlayer } from "../store/usePlayerStore";
 
 export const useOnPlay = (songs: Song[]) => {
   const { setId, setIds } = usePlayer((state) => ({
