@@ -54,7 +54,7 @@ const Header = ({
   ) : (
     <>
       <Button
-        className="bg-transparent text-neutral-300 font-medium text-nowrap"
+        className="bg-transparent text-neutral-300 font-medium text-nowrap py-2"
         onClick={onOpen}
       >
         Sign up
@@ -112,7 +112,7 @@ const Header = ({
 
         <div className="flex justify-between items-center gap-x-4">
           {isUserLoading ? (
-            <Loader className="scale-[.65] m-0 p-0" />
+            <Loader className="m-0 p-0 size-[42px]" />
           ) : (
             AuthButtons
           )}
@@ -123,4 +123,5 @@ const Header = ({
     </header>
   );
 };
+
 export default Header;

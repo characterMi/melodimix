@@ -16,9 +16,9 @@ const LikeButton = ({
   songTitle: string;
 }) => {
   const btnRef = useRef<HTMLButtonElement>(null);
-  const [isLiked, setIsLiked] = useState(false);
   const { likedSongs, setLikedSongs, removeIdFromLikedSongs } = useLikedSongs();
   const { onOpen: onAuthModalOpen } = useAuthModal();
+  const [isLiked, setIsLiked] = useState(likedSongs[songId] || false);
   const [pending, startTransition] = useTransition();
 
   const router = useRouter();
@@ -27,18 +27,14 @@ const LikeButton = ({
 
   const { supabaseClient } = useSessionContext();
 
-  function checkIfSongIsInLikedPlaylist() {
-    const likedSongsSet = new Set(likedSongs);
-
-    // faster than .includes array method...
-    return likedSongsSet.has(songId);
-  }
-
   useEffect(() => {
     if (!user?.id) return;
 
-    if (checkIfSongIsInLikedPlaylist()) {
+    if (likedSongs[songId]) {
       setIsLiked(true);
+      return;
+    } else if (likedSongs[songId] === false) {
+      setIsLiked(false);
       return;
     }
 
@@ -52,15 +48,17 @@ const LikeButton = ({
           .single();
 
         if (!error && data) {
-          setLikedSongs(songId);
+          setLikedSongs(songId, true);
           setIsLiked(true);
+        } else {
+          setLikedSongs(songId, false);
         }
       });
     })();
   }, [user?.id]);
 
   useEffect(() => {
-    if (checkIfSongIsInLikedPlaylist()) {
+    if (likedSongs[songId]) {
       setIsLiked(true);
     } else {
       setIsLiked(false);
@@ -78,7 +76,8 @@ const LikeButton = ({
       const likeInformation = await likeSong(isLiked, user.id, songId);
 
       (likeInformation.isLiked ? setLikedSongs : removeIdFromLikedSongs)(
-        songId
+        songId,
+        true
       );
 
       router.refresh();

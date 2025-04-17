@@ -1,7 +1,8 @@
 "use client";
 
+import LikeButton from "@/components/LikeButton";
 import NoSongFallback from "@/components/NoSongFallback";
-import SongCard from "@/components/SongCard";
+import SongItem from "@/components/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
 import { useUser } from "@/hooks/useUser";
 import { usePlayerStore } from "@/store/usePlayerStore";
@@ -27,13 +28,17 @@ export const LikedContent = ({ songs }: { songs: Song[] }) => {
 
   return (
     <div
-      className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-4 p-2 sm:p-6 ${
+      className={`flex flex-col gap-y-2 p-2 sm:p-6 w-full ${
         activeId && "mb-28"
       }`}
     >
       {songs.map((song) => (
         <div key={song.id} className="flex items-center gap-x-4 w-full">
-          <SongCard data={song} onClick={(id) => onPlay(id)} />
+          <div className="flex-1 overflow-hidden">
+            <SongItem data={song} onClick={(id) => onPlay(id)} />
+          </div>
+
+          <LikeButton songId={song.id} songTitle={song.title} />
         </div>
       ))}
     </div>
