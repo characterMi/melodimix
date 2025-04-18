@@ -2,7 +2,17 @@ import { useRouter } from "next/navigation";
 import { RxReload } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
 
-const NoSongFallback = ({ className }: { className?: string }) => {
+type Props = {
+  className?: string;
+  showButton?: boolean;
+  fallbackText?: string;
+};
+
+const NoSongFallback = ({
+  className,
+  showButton = true,
+  fallbackText = "No song available.",
+}: Props) => {
   const router = useRouter();
 
   return (
@@ -12,14 +22,16 @@ const NoSongFallback = ({ className }: { className?: string }) => {
         className
       )}
     >
-      <p>No song available.</p>
-      <button
-        className="flex items-center gap-x-1 underline"
-        onClick={() => router.refresh()}
-      >
-        Refresh
-        <RxReload aria-hidden />
-      </button>
+      <p>{fallbackText}</p>
+      {showButton && (
+        <button
+          className="flex items-center gap-x-1 underline"
+          onClick={() => router.refresh()}
+        >
+          Refresh
+          <RxReload aria-hidden />
+        </button>
+      )}
     </div>
   );
 };

@@ -14,7 +14,14 @@ const SearchContent = ({ songs }: { songs: Song[] }) => {
   const activeId = usePlayerStore((state) => state.activeId);
   const filteredSongs = useSearchSong(songs);
 
-  if (filteredSongs.length === 0) return <NoSongFallback className="px-6" />;
+  if (filteredSongs.length === 0)
+    return (
+      <NoSongFallback
+        className="px-6"
+        showButton={false}
+        fallbackText="There is no results for given query."
+      />
+    );
 
   return (
     <div

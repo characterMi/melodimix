@@ -24,7 +24,10 @@ export const LikedContent = ({ songs }: { songs: Song[] }) => {
     );
   }
 
-  if (songs.length === 0) return <NoSongFallback className="m-4" />;
+  if (songs.length === 0)
+    return (
+      <NoSongFallback className="m-4" fallbackText="There is nothing here." />
+    );
 
   return (
     <div
