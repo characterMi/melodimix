@@ -32,7 +32,7 @@ const Sidebar: FC<SidebarProps> = ({ children }) => {
             <DownloadApplication />
           </div>
         </Box>
-        <Box className="overflow-y-auto h-full" isLibrary>
+        <Box className="overflow-y-auto h-full">
           <Suspense
             fallback={<Loader className="flex justify-center w-full mt-5" />}
           >
