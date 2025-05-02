@@ -10,7 +10,7 @@ const ManageCacheModalContent = () => {
   return (
     <div className="h-[30rem]">
       <hr />
-      <div className="flex gap-2 items-center justify-center pt-4 h-full">
+      <div className="flex gap-2 items-center justify-center pt-6 h-full">
         {status === "loading" && (
           <>
             <p>Calculating storage usage...</p>
