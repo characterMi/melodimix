@@ -1,8 +1,26 @@
-const assets = ["/", "/search", "/logo.svg", "/images/liked.png"];
+const assets = [
+  "/",
+  "/manifest.webmanifest",
+  "/search",
+  "/logo.svg",
+  "/images/liked.png",
+  "/images/1.jpg",
+  "/images/2.jpg",
+  "/images/d1.png",
+  "/images/d2.png",
+  "/images/d3.png",
+  "/icons/liked-192.png",
+  "/icons/melodimix-192.png",
+  "/icons/melodimix-192-maskable.png",
+  "/icons/melodimix-512.png",
+  "/icons/melodimix-512-maskable.png",
+];
+
+const APP_URL = "localhost:3000";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open("melodi-mix").then((cache) => {
+    caches.open("assets").then((cache) => {
       cache.addAll(assets);
     })
   );
@@ -13,18 +31,23 @@ self.addEventListener("install", (event) => {
 self.addEventListener("fetch", (event) => {
   const eventUrl = new URL(event.request.url);
 
+  // only caching songs or static assets...
   if (
-    eventUrl.hostname === "ibmcmrwzbejntporrerq.supabase.co" &&
-    (eventUrl.pathname.startsWith("/rest/v1/songs") ||
-      eventUrl.pathname.startsWith("/storage/v1/object/public/songs"))
+    (eventUrl.hostname === "ibmcmrwzbejntporrerq.supabase.co" &&
+      (eventUrl.pathname.startsWith("/rest/v1/songs") ||
+        eventUrl.pathname.startsWith("/storage/v1/object/public/songs"))) ||
+    (eventUrl.host === APP_URL && assets.includes(eventUrl.pathname))
   ) {
     event.respondWith(
       caches.match(event.request).then((response) => {
-        // Even if the response is in the cache, we fetch it
-        // and update the cache for future usage
-        const fetchPromise = fetch(event.request)
+        if (response) return response;
+
+        const cacheName = getCacheName(eventUrl);
+        console.log(cacheName);
+
+        return fetch(event.request)
           .then((networkResponse) => {
-            return caches.open("melodi-mix").then((cache) => {
+            return caches.open(cacheName).then((cache) => {
               cache.put(event.request.url, networkResponse.clone());
               return networkResponse;
             });
@@ -40,12 +63,19 @@ self.addEventListener("fetch", (event) => {
               }
             );
           });
-        // We use the currently cached version if it's there
-        return response || fetchPromise; // cached or a network fetch
       })
     );
-    return;
+  } else event.respondWith(fetch(event.request));
+});
+
+function getCacheName(eventUrl) {
+  if (eventUrl.host === APP_URL && assets.includes(eventUrl.pathname)) {
+    return "assets";
   }
 
-  event.respondWith(fetch(event.request));
-});
+  if (eventUrl.hostname === "ibmcmrwzbejntporrerq.supabase.co") {
+    if (eventUrl.pathname.startsWith("/rest/v1/songs")) return "song-urls";
+
+    return "songs";
+  }
+}
