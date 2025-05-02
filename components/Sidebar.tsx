@@ -4,6 +4,7 @@ import { FC, Suspense } from "react";
 import Box from "./Box";
 import DownloadApplication from "./DownloadApplication";
 import Loader from "./Loader";
+import ManageCacheButton from "./ManageCacheButton";
 import SidebarItem from "./SidebarItem";
 import UserSongs from "./UserSongs";
 
@@ -29,6 +30,7 @@ const Sidebar: FC<SidebarProps> = ({ children }) => {
               <SidebarItem key={route.label} {...route} />
             ))}
 
+            <ManageCacheButton />
             <DownloadApplication />
           </div>
         </Box>

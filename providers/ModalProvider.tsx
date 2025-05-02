@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import AuthModal from "@/components/AuthModal";
+import ManageCacheModal from "@/components/ManageCacheModal";
 import UploadModal from "@/components/UploadModal";
+import { useEffect, useState } from "react";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -17,6 +18,7 @@ export const ModalProvider = () => {
     <>
       <AuthModal />
       <UploadModal />
+      <ManageCacheModal />
     </>
   );
 };

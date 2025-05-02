@@ -2,9 +2,9 @@
 
 import type { Song } from "@/types/types";
 import { useState } from "react";
-import Box from "./Box";
 import DownloadApplication from "./DownloadApplication";
 import Library from "./Library";
+import ManageCacheButton from "./ManageCacheButton";
 
 const MobileSidebar = ({ songs }: { songs: Song[] }) => {
   const [isActive, setIsActive] = useState(false);
@@ -43,10 +43,9 @@ const MobileSidebar = ({ songs }: { songs: Song[] }) => {
         </div>
 
         <aside id="sidebar" className="overflow-y-auto" aria-hidden={!isActive}>
-          <div className="download-btn">
-            <Box className="m-4">
-              <DownloadApplication />
-            </Box>
+          <div className="flex flex-col gap-4 p-4">
+            <ManageCacheButton />
+            <DownloadApplication />
 
             <hr className="border-neutral-600" />
           </div>

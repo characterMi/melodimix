@@ -16,7 +16,7 @@ const assets = [
   "/icons/melodimix-512-maskable.png",
 ];
 
-const APP_URL = "localhost:3000";
+const APP_URL = "melodi-mix.vercel.app";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -28,10 +28,14 @@ self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
 
+self.addEventListener("activate", (event) => {
+  event.waitUntil(ClientRequest.claim());
+});
+
 self.addEventListener("fetch", (event) => {
   const eventUrl = new URL(event.request.url);
 
-  // only caching songs or static assets...
+  // only caching songs or static assets, if the user wants...
   if (
     (eventUrl.hostname === "ibmcmrwzbejntporrerq.supabase.co" &&
       (eventUrl.pathname.startsWith("/rest/v1/songs") ||
@@ -43,15 +47,14 @@ self.addEventListener("fetch", (event) => {
         if (response) return response;
 
         const cacheName = getCacheName(eventUrl);
-        console.log(cacheName);
 
         return fetch(event.request)
-          .then((networkResponse) => {
-            return caches.open(cacheName).then((cache) => {
+          .then((networkResponse) =>
+            caches.open(cacheName).then((cache) => {
               cache.put(event.request.url, networkResponse.clone());
               return networkResponse;
-            });
-          })
+            })
+          )
           .catch((e) => {
             console.error(e);
 
