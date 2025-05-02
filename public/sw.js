@@ -6,6 +6,8 @@ self.addEventListener("install", (event) => {
       cache.addAll(assets);
     })
   );
+
+  self.skipWaiting();
 });
 
 self.addEventListener("fetch", (event) => {
