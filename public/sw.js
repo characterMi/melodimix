@@ -20,16 +20,19 @@ const APP_URL = "melodi-mix.vercel.app";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open("assets").then((cache) => {
-      cache.addAll(assets);
-    })
-  );
+    (async () => {
+      await caches.delete("assets");
 
-  self.skipWaiting();
+      const cache = await caches.open("assets");
+      await cache.addAll(assets);
+
+      self.skipWaiting();
+    })()
+  );
 });
 
 self.addEventListener("activate", (event) => {
-  event.waitUntil(ClientRequest.claim());
+  event.waitUntil(clients.claim());
 });
 
 self.addEventListener("fetch", (event) => {
