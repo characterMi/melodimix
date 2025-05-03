@@ -1,14 +1,9 @@
 import { formatBytes } from "@/lib/formatBytes";
 import { formatPercentage } from "@/lib/formatPercentage";
-import { useManageCacheModal } from "@/store/useManageCacheModal";
 import type { CacheData, CacheKeys } from "@/types/types";
-import toast from "react-hot-toast";
 
 export const useCacheInfo = (totalCacheSize: number, cacheData: CacheData) => {
-  const closeModal = useManageCacheModal((state) => state.onClose);
-
   const cacheNames = Object.keys(cacheData) as CacheKeys[];
-
   const totalCacheSizeFormatted = formatBytes(totalCacheSize, 0).split(" ");
 
   const cacheColors: Record<CacheKeys, string> = {
@@ -42,23 +37,12 @@ export const useCacheInfo = (totalCacheSize: number, cacheData: CacheData) => {
     return gradientString + segments.join(", ");
   }
 
-  async function handleClearCache() {
-    try {
-      const cacheNames = await caches.keys();
-      await Promise.all(cacheNames.map((name) => caches.delete(name)));
-      toast.success("Cache cleared successfully.");
-      closeModal();
-    } catch (error) {
-      toast.error("Something went wrong while clearing the cache.");
-    }
-  }
-
   return {
     title: totalCacheSizeFormatted as [string, string],
     cacheColors,
     cachePercentages,
     cacheSizesFormatted,
     conicGradient,
-    handleClearCache,
+    cacheNames,
   };
 };
