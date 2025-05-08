@@ -1,7 +1,5 @@
 const assets = [
-  "/",
   "/manifest.webmanifest",
-  "/search",
   "/logo.svg",
   "/images/liked.png",
   "/images/1.jpg",
@@ -25,6 +23,8 @@ self.addEventListener("install", (event) => {
 
       const cache = await caches.open("assets");
       await cache.addAll(assets);
+
+      self.skipWaiting();
     })()
   );
 });
