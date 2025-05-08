@@ -32,13 +32,13 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("activate", (event) => {
-  event.waitUntil(clients.claim());
+  event.waitUntil(self.clients.claim());
 });
 
 self.addEventListener("fetch", (event) => {
   const eventUrl = new URL(event.request.url);
 
-  // only caching songs or static assets, if the user wants...
+  // only caching songs or static assets...
   if (
     (eventUrl.hostname === "ibmcmrwzbejntporrerq.supabase.co" &&
       (eventUrl.pathname.startsWith("/rest/v1/songs") ||
@@ -46,7 +46,9 @@ self.addEventListener("fetch", (event) => {
     (eventUrl.host === APP_URL && assets.includes(eventUrl.pathname))
   ) {
     event.respondWith(
-      caches.match(event.request).then((response) => {
+      caches.match(event.request, {
+        ignoreSearch: true,
+      }).then((response) => {
         if (response) return response;
 
         const cacheName = getCacheName(eventUrl);
