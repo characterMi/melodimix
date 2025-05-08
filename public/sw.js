@@ -25,8 +25,6 @@ self.addEventListener("install", (event) => {
 
       const cache = await caches.open("assets");
       await cache.addAll(assets);
-
-      self.skipWaiting();
     })()
   );
 });
