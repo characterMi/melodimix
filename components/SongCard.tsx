@@ -28,10 +28,9 @@ const SongCard = ({ data, onClick }: Props) => {
   }
 
   return (
-    <div
+    <button
       onClick={() => onClick(data.id)}
-      className="relative group flex flex-col items-center justify-center rounded-md overflow-hidden gap-x-4 bg-neutral-400/5 cursor-pointer hover:bg-neutral-400/10 transition p-3"
-      role="button"
+      className="relative group flex flex-col text-left rounded-md overflow-hidden gap-x-4 bg-neutral-400/5 cursor-pointer hover:bg-neutral-400/10 transition p-3"
       aria-label={"Play the " + data.title + " song"}
     >
       <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
@@ -67,7 +66,7 @@ const SongCard = ({ data, onClick }: Props) => {
           <FaPlay className="text-black" />
         </div>
       </div>
-    </div>
+    </button>
   );
 };
 export default SongCard;

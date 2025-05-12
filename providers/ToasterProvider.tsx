@@ -10,6 +10,10 @@ export const ToasterProvider = () => {
           background: "#333",
           color: "#fff",
         },
+        ariaProps: {
+          role: "status",
+          "aria-live": "polite",
+        },
       }}
     />
   );

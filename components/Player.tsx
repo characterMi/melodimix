@@ -16,11 +16,14 @@ const Player = () => {
   if (!song || !songUrl || !activeId) return null;
 
   return (
-    <div className="fixed bottom-0 bg-black w-full py-2 pt-4 sm:pt-0 rounded-t-2xl px-4 player">
+    <div
+      className="fixed bottom-0 bg-black w-full py-2 pt-4 sm:pt-0 rounded-t-2xl px-4 player"
+      aria-live="assertive"
+    >
       <section className="h-full w-full relative">
         <PlayerContent song={song} songUrl={songUrl} key={songUrl} />
         {isLoading && (
-          <section
+          <div
             className="w-full h-28 z-50 bg-black/60 backdrop-blur-sm"
             style={{
               position: "absolute",
@@ -29,7 +32,7 @@ const Player = () => {
             }}
           >
             <Loader className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-0" />
-          </section>
+          </div>
         )}
       </section>
     </div>

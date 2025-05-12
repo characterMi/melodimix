@@ -5,16 +5,15 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { TbPlaylist } from "react-icons/tb";
 
 const AddSongButton = () => {
-  const authModal = useAuthModal();
-
-  const uploadModal = useUploadModal();
+  const openAuthModal = useAuthModal((state) => state.onOpen);
+  const openUploadModal = useUploadModal((state) => state.onOpen);
 
   const { user } = useUser();
 
   const handleClick = () => {
-    if (!user) return authModal.onOpen();
+    if (!user) return openAuthModal();
 
-    return uploadModal.onOpen();
+    openUploadModal();
   };
 
   return (
@@ -25,14 +24,15 @@ const AddSongButton = () => {
         <p className="text-neutral-400 font-medium text-sm">Your Library</p>
       </div>
 
-      <AiOutlinePlus
+      <button
         onClick={handleClick}
-        size={20}
         className="text-neutral-400 cursor-pointer hover:text-white transition"
-        role="button"
         aria-label="Upload a song..."
-      />
+      >
+        <AiOutlinePlus size={20} aria-hidden />
+      </button>
     </div>
   );
 };
+
 export default AddSongButton;

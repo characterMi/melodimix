@@ -33,7 +33,9 @@ const Header = ({
     router.refresh();
 
     if (error) {
-      toast.error(error.message);
+      toast.error(error.message, {
+        ariaProps: { role: "alert", "aria-live": "assertive" },
+      });
       return;
     }
 

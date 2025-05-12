@@ -31,7 +31,7 @@ function Duration({ song, duration }: DurationProps) {
         }}
         max={100}
         step={1}
-        label="Duration"
+        label="Song Duration"
       />
 
       <p className="relative bg-black px-2 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:pointer-events-none whitespace-nowrap duration-el">

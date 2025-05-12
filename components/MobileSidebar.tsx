@@ -16,11 +16,10 @@ const MobileSidebar = ({ songs }: { songs: Song[] }) => {
           isActive ? "translate-x-0" : "-translate-x-full"
         } left-0 top-0 h-screen w-[200px] min-[360px]:w-[300px] sm:w-[360px] md:hidden`}
       >
-        <div
+        <button
           className="fixed top-[40%] -translate-y-[40%] left-full bg-neutral-900 size-14 flex flex-col gap-y-[6px] justify-center items-end pl-2 rounded-r-xl z-50 md:hidden cursor-pointer"
           onClick={() => setIsActive((prev) => !prev)}
           style={{ direction: "rtl" }}
-          role="button"
           aria-controls="sidebar"
           aria-expanded={isActive}
           aria-label="Menu toggle button"
@@ -40,9 +39,14 @@ const MobileSidebar = ({ songs }: { songs: Song[] }) => {
               isActive && "-rotate-45 mb-[10px]"
             }`}
           />
-        </div>
+        </button>
 
-        <aside id="sidebar" className="overflow-y-auto" aria-hidden={!isActive}>
+        <aside
+          id="sidebar"
+          className="overflow-y-auto"
+          aria-hidden={!isActive}
+          {...(!isActive ? { inert: true } : {})}
+        >
           <div className="flex flex-col gap-4 p-4">
             <ManageCacheButton />
             <DownloadApplication />

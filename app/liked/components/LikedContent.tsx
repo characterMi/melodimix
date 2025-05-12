@@ -17,10 +17,10 @@ export const LikedContent = ({ songs }: { songs: Song[] }) => {
 
   if (!isLoading && !user) {
     return (
-      <h1 className="flex flex-col gap-y-2 m-4">
+      <h2 className="flex flex-col gap-y-2 m-4">
         Seems like you didn't sign-in 🤔 if that's true, Please first sign-in to
         Your account.
-      </h1>
+      </h2>
     );
   }
 

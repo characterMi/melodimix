@@ -20,12 +20,14 @@ const UploadModal = () => {
     if (!uploadModal.isOpen) return;
 
     if (!user) {
-      toast.error("Unauthenticated User.");
+      toast.error("Unauthenticated User.", {
+        ariaProps: { role: "alert", "aria-live": "polite" },
+      });
 
       return;
     }
 
-    toast.success("this process might take a while, be patient.");
+    toast.success("this process might take a while, do not close the modal.");
 
     startTransition(async () => {
       try {

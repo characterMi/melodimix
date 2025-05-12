@@ -2,12 +2,13 @@ import { usePlayer } from "@/hooks/usePlayer";
 import type { Song } from "@/types/types";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import Duration from "./Duration";
-import LikedButton from "./LikeButton";
+import LikeButton from "./LikeButton";
 import Slider from "./Slider";
 import SongItem from "./SongItem";
 
 const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
   const { handlers, icons, sound, state } = usePlayer(song, songUrl);
+
   const { handleChangePlayerType, handlePlay, onPlaySong, toggleMute } =
     handlers;
   const { PauseOrPlayIcon, PlayerTypeIcon, VolumeIcon } = icons;
@@ -22,7 +23,7 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
           <div className="flex items-center gap-x-4 w-full">
             <SongItem player data={song} />
             <div className="flex items-center gap-x-2 w-max bg-black h-full absolute top-0 right-0 pl-1 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black">
-              <LikedButton songId={song.id} songTitle={song.title} />
+              <LikeButton songId={song.id} songTitle={song.title} />
               <PlayerTypeIcon
                 size={32}
                 className="cursor-pointer"
@@ -38,12 +39,13 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
         </div>
 
         <div className="z-10 sm:h-full flex sm:justify-end md:justify-center items-center sm:w-full max-w-[722px] gap-x-2 sm:gap-x-6 absolute sm:relative -top-full sm:top-0 -translate-y-1/4 sm:translate-y-0 right-0">
-          <AiFillStepBackward
-            onClick={() => onPlaySong("previous")}
-            className="text-black sm:text-neutral-400 size-[28px] sm:size-[30px] p-1 sm:p-0 rounded-full bg-white sm:bg-transparent cursor-pointer hover:opacity-75 sm:hover:text-white transition"
+          <button
             aria-label="Change the song (backward)"
-            role="button"
-          />
+            className="text-black sm:text-neutral-400 size-[28px] sm:size-[30px] p-1 sm:p-0 rounded-full bg-white sm:bg-transparent cursor-pointer hover:opacity-75 sm:hover:text-white transition"
+            onClick={() => onPlaySong("previous")}
+          >
+            <AiFillStepBackward className="w-full h-full" aria-hidden />
+          </button>
 
           <button
             onClick={handlePlay}
@@ -59,23 +61,24 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
             )}
           </button>
 
-          <AiFillStepForward
+          <button
             onClick={() => onPlaySong("next")}
             className="text-black sm:text-neutral-400 size-[28px] sm:size-[30px] p-1 sm:p-0 rounded-full bg-white sm:bg-transparent cursor-pointer hover:opacity-75 sm:hover:text-white transition"
             aria-label="Change the song (forward)"
-            role="button"
-          />
+          >
+            <AiFillStepForward className="w-full h-full" aria-hidden />
+          </button>
         </div>
 
         <div className="hidden md:flex w-full justify-end pr-2">
           <div className="flex items-center gap-x-2 w-[120px]">
-            <VolumeIcon
-              onClick={toggleMute}
+            <button
               className="cursor-pointer"
-              size={34}
+              onClick={toggleMute}
               aria-label={sound.volume === 0 ? "unmute" : "mute"}
-              role="button"
-            />
+            >
+              <VolumeIcon size={24} />
+            </button>
 
             <Slider
               value={sound.volume}

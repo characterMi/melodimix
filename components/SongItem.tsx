@@ -19,10 +19,9 @@ const SongItem = ({ data, onClick, player }: Props) => {
   };
 
   return (
-    <div
+    <button
       onClick={handleClick}
-      className="flex items-center gap-x-3 cursor-pointer hover:bg-neutral-800/50 w-full p-2 rounded-md"
-      role="button"
+      className="flex items-center text-left gap-x-3 cursor-pointer hover:bg-neutral-800/50 w-full p-2 rounded-md"
       aria-label={"Play the " + data.title + " song"}
     >
       <div className="relative rounded-md min-w-12 h-12 overflow-hidden">
@@ -42,28 +41,29 @@ const SongItem = ({ data, onClick, player }: Props) => {
             player && "w-[200%]"
           )}
         >
-          <h1
+          <p
             className={twMerge(
               "text-white whitespace-nowrap select-none truncate",
               player && "scroll-animation w-full child_1"
             )}
           >
             {data.title}
-          </h1>
+          </p>
 
           {player && (
-            <h1
+            <p
               className="text-white whitespace-nowrap select-none truncate w-full scroll-animation child_2"
               aria-hidden
             >
               {data.title}
-            </h1>
+            </p>
           )}
         </div>
 
         <p className="text-neutral-400 text-sm truncate">{data.author}</p>
       </div>
-    </div>
+    </button>
   );
 };
+
 export default SongItem;
