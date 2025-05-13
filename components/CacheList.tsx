@@ -43,7 +43,7 @@ const CacheList = ({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleClickOnCacheItem(item, isSelected)}
-                    aria-label="Select the cache"
+                    aria-label={`Select ${item} cache`}
                   >
                     <CheckmarkIcon
                       style={{
