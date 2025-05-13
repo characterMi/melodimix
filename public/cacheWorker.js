@@ -1,3 +1,5 @@
+const VERSION = "1.0.0";
+
 async function estimateCacheSize(cacheName) {
   const cache = await caches.open(cacheName);
   const requests = await cache.keys();
@@ -16,8 +18,14 @@ async function estimateCacheSize(cacheName) {
 
 self.onmessage = async function () {
   const sizeEntries = await Promise.all(
-    ["assets", "songs", "song-urls"].map(async (cacheName) => {
+    ["assets" + VERSION, "songs", "song-urls"].map(async (cacheName) => {
       const size = await estimateCacheSize(cacheName);
+
+      // we don't want to set the key as for example "assets1.0.0", instead we set the key as just "assets"
+      if (cacheName === "assets" + VERSION) {
+        return ["assets", size];
+      }
+
       return [cacheName, size];
     })
   );
