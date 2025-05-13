@@ -25,7 +25,7 @@ const NoSongFallback = ({
       <p>{fallbackText}</p>
       {showButton && (
         <button
-          className="flex items-center gap-x-1 underline"
+          className="flex items-center gap-x-1 underline outline-none hover:text-white focus-visible:text-white transition"
           onClick={() => router.refresh()}
         >
           Refresh

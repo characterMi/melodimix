@@ -20,7 +20,7 @@ const SidebarItem: FC<SidebarItemProps> = ({ href, label }) => {
     <Link
       href={href}
       className={twMerge(
-        "flex flex-row h-auto items-center w-full gap-x-4 text-sm font-medium cursor-pointer hover:text-white transition text-neutral-400 py-1",
+        "flex flex-row h-auto items-center w-full gap-x-4 text-sm font-medium cursor-pointer hover:text-white focus-visible:text-white outline-none transition text-neutral-400 py-1",
         pathName === href ? "text-white" : ""
       )}
       aria-label={"Go to " + label + " page"}

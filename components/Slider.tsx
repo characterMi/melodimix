@@ -8,9 +8,18 @@ interface Props {
   max: number;
   step: number;
   label: string;
+  children?: React.ReactNode;
 }
 
-const Slider = ({ onChange, value = 1, bgColor, max, step, label }: Props) => {
+const Slider = ({
+  onChange,
+  value = 1,
+  bgColor,
+  max,
+  step,
+  label,
+  children,
+}: Props) => {
   const handleChange = (newValue: number[]) => {
     onChange?.(newValue[0]);
   };
@@ -30,6 +39,7 @@ const Slider = ({ onChange, value = 1, bgColor, max, step, label }: Props) => {
           className={twMerge("absolute rounded-full h-full", bgColor)}
         />
       </RadixSlider.Track>
+      {children}
     </RadixSlider.Root>
   );
 };

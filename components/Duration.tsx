@@ -1,4 +1,6 @@
 import { useUpdateDuration } from "@/hooks/useUpdateDuration";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { twMerge } from "tailwind-merge";
 import Slider from "./Slider";
 
 interface DurationProps {
@@ -32,7 +34,12 @@ function Duration({ song, duration }: DurationProps) {
         max={100}
         step={1}
         label="Song Duration"
-      />
+      >
+        <KeyboardNavigationHelper
+          durationPercentage={currentDurationPercentage}
+          setDurationPercentage={setCurrentDurationPercentage}
+        />
+      </Slider>
 
       <p className="relative bg-black px-2 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:pointer-events-none whitespace-nowrap duration-el">
         {totalDuration}
@@ -40,5 +47,49 @@ function Duration({ song, duration }: DurationProps) {
     </div>
   );
 }
+
+const KeyboardNavigationHelper = ({
+  durationPercentage,
+  setDurationPercentage,
+}: {
+  durationPercentage: number;
+  setDurationPercentage: Dispatch<SetStateAction<number>>;
+}) => {
+  const [isHoveredOn, setIsHoveredOn] = useState(false);
+
+  useEffect(() => {
+    if (isHoveredOn) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "ArrowLeft") {
+          setDurationPercentage((prev) => prev - 1);
+        } else if (e.key === "ArrowRight") {
+          setDurationPercentage((prev) => prev + 1);
+        }
+      };
+
+      document.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [isHoveredOn]);
+
+  return (
+    <div
+      className={twMerge(
+        "absolute top-0 left-0 z-10 h-full w-1 bg-gradient-to-t from-transparent via-green-500 to-transparent opacity-0 transition-opacity outline-none",
+        isHoveredOn && "opacity-100"
+      )}
+      style={{
+        left: `${durationPercentage}%`,
+      }}
+      onFocus={() => setIsHoveredOn(true)}
+      onBlur={() => setIsHoveredOn(false)}
+      tabIndex={0}
+      aria-description="You can use the arrow keys to navigate the song duration"
+    />
+  );
+};
 
 export default Duration;

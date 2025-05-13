@@ -2,6 +2,7 @@
 
 import type { Song } from "@/types/types";
 import { useState } from "react";
+import { twMerge } from "tailwind-merge";
 import DownloadApplication from "./DownloadApplication";
 import Library from "./Library";
 import ManageCacheButton from "./ManageCacheButton";
@@ -12,9 +13,10 @@ const MobileSidebar = ({ songs }: { songs: Song[] }) => {
   return (
     <>
       <div
-        className={`fixed bg-neutral-900 flex flex-col z-50 transition ${
+        className={twMerge(
+          "fixed bg-neutral-900 flex flex-col z-50 transition left-0 top-0 h-screen w-[200px] min-[360px]:w-[300px] sm:w-[360px] md:hidden",
           isActive ? "translate-x-0" : "-translate-x-full"
-        } left-0 top-0 h-screen w-[200px] min-[360px]:w-[300px] sm:w-[360px] md:hidden`}
+        )}
       >
         <button
           className="fixed top-[40%] -translate-y-[40%] left-full bg-neutral-900 size-14 flex flex-col gap-y-[6px] justify-center items-end pl-2 rounded-r-xl z-50 md:hidden cursor-pointer"
@@ -25,27 +27,32 @@ const MobileSidebar = ({ songs }: { songs: Song[] }) => {
           aria-label="Menu toggle button"
         >
           <span
-            className={`h-1 rounded-full w-[60%] bg-white transition ${
+            className={twMerge(
+              "h-1 rounded-full w-[60%] bg-white transition",
               isActive && "opacity-0"
-            }`}
+            )}
           />
           <span
-            className={`h-1 rounded-full w-[85%] bg-white transition ${
-              isActive && "rotate-45 -mb-[10px]"
-            }`}
+            className={twMerge(
+              "h-1 rounded-full w-[85%] bg-white transition",
+              isActive && "rotate-45 -mt-[10px]"
+            )}
           />
           <span
-            className={`h-1 rounded-full w-[85%] bg-white transition ${
-              isActive && "-rotate-45 mb-[10px]"
-            }`}
+            className={twMerge(
+              "h-1 rounded-full w-[85%] bg-white transition",
+              isActive && "-rotate-45 -mt-[10px]"
+            )}
           />
         </button>
 
         <aside
           id="sidebar"
-          className="overflow-y-auto"
+          className={twMerge(
+            "overflow-y-auto",
+            !isActive && "pointer-events-none invisible"
+          )}
           aria-hidden={!isActive}
-          {...(!isActive ? { inert: true } : {})}
         >
           <div className="flex flex-col gap-4 p-4">
             <ManageCacheButton />

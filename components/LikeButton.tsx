@@ -98,7 +98,7 @@ const LikeButton = ({
 
   return (
     <button
-      className="hover:opacity-75 transition disabled:opacity-50 disabled:cursor-not-allowed active:scale-90 relative duration-200 ease-out"
+      className="hover:opacity-75 transition disabled:opacity-50 disabled:cursor-not-allowed active:scale-90 focus-visible:opacity-75 outline-none relative duration-200 ease-out"
       onClick={handleLike}
       disabled={pending}
       aria-label={`Like the ${songTitle} song`}

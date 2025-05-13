@@ -26,7 +26,7 @@ const AddSongButton = () => {
 
       <button
         onClick={handleClick}
-        className="text-neutral-400 cursor-pointer hover:text-white transition"
+        className="text-neutral-400 cursor-pointer hover:text-white focus-visible:text-white outline-none transition"
         aria-label="Upload a song..."
       >
         <AiOutlinePlus size={20} aria-hidden />

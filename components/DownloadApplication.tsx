@@ -33,7 +33,7 @@ const DownloadApplication = () => {
 
   return (
     <button
-      className="download-btn flex flex-row h-auto items-center w-full gap-x-[14px] text-sm font-medium cursor-pointer hover:text-white transition text-neutral-400 py-1"
+      className="download-btn flex flex-row h-auto items-center w-full gap-x-[14px] text-sm font-medium cursor-pointer hover:text-white focus-visible:text-white outline-none transition text-neutral-400 py-1"
       onClick={handleDownload}
     >
       <HiDownload size={24} aria-hidden />
