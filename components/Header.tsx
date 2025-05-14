@@ -30,16 +30,15 @@ const Header = ({
   const handleLogOut = async () => {
     const { error } = await supabaseClient.auth.signOut();
 
-    router.refresh();
-
     if (error) {
-      toast.error(error.message, {
+      toast.error("There was an error when logging you out, try again!", {
         ariaProps: { role: "alert", "aria-live": "assertive" },
       });
       return;
     }
 
     toast.success("Logged out !");
+    router.refresh();
     clearLikedSongs();
   };
 
