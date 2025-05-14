@@ -1,8 +1,8 @@
 import { useLoadImage } from "@/hooks/useLoadImage";
 import type { Song } from "@/types/types";
-import Image from "next/image";
 import toast from "react-hot-toast";
 import { FaPlay, FaShareAlt } from "react-icons/fa";
+import SongCover from "./SongCover";
 
 interface Props {
   data: Song;
@@ -41,12 +41,12 @@ const SongCard = ({ data, onClick }: Props) => {
       aria-label={"Play the " + data.title + " song"}
     >
       <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
-        <Image
-          className="object-cover w-full h-full"
+        <SongCover
           src={imagePath || "/images/liked.png"}
-          alt={data.title + " poster"}
+          alt={data.title}
           width={130}
           height={130}
+          className="w-full"
         />
       </div>
 

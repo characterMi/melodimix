@@ -1,7 +1,7 @@
 import { useLoadImage } from "@/hooks/useLoadImage";
 import type { Song } from "@/types/types";
-import Image from "next/image";
 import { twMerge } from "tailwind-merge";
+import SongCover from "./SongCover";
 
 interface Props {
   data: Song;
@@ -25,12 +25,11 @@ const SongItem = ({ data, onClick, player }: Props) => {
       aria-label={"Play the " + data.title + " song"}
     >
       <div className="relative rounded-md min-w-12 h-12 overflow-hidden">
-        <Image
+        <SongCover
           src={imageUrl || "/images/liked.png"}
-          alt={data.title + " poster"}
+          alt={data.title}
           width={50}
           height={50}
-          className="object-cover h-full"
         />
       </div>
 
