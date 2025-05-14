@@ -55,10 +55,10 @@ const KeyboardNavigationHelper = ({
   durationPercentage: number;
   setDurationPercentage: Dispatch<SetStateAction<number>>;
 }) => {
-  const [isHoveredOn, setIsHoveredOn] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {
-    if (isHoveredOn) {
+    if (isFocused) {
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === "ArrowLeft") {
           setDurationPercentage((prev) => prev - 1);
@@ -73,19 +73,19 @@ const KeyboardNavigationHelper = ({
         document.removeEventListener("keydown", handleKeyDown);
       };
     }
-  }, [isHoveredOn]);
+  }, [isFocused]);
 
   return (
     <div
       className={twMerge(
         "absolute top-0 left-0 z-10 h-full w-1 bg-gradient-to-t from-transparent via-green-500 to-transparent opacity-0 transition-opacity outline-none",
-        isHoveredOn && "opacity-100"
+        isFocused && "opacity-100"
       )}
       style={{
         left: `${durationPercentage}%`,
       }}
-      onFocus={() => setIsHoveredOn(true)}
-      onBlur={() => setIsHoveredOn(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
       tabIndex={0}
       aria-description="You can use the arrow keys to navigate the song duration"
     />
