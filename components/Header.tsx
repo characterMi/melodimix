@@ -48,7 +48,7 @@ const Header = ({
   const AuthButtons = user ? (
     <Button
       onClick={handleLogOut}
-      className="bg-white px-6 py-2 flex gap-x-2 items-center"
+      className="bg-white px-6 py-[8px] flex gap-x-2 items-center"
     >
       Logout
       <FiLogOut aria-hidden />
@@ -56,13 +56,13 @@ const Header = ({
   ) : (
     <>
       <Button
-        className="bg-transparent text-neutral-300 font-medium text-nowrap py-2"
+        className="bg-transparent text-neutral-300 font-medium text-nowrap py-[8px]"
         onClick={onOpen}
       >
         Sign up
       </Button>
 
-      <Button className="bg-white px-6 py-2 text-nowrap" onClick={onOpen}>
+      <Button className="bg-white px-6 py-[8px] text-nowrap" onClick={onOpen}>
         Login
       </Button>
     </>
