@@ -1,4 +1,4 @@
-const VERSION = "1.0.0";
+importScripts("/appVersion.js");
 
 async function estimateCacheSize(cacheName) {
   const cache = await caches.open(cacheName);
