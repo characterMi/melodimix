@@ -137,8 +137,6 @@ async function cacheOnly(req, cacheName) {
   const cachedResponse = await cache.match(req);
 
   if (cachedResponse) {
-    console.log(cachedResponse);
-
     return cachedResponse.clone();
   }
 

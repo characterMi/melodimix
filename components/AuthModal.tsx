@@ -21,13 +21,11 @@ const AuthModal = () => {
   const { isOpen, onClose } = useAuthModal();
 
   useEffect(() => {
-    if (!session) return;
+    if (session) {
+      navigator.onLine && router.refresh();
 
-    if (navigator.onLine) {
-      router.refresh();
+      onClose();
     }
-
-    onClose();
   }, [session, router, onClose]);
 
   return (
