@@ -7,7 +7,17 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        skeleton: {
+          "0%": { transform: "translate(-100%, -100%) rotateZ(45deg)" }, 
+          "100%": { transform: "translate(100%, 150%) rotateZ(45deg)" }, 
+        },
+      },
+      animation: {
+        skeleton: "skeleton 8s linear infinite",
+      },
+    },
   },
   plugins: [],
 };

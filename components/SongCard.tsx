@@ -40,7 +40,7 @@ const SongCard = ({ data, onClick }: Props) => {
       className="relative group flex flex-col text-left rounded-md overflow-hidden gap-x-4 bg-neutral-400/5 cursor-pointer hover:bg-neutral-400/10 focus-visible:bg-neutral-400/10 outline-none transition p-3"
       aria-label={"Play the " + data.title + " song"}
     >
-      <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
+      <div className="relative aspect-square w-full h-full rounded-md overflow-hidden bg-neutral-950">
         <SongCover
           src={imagePath || "/images/liked.png"}
           alt={data.title}

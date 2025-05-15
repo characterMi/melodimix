@@ -62,12 +62,12 @@ export default function manifest(): Manifest {
       },
       {
         src: "/images/1.jpg",
-        sizes: "1080x2258",
+        sizes: "1080x2260",
         type: "image/jpg",
       },
       {
         src: "/images/2.jpg",
-        sizes: "1080x2256",
+        sizes: "1080x2260",
         type: "image/jpg",
       },
     ],
@@ -105,5 +105,6 @@ export default function manifest(): Manifest {
         url: "/search?song_title=%s",
       },
     ],
+    categories: ["Song", "Song player", "Music player", "Spotify clone"],
   };
 }

@@ -8,8 +8,6 @@ const assets = [
   "/cacheWorker.js",
   "/appVersion.js",
   "/logo.svg",
-  "/icons/offline.png",
-  "/images/liked.png",
   "/images/1.jpg",
   "/images/2.jpg",
   "/images/d1.png",

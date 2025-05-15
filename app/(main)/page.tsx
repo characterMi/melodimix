@@ -1,6 +1,8 @@
 import { getSongs } from "@/actions/getSongs";
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
+import LikedImage from "@/public/images/liked.png";
+import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { FaPlay } from "react-icons/fa";
@@ -37,10 +39,13 @@ export default async function Home() {
               className="relative group flex items-center rounded-md overflow-hidden gap-x-4 bg-neutral-100/10 hover:bg-neutral-100/20 focus-visible:bg-neutral-100/20 outline-none transition pr-4"
             >
               <div className="relative min-h-[64px] min-w-[64px]" aria-hidden>
-                <img
-                  src="/images/liked.png"
-                  alt="Liked songs"
+                <Image
+                  src={LikedImage}
+                  alt="Liked musics"
                   className="object-cover size-16"
+                  width={64}
+                  height={64}
+                  placeholder="blur"
                 />
               </div>
 

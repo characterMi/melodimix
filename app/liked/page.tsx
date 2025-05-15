@@ -1,6 +1,8 @@
 import { getLikedSongs } from "@/actions/getLikedSongs";
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
+import LikedImage from "@/public/images/liked.png";
+import Image from "next/image";
 import { Suspense } from "react";
 import { LikedContent } from "./components/LikedContent";
 
@@ -24,10 +26,13 @@ const LikedSongsPage = () => {
             className="relative size-32 lg:size-44"
             aria-labelledby="like-title"
           >
-            <img
-              src="/images/liked.png"
-              alt="Liked songs"
+            <Image
+              src={LikedImage}
+              alt="Liked Songs"
+              width={100}
+              height={100}
               className="object-cover size-32 lg:size-44"
+              placeholder="blur"
             />
           </div>
 

@@ -1,37 +1,55 @@
 import Image, { ImageProps } from "next/image";
 import { useState } from "react";
+import { HiOutlineStatusOffline } from "react-icons/hi";
 import { twMerge } from "tailwind-merge";
 
-type Props = ImageProps;
-
-const SongCover = ({ src, alt, width, height, className, ...props }: Props) => {
+const SongCover = ({
+  src,
+  alt,
+  width,
+  height,
+  className,
+  ...props
+}: ImageProps) => {
   const [imageStatus, setImageStatus] = useState<
     "loading" | "loaded" | "error"
   >("loading");
 
-  return imageStatus === "error" ? (
-    <div className="flex justify-center items-center h-full w-full bg-black">
-      <img
-        src="/icons/offline.png"
-        alt="You're offline"
-        className="size-[30%] object-cover"
+  if (imageStatus === "error") {
+    return (
+      <div
+        className="flex justify-center items-center h-full w-full"
+        aria-label="Could not load image"
+      >
+        <HiOutlineStatusOffline className="text-white size-[30%]" />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <Image
+        className={twMerge(
+          "object-cover h-full transition-opacity opacity-0",
+          imageStatus === "loaded" && "opacity-100",
+          className
+        )}
+        src={src}
+        alt={alt + " poster"}
+        width={width}
+        height={height}
+        onLoad={() => setImageStatus("loaded")}
+        onError={() => setImageStatus("error")}
+        {...props}
       />
-    </div>
-  ) : (
-    <Image
-      className={twMerge(
-        "object-cover h-full transition-opacity opacity-0",
-        imageStatus === "loaded" && "opacity-100",
-        className
+
+      {imageStatus === "loading" && (
+        <div
+          aria-label="Image is loading"
+          className="bg-gradient-to-r from-neutral-950 via-neutral-900 to-neutral-950 w-[300%] h-[200%] absolute top-0 left-0 animate-skeleton"
+        />
       )}
-      src={src}
-      alt={alt + " poster"}
-      width={width}
-      height={height}
-      onLoad={() => setImageStatus("loaded")}
-      onError={() => setImageStatus("error")}
-      {...props}
-    />
+    </>
   );
 };
 
