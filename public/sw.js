@@ -37,16 +37,27 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches
-      .keys()
-      .then((keys) =>
-        Promise.allSettled([
-          ...keys
-            .filter((key) => !cacheNames.has(key))
-            .map((key) => caches.delete(key)),
-          self.clients.claim(),
-        ])
-      )
+    (async () => {
+      // Remove old caches (assets)
+      const keys = await caches.keys();
+      await Promise.allSettled(
+        keys
+          .filter((key) => !cacheNames.has(key))
+          .map((key) => caches.delete(key))
+      );
+
+      // caching missing assets (like if the install event interrupted)
+      const cache = await caches.open(assetsCacheName);
+      const matches = await Promise.allSettled(
+        assets.map((asset) => cache.match(asset))
+      );
+
+      const missingAssets = assets.filter((_, index) => !matches[index]);
+
+      await Promise.allSettled(missingAssets.map((url) => cache.add(url)));
+
+      await self.clients.claim();
+    })()
   );
 });
 
@@ -87,7 +98,12 @@ self.addEventListener("fetch", (event) => {
     event.request.headers.get("accept")?.includes("text/html")
   ) {
     event.respondWith(
-      staleWhileRevalidate(event.request, assetsCacheName, true)
+      // using staleWhileRevalidate strategy, because we want fresh page and fresh data since users can upload songs.
+      staleWhileRevalidate(
+        event.request,
+        assetsCacheName,
+        /*returnOffline= */ true
+      )
     );
     return;
   }
@@ -168,11 +184,11 @@ async function fetchReq(req, cache = null, returnOffline = false) {
       }
 
       return new Response(
-        "Network error and no cached data available. see the browser's console for more information",
+        "<h1>Network error and no cached data available. see the browser's console for more information</h1>",
         {
           status: 503,
           statusText: "Service Unavailable.",
-          headers: { "Content-Type": "text/plain" },
+          headers: { "Content-Type": "text/html" },
         }
       );
     });
