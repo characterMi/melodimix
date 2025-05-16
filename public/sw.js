@@ -174,22 +174,25 @@ async function fetchReq(req, cache = null, returnOffline = false) {
       return networkRes;
     })
     .catch(async () => {
+      const errMsg =
+        "Network error and no cached data available. see the browser's console for more information";
+      let errResponse = errMsg;
+
       if (returnOffline) {
         const assetsCache = await caches.open(assetsCacheName);
         const offlinePage = await assetsCache.match("/offline.html");
 
         if (offlinePage) return offlinePage;
 
+        // if we couldn't find the offline.html, we return a simple html page.
+        errResponse = `<body style='background:black;display:flex;justify-content:center;align-items:center;padding-block:1rem;'><h1 style='color:white;'>${errMsg}</h1></body>`;
         console.warn("Offline page not found in cache");
       }
 
-      return new Response(
-        "<h1>Network error and no cached data available. see the browser's console for more information</h1>",
-        {
-          status: 503,
-          statusText: "Service Unavailable.",
-          headers: { "Content-Type": "text/html" },
-        }
-      );
+      return new Response(errResponse, {
+        status: 503,
+        statusText: "Service Unavailable.",
+        headers: { "Content-Type": returnOffline ? "text/html" : "text/plain" },
+      });
     });
 }
