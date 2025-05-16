@@ -48,15 +48,16 @@ self.addEventListener("activate", (event) => {
 
       // caching missing assets (like if the install event interrupted)
       const cache = await caches.open(assetsCacheName);
-      const matches = await Promise.allSettled(
+      const matches = await Promise.all(
         assets.map((asset) => cache.match(asset))
       );
 
       const missingAssets = assets.filter((_, index) => !matches[index]);
 
-      await Promise.allSettled(missingAssets.map((url) => cache.add(url)));
-
-      await self.clients.claim();
+      await Promise.allSettled([
+        ...missingAssets.map((url) => cache.add(url)),
+        self.clients.claim(),
+      ]);
     })()
   );
 });
