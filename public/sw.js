@@ -54,10 +54,8 @@ self.addEventListener("activate", (event) => {
 
       const missingAssets = assets.filter((_, index) => !matches[index]);
 
-      await Promise.allSettled([
-        ...missingAssets.map((url) => cache.add(url)),
-        self.clients.claim(),
-      ]);
+      await Promise.allSettled(missingAssets.map((url) => cache.add(url)));
+      await self.clients.claim();
     })()
   );
 });
