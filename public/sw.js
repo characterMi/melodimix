@@ -62,6 +62,12 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  // we don't want to cache any method beside GET...
+  if (event.request.method !== "GET") {
+    event.respondWith(fetchReq(event.request));
+    return;
+  }
+
   const eventUrl = new URL(event.request.url);
 
   // caching songs and song-urls from supabase
@@ -137,13 +143,7 @@ self.addEventListener("fetch", (event) => {
   }
 
   // other requests...
-  if (event.request.method === "GET") {
-    event.respondWith(staleWhileRevalidate(event.request, assetsCacheName));
-    return;
-  }
-
-  // we don't cache any other method...
-  event.respondWith(fetchReq(event.request));
+  event.respondWith(staleWhileRevalidate(event.request, assetsCacheName));
 });
 
 async function cacheOnly(req, cacheName) {
