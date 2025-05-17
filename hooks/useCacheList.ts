@@ -29,7 +29,7 @@ export const useCacheList = (cacheNames: CacheKeys[], cacheData: CacheData) => {
     if (selectedCacheSize === 0) return;
 
     try {
-      await Promise.all(
+      await Promise.allSettled(
         selectedCaches.map((name) =>
           caches.delete(name === "assets" ? name + VERSION : name)
         )
