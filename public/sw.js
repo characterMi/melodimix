@@ -45,19 +45,31 @@ self.addEventListener("activate", (event) => {
           .filter((key) => !cacheNames.has(key))
           .map((key) => caches.delete(key))
       );
-
-      // caching missing assets (like if the install event interrupted)
-      const cache = await caches.open(assetsCacheName);
-      const matches = await Promise.all(
-        assets.map((asset) => cache.match(asset))
-      );
-
-      const missingAssets = assets.filter((_, index) => !matches[index]);
-
-      await Promise.allSettled(missingAssets.map((url) => cache.add(url)));
       await self.clients.claim();
     })()
   );
+});
+
+self.addEventListener("message", (event) => {
+  // We want to cache missing assets (if there is any) whenever user loads our app.
+  if (event.data?.type === "CACHE-MISSING-ASSETS") {
+    (async () => {
+      try {
+        const cache = await caches.open(assetsCacheName);
+        const matches = await Promise.all(
+          assets.map((asset) => cache.match(asset))
+        );
+
+        const missingAssets = assets.filter((_, i) => !matches[i]);
+
+        if (missingAssets.length) {
+          await Promise.allSettled(missingAssets.map((url) => cache.add(url)));
+        }
+      } catch (err) {
+        console.error("Error caching missing assets:", err);
+      }
+    })();
+  }
 });
 
 self.addEventListener("fetch", (event) => {

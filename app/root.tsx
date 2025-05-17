@@ -5,9 +5,26 @@ import { useEffect } from "react";
 const Root = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").catch(() => {
-        console.error("Service worker registration failed!");
-      });
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then(() => {
+          if (navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({
+              type: "CACHE-MISSING-ASSETS",
+            });
+          } else {
+            navigator.serviceWorker.ready.then(() => {
+              if (navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({
+                  type: "CACHE-MISSING-ASSETS",
+                });
+              }
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Service worker registration failed:", error);
+        });
     }
   }, []);
 
