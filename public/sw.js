@@ -196,8 +196,7 @@ async function fetchReq(req, cache = null, returnOffline = false) {
         if (offlinePage) return offlinePage;
 
         // if we couldn't find the offline.html, we return a simple html page.
-        errResponse = `<body style='background:black;display:flex;justify-content:center;align-items:center;padding-block:1rem;'><h1 style='color:white;'>${errMsg}</h1></body>`;
-        console.warn("Offline page not found in cache");
+        errResponse = `<!DOCTYPE html><html lang="en"><head><meta name="viewport"content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover"/><title>Network error and no cached data</title></head><body style='background:black;display:flex;justify-content:center;align-items:center;padding-block:1rem;font-family:Arial,Helvetica,sans-serif;'><h1 style='color:white;'>${errMsg}</h1></body></html>`;
       }
 
       return new Response(errResponse, {
