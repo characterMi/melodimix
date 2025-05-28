@@ -50,7 +50,7 @@ export const useLikeSong = (songId: string, initialIsLiked?: true) => {
           setLikedSongs(songId, true);
           setIsLiked(true);
         } else {
-          setLikedSongs(songId, false);
+          setLikedSongs(songId, initialIsLiked || false);
         }
       });
     })();
@@ -59,7 +59,7 @@ export const useLikeSong = (songId: string, initialIsLiked?: true) => {
   useEffect(() => {
     if (likedSongs[songId]) {
       setIsLiked(true);
-    } else if (!initialIsLiked) {
+    } else {
       setIsLiked(false);
     }
   }, [likedSongs]);
