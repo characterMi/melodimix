@@ -1,7 +1,7 @@
 "use client";
 
 import type { Song } from "@/types/types";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import DownloadApplication from "./DownloadApplication";
 import Library from "./Library";
@@ -9,6 +9,18 @@ import ManageCacheButton from "./ManageCacheButton";
 
 const MobileSidebar = ({ songs }: { songs: Song[] }) => {
   const [isActive, setIsActive] = useState(false);
+  const sidebarRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = sidebarRef.current;
+    if (!el) return;
+
+    if (!isActive) {
+      el.setAttribute("inert", "");
+    } else {
+      el.removeAttribute("inert");
+    }
+  }, [isActive]);
 
   return (
     <>
@@ -31,22 +43,26 @@ const MobileSidebar = ({ songs }: { songs: Song[] }) => {
               "h-1 rounded-full w-[60%] bg-white transition",
               isActive && "opacity-0"
             )}
+            aria-hidden
           />
           <span
             className={twMerge(
               "h-1 rounded-full w-[85%] bg-white transition",
               isActive && "rotate-45 -mt-[10px]"
             )}
+            aria-hidden
           />
           <span
             className={twMerge(
               "h-1 rounded-full w-[85%] bg-white transition",
               isActive && "-rotate-45 -mt-[10px]"
             )}
+            aria-hidden
           />
         </button>
 
         <aside
+          ref={sidebarRef}
           id="sidebar"
           className={twMerge(
             "overflow-y-auto",
