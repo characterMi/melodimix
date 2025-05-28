@@ -40,6 +40,7 @@ const SongCover = ({
         height={height}
         onLoad={() => setImageStatus("loaded")}
         onError={() => setImageStatus("error")}
+        loading="eager"
         {...props}
       />
 
