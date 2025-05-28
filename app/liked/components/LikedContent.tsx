@@ -4,18 +4,18 @@ import LikeButton from "@/components/LikeButton";
 import NoSongFallback from "@/components/NoSongFallback";
 import SongItem from "@/components/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
-import { useUser } from "@/hooks/useUser";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types/types";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 
 export const LikedContent = ({ songs }: { songs: Song[] }) => {
   const onPlay = useOnPlay(songs);
 
   const activeId = usePlayerStore((state) => state.activeId);
 
-  const { isLoading, user } = useUser();
+  const { isLoading, session } = useSessionContext();
 
-  if (!isLoading && !user) {
+  if (!isLoading && !session?.user) {
     return (
       <h2 className="flex flex-col gap-y-2 m-4">
         Seems like you didn't sign-in 🤔 if that's true, Please first sign-in to

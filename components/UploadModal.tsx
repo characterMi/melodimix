@@ -1,8 +1,10 @@
 import { revalidatePath } from "@/actions/revalidatePath";
-import { useUser } from "@/hooks/useUser";
 import { useUploadedSongs } from "@/store/useUploadedSongs";
 import { useUploadModal } from "@/store/useUploadModal";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import {
+  useSessionContext,
+  useSupabaseClient,
+} from "@supabase/auth-helpers-react";
 import { useTransition } from "react";
 import toast from "react-hot-toast";
 import Button from "./Button";
@@ -14,12 +16,12 @@ const UploadModal = () => {
   const setUploadedSongs = useUploadedSongs((state) => state.setUploadedSongs);
   const uploadModal = useUploadModal();
   const supabaseClient = useSupabaseClient();
-  const { user } = useUser();
+  const { session } = useSessionContext();
 
   const handleSubmit = (formData: FormData) => {
     if (!uploadModal.isOpen) return;
 
-    if (!user) {
+    if (!session?.user) {
       toast.error("Unauthenticated User.", {
         ariaProps: { role: "alert", "aria-live": "polite" },
       });
@@ -31,6 +33,8 @@ const UploadModal = () => {
 
     startTransition(async () => {
       try {
+        const user = session.user;
+
         const imageFile = formData.get("img");
         const songFile = formData.get("song");
         const title = (formData.get("title") as string).trim();

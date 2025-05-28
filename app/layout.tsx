@@ -3,7 +3,6 @@ import Sidebar from "@/components/Sidebar";
 import { ModalProvider } from "@/providers/ModalProvider";
 import { SupabaseProvider } from "@/providers/SupabaseProvider";
 import { ToasterProvider } from "@/providers/ToasterProvider";
-import { UserProvider } from "@/providers/UserProvider";
 import type { Metadata, Viewport } from "next";
 import { Figtree } from "next/font/google";
 
@@ -100,11 +99,9 @@ export default function RootLayout({
         <body className={figtree.className}>
           <ToasterProvider />
           <SupabaseProvider>
-            <UserProvider>
-              <ModalProvider />
-              <Sidebar>{children}</Sidebar>
-              <Player />
-            </UserProvider>
+            <ModalProvider />
+            <Sidebar>{children}</Sidebar>
+            <Player />
           </SupabaseProvider>
         </body>
       </html>

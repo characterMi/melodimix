@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { useUser } from "./useUser";
 
 export const useLikeSong = (songId: string, initialIsLiked?: true) => {
   const btnRef = useRef<HTMLButtonElement>(null);
@@ -22,9 +21,8 @@ export const useLikeSong = (songId: string, initialIsLiked?: true) => {
 
   const router = useRouter();
 
-  const { user } = useUser();
-
-  const { supabaseClient } = useSessionContext();
+  const { session, supabaseClient } = useSessionContext();
+  const user = session?.user;
 
   useEffect(() => {
     if (!user?.id) return;

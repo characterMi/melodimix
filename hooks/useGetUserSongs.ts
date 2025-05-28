@@ -1,11 +1,12 @@
 import { Song } from "@/types/types";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import { useUploadedSongs } from "../store/useUploadedSongs";
-import { useUser } from "./useUser";
 
 export function useGetUserSongs(songs: Song[]) {
-  const { isLoading, user } = useUser();
+  const { isLoading, session } = useSessionContext();
   const uploadedSongs = useUploadedSongs((state) => state.uploadedSongs);
+  const user = session?.user;
 
   const [userSongs, setUserSongs] = useState<Song[]>([]);
 

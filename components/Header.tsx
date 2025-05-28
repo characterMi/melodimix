@@ -1,9 +1,11 @@
 "use client";
 
-import { useUser } from "@/hooks/useUser";
 import { useAuthModal } from "@/store/useAuthModal";
 import { useLikedSongs } from "@/store/useLikedSongs";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import {
+  useSessionContext,
+  useSupabaseClient,
+} from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -25,7 +27,7 @@ const Header = ({
   const clearLikedSongs = useLikedSongs((state) => state.clearLikedSongs);
   const router = useRouter();
   const supabaseClient = useSupabaseClient();
-  const { user, isLoading: isUserLoading } = useUser();
+  const { session, isLoading: isUserLoading } = useSessionContext();
 
   const handleLogOut = async () => {
     const { error } = await supabaseClient.auth.signOut();
@@ -44,7 +46,7 @@ const Header = ({
 
   const { onOpen } = useAuthModal();
 
-  const AuthButtons = user ? (
+  const AuthButtons = session?.user ? (
     <Button
       onClick={handleLogOut}
       className="bg-white px-6 py-[8px] flex gap-x-2 items-center"
