@@ -84,7 +84,14 @@ self.addEventListener("fetch", (event) => {
   // caching songs and song-urls from supabase
   if (eventUrl.hostname === SUPABASE_HOSTNAME) {
     if (eventUrl.pathname.startsWith("/rest/v1/songs")) {
-      event.respondWith(cacheOnly(event.request, "song-urls"));
+      const isUserSongs = eventUrl.searchParams.has("user_id");
+
+      event.respondWith(
+        (isUserSongs ? staleWhileRevalidate : cacheOnly)(
+          event.request,
+          "song-urls"
+        )
+      );
       return;
     }
 

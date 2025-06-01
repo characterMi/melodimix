@@ -1,21 +1,12 @@
 "use client";
 
-import { useAuthModal } from "@/store/useAuthModal";
-import { useLikedSongs } from "@/store/useLikedSongs";
-import {
-  useSessionContext,
-  useSupabaseClient,
-} from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 import { BiSearch } from "react-icons/bi";
-import { FiLogOut } from "react-icons/fi";
 import { HiHome } from "react-icons/hi";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
-import Button from "./Button";
-import Loader from "./Loader";
+import AuthButtons from "./AuthButtons";
 
 const Header = ({
   children,
@@ -24,50 +15,7 @@ const Header = ({
   children: React.ReactNode;
   className?: string;
 }) => {
-  const clearLikedSongs = useLikedSongs((state) => state.clearLikedSongs);
   const router = useRouter();
-  const supabaseClient = useSupabaseClient();
-  const { session, isLoading: isUserLoading } = useSessionContext();
-
-  const handleLogOut = async () => {
-    const { error } = await supabaseClient.auth.signOut();
-
-    if (error) {
-      toast.error("There was an error when logging you out, try again!", {
-        ariaProps: { role: "alert", "aria-live": "assertive" },
-      });
-      return;
-    }
-
-    toast.success("Logged out !");
-    router.refresh();
-    clearLikedSongs();
-  };
-
-  const { onOpen } = useAuthModal();
-
-  const AuthButtons = session?.user ? (
-    <Button
-      onClick={handleLogOut}
-      className="bg-white px-6 py-[8px] flex gap-x-2 items-center"
-    >
-      Logout
-      <FiLogOut aria-hidden />
-    </Button>
-  ) : (
-    <>
-      <Button
-        className="bg-transparent text-neutral-300 font-medium text-nowrap py-[8px]"
-        onClick={onOpen}
-      >
-        Sign up
-      </Button>
-
-      <Button className="bg-white px-6 py-[8px] text-nowrap" onClick={onOpen}>
-        Login
-      </Button>
-    </>
-  );
 
   return (
     <header
@@ -113,13 +61,7 @@ const Header = ({
           </Link>
         </div>
 
-        <div className="flex justify-between items-center gap-x-4">
-          {isUserLoading ? (
-            <Loader className="m-0 p-0 min-w-[42px]" />
-          ) : (
-            AuthButtons
-          )}
-        </div>
+        <AuthButtons router={router} />
       </nav>
 
       {children}

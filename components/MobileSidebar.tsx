@@ -5,9 +5,16 @@ import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import DownloadApplication from "./DownloadApplication";
 import Library from "./Library";
+import Loader from "./Loader";
 import ManageCacheButton from "./ManageCacheButton";
 
-const MobileSidebar = ({ songs }: { songs: Song[] }) => {
+const MobileSidebar = ({
+  songs,
+  isSongsLoading,
+}: {
+  songs: Song[];
+  isSongsLoading: boolean;
+}) => {
   const [isActive, setIsActive] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
 
@@ -77,7 +84,13 @@ const MobileSidebar = ({ songs }: { songs: Song[] }) => {
             <hr className="border-neutral-600" />
           </div>
 
-          <Library songs={songs} />
+          {isSongsLoading ? (
+            <div className="flex justify-center">
+              <Loader className="p-0" />
+            </div>
+          ) : (
+            <Library songs={songs} />
+          )}
         </aside>
       </div>
 

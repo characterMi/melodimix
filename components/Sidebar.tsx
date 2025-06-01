@@ -1,4 +1,3 @@
-import { getSongs } from "@/actions/getSongs";
 import { routes } from "@/constants";
 import { FC, Suspense } from "react";
 import Box from "./Box";
@@ -12,16 +11,10 @@ interface SidebarProps {
   children: React.ReactNode;
 }
 
-async function GetUserSongs({ isMobile }: { isMobile?: boolean }) {
-  const songs = await getSongs();
-
-  return <UserSongs allSongs={songs} isMobile={isMobile} />;
-}
-
 const Sidebar: FC<SidebarProps> = ({ children }) => {
   return (
     <div className="flex h-full">
-      <GetUserSongs isMobile />
+      <UserSongs isMobile />
 
       <aside className="hidden md:flex flex-col gap-y-2 bg-black h-full w-[300px] p-2">
         <Box>
@@ -38,7 +31,7 @@ const Sidebar: FC<SidebarProps> = ({ children }) => {
           <Suspense
             fallback={<Loader className="flex justify-center w-full mt-5" />}
           >
-            <GetUserSongs />
+            <UserSongs />
           </Suspense>
         </Box>
       </aside>
