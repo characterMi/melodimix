@@ -3,7 +3,6 @@ importScripts("/appVersion.js");
 const assets = [
   "/",
   "/search",
-  "/offline.html",
   "/manifest.webmanifest",
   "/cacheWorker.js",
   "/appVersion.js",
@@ -121,14 +120,7 @@ self.addEventListener("fetch", (event) => {
     event.request.mode === "navigate" ||
     event.request.headers.get("accept")?.includes("text/html")
   ) {
-    event.respondWith(
-      // using staleWhileRevalidate strategy, because we want fresh page and fresh data since users can upload songs.
-      staleWhileRevalidate(
-        event.request,
-        assetsCacheName,
-        /*returnOffline= */ true
-      )
-    );
+    event.respondWith(serveHtmlPages(event.request));
     return;
   }
 
@@ -175,41 +167,58 @@ async function cacheOnly(req, cacheName) {
   return fetchReq(req, cache);
 }
 
-async function staleWhileRevalidate(req, cacheName, returnOffline = false) {
-  // if the request was for a html page, we ignore search params...
-  const cacheProps = returnOffline ? { ignoreSearch: true } : undefined;
+async function staleWhileRevalidate(req, cacheName) {
   const cache = await caches.open(cacheName);
-  const cachedResponse = await cache.match(req, cacheProps);
-  const fetchRes = await fetchReq(req, cache, returnOffline);
+  const cachedResponse = await cache.match(req);
+  const fetchRes = await fetchReq(req, cache);
 
   return cachedResponse || fetchRes;
 }
 
-async function fetchReq(req, cache = null, returnOffline = false) {
+async function serveHtmlPages(req) {
+  const url = new URL(req.url);
+  const hasSearch = url.searchParams.size > 0;
+
+  const cache = await caches.open(assetsCacheName);
+  const cachedResponse = await cache.match(req, { ignoreSearch: true });
+  const fetchRes = await fetchReq(
+    req,
+    // only caching the response if there is no searchParams
+    hasSearch ? null : cache,
+    /* isRequestingHtml=*/ true
+  );
+
+  return (
+    fetchRes ||
+    cachedResponse ||
+    new Response(offlineHTMLfallback(), {
+      status: 503,
+      statusText: "Service Unavailable.",
+      headers: { "Content-Type": "text/html" },
+    })
+  );
+}
+
+async function fetchReq(req, cache = null, isRequestingHtml = false) {
   return fetch(req, { cache: "no-cache" })
     .then(async (networkRes) => {
       if (cache && networkRes.ok) await cache.put(req, networkRes.clone());
       return networkRes;
     })
     .catch(async () => {
-      const errMsg =
-        "Network error and no cached data available. see the browser's console for more information";
-      let errResponse = errMsg;
+      if (isRequestingHtml) return;
 
-      if (returnOffline) {
-        const assetsCache = await caches.open(assetsCacheName);
-        const offlinePage = await assetsCache.match("/offline.html");
-
-        if (offlinePage) return offlinePage;
-
-        // if we couldn't find the offline.html, we return a simple html page.
-        errResponse = `<!DOCTYPE html><html lang="en"><head><meta name="viewport"content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover"/><title>Network error and no cached data</title></head><body style='background:black;display:flex;justify-content:center;align-items:center;padding-block:1rem;font-family:Arial,Helvetica,sans-serif;'><h1 style='color:white;'>${errMsg}</h1></body></html>`;
-      }
-
-      return new Response(errResponse, {
-        status: 503,
-        statusText: "Service Unavailable.",
-        headers: { "Content-Type": returnOffline ? "text/html" : "text/plain" },
-      });
+      return new Response(
+        "Network error and no cached data available. see the browser's console for more information",
+        {
+          status: 503,
+          statusText: "Service Unavailable.",
+          headers: { "Content-Type": "text/plain" },
+        }
+      );
     });
+}
+
+function offlineHTMLfallback() {
+  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport"content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover"/><link rel="icon" href="/icons/melodimix-192.png"/><link rel="apple-touch-icon" href="/icons/melodimix-192.png"/><link rel="manifest" href="/manifest.webmanifest"/><meta name="description"content="You're offline, check your internet connection and try again."/><meta name="theme-color"content="#065f46"/><meta name="color-scheme"content="dark"/><title>You're offline )):</title><style>body{background-color:black;font-family:Arial,Helvetica,sans-serif;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;height:100svh;margin:0;padding:0 1rem;}div{display:flex;align-items:center;gap:10px;}button{padding:0.75rem;border-radius:999px;background-color:#22c55e;color:black;border:none;cursor:pointer;transition:opacity 0.3s ease;font-size:1.2rem;font-weight:bold;margin-top:10px;-webkit-tap-highlight-color:transparent;}button:hover{opacity:0.75;}button:focus-visible{opacity: 0.75;outline: none;}</style></head><body><div><h1>You're currently <span style="color:#065f46">offline.</span></h1><svg stroke="white"fill="none"stroke-width="2"viewBox="0 0 24 24" aria-hidden="true"style="min-width:3.5rem;min-height:3.5rem"width="3.5rem"height="3.5rem"xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round"stroke-linejoin="round"d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414"></path></svg></div><p>it looks like you're offline, Unfortunately we haven't cached this page, so make sure you're online and try again.</p><button onclick="window.location.reload()">Reload</button></body></html>`;
 }
