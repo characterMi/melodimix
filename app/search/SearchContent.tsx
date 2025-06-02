@@ -10,9 +10,9 @@ import NoSongFallback from "../../components/NoSongFallback";
 import SongItem from "../../components/SongItem";
 
 const SearchContent = ({ songs }: { songs: Song[] }) => {
-  const onPlay = useOnPlay(songs);
-  const activeId = usePlayerStore((state) => state.activeId);
   const filteredSongs = useSearchSong(songs);
+  const activeId = usePlayerStore((state) => state.activeId);
+  const onPlay = useOnPlay(filteredSongs);
 
   if (filteredSongs.length === 0)
     return (

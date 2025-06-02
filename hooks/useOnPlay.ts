@@ -8,12 +8,10 @@ export const useOnPlay = (songs: Song[]) => {
     setIds: state.setIds,
   }));
 
-  const onPlay = (id: string) => {
+  return (id: string) => {
     setId(id);
     setIds(songs.map((song) => song.id));
   };
-
-  return onPlay;
 };
 
 export default useOnPlay;
