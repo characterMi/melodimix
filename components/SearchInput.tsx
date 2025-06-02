@@ -15,7 +15,7 @@ const SearchInput = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
 
-    if (searchParams.get("song_title")) {
+    if (searchParams.has("song_title")) {
       setValue(searchParams.get("song_title")!);
     }
   }, []);

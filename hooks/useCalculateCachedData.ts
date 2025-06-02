@@ -5,7 +5,7 @@ export const useCalculateCachedData = () => {
   const [cacheData, setCacheData] = useState<CacheData>({
     assets: 0,
     songs: 0,
-    "song-urls": 0,
+    "songs-data": 0,
   });
 
   const [status, setStatus] = useState<"loading" | "error" | "loaded">(
@@ -36,7 +36,7 @@ export const useCalculateCachedData = () => {
   const totalCacheSize =
     (cacheData.assets ?? 0) +
     (cacheData.songs ?? 0) +
-    (cacheData["song-urls"] ?? 0);
+    (cacheData["songs-data"] ?? 0);
 
   return {
     cacheData,

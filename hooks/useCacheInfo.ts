@@ -9,7 +9,7 @@ export const useCacheInfo = (totalCacheSize: number, cacheData: CacheData) => {
   const cacheColors: Record<CacheKeys, string> = {
     assets: "#34d399",
     songs: "#4216b8",
-    "song-urls": "#065f46",
+    "songs-data": "#065f46",
   };
 
   const cachePercentages = {} as Record<CacheKeys, number>;

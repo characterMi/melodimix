@@ -1,4 +1,4 @@
-export type CacheKeys = "assets" | "songs" | "song-urls";
+export type CacheKeys = "assets" | "songs" | "songs-data";
 
 export type CacheData = Record<CacheKeys, number>;
 

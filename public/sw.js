@@ -19,7 +19,7 @@ const assets = [
 ];
 
 const assetsCacheName = "assets" + VERSION;
-const cacheNames = new Set([assetsCacheName, "song-urls", "songs"]);
+const cacheNames = new Set([assetsCacheName, "songs-data", "songs"]);
 
 const SUPABASE_HOSTNAME = "ibmcmrwzbejntporrerq.supabase.co";
 
@@ -80,7 +80,6 @@ self.addEventListener("fetch", (event) => {
 
   const eventUrl = new URL(event.request.url);
 
-  // caching songs and song-urls from supabase
   if (eventUrl.hostname === SUPABASE_HOSTNAME) {
     if (eventUrl.pathname.startsWith("/rest/v1/songs")) {
       const isUserSongs = eventUrl.searchParams.has("user_id");
@@ -88,7 +87,7 @@ self.addEventListener("fetch", (event) => {
       event.respondWith(
         (isUserSongs ? staleWhileRevalidate : cacheOnly)(
           event.request,
-          "song-urls"
+          "songs-data"
         )
       );
       return;
