@@ -12,18 +12,6 @@ export const useGetUserSongs = () => {
   const [isSongsLoading, setIsSongsLoading] = useState(true);
 
   useEffect(() => {
-    const { data } = supabaseClient.auth.onAuthStateChange((e) => {
-      if (e === "SIGNED_OUT") {
-        setUserSongs([]);
-      }
-    });
-
-    return () => {
-      data.subscription.unsubscribe();
-    };
-  }, []);
-
-  useEffect(() => {
     if (session?.user) {
       (async () => {
         setIsSongsLoading(true);
@@ -41,6 +29,7 @@ export const useGetUserSongs = () => {
         setIsSongsLoading(false);
       })();
     } else {
+      setUserSongs([]);
       setIsSongsLoading(false);
     }
   }, [session]);

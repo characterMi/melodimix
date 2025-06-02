@@ -42,19 +42,19 @@ const SongItem = ({ data, onClick, player }: Props) => {
         >
           <p
             className={twMerge(
-              "text-white whitespace-nowrap select-none truncate",
-              player && "scroll-animation w-full child_1"
+              "text-white whitespace-nowrap select-none",
+              player ? "scroll-animation w-full child_1" : "truncate"
             )}
           >
-            {data.title}
+            {data.title} &nbsp;
           </p>
 
           {player && (
             <p
-              className="text-white whitespace-nowrap select-none truncate w-full scroll-animation child_2"
+              className="text-white whitespace-nowrap select-none w-full scroll-animation child_2"
               aria-hidden
             >
-              {data.title}
+              {data.title} &nbsp;
             </p>
           )}
         </div>

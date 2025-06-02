@@ -38,6 +38,10 @@ export function usePlayer(song: Song, songUrl: string) {
       navigator.clearAppBadge?.();
     },
     onload: () => setIsMusicLoading(false),
+    onloaderror: () => {
+      setIsMusicLoading(false);
+      toast.error("Couldn't load the music!");
+    },
   });
 
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
@@ -83,18 +87,21 @@ export function usePlayer(song: Song, songUrl: string) {
   const generateNextSongIndex = (currentIndex: number): number => {
     if (ids.length === 1) return 0; // if the length of our playlist is 1, we don't want to play a random music, but instead we want to play the current music
 
-    const nextSongIndex = Math.floor(Math.random() * ids.length);
+    let nextSongIndex = currentIndex;
 
-    if (nextSongIndex === currentIndex)
-      return generateNextSongIndex(currentIndex);
+    while (nextSongIndex === currentIndex) {
+      nextSongIndex = Math.floor(Math.random() * ids.length);
+    }
 
     return nextSongIndex;
   };
 
   useEffect(() => {
-    sound?.play();
+    if (!sound) return;
 
-    if (navigator.mediaSession && sound) {
+    sound.play();
+
+    if (navigator.mediaSession) {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: song.title,
         artist: song.author,
@@ -115,13 +122,13 @@ export function usePlayer(song: Song, songUrl: string) {
         onPlaySong("previous")
       );
       navigator.mediaSession.setActionHandler("seekforward", () => {
-        sound.seek(sound?.seek() + 10);
+        sound.seek(sound.seek() + 10);
       });
       navigator.mediaSession.setActionHandler("seekbackward", () => {
-        sound.seek(sound?.seek() - 10);
+        sound.seek(sound.seek() - 10);
       });
-      navigator.mediaSession.setActionHandler("seekto", (newTime) => {
-        sound.seek(newTime);
+      navigator.mediaSession.setActionHandler("seekto", ({ seekTime }) => {
+        sound.seek(seekTime);
       });
       navigator.mediaSession.setActionHandler("stop", () => {
         sound.unload();
@@ -135,10 +142,14 @@ export function usePlayer(song: Song, songUrl: string) {
     }
 
     return () => {
-      sound?.unload();
+      sound.unload();
       navigator.mediaSession.metadata = null;
     };
   }, [sound]);
+
+  useEffect(() => {
+    sound?.unload();
+  }, [activeId]);
 
   return {
     state: {

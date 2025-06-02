@@ -1,5 +1,5 @@
 export default async function sitemap() {
-  const staticRoutes = ["", "liked", "search", "offline.html"].map((route) => ({
+  const staticRoutes = ["", "liked", "search"].map((route) => ({
     url: `${process.env.NEXT_PUBLIC_BASE_URL}${route}`,
     lastModified: new Date().toISOString(),
   }));
