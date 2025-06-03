@@ -10,7 +10,7 @@ import ManageCacheButton from "./ManageCacheButton";
 
 const MobileSidebar = ({
   songs,
-  isSongsLoading,
+  isSongsLoading = true,
 }: {
   songs: Song[];
   isSongsLoading: boolean;
@@ -19,13 +19,10 @@ const MobileSidebar = ({
   const sidebarRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const el = sidebarRef.current;
-    if (!el) return;
-
     if (!isActive) {
-      el.setAttribute("inert", "");
+      sidebarRef.current?.setAttribute("inert", "");
     } else {
-      el.removeAttribute("inert");
+      sidebarRef.current?.removeAttribute("inert");
     }
   }, [isActive]);
 
