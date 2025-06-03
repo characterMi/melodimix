@@ -147,10 +147,6 @@ export function usePlayer(song: Song, songUrl: string) {
     };
   }, [sound]);
 
-  useEffect(() => {
-    sound?.unload();
-  }, [activeId]);
-
   return {
     state: {
       isMusicPlaying,
