@@ -83,7 +83,7 @@ const MobileSidebar = ({
 
           {isSongsLoading ? (
             <div className="flex justify-center">
-              <Loader className="p-0" />
+              <Loader />
             </div>
           ) : (
             <Library songs={songs} />

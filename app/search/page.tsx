@@ -32,7 +32,7 @@ const SearchPage = () => {
 
       <Suspense
         fallback={
-          <Loader className="p-0 flex justify-center md:px-6 md:justify-start" />
+          <Loader className="flex justify-center md:px-6 md:justify-start" />
         }
       >
         <GetSongs />

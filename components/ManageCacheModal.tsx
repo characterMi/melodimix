@@ -14,7 +14,7 @@ const ManageCacheModalContent = () => {
         {status === "loading" && (
           <>
             <p>Calculating storage usage...</p>
-            <Loader className="p-0 min-w-8" />
+            <Loader className="min-w-8" />
           </>
         )}
 
