@@ -21,7 +21,7 @@ async function GetSongs() {
 
   return (
     <div className="px-6">
-      <PageContent songs={songs} />
+      <PageContent initialSongs={songs} />
     </div>
   );
 }
