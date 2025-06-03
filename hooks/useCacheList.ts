@@ -3,7 +3,7 @@ import type { CacheData, CacheKeys } from "@/types/types";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-const VERSION = "1.0.0";
+const VERSION = "1.1.1";
 
 export const useCacheList = (cacheNames: CacheKeys[], cacheData: CacheData) => {
   const closeModal = useManageCacheModal((state) => state.onClose);
