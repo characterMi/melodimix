@@ -10,7 +10,7 @@ import NoSongFallback from "../../components/NoSongFallback";
 import SongItem from "../../components/SongItem";
 
 const SearchContent = ({ songs }: { songs: Song[] }) => {
-  const filteredSongs = useSearchSong(songs);
+  const { filteredSongs, isSearching } = useSearchSong(songs);
   const activeId = usePlayerStore((state) => state.activeId);
   const onPlay = useOnPlay(filteredSongs);
 
@@ -27,7 +27,8 @@ const SearchContent = ({ songs }: { songs: Song[] }) => {
     <div
       className={twMerge(
         "flex flex-col gap-y-2 w-full px-6",
-        activeId && "mb-28"
+        activeId && "mb-28",
+        isSearching && "opacity-50"
       )}
     >
       {filteredSongs.map((song) => (

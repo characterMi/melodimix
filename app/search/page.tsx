@@ -13,8 +13,8 @@ export const metadata = {
 };
 
 async function GetSongs() {
-  // i could get the search term with query params and use the getSongByTitle function to get the searched song, and i should do that in a large scale project, but in this case, i don't have lots of musics, so i just store the search term in a zustand context and i filter out all songs using the searchValue state. this way, we improved the performance by not calling the database every time user searches for something.
-  const songs = await getSongs();
+  // Initial data
+  const songs = await getSongs(/* limit= */ 20);
 
   return <SearchContent songs={songs} />;
 }

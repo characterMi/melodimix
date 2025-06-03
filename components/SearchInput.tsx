@@ -8,9 +8,9 @@ import Input from "./Input";
 
 const SearchInput = () => {
   const [value, setValue] = useState<string>();
-  const { setSearchValue } = useSearchMusic();
+  const setSearchValue = useSearchMusic((state) => state.setSearchValue);
 
-  const debouncedValue = useDebounce(value, 1000);
+  const debouncedValue = useDebounce(value, 1500);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);

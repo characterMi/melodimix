@@ -1,18 +1,48 @@
 import { Song } from "@/types/types";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchMusic } from "../store/useSearch";
+import toast from "react-hot-toast";
+import { searchForSongs } from "@/lib/searchForSongs";
 
 export function useSearchSong(songs: Song[]) {
-  const { searchValue } = useSearchMusic();
+  const searchValue = useSearchMusic((state) => state.searchValue);
+  const [isSearching, setIsSearching] = useState(false);
   const [filteredSongs, setFilteredSongs] = useState(songs);
 
-  useLayoutEffect(() => {
-    setFilteredSongs(
-      songs.filter((song) =>
-        song.title.toLowerCase().includes(searchValue?.toLowerCase() || "")
-      )
-    );
+  useEffect(() => {
+    if (!searchValue?.trim()) {
+      setFilteredSongs(songs);
+      return;
+    }
+
+    const controller = new AbortController();
+
+    (async () => {
+      try {
+        setIsSearching(true);
+        const data = await searchForSongs(searchValue, controller.signal);
+
+        setFilteredSongs(data);
+      } catch (err: any) {
+        console.error("No song found. Reason: ", err);
+        if (err?.code === "499") return;
+
+        toast.error("No song found. trying to search locally.");
+
+        setFilteredSongs(
+          songs.filter((song) =>
+            song.title.toLowerCase().includes(searchValue.toLowerCase())
+          )
+        );
+      } finally {
+        setIsSearching(false);
+      }
+    })();
+
+    return () => {
+      controller.abort({ code: "499", message: "User Aborted the request" });
+    };
   }, [searchValue]);
 
-  return filteredSongs;
+  return { isSearching, filteredSongs };
 }

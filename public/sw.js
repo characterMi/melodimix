@@ -82,11 +82,19 @@ self.addEventListener("fetch", (event) => {
 
   if (eventUrl.hostname === SUPABASE_HOSTNAME) {
     if (eventUrl.pathname.startsWith("/rest/v1/songs")) {
-      const isUserSongs = eventUrl.searchParams.has("user_id");
+      // Search songs...
+      if (eventUrl.searchParams.has("title")) {
+        event.respondWith(staleWhileRevalidate(event.request, "songs-data"));
+        return;
+      }
 
-      event.respondWith(
-        (isUserSongs ? networkFirst : cacheOnly)(event.request, "songs-data")
-      );
+      // User songs...
+      if (eventUrl.searchParams.has("user_id")) {
+        event.respondWith(networkFirst(event.request, "songs-data"));
+        return;
+      }
+
+      event.respondWith(cacheOnly(event.request, "songs-data"));
       return;
     }
 
