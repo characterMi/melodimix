@@ -86,7 +86,7 @@ const MobileSidebar = ({
               <Loader />
             </div>
           ) : (
-            <Library songs={songs} />
+            <Library songs={songs} isMobile />
           )}
         </aside>
       </div>
