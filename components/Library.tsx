@@ -7,6 +7,9 @@ import { twMerge } from "tailwind-merge";
 import AddSongButton from "./AddSongButton";
 import NoSongFallback from "./NoSongFallback";
 import SongItem from "./SongItem";
+import Link from "next/link";
+import { HiChevronRight } from "react-icons/hi";
+import { MdArrowOutward } from "react-icons/md";
 
 const Library = ({ songs }: { songs: Song[] }) => {
   const activeId = usePlayerStore((state) => state.activeId);
@@ -22,14 +25,23 @@ const Library = ({ songs }: { songs: Song[] }) => {
   }
 
   return (
-    <div className={twMerge("flex flex-col", activeId && "pb-28")}>
+    <div className={twMerge("flex flex-col px-3", activeId && "pb-28")}>
       <AddSongButton />
 
-      <div className="flex flex-col gap-y-2 mt-4 px-3">
+      <div className="flex flex-col gap-y-2 mt-4">
         {songs.map((song) => (
           <SongItem onClick={(id) => onPlay(id)} key={song.id} data={song} />
         ))}
       </div>
+
+      {songs.length === 10 && (
+        <Link
+          href="/profile"
+          className="flex w-full py-6 items-center justify-center gap-2 text-neutral-400 hover:text-white focus-visible:text-white outline-none transition-colors"
+        >
+          See more <MdArrowOutward size={20} />
+        </Link>
+      )}
     </div>
   );
 };

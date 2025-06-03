@@ -25,7 +25,8 @@ export const useGetUserSongs = () => {
           .from("songs")
           .select("*")
           .eq("user_id", session?.user.id)
-          .order("created_at", { ascending: false });
+          .order("created_at", { ascending: false })
+          .limit(10);
 
         if (!error) {
           setUserSongs(data ?? []);
