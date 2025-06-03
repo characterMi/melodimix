@@ -21,7 +21,7 @@ export const useLikeSong = (songId: string, initialIsLiked?: true) => {
 
   const router = useRouter();
 
-  const { session, supabaseClient } = useSessionContext();
+  const { session } = useSessionContext();
   const user = session?.user;
 
   useEffect(() => {
@@ -30,28 +30,7 @@ export const useLikeSong = (songId: string, initialIsLiked?: true) => {
     if (likedSongs[songId]) {
       setIsLiked(true);
       return;
-    } else if (likedSongs[songId] === false) {
-      setIsLiked(false);
-      return;
     }
-
-    (() => {
-      startTransition(async () => {
-        const { data, error } = await supabaseClient
-          .from("liked_songs")
-          .select("*")
-          .eq("user_id", user.id)
-          .eq("song_id", songId)
-          .single();
-
-        if (!error && data) {
-          setLikedSongs(songId, true);
-          setIsLiked(true);
-        } else {
-          setLikedSongs(songId, initialIsLiked || false);
-        }
-      });
-    })();
   }, [user?.id]);
 
   useEffect(() => {
@@ -69,18 +48,23 @@ export const useLikeSong = (songId: string, initialIsLiked?: true) => {
 
     startTransition(async () => {
       try {
+        // Optimistic update...
+        setLikedSongs(songId, !isLiked);
+
+        // Simple animation when we like a song...
+        if (!isLiked) btnRef.current?.classList.add("like-button-animation");
+        else btnRef.current?.classList.remove("like-button-animation");
+
+        // Updating the song in DB
         const likeInformation = await likeSong(isLiked, user.id, songId);
 
+        // Updating the store based on result
         (likeInformation.isLiked ? setLikedSongs : removeIdFromLikedSongs)(
           songId,
           true
         );
 
         router.refresh();
-
-        if (likeInformation.isLiked)
-          btnRef.current?.classList.add("like-button-animation");
-        else btnRef.current?.classList.remove("like-button-animation");
 
         if (likeInformation.error) {
           toast.error(likeInformation.error);

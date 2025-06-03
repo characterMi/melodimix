@@ -85,11 +85,13 @@ self.addEventListener("fetch", (event) => {
       const isUserSongs = eventUrl.searchParams.has("user_id");
 
       event.respondWith(
-        (isUserSongs ? staleWhileRevalidate : cacheOnly)(
-          event.request,
-          "songs-data"
-        )
+        (isUserSongs ? networkFirst : cacheOnly)(event.request, "songs-data")
       );
+      return;
+    }
+
+    if (eventUrl.pathname.startsWith("/rest/v1/liked_songs")) {
+      event.respondWith(networkFirst(event.request, "songs-data"));
       return;
     }
 
@@ -98,11 +100,8 @@ self.addEventListener("fetch", (event) => {
       return;
     }
 
-    // don't cache any token or liked songs (strange behavior when we cache liked songs)...
-    if (
-      eventUrl.pathname.startsWith("/auth/v1/token") ||
-      eventUrl.pathname.startsWith("/rest/v1/liked_songs")
-    ) {
+    // don't cache any token...
+    if (eventUrl.pathname.startsWith("/auth/v1/token")) {
       event.respondWith(fetchReq(event.request));
       return;
     }
@@ -163,7 +162,9 @@ async function cacheOnly(req, cacheName) {
     return cachedResponse.clone();
   }
 
-  return fetchReq(req, cache);
+  const fetchRes = await fetchReq(req, cache);
+
+  return fetchRes || responseFallback();
 }
 
 async function staleWhileRevalidate(req, cacheName) {
@@ -171,7 +172,18 @@ async function staleWhileRevalidate(req, cacheName) {
   const cachedResponse = await cache.match(req);
   const fetchRes = await fetchReq(req, cache);
 
-  return cachedResponse || fetchRes;
+  return cachedResponse || fetchRes || responseFallback();
+}
+
+async function networkFirst(req, cacheName) {
+  const cache = await caches.open(cacheName);
+  const fetchRes = await fetchReq(req, cache);
+
+  if (fetchRes) return fetchRes;
+
+  const cachedResponse = await cache.match(req);
+
+  return cachedResponse || responseFallback();
 }
 
 async function serveHtmlPages(req) {
@@ -179,12 +191,11 @@ async function serveHtmlPages(req) {
   const hasSearch = url.searchParams.size > 0;
 
   const cache = await caches.open(assetsCacheName);
-  const cachedResponse = await cache.match(req, { ignoreSearch: true });
+  const cachedResponse = await cache.match(req);
   const fetchRes = await fetchReq(
     req,
     // only caching the response if there is no searchParams
-    hasSearch ? null : cache,
-    /* isRequestingHtml=*/ true
+    hasSearch ? null : cache
   );
 
   return (
@@ -198,24 +209,26 @@ async function serveHtmlPages(req) {
   );
 }
 
-async function fetchReq(req, cache = null, isRequestingHtml = false) {
+async function fetchReq(req, cache = null) {
   return fetch(req, { cache: "no-cache" })
     .then(async (networkRes) => {
       if (cache && networkRes.ok) await cache.put(req, networkRes.clone());
       return networkRes;
     })
-    .catch(async () => {
-      if (isRequestingHtml) return;
-
-      return new Response(
-        "Network error and no cached data available. see the browser's console for more information",
-        {
-          status: 503,
-          statusText: "Service Unavailable.",
-          headers: { "Content-Type": "text/plain" },
-        }
-      );
+    .catch(() => {
+      return null;
     });
+}
+
+function responseFallback() {
+  return new Response(
+    "Network error and no cached data available. see the browser's console for more information",
+    {
+      status: 503,
+      statusText: "Service Unavailable.",
+      headers: { "Content-Type": "text/plain" },
+    }
+  );
 }
 
 function offlineHTMLfallback() {

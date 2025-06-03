@@ -97,9 +97,9 @@ export default function RootLayout({
       </head>
       <body className={figtree.className}>
         <ToasterProvider />
+        <ModalProvider />
         <SupabaseProvider>
           <Root>
-            <ModalProvider />
             <Sidebar>{children}</Sidebar>
             <Player />
           </Root>
