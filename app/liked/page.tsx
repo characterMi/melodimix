@@ -14,7 +14,7 @@ export const metadata = {
 async function GetSongs() {
   const songs = await getLikedSongs();
 
-  return <LikedContent songs={songs} />;
+  return <LikedContent initialSongs={songs} />;
 }
 
 const LikedSongsPage = () => {

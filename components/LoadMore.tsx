@@ -1,17 +1,17 @@
 import useInView from "@/hooks/useInView";
 import type { Song } from "@/types/types";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { getSongs } from "@/actions/getSongs";
 import { twMerge } from "tailwind-merge";
 
 interface Props {
   numOfSongs: number;
   setSongs: Dispatch<SetStateAction<Song[]>>;
+  getSongsPromise: (limit: number, offset: number) => Promise<Song[]>;
 }
 
 const LIMIT = 10;
 
-const LoadMore = ({ numOfSongs, setSongs }: Props) => {
+const LoadMore = ({ numOfSongs, setSongs, getSongsPromise }: Props) => {
   const offset = useRef(0);
   const retries = useRef(0);
   const retryTimeout = useRef<NodeJS.Timeout>();
@@ -26,7 +26,7 @@ const LoadMore = ({ numOfSongs, setSongs }: Props) => {
 
     offset.current += 1;
 
-    getSongs(LIMIT, offset.current)
+    getSongsPromise(LIMIT, offset.current)
       .then((songs) => {
         if (songs.length < LIMIT) {
           setStatus("ended");

@@ -4,7 +4,10 @@ import type { Song } from "@/types/types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
-export const getLikedSongs = async (): Promise<Song[]> => {
+export const getLikedSongs = async (
+  limit: number = 10,
+  offset: number = 0
+): Promise<Song[]> => {
   const supabase = createServerComponentClient({
     cookies,
   });
@@ -13,16 +16,21 @@ export const getLikedSongs = async (): Promise<Song[]> => {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const from = offset * limit;
+  const to = from + limit;
+
   const { data, error } = await supabase
     .from("liked_songs")
     .select("*, songs(*)")
     .eq("user_id", user?.id)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .range(from, to)
+    .limit(limit);
 
   if (error) {
     console.error(error);
 
-    return [];
+    throw error;
   }
 
   if (!data) {

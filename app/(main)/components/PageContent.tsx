@@ -1,5 +1,6 @@
 "use client";
 
+import { getSongs } from "@/actions/getSongs";
 import LoadMore from "@/components/LoadMore";
 import NoSongFallback from "@/components/NoSongFallback";
 import SongCard from "@/components/SongCard";
@@ -28,7 +29,11 @@ const PageContent = ({ initialSongs }: { initialSongs: Song[] }) => {
         ))}
       </section>
 
-      <LoadMore numOfSongs={songs.length} setSongs={setSongs} />
+      <LoadMore
+        numOfSongs={songs.length}
+        setSongs={setSongs}
+        getSongsPromise={getSongs}
+      />
     </div>
   );
 };
