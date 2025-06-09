@@ -34,11 +34,16 @@ export const useUploadSong = () => {
 
         const imageFile = formData.get("img");
         const songFile = formData.get("song");
-        const title = (formData.get("title") as string).trim();
-        const author = (formData.get("author") as string).trim();
+        const title = (formData.get("title") as string | undefined)?.trim();
+        const author = (formData.get("author") as string | undefined)?.trim();
 
         if (!imageFile || !songFile || !title || !author) {
           toast.error("Missing fields !");
+          return;
+        }
+
+        if (title.length > 100 || author.length > 50) {
+          toast.error("Title or Author is too long!");
           return;
         }
 

@@ -10,14 +10,14 @@ export type Duration =
 export function useUpdateDuration(song: any, duration: number) {
   const totalDuration = useRef<Duration>("00 : 00");
   const [currentDurationPercentage, setCurrentDurationPercentage] = useState(0);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout>();
   let currentDuration: Duration = "00 : 00";
 
   useEffect(() => {
     const DURATION_IN_SECOND = duration / 1000;
 
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    
+    clearInterval(intervalRef.current);
+
     intervalRef.current = setInterval(() => {
       // song.seek gives us the current duration (in second)
       setCurrentDurationPercentage(
@@ -28,7 +28,7 @@ export function useUpdateDuration(song: any, duration: number) {
     totalDuration.current = formatDuration(DURATION_IN_SECOND);
 
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      clearInterval(intervalRef.current);
     };
   }, [song]);
 
