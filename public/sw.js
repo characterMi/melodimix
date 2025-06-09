@@ -94,7 +94,13 @@ self.addEventListener("fetch", (event) => {
         return;
       }
 
-      event.respondWith(cacheOnly(event.request, "songs-data"));
+      // Song by id...
+      if (eventUrl.searchParams.has("id")) {
+        event.respondWith(cacheOnly(event.request, "songs-data"));
+        return;
+      }
+
+      event.respondWith(networkFirst(event.request, "songs-data"));
       return;
     }
 

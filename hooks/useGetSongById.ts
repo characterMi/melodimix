@@ -14,9 +14,9 @@ export const useGetSongById = (id?: string) => {
       return;
     }
 
-    setIsLoading(true);
-
     const fetchSong = async () => {
+      setIsLoading(true);
+
       const { data, error } = await supabaseClient
         .from("songs")
         .select("*")
