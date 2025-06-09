@@ -28,12 +28,13 @@ const PageContent = ({ initialSongs }: { initialSongs: Song[] }) => {
   }, [songs]);
 
   useEffect(() => {
-    if (page === 0) {
+    if (initialSongs.length > 0 && songs.length === 0) {
       addAll(initialSongs, initialSongs.length === LIMIT ? page + 1 : page);
     }
   }, []);
 
-  if (songs.length === 0) return <NoSongFallback className="px-6 text-xl" />;
+  if (initialSongs.length === 0)
+    return <NoSongFallback className="px-6 text-xl" />;
 
   return (
     <div style={{ marginBottom: activeId ? "7rem" : "0" }}>

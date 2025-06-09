@@ -48,7 +48,7 @@ export const LikedContent = ({ initialSongs }: { initialSongs: Song[] }) => {
   }, [songs]);
 
   useEffect(() => {
-    if (page === 0) {
+    if (initialSongs.length > 0 && songs.length === 0) {
       addAll(initialSongs, initialSongs.length === LIMIT ? page + 1 : page);
     }
   }, []);
@@ -66,7 +66,7 @@ export const LikedContent = ({ initialSongs }: { initialSongs: Song[] }) => {
     );
   }
 
-  if (songs.length === 0)
+  if (initialSongs.length === 0)
     return (
       <NoSongFallback className="m-4" fallbackText="There is nothing here." />
     );

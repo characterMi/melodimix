@@ -1,20 +1,17 @@
 "use server";
 
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
+import { getUserData } from "./getUserData";
 
 export const likeSong = async (
   isLiked: boolean,
   userId: string,
   songId: string
 ) => {
-  const supabaseClient = createServerComponentClient({
-    cookies,
-  });
+  const { supabase } = await getUserData();
 
   if (isLiked) {
-    const { error } = await supabaseClient
+    const { error } = await supabase
       .from("liked_songs")
       .delete()
       .eq("user_id", userId)
@@ -25,11 +22,12 @@ export const likeSong = async (
     }
 
     revalidatePath("/liked");
+    revalidatePath("/profile/liked");
 
     return { isLiked: false };
   }
 
-  const { error } = await supabaseClient.from("liked_songs").insert({
+  const { error } = await supabase.from("liked_songs").insert({
     song_id: songId,
     user_id: userId,
   });
@@ -39,6 +37,7 @@ export const likeSong = async (
   }
 
   revalidatePath("/liked");
+  revalidatePath("/profile/liked");
 
   return { message: "Liked !", isLiked: true };
 };

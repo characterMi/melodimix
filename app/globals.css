@@ -159,12 +159,33 @@ body {
 }
 
 @keyframes retryAnimation {
-  0% { content: "5" }
-  20% { content: "4" }
-  40% { content: "3" }
-  60% { content: "2" }
-  80% { content: "1" }
-  100% { content: "0" }
+  0% {
+    content: "5";
+  }
+  20% {
+    content: "4";
+  }
+  40% {
+    content: "3";
+  }
+  60% {
+    content: "2";
+  }
+  80% {
+    content: "1";
+  }
+  100% {
+    content: "0";
+  }
+}
+
+@keyframes spinnerFade {
+  0% {
+    background-color: #f5f5f5;
+  }
+  100% {
+    background-color: transparent;
+  }
 }
 
 @media (display-mode: standalone) {

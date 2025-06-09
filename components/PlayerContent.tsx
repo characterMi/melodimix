@@ -41,7 +41,7 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
                 <PlayerTypeIcon size={30} aria-hidden />
               </button>
 
-              <AddToPlaylist />
+              <AddToPlaylist songId={song.id} />
             </div>
           </div>
         </div>

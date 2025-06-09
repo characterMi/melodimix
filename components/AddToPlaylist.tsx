@@ -2,18 +2,58 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
-import { TbDotsVertical } from "react-icons/tb";
 import Loader from "./Loader";
 import { usePlaylistModal } from "@/store/usePlaylistModal";
 import { RiPlayListFill } from "react-icons/ri";
 import { MdArrowOutward } from "react-icons/md";
-import { useRouter } from "next/navigation";
+import { updatePlaylist } from "@/actions/updatePlaylist";
+import { Playlist } from "@/types";
+import toast from "react-hot-toast";
 
-const Playlists = () => {
-  const [playlists, setPlaylists] = useState<any[]>([]);
+const PlaylistItem = ({
+  playlist,
+  songId,
+}: {
+  playlist: Playlist;
+  songId: string;
+}) => {
+  const [isAdding, setIsAdding] = useState(false);
+
+  const handleClick = async () => {
+    setIsAdding(true);
+
+    const { error } = await updatePlaylist({
+      id: playlist.id,
+      name: playlist.name,
+      user_id: playlist.user_id,
+      song_ids: [...playlist.song_ids, songId],
+    });
+
+    if (error) {
+      toast.error("Something went wrong.");
+    } else {
+      toast.success("Song added to playlist.");
+    }
+
+    setIsAdding(false);
+  };
+
+  return (
+    <DropdownMenu.Item
+      className="cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition w-full flex items-center justify-between disabled:opacity-50"
+      disabled={isAdding}
+      onClick={handleClick}
+    >
+      <p className="truncate flex-1">{playlist.name}</p>
+
+      <MdArrowOutward size={20} />
+    </DropdownMenu.Item>
+  );
+};
+
+const Playlists = ({ songId }: { songId: string }) => {
+  const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const router = useRouter();
 
   const {
     session,
@@ -49,15 +89,7 @@ const Playlists = () => {
   return playlists.length > 0 ? (
     <div className="flex flex-col gap-y-4 flex-1 w-full p-2">
       {playlists.map((playlist) => (
-        <DropdownMenu.Item
-          className="cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition w-full flex items-center justify-between"
-          key={playlist.id}
-          onClick={() => router.push(`/profile/playlists/${playlist.id}`)}
-        >
-          <p className="truncate flex-1">{playlist.name}</p>
-
-          <MdArrowOutward size={20} />
-        </DropdownMenu.Item>
+        <PlaylistItem playlist={playlist} songId={songId} key={playlist.id} />
       ))}
     </div>
   ) : (
@@ -68,7 +100,7 @@ const Playlists = () => {
   );
 };
 
-const AddToPlaylist = () => {
+const AddToPlaylist = ({ songId }: { songId: string }) => {
   const openModal = usePlaylistModal((state) => state.onOpen);
 
   return (
@@ -97,7 +129,7 @@ const AddToPlaylist = () => {
         <DropdownMenu.Separator className="h-[1px] bg-neutral-800 my-2" />
 
         <div className="flex flex-1 overflow-y-auto flex-col items-center justify-center">
-          <Playlists />
+          <Playlists songId={songId} />
         </div>
       </DropdownMenu.Content>
     </DropdownMenu.Root>

@@ -1,20 +1,37 @@
 "use server";
 
 import type { Song } from "@/types";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { getUserData } from "./getUserData";
+
+export const getLikedSongsWithoutLimit = async () => {
+  const { user, supabase } = await getUserData();
+
+  const { data, error } = await supabase
+    .from("liked_songs")
+    .select("*, songs(*)")
+    .eq("user_id", user?.id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+
+    return [];
+  }
+
+  if (!data) {
+    return [];
+  }
+
+  return data.map((item) => ({
+    ...item.songs,
+  }));
+};
 
 export const getLikedSongs = async (
   limit: number = 25,
   offset: number = 0
 ): Promise<Song[]> => {
-  const supabase = createServerComponentClient({
-    cookies,
-  });
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { user, supabase } = await getUserData();
 
   const from = offset * limit;
   const to = from + limit;

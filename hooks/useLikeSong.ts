@@ -35,14 +35,13 @@ export const useLikeSong = (song: Song, initialIsLiked?: true) => {
 
     if (likedSongs[song.id]) {
       setIsLiked(true);
-      return;
     }
   }, [user?.id]);
 
   useEffect(() => {
     if (likedSongs[song.id]) {
       setIsLiked(true);
-    } else {
+    } else if (!initialIsLiked) {
       setIsLiked(false);
     }
   }, [likedSongs]);
