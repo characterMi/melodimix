@@ -1,4 +1,4 @@
-import { CacheData } from "@/types/types";
+import { CacheData } from "@/types";
 import { useEffect, useState } from "react";
 
 export const useCalculateCachedData = () => {

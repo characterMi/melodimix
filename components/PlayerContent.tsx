@@ -1,10 +1,11 @@
 import { usePlayer } from "@/hooks/usePlayer";
-import type { Song } from "@/types/types";
+import type { Song } from "@/types";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import Duration from "./Duration";
 import LikeButton from "./LikeButton";
 import Slider from "./Slider";
 import SongItem from "./SongItem";
+import AddToPlaylist from "./AddToPlaylist";
 
 const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
   const { handlers, icons, sound, state } = usePlayer(song, songUrl);
@@ -22,18 +23,25 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
         <div className="flex w-full justify-start relative">
           <div className="flex items-center gap-x-4 w-full">
             <SongItem player data={song} />
-            <div className="flex items-center gap-x-2 w-max bg-black h-full absolute top-0 right-0 pl-1 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black">
+            <div className="flex items-center gap-x-2 w-max bg-black h-full absolute top-0 right-0 pl-1 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:z-[1]">
               <LikeButton song={song} />
+
               <button
                 aria-label={
                   "Change the type of player to " +
-                  (playerType === "next-song" ? "Shuffle" : "Next song")
+                  (playerType === "next-song"
+                    ? "Shuffle"
+                    : playerType === "shuffle"
+                    ? "Repeat"
+                    : "Next song")
                 }
                 className="cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition"
                 onClick={handleChangePlayerType}
               >
-                <PlayerTypeIcon size={32} aria-hidden />
+                <PlayerTypeIcon size={30} aria-hidden />
               </button>
+
+              <AddToPlaylist />
             </div>
           </div>
         </div>

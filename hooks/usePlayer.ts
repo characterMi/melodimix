@@ -1,5 +1,5 @@
 import { usePlayerStore } from "@/store/usePlayerStore";
-import { Song } from "@/types/types";
+import { Song } from "@/types";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { BiArrowToRight } from "react-icons/bi";

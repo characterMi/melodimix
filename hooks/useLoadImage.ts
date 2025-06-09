@@ -1,4 +1,4 @@
-import type { Song } from "@/types/types";
+import type { Song } from "@/types";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 export const useLoadImage = (song: Song) => {

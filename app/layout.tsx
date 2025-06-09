@@ -90,21 +90,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="mobile-web-app-capable" content="yes" />
-      </head>
-      <body className={figtree.className}>
-        <ToasterProvider />
-        <ModalProvider />
-        <SupabaseProvider>
-          <Root>
+    <SupabaseProvider>
+      <Root>
+        <html lang="en">
+          <head>
+            <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+            <meta name="mobile-web-app-capable" content="yes" />
+          </head>
+          <body className={figtree.className}>
+            <ToasterProvider />
+            <ModalProvider />
             <Sidebar>{children}</Sidebar>
             <Player />
-          </Root>
-        </SupabaseProvider>
-      </body>
-    </html>
+          </body>
+        </html>
+      </Root>
+    </SupabaseProvider>
   );
 }

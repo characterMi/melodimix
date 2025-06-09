@@ -1,6 +1,6 @@
 import { formatBytes } from "@/lib/formatBytes";
 import { formatPercentage } from "@/lib/formatPercentage";
-import type { CacheData, CacheKeys } from "@/types/types";
+import type { CacheData, CacheKeys } from "@/types";
 
 export const useCacheInfo = (totalCacheSize: number, cacheData: CacheData) => {
   const cacheNames = Object.keys(cacheData) as CacheKeys[];

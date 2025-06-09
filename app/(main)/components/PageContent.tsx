@@ -6,7 +6,7 @@ import NoSongFallback from "@/components/NoSongFallback";
 import SongCard from "@/components/SongCard";
 import { useOnPlay } from "@/hooks/useOnPlay";
 import { usePlayerStore } from "@/store/usePlayerStore";
-import type { Song } from "@/types/types";
+import type { Song } from "@/types";
 import { useHomePageData } from "@/store/useHomePageData";
 import { useEffect, useMemo } from "react";
 

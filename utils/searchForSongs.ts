@@ -1,5 +1,5 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import type { Song } from "@/types/types";
+import type { Song } from "@/types";
 
 export async function searchForSongs(
   title: string | undefined,

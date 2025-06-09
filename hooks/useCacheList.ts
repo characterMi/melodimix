@@ -1,5 +1,5 @@
 import { useManageCacheModal } from "@/store/useManageCacheModal";
-import type { CacheData, CacheKeys } from "@/types/types";
+import type { CacheData, CacheKeys } from "@/types";
 import { useState } from "react";
 import toast from "react-hot-toast";
 

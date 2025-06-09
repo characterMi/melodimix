@@ -1,17 +1,17 @@
-import { Song } from "@/types/types";
+import { Song } from "@/types";
 import { useEffect, useState } from "react";
 import { useSearchMusic } from "../store/useSearch";
 import toast from "react-hot-toast";
 import { searchForSongs } from "@/utils/searchForSongs";
 
-export function useSearchSong(songs: Song[]) {
+export function useSearchSong(songs?: Song[]) {
   const searchValue = useSearchMusic((state) => state.searchValue);
   const [isSearching, setIsSearching] = useState(false);
-  const [filteredSongs, setFilteredSongs] = useState(songs);
+  const [filteredSongs, setFilteredSongs] = useState(songs ?? []);
 
   useEffect(() => {
     if (!searchValue?.trim()) {
-      setFilteredSongs(songs);
+      setFilteredSongs(songs ?? []);
       return;
     }
 
@@ -25,7 +25,7 @@ export function useSearchSong(songs: Song[]) {
         setFilteredSongs(data);
       } catch (err: any) {
         console.error("No song found. Reason: ", err);
-        if (err?.code === "499") return;
+        if (err?.code === "499" || !songs) return;
 
         toast.error("No song found. trying to search locally.");
 

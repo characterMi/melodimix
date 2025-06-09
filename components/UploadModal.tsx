@@ -21,6 +21,7 @@ const UploadModal = () => {
           placeholder="Song title"
           required
           aria-label="Enter the song title"
+          maxLength={100}
         />
 
         <Input
@@ -29,6 +30,7 @@ const UploadModal = () => {
           placeholder="Song author"
           required
           aria-label="Enter the author's name"
+          maxLength={50}
         />
 
         <div>

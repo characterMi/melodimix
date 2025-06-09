@@ -3,7 +3,7 @@
 import useOnPlay from "@/hooks/useOnPlay";
 import { useSearchSong } from "@/hooks/useSearchSong";
 import { usePlayerStore } from "@/store/usePlayerStore";
-import type { Song } from "@/types/types";
+import type { Song } from "@/types";
 import { twMerge } from "tailwind-merge";
 import LikeButton from "../../components/LikeButton";
 import NoSongFallback from "../../components/NoSongFallback";

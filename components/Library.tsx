@@ -2,7 +2,7 @@
 
 import useOnPlay from "@/hooks/useOnPlay";
 import { usePlayerStore } from "@/store/usePlayerStore";
-import type { Song } from "@/types/types";
+import type { Song } from "@/types";
 import { twMerge } from "tailwind-merge";
 import AddSongButton from "./AddSongButton";
 import NoSongFallback from "./NoSongFallback";

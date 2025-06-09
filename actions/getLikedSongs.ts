@@ -1,6 +1,6 @@
 "use server";
 
-import type { Song } from "@/types/types";
+import type { Song } from "@/types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 

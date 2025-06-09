@@ -1,4 +1,4 @@
-import { Song } from "@/types/types";
+import { Song } from "@/types";
 
 import { usePlayerStore } from "../store/usePlayerStore";
 

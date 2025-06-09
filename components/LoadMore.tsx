@@ -1,5 +1,5 @@
 import useInView from "@/hooks/useInView";
-import type { Song } from "@/types/types";
+import type { Song } from "@/types";
 import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 

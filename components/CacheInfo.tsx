@@ -1,5 +1,5 @@
 import { useCacheInfo } from "@/hooks/useCacheInfo";
-import type { CacheData } from "@/types/types";
+import type { CacheData } from "@/types";
 import CacheList from "./CacheList";
 
 type Props = {

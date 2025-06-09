@@ -1,5 +1,5 @@
 import { useLikeSong } from "@/hooks/useLikeSong";
-import type { Song } from "@/types/types";
+import type { Song } from "@/types";
 
 const LikeButton = ({
   song,

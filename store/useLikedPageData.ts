@@ -1,4 +1,4 @@
-import type { Song } from "@/types/types";
+import type { Song } from "@/types";
 import { create } from "zustand";
 
 type Store = {

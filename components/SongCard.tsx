@@ -1,5 +1,5 @@
 import { useLoadImage } from "@/hooks/useLoadImage";
-import type { Song } from "@/types/types";
+import type { Song } from "@/types";
 import toast from "react-hot-toast";
 import { FaPlay, FaShareAlt } from "react-icons/fa";
 import SongCover from "./SongCover";

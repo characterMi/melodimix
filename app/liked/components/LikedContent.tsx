@@ -9,7 +9,7 @@ import SongItem from "@/components/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
 import { useLikedPageData } from "@/store/useLikedPageData";
 import { usePlayerStore } from "@/store/usePlayerStore";
-import type { Song } from "@/types/types";
+import type { Song } from "@/types";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useEffect, useMemo } from "react";
 

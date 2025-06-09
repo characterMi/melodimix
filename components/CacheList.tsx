@@ -1,6 +1,6 @@
 import { useCacheList } from "@/hooks/useCacheList";
 import { formatBytes } from "@/lib/formatBytes";
-import type { CacheData, CacheKeys } from "@/types/types";
+import type { CacheData, CacheKeys } from "@/types";
 import { Fragment } from "react";
 import { CheckmarkIcon } from "react-hot-toast";
 import { twMerge } from "tailwind-merge";

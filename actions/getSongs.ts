@@ -1,6 +1,6 @@
 "use server";
 
-import type { Song } from "@/types/types";
+import type { Song } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export const getSongs = async (

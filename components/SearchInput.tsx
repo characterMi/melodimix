@@ -7,7 +7,7 @@ import { useSearchMusic } from "@/store/useSearch";
 import Input from "./Input";
 
 const SearchInput = () => {
-  const [value, setValue] = useState<string>();
+  const [value, setValue] = useState<string>("");
   const setSearchValue = useSearchMusic((state) => state.setSearchValue);
 
   const debouncedValue = useDebounce(value, 1500);

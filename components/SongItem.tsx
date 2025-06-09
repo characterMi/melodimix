@@ -1,5 +1,5 @@
 import { useLoadImage } from "@/hooks/useLoadImage";
-import type { Song } from "@/types/types";
+import type { Song } from "@/types";
 import { twMerge } from "tailwind-merge";
 import SongCover from "./SongCover";
 
