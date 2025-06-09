@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type PlayerType = "next-song" | "shuffle";
+type PlayerType = "next-song" | "shuffle" | "repeat";
 
 interface PlayerStore {
   ids: string[];

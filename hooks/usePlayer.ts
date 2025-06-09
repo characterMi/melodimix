@@ -8,6 +8,7 @@ import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { IoShuffleOutline } from "react-icons/io5";
 import useSound from "use-sound";
 import { useLoadImage } from "./useLoadImage";
+import { PiRepeatOnce } from "react-icons/pi";
 
 export function usePlayer(song: Song, songUrl: string) {
   const songImageUrl = useLoadImage(song);
@@ -42,17 +43,25 @@ export function usePlayer(song: Song, songUrl: string) {
       setIsMusicLoading(false);
       toast.error("Couldn't load the music!");
     },
+    loop: playerType === "repeat",
   });
 
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
   const PlayerTypeIcon =
-    playerType === "next-song" ? BiArrowToRight : IoShuffleOutline;
+    playerType === "next-song"
+      ? BiArrowToRight
+      : playerType === "shuffle"
+      ? IoShuffleOutline
+      : PiRepeatOnce;
   const PauseOrPlayIcon = isMusicPlaying ? BsPauseFill : BsPlayFill;
 
   function handleChangePlayerType() {
     if (playerType === "next-song") {
       setPlayerType("shuffle");
       toast.success('Change the type to "Shuffle"');
+    } else if (playerType === "shuffle") {
+      setPlayerType("repeat");
+      toast.success('Change the type to "Repeat"');
     } else {
       setPlayerType("next-song");
       toast.success('Change the type to "Next song"');
