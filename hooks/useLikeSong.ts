@@ -1,19 +1,25 @@
 import { likeSong } from "@/actions/likeSong";
 import { useAuthModal } from "@/store/useAuthModal";
+import { useLikedPageData } from "@/store/useLikedPageData";
 import { useLikedSongs } from "@/store/useLikedSongs";
+import type { Song } from "@/types/types";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
-export const useLikeSong = (songId: string, initialIsLiked?: true) => {
+export const useLikeSong = (song: Song, initialIsLiked?: true) => {
   const btnRef = useRef<HTMLButtonElement>(null);
 
   const { likedSongs, setLikedSongs, removeIdFromLikedSongs } = useLikedSongs();
   const { onOpen: onAuthModalOpen } = useAuthModal();
+  const { addOne, removeOne } = useLikedPageData((state) => ({
+    addOne: state.addOne,
+    removeOne: state.removeOne,
+  }));
   const [isLiked, setIsLiked] = useState(
-    initialIsLiked || likedSongs[songId] || false
+    initialIsLiked || likedSongs[song.id] || false
   );
   const [pending, startTransition] = useTransition();
 
@@ -27,14 +33,14 @@ export const useLikeSong = (songId: string, initialIsLiked?: true) => {
   useEffect(() => {
     if (!user?.id) return;
 
-    if (likedSongs[songId]) {
+    if (likedSongs[song.id]) {
       setIsLiked(true);
       return;
     }
   }, [user?.id]);
 
   useEffect(() => {
-    if (likedSongs[songId]) {
+    if (likedSongs[song.id]) {
       setIsLiked(true);
     } else {
       setIsLiked(false);
@@ -49,20 +55,27 @@ export const useLikeSong = (songId: string, initialIsLiked?: true) => {
     startTransition(async () => {
       try {
         // Optimistic update...
-        setLikedSongs(songId, !isLiked);
+        setLikedSongs(song.id, !isLiked);
 
         // Simple animation when we like a song...
         if (!isLiked) btnRef.current?.classList.add("like-button-animation");
         else btnRef.current?.classList.remove("like-button-animation");
 
         // Updating the song in DB
-        const likeInformation = await likeSong(isLiked, user.id, songId);
+        const likeInformation = await likeSong(isLiked, user.id, song.id);
 
         // Updating the store based on result
         (likeInformation.isLiked ? setLikedSongs : removeIdFromLikedSongs)(
-          songId,
+          song.id,
           true
         );
+
+        // Updating the page data based on result
+        if (likeInformation.isLiked) {
+          addOne(song);
+        } else {
+          removeOne(song.id);
+        }
 
         router.refresh();
 

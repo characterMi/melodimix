@@ -1,4 +1,5 @@
 import { revalidatePath } from "@/actions/revalidatePath";
+import { useHomePageData } from "@/store/useHomePageData";
 import { useUploadModal } from "@/store/useUploadModal";
 import {
   useSessionContext,
@@ -11,6 +12,7 @@ import toast from "react-hot-toast";
 export const useUploadSong = () => {
   const [isUploading, startTransition] = useTransition();
   const uploadModal = useUploadModal();
+  const addUploadedSongToSongs = useHomePageData((state) => state.addOne);
   const supabaseClient = useSupabaseClient();
   const { session } = useSessionContext();
   const router = useRouter();
@@ -82,6 +84,15 @@ export const useUploadSong = () => {
 
           return;
         }
+
+        addUploadedSongToSongs({
+          id: uniqueId,
+          author,
+          title,
+          img_path: imageData.path,
+          song_path: songData.path,
+          user_id: user.id,
+        });
 
         toast.success("Song created!");
         revalidatePath();

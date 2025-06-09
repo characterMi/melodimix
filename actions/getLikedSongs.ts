@@ -5,7 +5,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
 export const getLikedSongs = async (
-  limit: number = 10,
+  limit: number = 25,
   offset: number = 0
 ): Promise<Song[]> => {
   const supabase = createServerComponentClient({

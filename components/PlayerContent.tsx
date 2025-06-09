@@ -23,7 +23,7 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
           <div className="flex items-center gap-x-4 w-full">
             <SongItem player data={song} />
             <div className="flex items-center gap-x-2 w-max bg-black h-full absolute top-0 right-0 pl-1 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black">
-              <LikeButton songId={song.id} songTitle={song.title} />
+              <LikeButton song={song} />
               <button
                 aria-label={
                   "Change the type of player to " +

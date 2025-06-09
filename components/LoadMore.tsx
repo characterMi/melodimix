@@ -1,11 +1,12 @@
 import useInView from "@/hooks/useInView";
 import type { Song } from "@/types/types";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface Props {
   numOfSongs: number;
-  setSongs: Dispatch<SetStateAction<Song[]>>;
+  currentPage: number;
+  setSongs: (songs: Song[], page: number) => void;
   getSongsPromise: (limit: number, offset: number) => Promise<Song[]>;
   numberOfRetries?: number;
   limit?: number;
@@ -13,12 +14,12 @@ interface Props {
 
 const LoadMore = ({
   numOfSongs,
+  currentPage,
   setSongs,
   getSongsPromise,
   numberOfRetries = 5,
   limit = 10,
 }: Props) => {
-  const offset = useRef(0);
   const retries = useRef(0);
   const retryTimeout = useRef<NodeJS.Timeout>();
 
@@ -30,15 +31,13 @@ const LoadMore = ({
   useEffect(() => {
     if (!isInView || status !== "loadmore") return;
 
-    offset.current += 1;
-
-    getSongsPromise(limit, offset.current)
+    getSongsPromise(limit, currentPage)
       .then((songs) => {
         if (songs.length < limit) {
           setStatus("ended");
         }
 
-        setSongs((prev) => [...prev, ...songs]);
+        setSongs(songs, currentPage + 1);
       })
       .catch(() => {
         setStatus("retrying");
@@ -84,7 +83,7 @@ const LoadMore = ({
 
       {status === "error" && <Text>Can't load more songs</Text>}
 
-      {status === "ended" && offset.current !== 0 && <Text>No more songs</Text>}
+      {status === "ended" && currentPage !== 0 && <Text>No more songs</Text>}
     </div>
   );
 };

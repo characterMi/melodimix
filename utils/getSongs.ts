@@ -2,8 +2,8 @@ import type { Song } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export const getSongs = async (
-  limit: number = 10,
-  offset: number = 0
+  limit: number,
+  offset: number
 ): Promise<Song[]> => {
   const supabase = createClientComponentClient();
 
