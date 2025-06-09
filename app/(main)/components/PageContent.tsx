@@ -1,6 +1,6 @@
 "use client";
 
-import { getSongs } from "@/actions/getSongs";
+import { getSongs } from "@/utils/getSongs";
 import LoadMore from "@/components/LoadMore";
 import NoSongFallback from "@/components/NoSongFallback";
 import SongCard from "@/components/SongCard";

@@ -2,7 +2,7 @@ import { Song } from "@/types/types";
 import { useEffect, useState } from "react";
 import { useSearchMusic } from "../store/useSearch";
 import toast from "react-hot-toast";
-import { searchForSongs } from "@/lib/searchForSongs";
+import { searchForSongs } from "@/utils/searchForSongs";
 
 export function useSearchSong(songs: Song[]) {
   const searchValue = useSearchMusic((state) => state.searchValue);
