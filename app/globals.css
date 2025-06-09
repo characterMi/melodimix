@@ -100,6 +100,11 @@ body {
   animation: scroll 12s linear infinite;
 }
 
+.retry-animation::after {
+  content: "5";
+  animation: retryAnimation 5s linear;
+}
+
 @keyframes greenbottomBubbles {
   0% {
     background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%,
@@ -151,6 +156,15 @@ body {
   to {
     transform: rotate(1turn);
   }
+}
+
+@keyframes retryAnimation {
+  0% { content: "5" }
+  20% { content: "4" }
+  40% { content: "3" }
+  60% { content: "2" }
+  80% { content: "1" }
+  100% { content: "0" }
 }
 
 @media (display-mode: standalone) {

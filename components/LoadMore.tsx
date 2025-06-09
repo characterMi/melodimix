@@ -7,11 +7,17 @@ interface Props {
   numOfSongs: number;
   setSongs: Dispatch<SetStateAction<Song[]>>;
   getSongsPromise: (limit: number, offset: number) => Promise<Song[]>;
+  numberOfRetries?: number;
+  limit?: number;
 }
 
-const LIMIT = 10;
-
-const LoadMore = ({ numOfSongs, setSongs, getSongsPromise }: Props) => {
+const LoadMore = ({
+  numOfSongs,
+  setSongs,
+  getSongsPromise,
+  numberOfRetries = 5,
+  limit = 10,
+}: Props) => {
   const offset = useRef(0);
   const retries = useRef(0);
   const retryTimeout = useRef<NodeJS.Timeout>();
@@ -19,24 +25,24 @@ const LoadMore = ({ numOfSongs, setSongs, getSongsPromise }: Props) => {
   const [ref, isInView] = useInView<HTMLDivElement>();
   const [status, setStatus] = useState<
     "loadmore" | "error" | "retrying" | "ended"
-  >(numOfSongs === LIMIT ? "loadmore" : "ended");
+  >(numOfSongs === limit ? "loadmore" : "ended");
 
   useEffect(() => {
     if (!isInView || status !== "loadmore") return;
 
     offset.current += 1;
 
-    getSongsPromise(LIMIT, offset.current)
+    getSongsPromise(limit, offset.current)
       .then((songs) => {
-        if (songs.length < LIMIT) {
+        if (songs.length < limit) {
           setStatus("ended");
         }
 
         setSongs((prev) => [...prev, ...songs]);
       })
       .catch(() => {
-        retries.current += 1;
         setStatus("retrying");
+        retries.current += 1;
       });
   }, [isInView, status]);
 
@@ -44,7 +50,7 @@ const LoadMore = ({ numOfSongs, setSongs, getSongsPromise }: Props) => {
     clearTimeout(retryTimeout.current);
 
     if (status === "retrying") {
-      if (retries.current < 6) {
+      if (retries.current < numberOfRetries) {
         retryTimeout.current = setTimeout(() => {
           setStatus("loadmore");
         }, 5000);
@@ -71,7 +77,8 @@ const LoadMore = ({ numOfSongs, setSongs, getSongsPromise }: Props) => {
 
       {status === "retrying" && (
         <Text className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          Something went wrong, Retry in 5 seconds
+          Something went wrong, Retry in{" "}
+          <span aria-label="5" className="retry-animation" /> seconds
         </Text>
       )}
 
@@ -86,7 +93,7 @@ const Text = ({
   children,
   className,
 }: {
-  children: string;
+  children: React.ReactNode;
   className?: string;
 }) => (
   <p className={twMerge("text-neutral-500 text-center", className)}>
