@@ -53,7 +53,7 @@ const PlaylistItem = ({
     >
       <p className="truncate flex-1">{playlist.name}</p>
 
-      <MdArrowOutward size={20} />
+      <MdArrowOutward size={20} aria-hidden />
     </DropdownMenu.Item>
   );
 };
@@ -119,7 +119,7 @@ const AddToPlaylist = ({ songId }: { songId: string }) => {
         <RiPlayListFill size={24} aria-hidden />
       </DropdownMenu.Trigger>
 
-      <DropdownMenu.Content className="bg-neutral-900 border border-neutral-700 py-2 px-3 rounded-lg shadow-2xl w-[260px] h-[220px] mb-4 flex flex-col z-[2]">
+      <DropdownMenu.Content className="bg-neutral-900 border border-neutral-700 p-4 rounded-lg shadow-2xl w-[260px] h-[220px] mb-4 flex flex-col z-[2]">
         <div className="flex items-center justify-between gap-x-2">
           <DropdownMenu.Label className="font-bold text-xl">
             Playlists
@@ -133,9 +133,9 @@ const AddToPlaylist = ({ songId }: { songId: string }) => {
             <AiOutlinePlus size={20} aria-hidden />
           </DropdownMenu.Item>
         </div>
-        <DropdownMenu.Separator className="h-[1px] bg-neutral-800 my-2" />
+        <DropdownMenu.Separator className="h-[2px] bg-neutral-800 mt-4 mb-1" />
 
-        <div className="flex flex-1 overflow-y-auto flex-col items-center justify-center">
+        <div className="flex flex-1 overflow-y-auto flex-col items-center justify-center pt-5">
           <Playlists songId={songId} />
         </div>
       </DropdownMenu.Content>

@@ -30,14 +30,14 @@ async function GetPlaylists({ children }: { children: React.ReactNode }) {
     </h2>
   ) : (
     <>
-      <div className="sticky top-0 z-[1] bg-neutral-900/80 pt-4 md:backdrop-blur-sm">
+      <div className="sticky top-0 z-[1] bg-neutral-900/95 pt-2 md:pt-4 md:backdrop-blur-sm">
         <div className="w-full flex gap-4 h-full overflow-auto snap-x snap-mandatory snap-always px-2">
           {playlistsList.map((playlist) => (
             <PlaylistLink key={playlist.href} {...playlist} />
           ))}
         </div>
 
-        <hr className="my-6 border-none bg-neutral-600 h-[1px]" />
+        <hr className="mb-6 border-none bg-neutral-600 h-[1px]" />
       </div>
 
       {children}

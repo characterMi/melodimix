@@ -179,15 +179,6 @@ body {
   }
 }
 
-@keyframes spinnerFade {
-  0% {
-    background-color: #f5f5f5;
-  }
-  100% {
-    background-color: transparent;
-  }
-}
-
 @media (display-mode: standalone) {
   * {
     user-select: none;

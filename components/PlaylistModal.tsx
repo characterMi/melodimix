@@ -21,7 +21,7 @@ const SongCard = ({
   isActive: boolean;
   onClick: () => void;
 }) => (
-  <div className="flex items-center text-left gap-x-3 bg-neutral-900/50 hover:bg-neutral-900/20 w-full p-2 rounded-md">
+  <div className="flex items-center text-left gap-x-3 bg-neutral-900/50 hover:bg-neutral-900/20 w-full py-2 px-4 rounded-md">
     <div className="flex flex-col gap-y-1 overflow-hidden w-full">
       <p className="text-white text-lg whitespace-nowrap select-none truncate">
         {data.title}

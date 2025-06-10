@@ -12,7 +12,7 @@ const PlaylistLink = ({ href, name }: { href: string; name: string }) => {
       href={href}
       key={href}
       className={twMerge(
-        "text-white snap-start text-nowrap hover:text-emerald-600 focus-visible:text-emerald-600 outline-none transition-colors",
+        "text-white snap-start text-nowrap hover:text-emerald-300 hover:opacity-75 focus-visible:text-emerald-300 focus-visible:opacity-75 outline-none transition-all pb-4 px-2",
         pathname === href && "border-b border-emerald-500"
       )}
     >

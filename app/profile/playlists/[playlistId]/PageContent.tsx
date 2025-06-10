@@ -38,7 +38,7 @@ const DeleteButton = ({
 
   return (
     <button
-      className="cursor-pointer size-8 bg-gradient-to-b from-rose-800 to-rose-900 border border-rose-700 rounded-sm flex items-center justify-center hover:opacity-75 focus-visible:opacity-75 outline-none transition"
+      className="cursor-pointer size-8 bg-gradient-to-b from-rose-900 to-rose-950 border border-rose-800 rounded-sm flex items-center justify-center hover:opacity-75 focus-visible:opacity-75 outline-none transition"
       onClick={handleClick}
       aria-label={`Remove ${songTitle} from playlist`}
       disabled={isDeleting}
