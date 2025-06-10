@@ -1,14 +1,14 @@
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import Loader from "./Loader";
-import { usePlaylistModal } from "@/store/usePlaylistModal";
+import { useCreatePlaylistModal } from "@/store/usePlaylistModal";
 import { RiPlayListFill } from "react-icons/ri";
 import { MdArrowOutward } from "react-icons/md";
 import { updatePlaylist } from "@/actions/updatePlaylist";
 import { Playlist } from "@/types";
 import toast from "react-hot-toast";
+import DropdownMenu from "./DropdownMenu";
 
 const PlaylistItem = ({
   playlist,
@@ -23,7 +23,7 @@ const PlaylistItem = ({
     if (isAdding) return;
 
     if (playlist.song_ids.includes(songId)) {
-      toast("The song is already in the playlist.");
+      toast(`The song already exists in "${playlist.name}" playlist.`);
       return;
     }
 
@@ -108,38 +108,38 @@ const Playlists = ({ songId }: { songId: string }) => {
 };
 
 const AddToPlaylist = ({ songId }: { songId: string }) => {
-  const openModal = usePlaylistModal((state) => state.onOpen);
+  const openModal = useCreatePlaylistModal((state) => state.onOpen);
 
   return (
-    <DropdownMenu.Root modal={false}>
-      <DropdownMenu.Trigger
-        aria-label="Add to playlist"
-        className="cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition"
-      >
-        <RiPlayListFill size={24} aria-hidden />
-      </DropdownMenu.Trigger>
+    <DropdownMenu
+      triggerProps={{
+        element: <RiPlayListFill size={24} aria-hidden />,
+        className:
+          "cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition",
+      }}
+      contentProps={{
+        className: "w-[260px] h-[220px] mb-4",
+      }}
+    >
+      <DropdownMenu.Group className="flex items-center justify-between gap-x-2">
+        <DropdownMenu.Label className="font-bold text-xl">
+          Playlists
+        </DropdownMenu.Label>
 
-      <DropdownMenu.Content className="bg-neutral-900 border border-neutral-700 p-4 rounded-lg shadow-2xl w-[260px] h-[220px] mb-4 flex flex-col z-[2]">
-        <div className="flex items-center justify-between gap-x-2">
-          <DropdownMenu.Label className="font-bold text-xl">
-            Playlists
-          </DropdownMenu.Label>
+        <DropdownMenu.Item
+          className="text-white cursor-pointer hover:text-neutral-400 focus-visible:text-neutral-400 outline-none transition"
+          aria-label="Create a new playlist"
+          onClick={openModal}
+        >
+          <AiOutlinePlus size={20} aria-hidden />
+        </DropdownMenu.Item>
+      </DropdownMenu.Group>
+      <DropdownMenu.Separator className="h-[2px] bg-neutral-800 mt-4 mb-1" />
 
-          <DropdownMenu.Item
-            className="text-white cursor-pointer hover:text-neutral-400 focus-visible:text-neutral-400 outline-none transition"
-            aria-label="Create a new playlist"
-            onClick={openModal}
-          >
-            <AiOutlinePlus size={20} aria-hidden />
-          </DropdownMenu.Item>
-        </div>
-        <DropdownMenu.Separator className="h-[2px] bg-neutral-800 mt-4 mb-1" />
-
-        <div className="flex flex-1 overflow-y-auto flex-col items-center justify-center pt-5">
-          <Playlists songId={songId} />
-        </div>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+      <DropdownMenu.Group className="flex flex-1 overflow-y-auto flex-col items-center justify-center pt-5">
+        <Playlists songId={songId} />
+      </DropdownMenu.Group>
+    </DropdownMenu>
   );
 };
 

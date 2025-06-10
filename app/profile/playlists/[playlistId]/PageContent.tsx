@@ -4,6 +4,7 @@ import { updatePlaylist } from "@/actions/updatePlaylist";
 import NoSongFallback from "@/components/NoSongFallback";
 import SongItem from "@/components/SongItem";
 import Spinner from "@/components/Spinner";
+import VariantButton from "@/components/VariantButton";
 import { useOnPlay } from "@/hooks/useOnPlay";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Playlist, Song } from "@/types";
@@ -37,14 +38,15 @@ const DeleteButton = ({
   };
 
   return (
-    <button
-      className="cursor-pointer size-8 bg-gradient-to-b from-rose-900 to-rose-950 border border-rose-800 rounded-sm flex items-center justify-center hover:opacity-75 focus-visible:opacity-75 outline-none transition"
+    <VariantButton
+      variant="error"
       onClick={handleClick}
       aria-label={`Remove ${songTitle} from playlist`}
       disabled={isDeleting}
+      className="size-8"
     >
       {isDeleting ? <Spinner /> : <FiTrash2 size={20} />}
-    </button>
+    </VariantButton>
   );
 };
 
@@ -60,8 +62,13 @@ const PageContent = ({
   const onPlay = useOnPlay(songs);
   const activeId = usePlayerStore((state) => state.activeId);
 
-  if (errMessage)
-    return <NoSongFallback className="-mt-2" fallbackText={errMessage} />;
+  if (errMessage || songs.length === 0)
+    return (
+      <NoSongFallback
+        className="-mt-2"
+        fallbackText={errMessage || "No song in this playlist."}
+      />
+    );
 
   return (
     <div

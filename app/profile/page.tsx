@@ -7,7 +7,7 @@ async function GetUserSongs() {
   const userSongs = await getUserSongs();
 
   return (
-    <div className="px-2">
+    <div className="px-4">
       <PageContent songs={userSongs} />
     </div>
   );

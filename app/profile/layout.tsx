@@ -4,7 +4,7 @@ import ProfileImage from "@/public/images/profile.png";
 import React, { Suspense } from "react";
 import Loader from "@/components/Loader";
 import { getUserPlaylists } from "@/actions/getUserPlaylists";
-import PlaylistLink from "./components/PlaylistLink";
+import PlaylistContainer from "./components/PlaylistContainer";
 
 export const metadata = {
   title: "Profile",
@@ -15,11 +15,14 @@ async function GetPlaylists({ children }: { children: React.ReactNode }) {
   const { playlists, isLoggedIn } = await getUserPlaylists();
 
   const playlistsList = [
-    { href: "/profile", name: "Uploaded songs" },
-    { href: "/profile/liked", name: "Liked Songs" },
+    { href: "/profile", name: "Uploaded songs", id: "uploaded" },
+    { href: "/profile/liked", name: "Liked Songs", id: "liked" },
     ...playlists.map((playlist) => ({
       href: `/profile/playlists/${playlist.id}`,
       name: playlist.name,
+      id: playlist.id,
+      user_id: playlist.user_id,
+      song_ids: playlist.song_ids,
     })),
   ];
 
@@ -30,15 +33,7 @@ async function GetPlaylists({ children }: { children: React.ReactNode }) {
     </h2>
   ) : (
     <>
-      <div className="sticky top-0 z-[1] bg-neutral-900/95 pt-2 md:pt-4 md:backdrop-blur-sm">
-        <div className="w-full flex gap-4 h-full overflow-auto snap-x snap-mandatory snap-always px-2">
-          {playlistsList.map((playlist) => (
-            <PlaylistLink key={playlist.href} {...playlist} />
-          ))}
-        </div>
-
-        <hr className="mb-6 border-none bg-neutral-600 h-[1px]" />
-      </div>
+      <PlaylistContainer playlistsList={playlistsList} />
 
       {children}
     </>

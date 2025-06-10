@@ -1,16 +1,21 @@
 import Input from "./Input";
 import Modal from "./Modal";
-import { usePlaylistModal } from "@/store/usePlaylistModal";
+import {
+  useCreatePlaylistModal,
+  useUpdatePlaylistModal,
+} from "@/store/usePlaylistModal";
 import SearchInput from "./SearchInput";
 import { useSearchSong } from "@/hooks/useSearchSong";
 import { twMerge } from "tailwind-merge";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Song } from "@/types";
 import { TbMinus, TbPlus } from "react-icons/tb";
 import Button from "./Button";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import toast from "react-hot-toast";
 import { revalidatePath } from "@/actions/revalidatePath";
+import VariantButton from "./VariantButton";
+import { updatePlaylist } from "@/actions/updatePlaylist";
 
 const SongCard = ({
   data,
@@ -30,8 +35,7 @@ const SongCard = ({
       <p className="text-neutral-400 text-sm truncate">{data.author}</p>
     </div>
 
-    <button
-      className="cursor-pointer size-6 bg-gradient-to-b from-emerald-700 to-emerald-800 border border-emerald-600 rounded-sm flex items-center justify-center hover:opacity-75 focus-visible:opacity-75 outline-none transition"
+    <VariantButton
       onClick={onClick}
       aria-label={
         isActive
@@ -40,7 +44,7 @@ const SongCard = ({
       }
     >
       {isActive ? <TbMinus size={18} /> : <TbPlus size={18} />}
-    </button>
+    </VariantButton>
   </div>
 );
 
@@ -86,8 +90,8 @@ const SearchResults = ({
   );
 };
 
-const PlaylistModal = () => {
-  const { isOpen, onClose } = usePlaylistModal();
+export const CreatePlaylistModal = () => {
+  const { isOpen, onClose } = useCreatePlaylistModal();
   const [name, setName] = useState("");
   const [songIds, setSongIds] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -95,8 +99,15 @@ const PlaylistModal = () => {
   const { session, supabaseClient } = useSessionContext();
 
   const onSubmit = async () => {
-    if (name.trim() === "") {
+    const trimmedName = name.trim();
+
+    if (trimmedName === "") {
       toast.error("Playlist name is required!");
+      return;
+    }
+
+    if (trimmedName.length > 100) {
+      toast.error("Playlist name is too long!");
       return;
     }
 
@@ -108,7 +119,7 @@ const PlaylistModal = () => {
     setIsSubmitting(true);
 
     const { error } = await supabaseClient.from("playlists").insert({
-      name,
+      name: trimmedName,
       user_id: session.user.id,
       song_ids: songIds,
     });
@@ -165,4 +176,97 @@ const PlaylistModal = () => {
   );
 };
 
-export default PlaylistModal;
+export const UpdatePlaylistModal = () => {
+  const { isOpen, onClose, initialData } = useUpdatePlaylistModal();
+  const [name, setName] = useState("");
+  const [songIds, setSongIds] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { session } = useSessionContext();
+
+  const onSubmit = async () => {
+    const trimmedName = name.trim();
+
+    if (trimmedName === "") {
+      toast.error("Playlist name is required!");
+      return;
+    }
+
+    if (trimmedName.length > 100) {
+      toast.error("Playlist name is too long!");
+      return;
+    }
+
+    if (!session?.user) {
+      toast.error("Unauthenticated User.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    const { error } = await updatePlaylist({
+      id: initialData.id,
+      name: trimmedName,
+      user_id: session.user.id,
+      song_ids: songIds,
+    });
+
+    if (error) {
+      toast.error("Something went wrong while updating the playlist!");
+      return;
+    }
+
+    toast.success("Playlist updated!");
+
+    onClose();
+    setIsSubmitting(false);
+    setName("");
+    setSongIds([]);
+    revalidatePath("/profile");
+    revalidatePath(`/profile/playlists/${initialData.id}`);
+  };
+
+  useEffect(() => {
+    if (initialData) {
+      setName(initialData.name);
+      setSongIds(initialData.song_ids);
+    }
+  }, [initialData]);
+
+  return (
+    <Modal
+      title="Update playlist"
+      description={`Update ${initialData.name} playlist.`}
+      isOpen={isOpen}
+      handleChange={(open) => !open && onClose()}
+    >
+      <Input
+        name="name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Playlist name"
+        maxLength={100}
+        required
+        aria-label="Enter the playlist name"
+      />
+
+      <div className="mt-6 flex flex-col gap-4">
+        <h3 className="text-lg font-semibold">Search, and Add songs</h3>
+
+        <SearchInput />
+
+        <SearchResults songIds={songIds} setSongIds={setSongIds} />
+      </div>
+
+      <hr className="border-neutral-600 my-4" />
+
+      <Button
+        onClick={onSubmit}
+        disabled={name.trim() === "" || isSubmitting}
+        className="w-full mt-4"
+      >
+        {isSubmitting ? "Updating..." : "Update playlist"}
+      </Button>
+    </Modal>
+  );
+};

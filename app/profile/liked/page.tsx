@@ -3,11 +3,16 @@ import Loader from "@/components/Loader";
 import PageContent from "./PageContent";
 import { Suspense } from "react";
 
+export const metadata = {
+  title: "MelodiMix | Liked Songs",
+  description: "Browse between Your liked Songs!",
+};
+
 async function GetLikedSongs() {
   const likedSongs = await getLikedSongsWithoutLimit();
 
   return (
-    <div className="px-2">
+    <div className="px-4">
       <PageContent songs={likedSongs} />
     </div>
   );

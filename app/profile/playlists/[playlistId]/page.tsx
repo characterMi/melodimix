@@ -3,6 +3,19 @@ import { Suspense } from "react";
 import PageContent from "./PageContent";
 import { getPlaylistSongs } from "@/actions/getPlaylistSongs";
 
+export async function generateMetadata({
+  params,
+}: {
+  params: { playlistId: string };
+}) {
+  const { playlist } = await getPlaylistSongs(params.playlistId);
+
+  return {
+    title: `MelodiMix | ${playlist?.name} playlist`,
+    description: `Browse between ${playlist?.name} playlist songs!`,
+  };
+}
+
 async function GetPlaylistSongs({ playlistId }: { playlistId: string }) {
   const {
     data: songs,
@@ -11,7 +24,7 @@ async function GetPlaylistSongs({ playlistId }: { playlistId: string }) {
   } = await getPlaylistSongs(playlistId);
 
   return (
-    <div className="px-2">
+    <div className="px-4">
       <PageContent songs={songs} errMessage={errMessage} playlist={playlist} />
     </div>
   );
