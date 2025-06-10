@@ -23,7 +23,7 @@ async function GetPlaylists() {
   ];
 
   return (
-    <div className="sticky top-0 z-[1] bg-neutral-900/80 pt-4 backdrop-blur-sm">
+    <div className="sticky top-0 z-[1] bg-neutral-900/80 pt-4 md:backdrop-blur-sm">
       <div className="w-full flex gap-4 h-full overflow-auto snap-x snap-mandatory snap-always px-2">
         {playlistsList.map((playlist) => (
           <PlaylistLink key={playlist.href} {...playlist} />
