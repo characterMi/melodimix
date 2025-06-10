@@ -95,7 +95,7 @@ export const useUploadSong = () => {
         });
 
         toast.success("Song created!");
-        revalidatePath();
+        revalidatePath("/", "layout");
         router.refresh();
         uploadModal.onClose();
       } catch (error: any) {

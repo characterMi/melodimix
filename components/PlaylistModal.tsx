@@ -10,6 +10,7 @@ import { TbMinus, TbPlus } from "react-icons/tb";
 import Button from "./Button";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import toast from "react-hot-toast";
+import { revalidatePath } from "@/actions/revalidatePath";
 
 const SongCard = ({
   data,
@@ -95,16 +96,12 @@ const PlaylistModal = () => {
 
   const onSubmit = async () => {
     if (name.trim() === "") {
-      toast.error("Playlist name is required!", {
-        ariaProps: { role: "alert", "aria-live": "polite" },
-      });
+      toast.error("Playlist name is required!");
       return;
     }
 
     if (!session?.user) {
-      toast.error("Unauthenticated User.", {
-        ariaProps: { role: "alert", "aria-live": "polite" },
-      });
+      toast.error("Unauthenticated User.");
       return;
     }
 
@@ -117,20 +114,17 @@ const PlaylistModal = () => {
     });
 
     if (error) {
-      toast.error("Something went wrong while creating the playlist!", {
-        ariaProps: { role: "alert", "aria-live": "polite" },
-      });
+      toast.error("Something went wrong while creating the playlist!");
       return;
     }
 
-    toast.success("Playlist created!", {
-      ariaProps: { role: "alert", "aria-live": "polite" },
-    });
+    toast.success("Playlist created!");
 
     onClose();
     setIsSubmitting(false);
     setName("");
     setSongIds([]);
+    revalidatePath("/profile");
   };
 
   return (

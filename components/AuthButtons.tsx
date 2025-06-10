@@ -71,7 +71,7 @@ const AuthButtons = ({ router }: { router: AppRouterInstance }) => {
   );
 
   return (
-    <div className="flex justify-between items-center gap-x-4">
+    <div className="flex justify-between items-center gap-x-2">
       {isUserLoading ? <Loader className="m-0 min-w-[38px]" /> : AuthButtons}
     </div>
   );

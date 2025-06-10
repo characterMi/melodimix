@@ -20,6 +20,13 @@ const PlaylistItem = ({
   const [isAdding, setIsAdding] = useState(false);
 
   const handleClick = async () => {
+    if (isAdding) return;
+
+    if (playlist.song_ids.includes(songId)) {
+      toast("The song is already in the playlist.");
+      return;
+    }
+
     setIsAdding(true);
 
     const { error } = await updatePlaylist({

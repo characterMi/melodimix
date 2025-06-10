@@ -5,7 +5,7 @@ import { getUserData } from "./getUserData";
 
 export const getUserPlaylists = async (): Promise<{
   playlists: Playlist[];
-  isLoggedIn?: false;
+  isLoggedIn: boolean;
 }> => {
   const { supabase, user } = await getUserData();
 
@@ -14,18 +14,18 @@ export const getUserPlaylists = async (): Promise<{
   const { data, error } = await supabase
     .from("playlists")
     .select("*")
-    .eq("user_id", user?.id)
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
   if (error) {
     console.error(error);
 
-    return { playlists: [] };
+    return { playlists: [], isLoggedIn: true };
   }
 
   if (!data) {
-    return { playlists: [] };
+    return { playlists: [], isLoggedIn: true };
   }
 
-  return { playlists: data };
+  return { playlists: data, isLoggedIn: true };
 };
