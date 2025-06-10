@@ -3,22 +3,22 @@
 import { revalidatePath } from "next/cache";
 import { getUserData } from "./getUserData";
 
-export const likeSong = async (
-  isLiked: boolean,
-  userId: string,
-  songId: string
-) => {
-  const { supabase } = await getUserData();
+export const likeSong = async (isLiked: boolean, songId: string) => {
+  const { supabase, user } = await getUserData();
+
+  if (!user) {
+    return { error: "User not found", isLiked };
+  }
 
   if (isLiked) {
     const { error } = await supabase
       .from("liked_songs")
       .delete()
-      .eq("user_id", userId)
+      .eq("user_id", user.id)
       .eq("song_id", songId);
 
     if (error) {
-      return { error: error.message, isLiked: true };
+      return { error: error.message, isLiked };
     }
 
     revalidatePath("/liked");
@@ -29,11 +29,11 @@ export const likeSong = async (
 
   const { error } = await supabase.from("liked_songs").insert({
     song_id: songId,
-    user_id: userId,
+    user_id: user.id,
   });
 
   if (error) {
-    return { error: error.message, isLiked: false };
+    return { error: error.message, isLiked };
   }
 
   revalidatePath("/liked");

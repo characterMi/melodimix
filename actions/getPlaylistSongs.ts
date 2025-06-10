@@ -21,10 +21,18 @@ export const getPlaylistSongs = async (
 > => {
   const { supabase, user } = await getUserData();
 
+  if (!user) {
+    return {
+      data: [],
+      errMessage: "User not found.",
+      playlist: undefined,
+    };
+  }
+
   const { data, error } = await supabase
     .from("playlists")
     .select("*")
-    .eq("user_id", user?.id)
+    .eq("user_id", user.id)
     .eq("id", playlistId)
     .single();
 
@@ -49,8 +57,7 @@ export const getPlaylistSongs = async (
   const { data: songs, error: songsError } = await supabase
     .from("songs")
     .select("*")
-    .in("id", data?.song_ids)
-    .order("created_at", { ascending: false });
+    .in("id", data?.song_ids);
 
   if (songsError) {
     console.error(songsError);

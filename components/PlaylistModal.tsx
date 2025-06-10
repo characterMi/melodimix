@@ -227,7 +227,7 @@ export const UpdatePlaylistModal = () => {
   };
 
   useEffect(() => {
-    if (initialData) {
+    if (initialData.name && initialData.song_ids) {
       setName(initialData.name);
       setSongIds(initialData.song_ids);
     }

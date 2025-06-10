@@ -61,7 +61,7 @@ export const useLikeSong = (song: Song, initialIsLiked?: true) => {
         else btnRef.current?.classList.remove("like-button-animation");
 
         // Updating the song in DB
-        const likeInformation = await likeSong(isLiked, user.id, song.id);
+        const likeInformation = await likeSong(isLiked, song.id);
 
         // Updating the store based on result
         (likeInformation.isLiked ? setLikedSongs : removeIdFromLikedSongs)(

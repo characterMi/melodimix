@@ -48,7 +48,7 @@ const PageContent = ({ initialSongs }: { initialSongs: Song[] }) => {
       </section>
 
       <LoadMore
-        numOfSongs={songs.length}
+        numOfSongs={initialSongs.length}
         currentPage={page}
         setSongs={addAll}
         getSongsPromise={getSongs}

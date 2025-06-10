@@ -86,7 +86,7 @@ export const LikedContent = ({ initialSongs }: { initialSongs: Song[] }) => {
       </div>
 
       <LoadMore
-        numOfSongs={songs.length}
+        numOfSongs={initialSongs.length}
         currentPage={page}
         setSongs={addAll}
         getSongsPromise={getLikedSongs}
