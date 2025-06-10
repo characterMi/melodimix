@@ -17,7 +17,7 @@ const Player = () => {
 
   return (
     <div
-      className="fixed bottom-0 bg-black w-full py-2 pt-4 sm:pt-0 rounded-t-2xl px-4 player z-50"
+      className="fixed bottom-0 bg-black w-full py-2 pt-4 sm:pt-0 rounded-t-2xl px-4 player z-30"
       aria-live="assertive"
     >
       <section className="h-full w-full relative">

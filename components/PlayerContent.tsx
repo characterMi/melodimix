@@ -46,7 +46,7 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
           </div>
         </div>
 
-        <div className="z-10 sm:h-full flex sm:justify-end md:justify-center items-center sm:w-full max-w-[722px] gap-x-2 sm:gap-x-6 absolute sm:relative -top-full sm:top-0 -translate-y-1/4 sm:translate-y-0 right-0">
+        <div className="z-[1] sm:h-full flex sm:justify-end md:justify-center items-center sm:w-full max-w-[722px] gap-x-2 sm:gap-x-6 absolute sm:relative -top-full sm:top-0 -translate-y-1/4 sm:translate-y-0 right-0">
           <button
             aria-label="Change the song (backward)"
             className="text-black sm:text-neutral-400 size-[28px] sm:size-[30px] p-1 sm:p-0 rounded-full bg-white sm:bg-transparent cursor-pointer hover:opacity-75 sm:hover:text-white focus-visible:opacity-75 sm:focus-visible:text-white outline-none transition"

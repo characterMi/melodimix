@@ -5,6 +5,7 @@ import LikedImage from "@/public/images/liked.png";
 import Image from "next/image";
 import { Suspense } from "react";
 import { LikedContent } from "./components/LikedContent";
+import type { Song } from "@/types";
 
 export const metadata = {
   title: "Liked Songs",
@@ -12,7 +13,13 @@ export const metadata = {
 };
 
 async function GetSongs() {
-  const songs = await getLikedSongs();
+  let songs: Song[];
+
+  try {
+    songs = await getLikedSongs();
+  } catch {
+    songs = [];
+  }
 
   return <LikedContent initialSongs={songs} />;
 }

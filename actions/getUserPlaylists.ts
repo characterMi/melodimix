@@ -3,8 +3,13 @@
 import type { Playlist } from "@/types";
 import { getUserData } from "./getUserData";
 
-export const getUserPlaylists = async (): Promise<Playlist[]> => {
+export const getUserPlaylists = async (): Promise<{
+  playlists: Playlist[];
+  isLoggedIn?: false;
+}> => {
   const { supabase, user } = await getUserData();
+
+  if (!user) return { playlists: [], isLoggedIn: false };
 
   const { data, error } = await supabase
     .from("playlists")
@@ -15,12 +20,12 @@ export const getUserPlaylists = async (): Promise<Playlist[]> => {
   if (error) {
     console.error(error);
 
-    return [];
+    return { playlists: [] };
   }
 
   if (!data) {
-    return [];
+    return { playlists: [] };
   }
 
-  return data;
+  return { playlists: data };
 };

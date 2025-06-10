@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import Image from "next/image";
 import ProfileImage from "@/public/images/profile.png";
-import { Suspense } from "react";
+import React, { Suspense } from "react";
 import Loader from "@/components/Loader";
 import { getUserPlaylists } from "@/actions/getUserPlaylists";
 import PlaylistLink from "./components/PlaylistLink";
@@ -11,8 +11,9 @@ export const metadata = {
   description: "Browse between Your Playlists!",
 };
 
-async function GetPlaylists() {
-  const playlists = await getUserPlaylists();
+async function GetPlaylists({ children }: { children: React.ReactNode }) {
+  const { playlists, isLoggedIn } = await getUserPlaylists();
+
   const playlistsList = [
     { href: "/profile", name: "Uploaded songs" },
     { href: "/profile/liked", name: "Liked Songs" },
@@ -22,16 +23,25 @@ async function GetPlaylists() {
     })),
   ];
 
-  return (
-    <div className="sticky top-0 z-[1] bg-neutral-900/80 pt-4 md:backdrop-blur-sm">
-      <div className="w-full flex gap-4 h-full overflow-auto snap-x snap-mandatory snap-always px-2">
-        {playlistsList.map((playlist) => (
-          <PlaylistLink key={playlist.href} {...playlist} />
-        ))}
+  return !isLoggedIn ? (
+    <h2 className="m-4">
+      Seems like you didn't sign-in 🤔 if that's true, Please first sign-in to
+      Your account.
+    </h2>
+  ) : (
+    <>
+      <div className="sticky top-0 z-[1] bg-neutral-900/80 pt-4 md:backdrop-blur-sm">
+        <div className="w-full flex gap-4 h-full overflow-auto snap-x snap-mandatory snap-always px-2">
+          {playlistsList.map((playlist) => (
+            <PlaylistLink key={playlist.href} {...playlist} />
+          ))}
+        </div>
+
+        <hr className="my-6 border-none bg-neutral-600 h-[1px]" />
       </div>
 
-      <hr className="my-6 border-none bg-neutral-600 h-[1px]" />
-    </div>
+      {children}
+    </>
   );
 }
 
@@ -39,7 +49,7 @@ const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <section className="bg-neutral-900 rounded-lg w-full h-full overflow-hidden overflow-y-auto">
       <Header>
-        <div className="mt-20 flex flex-col md:flex-row items-center gap-x-4 px-2">
+        <div className="mt-20 flex flex-col md:flex-row items-center gap-x-4">
           <div
             className="relative size-32 lg:size-44"
             aria-labelledby="profile-title"
@@ -69,11 +79,9 @@ const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
       </Header>
 
-      <div className="p-6 w-full">
+      <div className="px-2 w-full">
         <Suspense fallback={<Loader className="mx-auto" />}>
-          <GetPlaylists />
-
-          {children}
+          <GetPlaylists>{children}</GetPlaylists>
         </Suspense>
       </div>
     </section>

@@ -59,7 +59,7 @@ export const LikedContent = ({ initialSongs }: { initialSongs: Song[] }) => {
 
   if (!session?.user) {
     return (
-      <h2 className="flex flex-col gap-y-2 m-4">
+      <h2 className="flex flex-col gap-y-2 mx-6 mt-4">
         Seems like you didn't sign-in 🤔 if that's true, Please first sign-in to
         Your account.
       </h2>
@@ -68,7 +68,10 @@ export const LikedContent = ({ initialSongs }: { initialSongs: Song[] }) => {
 
   if (initialSongs.length === 0)
     return (
-      <NoSongFallback className="m-4" fallbackText="There is nothing here." />
+      <NoSongFallback
+        className="mx-6 mt-4"
+        fallbackText="There is nothing here."
+      />
     );
 
   return (

@@ -21,7 +21,7 @@ export const getSongs = async (
 
   if (error) {
     console.error(error);
-    throw error;
+    return [];
   }
 
   return (data as any) || [];
