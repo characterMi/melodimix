@@ -98,6 +98,19 @@ export default function manifest(): Manifest {
           },
         ],
       },
+      {
+        name: "Profile",
+        short_name: "Profile",
+        description: "Profile",
+        url: "/profile",
+        icons: [
+          {
+            src: "/icons/profile-192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+        ],
+      },
     ],
     protocol_handlers: [
       {
