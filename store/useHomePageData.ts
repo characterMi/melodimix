@@ -5,6 +5,7 @@ type Store = {
   pageData: { page: number; songs: Song[] };
   addOne: (song: Song) => void;
   addAll: (songs: Song[], page: number) => void;
+  updateOne: (newData: Song) => void;
 };
 
 export const useHomePageData = create<Store>((set) => ({
@@ -22,6 +23,19 @@ export const useHomePageData = create<Store>((set) => ({
       pageData: {
         page: pageData.page,
         songs: [song, ...pageData.songs],
+      },
+    }));
+  },
+  updateOne(newData) {
+    set(({ pageData }) => ({
+      pageData: {
+        page: pageData.page,
+        songs: pageData.songs.map((song) => {
+          if (song.id === newData.id) {
+            return newData;
+          }
+          return song;
+        }),
       },
     }));
   },

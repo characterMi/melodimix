@@ -7,7 +7,7 @@ import { BiDotsVerticalRounded } from "react-icons/bi";
 import { FiTrash2 } from "react-icons/fi";
 import { MdOutlineEdit } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
-import { useUpdatePlaylistModal } from "@/store/usePlaylistModal";
+import { usePlaylistModal } from "@/store/usePlaylistModal";
 import type { Playlist } from "@/types";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -71,7 +71,7 @@ const UpdateButton = ({
   user_id?: string;
   song_ids?: string[];
 }) => {
-  const openModal = useUpdatePlaylistModal((state) => state.onOpen);
+  const openModal = usePlaylistModal((state) => state.onOpen);
 
   return (
     <DropdownMenu.Item className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity">

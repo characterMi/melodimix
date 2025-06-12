@@ -1,9 +1,6 @@
 import Input from "./Input";
 import Modal from "./Modal";
-import {
-  useCreatePlaylistModal,
-  useUpdatePlaylistModal,
-} from "@/store/usePlaylistModal";
+import { usePlaylistModal } from "@/store/usePlaylistModal";
 import SearchInput from "./SearchInput";
 import { useSearchSong } from "@/hooks/useSearchSong";
 import { twMerge } from "tailwind-merge";
@@ -91,14 +88,16 @@ const SearchResults = ({
   );
 };
 
-export const CreatePlaylistModal = () => {
-  const { isOpen, onClose } = useCreatePlaylistModal();
+const PlaylistModal = () => {
+  const { isOpen, onClose, initialData, clearInitialData } = usePlaylistModal();
   const [name, setName] = useState("");
   const [songIds, setSongIds] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const openAuthModal = useAuthModal((state) => state.onOpen);
   const { session, supabaseClient } = useSessionContext();
+
+  const isEditing = !!initialData;
 
   const onSubmit = async () => {
     if (!session?.user) {
@@ -120,125 +119,64 @@ export const CreatePlaylistModal = () => {
 
     setIsSubmitting(true);
 
-    const { error } = await supabaseClient.from("playlists").insert({
-      name: trimmedName,
-      user_id: session.user.id,
-      song_ids: songIds,
-    });
+    if (isEditing) {
+      const { error } = await updatePlaylist({
+        id: initialData.id,
+        name: trimmedName,
+        user_id: session.user.id,
+        song_ids: songIds,
+      });
 
-    if (error) {
-      toast.error("Something went wrong while creating the playlist!");
-      return;
+      if (error) {
+        toast.error("Something went wrong while updating the playlist!");
+        setIsSubmitting(false);
+        return;
+      }
+    } else {
+      const { error } = await supabaseClient.from("playlists").insert({
+        name: trimmedName,
+        user_id: session.user.id,
+        song_ids: songIds,
+      });
+
+      if (error) {
+        toast.error("Something went wrong while creating the playlist!");
+        setIsSubmitting(false);
+        return;
+      }
     }
 
-    toast.success("Playlist created!");
+    toast.success(`Playlist ${isEditing ? "updated" : "created"}!`);
 
     onClose();
     setIsSubmitting(false);
     setName("");
     setSongIds([]);
     revalidatePath("/profile");
-  };
-
-  return (
-    <Modal
-      title="Add a playlist"
-      description="Create a new playlist."
-      isOpen={isOpen}
-      handleChange={(open) => !open && onClose()}
-    >
-      <Input
-        name="name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Playlist name"
-        maxLength={100}
-        required
-        aria-label="Enter the playlist name"
-      />
-
-      <div className="mt-6 flex flex-col gap-4">
-        <h3 className="text-lg font-semibold">Search, and Add songs</h3>
-
-        <SearchInput />
-
-        <SearchResults songIds={songIds} setSongIds={setSongIds} />
-      </div>
-
-      <hr className="border-neutral-600 my-4" />
-
-      <Button
-        onClick={onSubmit}
-        disabled={name.trim() === "" || isSubmitting}
-        className="w-full mt-4"
-      >
-        {isSubmitting ? "Creating..." : "Create playlist"}
-      </Button>
-    </Modal>
-  );
-};
-
-export const UpdatePlaylistModal = () => {
-  const { isOpen, onClose, initialData } = useUpdatePlaylistModal();
-  const [name, setName] = useState("");
-  const [songIds, setSongIds] = useState<string[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const { session } = useSessionContext();
-
-  const onSubmit = async () => {
-    const trimmedName = name.trim();
-
-    if (trimmedName === "") {
-      toast.error("Playlist name is required!");
-      return;
-    }
-
-    if (trimmedName.length > 100) {
-      toast.error("Playlist name is too long!");
-      return;
-    }
-
-    if (!session?.user) {
-      toast.error("Unauthenticated User.");
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    const { error } = await updatePlaylist({
-      id: initialData.id,
-      name: trimmedName,
-      user_id: session.user.id,
-      song_ids: songIds,
-    });
-
-    if (error) {
-      toast.error("Something went wrong while updating the playlist!");
-      return;
-    }
-
-    toast.success("Playlist updated!");
-
-    onClose();
-    setIsSubmitting(false);
-    setName("");
-    setSongIds([]);
-    revalidatePath("/profile");
-    revalidatePath(`/profile/playlists/${initialData.id}`);
+    isEditing && revalidatePath(`/profile/playlists/${initialData.id}`);
   };
 
   useEffect(() => {
-    if (initialData.name && initialData.song_ids) {
+    if (isEditing) {
       setName(initialData.name);
       setSongIds(initialData.song_ids);
     }
-  }, [initialData]);
+  }, [isEditing]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setName("");
+      setSongIds([]);
+      clearInitialData();
+    }
+  }, [isOpen]);
 
   return (
     <Modal
-      title="Update playlist"
-      description={`Update ${initialData.name} playlist.`}
+      title={`${isEditing ? "Update" : "Add a"} playlist`}
+      description={`${
+        isEditing ? "Update " + initialData.name : "Create a new"
+      } playlist.`}
       isOpen={isOpen}
       handleChange={(open) => !open && onClose()}
     >
@@ -267,8 +205,11 @@ export const UpdatePlaylistModal = () => {
         disabled={name.trim() === "" || isSubmitting}
         className="w-full mt-4"
       >
-        {isSubmitting ? "Updating..." : "Update playlist"}
+        {isEditing && (isSubmitting ? "Updating..." : "Update playlist")}
+        {!isEditing && (isSubmitting ? "Creating..." : "Create playlist")}
       </Button>
     </Modal>
   );
 };
+
+export default PlaylistModal;

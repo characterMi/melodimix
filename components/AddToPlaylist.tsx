@@ -2,7 +2,7 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import Loader from "./Loader";
-import { useCreatePlaylistModal } from "@/store/usePlaylistModal";
+import { usePlaylistModal } from "@/store/usePlaylistModal";
 import { RiPlayListFill } from "react-icons/ri";
 import { MdArrowOutward } from "react-icons/md";
 import { updatePlaylist } from "@/actions/updatePlaylist";
@@ -108,7 +108,7 @@ const Playlists = ({ songId }: { songId: string }) => {
 };
 
 const AddToPlaylist = ({ songId }: { songId: string }) => {
-  const openModal = useCreatePlaylistModal((state) => state.onOpen);
+  const openModal = usePlaylistModal((state) => state.onOpen);
 
   return (
     <DropdownMenu
@@ -129,7 +129,7 @@ const AddToPlaylist = ({ songId }: { songId: string }) => {
         <DropdownMenu.Item
           className="text-white cursor-pointer hover:text-neutral-400 focus-visible:text-neutral-400 outline-none transition"
           aria-label="Create a new playlist"
-          onClick={openModal}
+          onClick={() => openModal()}
         >
           <AiOutlinePlus size={20} aria-hidden />
         </DropdownMenu.Item>

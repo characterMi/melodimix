@@ -2,7 +2,7 @@ import { deleteSong } from "@/actions/deleteSong";
 import DropdownMenu from "@/components/DropdownMenu";
 import Spinner from "@/components/Spinner";
 import VariantButton from "@/components/VariantButton";
-import { useEditUploadedSongModal } from "@/store/useEditUploadedSongModal";
+import { useUploadModal } from "@/store/useUploadModal";
 import type { Song } from "@/types";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -23,15 +23,15 @@ const Options = ({ song }: { song: Song }) => {
         className: "w-[160px] gap-4",
       }}
     >
-      <UpdateButton title={song.title} author={song.author} />
+      <UpdateButton song={song} />
 
       <DeleteButton songId={song.id} />
     </DropdownMenu>
   );
 };
 
-const UpdateButton = ({ title, author }: { title: string; author: string }) => {
-  const openModal = useEditUploadedSongModal((state) => state.onOpen);
+const UpdateButton = ({ song }: { song: Song }) => {
+  const openModal = useUploadModal((state) => state.onOpen);
 
   return (
     <DropdownMenu.Item className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity">
@@ -39,9 +39,7 @@ const UpdateButton = ({ title, author }: { title: string; author: string }) => {
         variant="secondary"
         className="w-full py-4 text-sm gap-1"
         tabIndex={-1}
-        onClick={() => {
-          openModal({ title, author });
-        }}
+        onClick={() => openModal(song)}
       >
         Edit song <MdOutlineEdit size={16} />
       </VariantButton>
