@@ -5,6 +5,7 @@ import SongItem from "@/components/SongItem";
 import { useOnPlay } from "@/hooks/useOnPlay";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types";
+import Options from "./UploadedSongOptions";
 
 const PageContent = ({ songs }: { songs: Song[] }) => {
   const onPlay = useOnPlay(songs);
@@ -21,7 +22,13 @@ const PageContent = ({ songs }: { songs: Song[] }) => {
       className="flex flex-col gap-y-2 w-full"
     >
       {songs.map((song) => (
-        <SongItem key={song.id} onClick={onPlay} data={song} />
+        <div className="flex items-center gap-x-4 w-full">
+          <div className="flex-1 overflow-hidden">
+            <SongItem data={song} onClick={(id) => onPlay(id)} />
+          </div>
+
+          <Options song={song} />
+        </div>
       ))}
     </div>
   );

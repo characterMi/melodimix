@@ -71,28 +71,21 @@ const UpdateButton = ({
   user_id?: string;
   song_ids?: string[];
 }) => {
-  const { openModal, setInitialData } = useUpdatePlaylistModal((state) => ({
-    openModal: state.onOpen,
-    setInitialData: state.setInitialData,
-  }));
+  const openModal = useUpdatePlaylistModal((state) => state.onOpen);
 
   return (
-    <DropdownMenu.Item
-      className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity"
-      aria-label={`Edit ${name} playlist`}
-    >
+    <DropdownMenu.Item className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity">
       <VariantButton
         variant="secondary"
         className="w-full py-4 text-sm gap-1"
         tabIndex={-1}
         onClick={() => {
-          setInitialData({
+          openModal({
             id,
             name,
             user_id: user_id!,
             song_ids: song_ids!,
           });
-          openModal();
         }}
       >
         Edit playlist <MdOutlineEdit size={16} />
@@ -112,9 +105,9 @@ const DeleteButton = ({ playlistId }: { playlistId: string }) => {
 
     setIsDeleting(true);
 
-    const { error } = await deletePlaylist(playlistId);
+    const isDeleted = await deletePlaylist(playlistId);
 
-    if (error) {
+    if (!isDeleted) {
       toast.error("Something went wrong.");
     } else {
       toast.success("Playlist deleted.");
@@ -126,8 +119,7 @@ const DeleteButton = ({ playlistId }: { playlistId: string }) => {
 
   return (
     <DropdownMenu.Item
-      className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity disabled:opacity-50"
-      aria-label={`Delete playlist`}
+      className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
       disabled={isDeleting}
     >
       <VariantButton

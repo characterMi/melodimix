@@ -14,15 +14,13 @@ export const useCreatePlaylistModal = create<PlaylistModalStore>((set) => ({
 }));
 
 export const useUpdatePlaylistModal = create<
-  PlaylistModalStore & {
+  Omit<PlaylistModalStore, "onOpen"> & {
     initialData: Playlist;
-    setInitialData: (playlistData: Playlist) => void;
+    onOpen: (data: Playlist) => void;
   }
 >((set) => ({
   isOpen: false,
   initialData: {} as Playlist,
-  setInitialData: (playlistData: Playlist) =>
-    set({ initialData: playlistData }),
-  onOpen: () => set({ isOpen: true }),
+  onOpen: (data: Playlist) => set({ isOpen: true, initialData: data }),
   onClose: () => set({ isOpen: false }),
 }));

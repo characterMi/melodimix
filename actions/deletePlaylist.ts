@@ -6,9 +6,7 @@ import { getUserData } from "./getUserData";
 export const deletePlaylist = async (playlistId: string) => {
   const { supabase, user } = await getUserData();
 
-  if (!user) {
-    return { error: "User not found" };
-  }
+  if (!user) return false;
 
   const { error } = await supabase
     .from("playlists")
@@ -19,10 +17,10 @@ export const deletePlaylist = async (playlistId: string) => {
   if (error) {
     console.error(error);
 
-    return { error: "Something went wrong." };
+    return false;
   }
 
   revalidatePath("/profile");
 
-  return { error: null };
+  return true;
 };
