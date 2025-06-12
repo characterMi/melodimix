@@ -14,8 +14,9 @@ const Spinner = ({ size = "large" }: { size?: "small" | "large" }) => {
         <div
           key={i}
           aria-hidden
-          className="absolute left-[8px] bottom-0 w-[2px] h-[5px] rounded-[1px] bg-neutral-100 animate-spinner"
+          className="absolute left-[8px] bottom-0 h-[5px] rounded-[1px] bg-neutral-100 animate-spinner"
           style={{
+            width: size === "small" ? "1px" : "2px",
             transform: `rotate(${i * 30}deg)`,
             transformOrigin: `center -${size === "small" ? 2 : 4}px`,
             animationDelay: `${(i * 1) / 12}s`,

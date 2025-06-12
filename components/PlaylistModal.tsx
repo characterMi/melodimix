@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 import { revalidatePath } from "@/actions/revalidatePath";
 import VariantButton from "./VariantButton";
 import { updatePlaylist } from "@/actions/updatePlaylist";
+import { useAuthModal } from "@/store/useAuthModal";
 
 const SongCard = ({
   data,
@@ -96,9 +97,15 @@ export const CreatePlaylistModal = () => {
   const [songIds, setSongIds] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const openAuthModal = useAuthModal((state) => state.onOpen);
   const { session, supabaseClient } = useSessionContext();
 
   const onSubmit = async () => {
+    if (!session?.user) {
+      openAuthModal();
+      return;
+    }
+
     const trimmedName = name.trim();
 
     if (trimmedName === "") {
@@ -108,11 +115,6 @@ export const CreatePlaylistModal = () => {
 
     if (trimmedName.length > 100) {
       toast.error("Playlist name is too long!");
-      return;
-    }
-
-    if (!session?.user) {
-      toast.error("Unauthenticated User.");
       return;
     }
 

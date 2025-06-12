@@ -27,7 +27,7 @@ const SongCard = ({
       <SongItem data={song} onClick={(id) => onPlay(id)} />
     </div>
 
-    <LikeButton song={song} initialIsLiked />
+    <LikeButton song={song} />
   </div>
 );
 

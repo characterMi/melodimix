@@ -19,7 +19,7 @@ const SongCover = ({
     return (
       <div
         className="flex justify-center items-center h-full w-full"
-        aria-label="Could not load image"
+        aria-label="Could not load the image"
       >
         <HiOutlineStatusOffline className="text-white size-[30%]" />
       </div>
@@ -40,7 +40,6 @@ const SongCover = ({
         height={height}
         onLoad={() => setImageStatus("loaded")}
         onError={() => setImageStatus("error")}
-        loading="eager"
         {...props}
       />
 

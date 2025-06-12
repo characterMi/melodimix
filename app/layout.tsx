@@ -25,9 +25,6 @@ export const metadata: Metadata = {
     icon: "/icons/melodimix-192.png",
   },
   keywords: ["melodimix", "song", "spotify", "spotify clone", "music player"],
-  alternates: {
-    canonical: process.env.NEXT_PUBLIC_BASE_URL,
-  },
   appleWebApp: {
     capable: true,
     startupImage: "/icons/melodimix-512.png",

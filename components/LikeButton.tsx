@@ -1,17 +1,8 @@
 import { useLikeSong } from "@/hooks/useLikeSong";
 import type { Song } from "@/types";
 
-const LikeButton = ({
-  song,
-  initialIsLiked,
-}: {
-  song: Song;
-  initialIsLiked?: true;
-}) => {
-  const { isLiked, handleLike, pending, Icon, btnRef } = useLikeSong(
-    song,
-    initialIsLiked
-  );
+const LikeButton = ({ song }: { song: Song }) => {
+  const { isLiked, handleLike, pending, Icon, btnRef } = useLikeSong(song);
 
   return (
     <button

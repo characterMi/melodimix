@@ -12,7 +12,7 @@ export const metadata = {
 };
 
 async function GetPlaylists({ children }: { children: React.ReactNode }) {
-  const { playlists, isLoggedIn } = await getUserPlaylists();
+  const playlists = await getUserPlaylists();
 
   const playlistsList = [
     { href: "/profile", name: "Uploaded songs", id: "uploaded" },
@@ -26,17 +26,10 @@ async function GetPlaylists({ children }: { children: React.ReactNode }) {
     })),
   ];
 
-  return !isLoggedIn ? (
-    <h2 className="m-4">
-      Seems like you didn't sign-in 🤔 if that's true, Please first sign-in to
-      Your account.
-    </h2>
-  ) : (
-    <>
-      <PlaylistContainer playlistsList={playlistsList} />
-
+  return (
+    <PlaylistContainer playlistsList={playlistsList}>
       {children}
-    </>
+    </PlaylistContainer>
   );
 }
 
@@ -56,6 +49,8 @@ const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
               height={100}
               className="object-cover size-32 lg:size-44"
               placeholder="blur"
+              loading="eager"
+              priority
             />
           </div>
 
@@ -75,7 +70,7 @@ const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
       </Header>
 
       <div className="px-2 w-full">
-        <Suspense fallback={<Loader className="mx-auto" />}>
+        <Suspense fallback={<Loader className="ml-4" />}>
           <GetPlaylists>{children}</GetPlaylists>
         </Suspense>
       </div>

@@ -9,7 +9,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
-export const useLikeSong = (song: Song, initialIsLiked?: true) => {
+export const useLikeSong = (song: Song) => {
   const btnRef = useRef<HTMLButtonElement>(null);
 
   const { likedSongs, setLikedSongs, removeIdFromLikedSongs } = useLikedSongs();
@@ -18,9 +18,7 @@ export const useLikeSong = (song: Song, initialIsLiked?: true) => {
     addOne: state.addOne,
     removeOne: state.removeOne,
   }));
-  const [isLiked, setIsLiked] = useState(
-    initialIsLiked || likedSongs[song.id] || false
-  );
+  const [isLiked, setIsLiked] = useState(likedSongs[song.id] || false);
   const [pending, startTransition] = useTransition();
 
   const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
@@ -41,7 +39,7 @@ export const useLikeSong = (song: Song, initialIsLiked?: true) => {
   useEffect(() => {
     if (likedSongs[song.id]) {
       setIsLiked(true);
-    } else if (!initialIsLiked) {
+    } else {
       setIsLiked(false);
     }
   }, [likedSongs]);
@@ -69,11 +67,9 @@ export const useLikeSong = (song: Song, initialIsLiked?: true) => {
           true
         );
 
-        // Updating the page data based on result
-        if (likeInformation.isLiked) {
-          addOne(song);
-        } else {
-          removeOne(song.id);
+        // Updating the liked page data based on result
+        if (!likeInformation.error) {
+          likeInformation.isLiked ? addOne(song) : removeOne(song.id);
         }
 
         router.refresh();
