@@ -120,9 +120,9 @@ self.addEventListener("fetch", (event) => {
     }
   }
 
-  // Next.js related things... (i don't even know what they are, i just know they ruin my app)
+  // Next.js related things (React server components and client-side navigation)...
   if (eventUrl.searchParams.has("_rsc")) {
-    event.respondWith(fetchReq(event.request));
+    event.respondWith(handleRSC(event.request));
     return;
   }
 
@@ -131,17 +131,7 @@ self.addEventListener("fetch", (event) => {
     event.request.mode === "navigate" ||
     event.request.headers.get("accept")?.includes("text/html")
   ) {
-    const hasSearch = eventUrl.searchParams.size > 0;
-
-    // We don't cache any page with search params...
-    if (hasSearch) {
-      event.respondWith(fetchReq(event.request));
-      return;
-    }
-
-    event.respondWith(
-      networkFirst(event.request, assetsCacheName, /* isRequestingHTML= */ true)
-    );
+    event.respondWith(handleHTML(event.request));
     return;
   }
 
@@ -224,6 +214,36 @@ async function fetchReq(req, cache = null) {
     .catch(() => {
       return null;
     });
+}
+
+async function handleRSC(req) {
+  // Requesting for shell html page and caching it...
+  const htmlUrl = new URL(req.url);
+  htmlUrl.search = "";
+  const cache = await caches.open(assetsCacheName);
+  fetchReq(htmlUrl.toString(), cache);
+
+  // rsc request
+  return (await fetchReq(req)) || responseFallback();
+}
+
+async function handleHTML(req) {
+  const hasSearch = new URL(req.url).searchParams.size > 0;
+
+  // handling requests with search params...
+  if (hasSearch) {
+    const htmlResponse = await fetchReq(req);
+    if (htmlResponse) return htmlResponse;
+
+    const cache = await caches.open(assetsCacheName);
+    const cachedResponse = await cache.match(req, { ignoreSearch: true });
+
+    if (cachedResponse) return cachedResponse.clone();
+
+    return offlineHTMLfallback();
+  }
+
+  return networkFirst(req, assetsCacheName, /* isRequestingHTML= */ true);
 }
 
 function responseFallback() {
