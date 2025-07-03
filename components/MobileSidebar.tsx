@@ -16,14 +16,80 @@ const MobileSidebar = ({
   isSongsLoading: boolean;
 }) => {
   const [isActive, setIsActive] = useState(false);
-  const sidebarRef = useRef<HTMLElement>(null);
+  const sidebarContainerRef = useRef<HTMLDivElement>(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!isActive) {
-      sidebarRef.current?.setAttribute("inert", "");
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isActive || !sidebarContainerRef.current || e.key !== "Tab") return;
+
+      const sidebarContainer = sidebarContainerRef.current;
+
+      const focusableElements = Array.from(
+        sidebarContainer.querySelectorAll(
+          [
+            "a[href]",
+            "button:not([disabled])",
+            "textarea:not([disabled])",
+            "input:not([disabled])",
+            "select:not([disabled])",
+            '[tabindex]:not([tabindex="-1"])',
+          ].join(",")
+        )
+      );
+
+      const firstElement = focusableElements[0] as HTMLElement;
+      const lastElement = focusableElements[
+        focusableElements.length - 1
+      ] as HTMLElement;
+
+      if (e.shiftKey) {
+        // Shift + Tab
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement?.focus();
+        }
+      } else {
+        // Tab
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement?.focus();
+        }
+      }
+    };
+
+    if (isActive) {
+      sidebarContainerRef.current?.addEventListener("keydown", handleKeyDown);
     } else {
-      sidebarRef.current?.removeAttribute("inert");
+      sidebarContainerRef.current?.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
     }
+
+    return () => {
+      sidebarContainerRef.current?.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
+    };
+  }, [isActive]);
+
+  // Handle escape key to close sidebar
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && isActive) {
+        setIsActive(false);
+      }
+    };
+
+    if (isActive) {
+      document.addEventListener("keydown", handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
   }, [isActive]);
 
   return (
@@ -33,6 +99,7 @@ const MobileSidebar = ({
           "fixed bg-neutral-900 flex flex-col z-50 transition left-0 top-0 h-screen w-[200px] min-[360px]:w-[300px] sm:w-[360px] md:hidden",
           isActive ? "translate-x-0" : "-translate-x-full"
         )}
+        ref={sidebarContainerRef}
       >
         <button
           className="fixed top-[40%] -translate-y-[40%] left-full bg-neutral-900 size-14 flex flex-col gap-y-[6px] justify-center items-end pl-2 rounded-r-xl z-50 md:hidden cursor-pointer"
