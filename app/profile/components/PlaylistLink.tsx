@@ -3,16 +3,16 @@ import VariantButton from "@/components/VariantButton";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-import { BiDotsVerticalRounded } from "react-icons/bi";
-import { FiTrash2 } from "react-icons/fi";
-import { MdOutlineEdit } from "react-icons/md";
-import { twMerge } from "tailwind-merge";
+import { deletePlaylist } from "@/actions/deletePlaylist";
+import Spinner from "@/components/Spinner";
 import { usePlaylistModal } from "@/store/usePlaylistModal";
 import type { Playlist } from "@/types";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { deletePlaylist } from "@/actions/deletePlaylist";
-import Spinner from "@/components/Spinner";
+import { BiDotsVerticalRounded } from "react-icons/bi";
+import { FiTrash2 } from "react-icons/fi";
+import { MdOutlineEdit } from "react-icons/md";
+import { twMerge } from "tailwind-merge";
 
 type Props = { href: string; name: string; id: string } & Partial<
   Omit<Playlist, "id" | "name">
@@ -74,19 +74,21 @@ const UpdateButton = ({
   const openModal = usePlaylistModal((state) => state.onOpen);
 
   return (
-    <DropdownMenu.Item className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity">
+    <DropdownMenu.Item
+      className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity"
+      onClick={() => {
+        openModal({
+          id,
+          name,
+          user_id: user_id!,
+          song_ids: song_ids!,
+        });
+      }}
+    >
       <VariantButton
         variant="secondary"
         className="w-full py-4 text-sm gap-1"
         tabIndex={-1}
-        onClick={() => {
-          openModal({
-            id,
-            name,
-            user_id: user_id!,
-            song_ids: song_ids!,
-          });
-        }}
       >
         Edit playlist <MdOutlineEdit size={16} />
       </VariantButton>
@@ -121,12 +123,12 @@ const DeleteButton = ({ playlistId }: { playlistId: string }) => {
     <DropdownMenu.Item
       className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
       disabled={isDeleting}
+      onClick={handleDelete}
     >
       <VariantButton
         variant="error"
         className="w-full py-4 text-sm gap-1"
         tabIndex={-1}
-        onClick={handleDelete}
       >
         Delete playlist{" "}
         {isDeleting ? <Spinner size="small" /> : <FiTrash2 size={16} />}

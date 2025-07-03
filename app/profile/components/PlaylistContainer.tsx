@@ -1,10 +1,12 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import PlaylistLink from "./PlaylistLink";
+import Loader from "@/components/Loader";
+import { usePlaylistModal } from "@/store/usePlaylistModal";
 import type { Playlist } from "@/types";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import Loader from "@/components/Loader";
+import { useEffect, useRef } from "react";
+import { AiOutlinePlus } from "react-icons/ai";
+import PlaylistLink from "./PlaylistLink";
 
 const ScrollableHeader = ({
   playlistsList,
@@ -15,6 +17,8 @@ const ScrollableHeader = ({
   >)[];
   children: React.ReactNode;
 }) => {
+  const openPlaylistModal = usePlaylistModal((state) => state.onOpen);
+
   const playlistContainer = useRef<HTMLDivElement>(null);
   const { session, isLoading: isUserLoading } = useSessionContext();
 
@@ -52,12 +56,20 @@ const ScrollableHeader = ({
       <div className="sticky top-0 z-[1] bg-neutral-900/95 pt-2 md:pt-4 md:backdrop-blur-sm">
         <div
           ref={playlistContainer}
-          className="w-full flex h-full overflow-x-auto snap-x snap-mandatory snap-always px-2"
+          className="w-full flex h-full overflow-x-auto snap-x snap-mandatory snap-always pl-2 pr-12"
         >
           {playlistsList.map((playlist) => (
             <PlaylistLink key={playlist.href} {...playlist} />
           ))}
         </div>
+
+        <button
+          onClick={() => openPlaylistModal()}
+          className="absolute top-0 right-0 w-12 h-[calc(100%-1px)] pb-2 bg-neutral-900 flex items-center justify-center outline-none hover:text-neutral-400 focus-visible:text-neutral-400 transition after:absolute after:top-0 after:right-full after:w-6 after:h-full after:bg-gradient-to-l after:from-neutral-900 after:to-transparent after:pointer-events-none"
+        >
+          <AiOutlinePlus size={24} aria-hidden />
+        </button>
+
         <hr className="mb-6 border-none bg-neutral-600 h-[1px]" />
       </div>
 

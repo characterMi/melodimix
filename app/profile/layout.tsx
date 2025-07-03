@@ -1,9 +1,9 @@
-import Header from "@/components/Header";
-import Image from "next/image";
-import ProfileImage from "@/public/images/profile.png";
-import React, { Suspense } from "react";
-import Loader from "@/components/Loader";
 import { getUserPlaylists } from "@/actions/getUserPlaylists";
+import Header from "@/components/Header";
+import Loader from "@/components/Loader";
+import ProfileImage from "@/public/images/profile.png";
+import Image from "next/image";
+import React, { Suspense } from "react";
 import PlaylistContainer from "./components/PlaylistContainer";
 
 export const metadata = {

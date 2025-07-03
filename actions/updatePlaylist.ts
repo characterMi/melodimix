@@ -1,14 +1,26 @@
 "use server";
 
 import type { Playlist } from "@/types";
-import { getUserData } from "./getUserData";
 import { revalidatePath } from "next/cache";
+import { getUserData } from "./getUserData";
 
-export const updatePlaylist = async (newData: Playlist) => {
+export const updatePlaylist = async (
+  newData: Playlist
+): Promise<
+  { error: true; message: string } | { error: false; message: null }
+> => {
   const { supabase, user } = await getUserData();
 
   if (!user) {
-    return { error: true };
+    return { error: true, message: "Unauthenticated User." };
+  }
+
+  if (typeof newData.name !== "string") {
+    return { error: true, message: "Playlist name is required!" };
+  }
+
+  if (newData.name.length > 50 || newData.name.length < 3) {
+    return { error: true, message: "Playlist name is too long or too short!" };
   }
 
   const { error } = await supabase
@@ -20,9 +32,12 @@ export const updatePlaylist = async (newData: Playlist) => {
   if (error) {
     console.error(error);
 
-    return { error: true };
+    return {
+      error: true,
+      message: "Something went wrong while updating the playlist!",
+    };
   }
 
   revalidatePath(`/profile/playlists/${newData.id}`);
-  return { error: false };
+  return { error: false, message: null };
 };

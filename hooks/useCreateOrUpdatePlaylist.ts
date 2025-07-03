@@ -1,7 +1,8 @@
+import { createPlaylist } from "@/actions/createPlaylist";
 import { useSessionContext } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { revalidatePath } from "../actions/revalidatePath";
 import { updatePlaylist } from "../actions/updatePlaylist";
 import { useAuthModal } from "../store/useAuthModal";
 import { usePlaylistModal } from "../store/usePlaylistModal";
@@ -13,7 +14,9 @@ export const useCreateOrUpdatePlaylist = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const openAuthModal = useAuthModal((state) => state.onOpen);
-  const { session, supabaseClient } = useSessionContext();
+  const { session } = useSessionContext();
+
+  const router = useRouter();
 
   const isEditing = !!initialData;
 
@@ -38,7 +41,7 @@ export const useCreateOrUpdatePlaylist = () => {
     setIsSubmitting(true);
 
     if (isEditing) {
-      const { error } = await updatePlaylist({
+      const { error, message } = await updatePlaylist({
         id: initialData.id,
         name: trimmedName,
         user_id: session.user.id,
@@ -46,32 +49,29 @@ export const useCreateOrUpdatePlaylist = () => {
       });
 
       if (error) {
-        toast.error("Something went wrong while updating the playlist!");
+        toast.error(message);
         setIsSubmitting(false);
         return;
       }
     } else {
-      const { error } = await supabaseClient.from("playlists").insert({
+      const { error, message, playlistId } = await createPlaylist({
         name: trimmedName,
-        user_id: session.user.id,
-        song_ids: songIds,
+        songIds,
       });
 
       if (error) {
-        toast.error("Something went wrong while creating the playlist!");
+        toast.error(message);
         setIsSubmitting(false);
         return;
       }
+
+      router.push(`/profile/playlists/${playlistId}`);
     }
 
     toast.success(`Playlist ${isEditing ? "updated" : "created"}!`);
 
     onClose();
     setIsSubmitting(false);
-    setName("");
-    setSongIds([]);
-    revalidatePath("/profile");
-    isEditing && revalidatePath(`/profile/playlists/${initialData.id}`);
   };
 
   useEffect(() => {

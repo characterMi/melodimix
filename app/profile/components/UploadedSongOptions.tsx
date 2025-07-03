@@ -34,12 +34,14 @@ const UpdateButton = ({ song }: { song: Song }) => {
   const openModal = useUploadModal((state) => state.onOpen);
 
   return (
-    <DropdownMenu.Item className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity">
+    <DropdownMenu.Item
+      className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity"
+      onClick={() => openModal(song)}
+    >
       <VariantButton
         variant="secondary"
         className="w-full py-4 text-sm gap-1"
         tabIndex={-1}
-        onClick={() => openModal(song)}
       >
         Edit song <MdOutlineEdit size={16} />
       </VariantButton>
@@ -78,12 +80,12 @@ const DeleteButton = ({ songId }: { songId: string }) => {
     <DropdownMenu.Item
       className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
       disabled={isDeleting}
+      onClick={handleDelete}
     >
       <VariantButton
         variant="error"
         className="w-full py-4 text-sm gap-1"
         tabIndex={-1}
-        onClick={handleDelete}
       >
         Delete song{" "}
         {isDeleting ? <Spinner size="small" /> : <FiTrash2 size={16} />}
