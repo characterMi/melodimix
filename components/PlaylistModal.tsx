@@ -1,19 +1,13 @@
-import Input from "./Input";
-import Modal from "./Modal";
-import { usePlaylistModal } from "@/store/usePlaylistModal";
-import SearchInput from "./SearchInput";
+import { useCreateOrUpdatePlaylist } from "@/hooks/useCreateOrUpdatePlaylist";
 import { useSearchSong } from "@/hooks/useSearchSong";
-import { twMerge } from "tailwind-merge";
-import { useEffect, useState } from "react";
 import type { Song } from "@/types";
 import { TbMinus, TbPlus } from "react-icons/tb";
+import { twMerge } from "tailwind-merge";
 import Button from "./Button";
-import { useSessionContext } from "@supabase/auth-helpers-react";
-import toast from "react-hot-toast";
-import { revalidatePath } from "@/actions/revalidatePath";
+import Input from "./Input";
+import Modal from "./Modal";
+import SearchInput from "./SearchInput";
 import VariantButton from "./VariantButton";
-import { updatePlaylist } from "@/actions/updatePlaylist";
-import { useAuthModal } from "@/store/useAuthModal";
 
 const SongCard = ({
   data,
@@ -89,96 +83,27 @@ const SearchResults = ({
 };
 
 const PlaylistModal = () => {
-  const { isOpen, onClose, initialData, clearInitialData } = usePlaylistModal();
-  const [name, setName] = useState("");
-  const [songIds, setSongIds] = useState<string[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const openAuthModal = useAuthModal((state) => state.onOpen);
-  const { session, supabaseClient } = useSessionContext();
-
-  const isEditing = !!initialData;
-
-  const onSubmit = async () => {
-    if (!session?.user) {
-      openAuthModal();
-      return;
-    }
-
-    const trimmedName = name.trim();
-
-    if (trimmedName === "") {
-      toast.error("Playlist name is required!");
-      return;
-    }
-
-    if (trimmedName.length > 100) {
-      toast.error("Playlist name is too long!");
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    if (isEditing) {
-      const { error } = await updatePlaylist({
-        id: initialData.id,
-        name: trimmedName,
-        user_id: session.user.id,
-        song_ids: songIds,
-      });
-
-      if (error) {
-        toast.error("Something went wrong while updating the playlist!");
-        setIsSubmitting(false);
-        return;
-      }
-    } else {
-      const { error } = await supabaseClient.from("playlists").insert({
-        name: trimmedName,
-        user_id: session.user.id,
-        song_ids: songIds,
-      });
-
-      if (error) {
-        toast.error("Something went wrong while creating the playlist!");
-        setIsSubmitting(false);
-        return;
-      }
-    }
-
-    toast.success(`Playlist ${isEditing ? "updated" : "created"}!`);
-
-    onClose();
-    setIsSubmitting(false);
-    setName("");
-    setSongIds([]);
-    revalidatePath("/profile");
-    isEditing && revalidatePath(`/profile/playlists/${initialData.id}`);
-  };
-
-  useEffect(() => {
-    if (isEditing) {
-      setName(initialData.name);
-      setSongIds(initialData.song_ids);
-    }
-  }, [isEditing]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      setName("");
-      setSongIds([]);
-      clearInitialData();
-    }
-  }, [isOpen]);
+  const {
+    isEditing,
+    isPlaylistModalOpen,
+    onPlaylistModalClose,
+    initialData,
+    name,
+    setName,
+    songIds,
+    setSongIds,
+    isSubmitting,
+    onSubmit,
+  } = useCreateOrUpdatePlaylist();
 
   return (
     <Modal
       title={`${isEditing ? "Update" : "Add a"} playlist`}
       description={`${
-        isEditing ? "Update " + initialData.name : "Create a new"
+        isEditing ? "Update " + initialData?.name : "Create a new"
       } playlist.`}
-      isOpen={isOpen}
-      handleChange={(open) => !open && onClose()}
+      isOpen={isPlaylistModalOpen}
+      handleChange={(open) => !open && onPlaylistModalClose()}
     >
       <Input
         name="name"

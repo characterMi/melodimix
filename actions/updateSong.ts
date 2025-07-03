@@ -1,8 +1,8 @@
 "use server";
 
 import type { Song } from "@/types";
-import { getUserData } from "./getUserData";
 import { revalidatePath } from "next/cache";
+import { getUserData } from "./getUserData";
 
 export const updateSong = async (
   newData: FormData,
@@ -32,7 +32,12 @@ export const updateSong = async (
   const title = (newData.get("title") as string).trim();
   const author = (newData.get("author") as string).trim();
 
-  if (!title || !author) {
+  if (
+    !title ||
+    !author ||
+    typeof title !== "string" ||
+    typeof author !== "string"
+  ) {
     return { error: "Missing fields !" };
   }
 
@@ -80,16 +85,8 @@ export const updateSong = async (
     );
   }
 
-  type UpdateResult = {
-    error: null | string;
-  };
-
   const [dbUpdateResult, imageUpdateResult, songUpdateResult] =
-    (await Promise.all(updates)) as [
-      UpdateResult,
-      (UpdateResult & { data: { path: string } }) | undefined,
-      (UpdateResult & { data: { path: string } }) | undefined
-    ];
+    await Promise.all(updates);
 
   if (
     dbUpdateResult.error ||

@@ -1,83 +1,17 @@
+import { useUploadOrUpdateSong } from "@/hooks/useUploadOrUpdateSong";
 import Button from "./Button";
 import Input from "./Input";
 import Modal from "./Modal";
-import toast from "react-hot-toast";
-import { useSessionContext } from "@supabase/auth-helpers-react";
-import { useRouter } from "next/navigation";
-import { useHomePageData } from "@/store/useHomePageData";
-import { useUploadModal } from "@/store/useUploadModal";
-import { useEffect, useTransition } from "react";
-import { updateSong } from "@/actions/updateSong";
-import { uploadSong } from "@/actions/uploadSong";
 
 const UploadModal = () => {
-  const [isUploading, startTransition] = useTransition();
-  const { isOpen, onClose, clearInitialData, initialData } = useUploadModal();
-  const { addOne: addUploadedSongToSongs, updateOne: updateUploadedSong } =
-    useHomePageData((state) => ({
-      addOne: state.addOne,
-      updateOne: state.updateOne,
-    }));
-  const { session } = useSessionContext();
-  const router = useRouter();
-
-  const isEditing = !!initialData;
-
-  const handleSubmit = (formData: FormData) => {
-    if (!isOpen || isUploading) return;
-
-    if (!session?.user) {
-      toast.error("Unauthenticated User.", {
-        ariaProps: { role: "alert", "aria-live": "polite" },
-      });
-
-      return;
-    }
-
-    toast.success("this process might take a while, do not close the modal.");
-
-    startTransition(async () => {
-      try {
-        if (isEditing) {
-          const { error, updatedSong } = await updateSong(formData, {
-            id: initialData.id,
-            img_path: initialData.img_path,
-            song_path: initialData.song_path,
-          });
-
-          if (error) {
-            toast.error(error);
-            return;
-          }
-
-          updateUploadedSong(updatedSong!);
-        } else {
-          const { error, uploadedSong } = await uploadSong(formData);
-
-          if (error) {
-            toast.error(error);
-            return;
-          }
-
-          addUploadedSongToSongs(uploadedSong!);
-        }
-
-        toast.success(`Song ${isEditing ? "updated" : "created"}!`);
-        router.refresh();
-        onClose();
-      } catch (error: any) {
-        console.error(error);
-
-        toast.error("Something went wrong.");
-      }
-    });
-  };
-
-  useEffect(() => {
-    if (!isOpen) {
-      clearInitialData();
-    }
-  }, [isOpen]);
+  const {
+    isEditing,
+    handleSubmit,
+    isUploading,
+    isUploadModalOpen,
+    onUploadModalClose,
+    initialData,
+  } = useUploadOrUpdateSong();
 
   return (
     <Modal
@@ -85,12 +19,12 @@ const UploadModal = () => {
       description={`${
         isEditing ? "Update " + initialData?.title : "Create a new"
       } song.`}
-      isOpen={isOpen}
-      handleChange={(open) => !open && onClose()}
+      isOpen={isUploadModalOpen}
+      handleChange={(open) => !open && onUploadModalClose()}
     >
       <form action={handleSubmit} className="flex flex-col gap-y-4">
         <Input
-          defaultValue={isEditing ? initialData.title : ""}
+          defaultValue={isEditing ? initialData?.title : ""}
           name="title"
           disabled={isUploading}
           placeholder="Song title"
@@ -100,7 +34,7 @@ const UploadModal = () => {
         />
 
         <Input
-          defaultValue={isEditing ? initialData.author : ""}
+          defaultValue={isEditing ? initialData?.author : ""}
           name="author"
           disabled={isUploading}
           placeholder="Song author"

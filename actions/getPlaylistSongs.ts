@@ -57,7 +57,7 @@ export const getPlaylistSongs = async (
   const { data: songs, error: songsError } = await supabase
     .from("songs")
     .select("*")
-    .in("id", data?.song_ids);
+    .in("id", data.song_ids);
 
   if (songsError) {
     console.error(songsError);

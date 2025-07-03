@@ -1,9 +1,9 @@
 "use server";
 
-import type { Song } from "@/types";
-import { getUserData } from "./getUserData";
 import { sanitize } from "@/lib/sanitize";
+import type { Song } from "@/types";
 import { revalidatePath } from "next/cache";
+import { getUserData } from "./getUserData";
 
 export const uploadSong = async (
   formData: FormData
@@ -28,7 +28,14 @@ export const uploadSong = async (
   const title = (formData.get("title") as string | undefined)?.trim();
   const author = (formData.get("author") as string | undefined)?.trim();
 
-  if (!imageFile || !songFile || !title || !author) {
+  if (
+    !imageFile ||
+    !songFile ||
+    !title ||
+    !author ||
+    typeof title !== "string" ||
+    typeof author !== "string"
+  ) {
     return { error: "Missing fields !" };
   }
 
@@ -75,7 +82,11 @@ export const uploadSong = async (
     song_path: songData.path,
   };
 
-  const { error: supabaseError } = await supabase.from("songs").insert(newSong);
+  const { error: supabaseError, data } = await supabase
+    .from("songs")
+    .insert(newSong)
+    .select("id")
+    .single();
 
   if (supabaseError) {
     return { error: "Something went wrong while uploading the song!" };
@@ -85,7 +96,7 @@ export const uploadSong = async (
 
   return {
     uploadedSong: {
-      id: uniqueId,
+      id: data.id,
       ...newSong,
     },
   };

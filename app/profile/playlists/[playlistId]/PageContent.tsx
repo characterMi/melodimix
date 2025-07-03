@@ -12,7 +12,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { FiTrash2 } from "react-icons/fi";
 
-const DeleteButton = ({
+const DeleteSongFromPlaylistButton = ({
   songTitle,
   newData,
 }: {
@@ -81,7 +81,7 @@ const PageContent = ({
             <SongItem data={song} onClick={(id) => onPlay(id)} />
           </div>
 
-          <DeleteButton
+          <DeleteSongFromPlaylistButton
             songTitle={song.title}
             newData={{
               id: playlist!.id,
