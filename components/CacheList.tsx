@@ -60,7 +60,9 @@ const CacheList = ({
                       )}
                     />
                   </button>
-                  <p className="capitalize font-thin">{item}</p>
+                  <p className="capitalize font-thin">
+                    {item.replace("-", " ")}
+                  </p>
                   <span className="text-xs opacity-50">
                     {cachePercentages[item]}%
                   </span>
