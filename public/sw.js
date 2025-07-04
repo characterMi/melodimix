@@ -193,7 +193,7 @@ async function networkFirst(req, cacheName, isRequestingHTML = false) {
 
   if (cachedResponse) return cachedResponse.clone();
 
-  return isRequestingHTML ? offlineHTMLfallback() : responseFallback();
+  return isRequestingHTML ? offlineHTMLFallback() : responseFallback();
 }
 
 async function fetchReq(req, cache = null) {
@@ -231,7 +231,7 @@ async function handleHTML(req) {
 
     if (cachedResponse) return cachedResponse.clone();
 
-    return offlineHTMLfallback();
+    return offlineHTMLFallback();
   }
 
   return networkFirst(req, assetsCacheName, /* isRequestingHTML= */ true);
