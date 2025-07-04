@@ -31,43 +31,36 @@ export const useLikeSong = (song: Song) => {
     if (!session) return onAuthModalOpen();
 
     startTransition(async () => {
-      try {
-        // Optimistic update...
-        setLikedSongs(song.id, !isLiked);
+      if (!navigator.onLine) {
+        toast.error("No internet connection, please try again later.");
+        return;
+      }
 
-        // animation when we like a song...
-        if (!isLiked) btnRef.current?.classList.add("like-button-animation");
+      // Optimistic update...
+      setLikedSongs(song.id, !isLiked);
 
-        // Updating the song in DB
-        const likeInformation = await likeSong(isLiked, song.id);
+      // animation when we like a song...
+      if (!isLiked) btnRef.current?.classList.add("like-button-animation");
 
-        // Updating (the store + liked page data) based on result...
-        if (likeInformation.isLiked) {
-          setLikedSongs(song.id, true);
-          addOne(song);
-        } else {
-          removeIdFromLikedSongs(song.id);
-          removeOne(song.id);
-          btnRef.current?.classList.remove("like-button-animation");
-        }
+      // Updating the song in DB
+      const likeInformation = await likeSong(isLiked, song.id);
 
-        if (likeInformation.error) {
-          toast.error(likeInformation.error);
-        }
-
-        if (likeInformation.message) {
-          toast.success(likeInformation.message);
-        }
-      } catch {
+      // Updating (the store + liked page data) based on result...
+      if (likeInformation.isLiked) {
+        setLikedSongs(song.id, true);
+        addOne(song);
+      } else {
         removeIdFromLikedSongs(song.id);
+        removeOne(song.id);
         btnRef.current?.classList.remove("like-button-animation");
+      }
 
-        if (!navigator.onLine) {
-          toast.error("No internet connection, please try again later.");
-          return;
-        }
+      if (likeInformation.error) {
+        toast.error(likeInformation.error);
+      }
 
-        toast.error("Something went wrong, please try again later.");
+      if (likeInformation.message) {
+        toast.success(likeInformation.message);
       }
     });
   };
