@@ -28,7 +28,7 @@ const Header = ({
         <div className="hidden md:flex gap-x-2 items-center">
           <button
             onClick={() => router.back()}
-            className="rounded-full bg-black flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none"
+            className="rounded-full bg-black flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none p-[1.5px]"
             aria-label="Go back to the previous page (from browser's history)"
           >
             <RxCaretLeft size={35} className="text-white" />
@@ -36,7 +36,7 @@ const Header = ({
 
           <button
             onClick={() => router.forward()}
-            className="rounded-full bg-black flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none"
+            className="rounded-full bg-black flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none p-[1.5px]"
             aria-label="Go to the next page (from browser's history)"
           >
             <RxCaretRight size={35} className="text-white" />
@@ -46,7 +46,7 @@ const Header = ({
         <div className="flex md:hidden gap-x-2 items-center">
           <Link
             href="/"
-            className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none"
+            className="rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none"
             aria-label="Go to home page"
           >
             <HiHome size={20} className="text-black" aria-hidden />
@@ -54,7 +54,7 @@ const Header = ({
 
           <Link
             href="/search"
-            className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none"
+            className="rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none"
             aria-label="Go to search page"
           >
             <BiSearch size={20} className="text-black" aria-hidden />

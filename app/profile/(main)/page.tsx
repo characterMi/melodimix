@@ -1,7 +1,7 @@
 import { getUserSongs } from "@/actions/getUserSongs";
 import Loader from "@/components/Loader";
 import { Suspense } from "react";
-import PageContent from "./components/PageContent";
+import PageContent from "./PageContent";
 
 async function GetUserSongs() {
   const userSongs = await getUserSongs();

@@ -17,3 +17,10 @@ export interface Playlist {
   name: string;
   song_ids: string[];
 }
+
+export interface User {
+  email: string;
+  avatar_url: string | null;
+  name: string | null;
+  full_name: string | null;
+}
