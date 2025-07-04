@@ -3,7 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { getUserData } from "./getUserData";
 
-export const likeSong = async (isLiked: boolean, songId: string) => {
+export const likeSong = async (
+  isLiked: boolean,
+  songId: string
+): Promise<{ isLiked: boolean; error?: string; message?: string }> => {
   const { supabase, user } = await getUserData();
 
   if (!user) {

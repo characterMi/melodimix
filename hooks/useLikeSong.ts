@@ -4,8 +4,7 @@ import { useLikedPageData } from "@/store/useLikedPageData";
 import { useLikedSongs } from "@/store/useLikedSongs";
 import type { Song } from "@/types";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useRef, useTransition } from "react";
 import toast from "react-hot-toast";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
@@ -18,61 +17,39 @@ export const useLikeSong = (song: Song) => {
     addOne: state.addOne,
     removeOne: state.removeOne,
   }));
-  const [isLiked, setIsLiked] = useState(likedSongs[song.id] || false);
   const [pending, startTransition] = useTransition();
+
+  const isLiked = likedSongs[song.id] ?? false;
 
   const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
 
-  const router = useRouter();
-
   const { session } = useSessionContext();
-  const user = session?.user;
-
-  useEffect(() => {
-    if (!user?.id) return;
-
-    if (likedSongs[song.id]) {
-      setIsLiked(true);
-    }
-  }, [user?.id]);
-
-  useEffect(() => {
-    if (likedSongs[song.id]) {
-      setIsLiked(true);
-    } else {
-      setIsLiked(false);
-    }
-  }, [likedSongs]);
 
   const handleLike = async () => {
     if (pending) return;
 
-    if (!user) return onAuthModalOpen();
+    if (!session) return onAuthModalOpen();
 
     startTransition(async () => {
       try {
         // Optimistic update...
         setLikedSongs(song.id, !isLiked);
 
-        // Simple animation when we like a song...
+        // animation when we like a song...
         if (!isLiked) btnRef.current?.classList.add("like-button-animation");
-        else btnRef.current?.classList.remove("like-button-animation");
 
         // Updating the song in DB
         const likeInformation = await likeSong(isLiked, song.id);
 
-        // Updating the store based on result
-        (likeInformation.isLiked ? setLikedSongs : removeIdFromLikedSongs)(
-          song.id,
-          true
-        );
-
-        // Updating the liked page data based on result
-        if (!likeInformation.error) {
-          likeInformation.isLiked ? addOne(song) : removeOne(song.id);
+        // Updating (the store + liked page data) based on result...
+        if (likeInformation.isLiked) {
+          setLikedSongs(song.id, true);
+          addOne(song);
+        } else {
+          removeIdFromLikedSongs(song.id);
+          removeOne(song.id);
+          btnRef.current?.classList.remove("like-button-animation");
         }
-
-        router.refresh();
 
         if (likeInformation.error) {
           toast.error(likeInformation.error);
@@ -82,6 +59,9 @@ export const useLikeSong = (song: Song) => {
           toast.success(likeInformation.message);
         }
       } catch {
+        removeIdFromLikedSongs(song.id);
+        btnRef.current?.classList.remove("like-button-animation");
+
         if (!navigator.onLine) {
           toast.error("No internet connection, please try again later.");
           return;
