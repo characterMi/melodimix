@@ -34,7 +34,7 @@ export const Avatar = ({
   return (
     <>
       <button
-        className="size-44 flex items-center justify-center relative bg-neutral-500 outline-none transition-opacity hover:opacity-75 focus-visible:opacity-75 rounded-full"
+        className="size-44 flex items-center justify-center relative bg-emerald-600 outline-none transition-opacity hover:opacity-75 focus-visible:opacity-75 rounded-full"
         onClick={() => {
           if (isSubmitting) return;
           imageInput.current?.click();
@@ -61,7 +61,7 @@ export const Avatar = ({
         )}
 
         <div
-          className="absolute -bottom-2 -right-2 border-[5px] border-neutral-800 rounded-full p-4 bg-neutral-500"
+          className="absolute -bottom-2 -right-2 border-[5px] border-neutral-800 rounded-full p-4 bg-emerald-600"
           aria-hidden
         >
           <FaCamera size={24} className="text-white" />

@@ -30,26 +30,26 @@ export const updateSong = async (
   const imageFile = newData.get("img") as File | null;
   const songFile = newData.get("song") as File | null;
   const title = (newData.get("title") as string).trim();
-  const author = (newData.get("author") as string).trim();
+  const artist = (newData.get("artist") as string).trim();
 
   if (
     !title ||
-    !author ||
+    !artist ||
     typeof title !== "string" ||
-    typeof author !== "string"
+    typeof artist !== "string"
   ) {
     return { error: "Missing fields !" };
   }
 
-  if (title.length > 100 || author.length > 50) {
-    return { error: "Title or Author is too long!" };
+  if (title.length > 100 || artist.length > 50) {
+    return { error: "Title or Artist is too long!" };
   }
 
   const dbUpdatePromise = supabase
     .from("songs")
     .update({
       title,
-      author,
+      artist,
     })
     .eq("user_id", user.id)
     .eq("id", songData.id);
@@ -108,7 +108,8 @@ export const updateSong = async (
     updatedSong: {
       id: songData.id,
       title,
-      author,
+      author: user.user_metadata.name ?? "Guest",
+      artist,
       img_path: imageUpdateResult?.data.path ?? songData.img_path,
       song_path: songUpdateResult?.data.path ?? songData.song_path,
       user_id: user.id,

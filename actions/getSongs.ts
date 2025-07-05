@@ -14,7 +14,7 @@ export const getSongs = async (
 
   const { data, error } = await supabase
     .from("songs")
-    .select("*")
+    .select("*, users!public_songs_user_id_fkey(full_name)")
     .order("created_at", { ascending: false })
     .range(from, to)
     .limit(limit);
@@ -24,5 +24,10 @@ export const getSongs = async (
     return [];
   }
 
-  return (data as any) || [];
+  return (
+    data.map((song) => ({
+      ...song,
+      author: song.users.full_name ?? "Guest",
+    })) || []
+  );
 };

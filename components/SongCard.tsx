@@ -2,6 +2,7 @@ import { useLoadImage } from "@/hooks/useLoadImage";
 import type { Song } from "@/types";
 import toast from "react-hot-toast";
 import { FaPlay, FaShareAlt } from "react-icons/fa";
+import Author from "./Author";
 import SongCover from "./SongCover";
 
 interface Props {
@@ -51,10 +52,13 @@ const SongCard = ({ data, onClick }: Props) => {
       </div>
 
       <div className="flex flex-col items-start w-full py-4 gap-y-1">
-        <h1 className="font-semibold truncate w-full">{data.title}</h1>
-        <p className="text-neutral-400 text-sm pt-1 w-full truncate">
-          By {data.author}
-        </p>
+        <h1 className="font-semibold truncate w-full">
+          {data.title} - {data.artist ?? "Anonymous"}
+        </h1>
+
+        <div className="text-neutral-400 text-sm pt-1 w-full truncate flex items-center gap-1">
+          By <Author name={data.author} userId={data.user_id} shouldHighlight />
+        </div>
       </div>
 
       <div className="absolute bottom-24 right-5">

@@ -26,21 +26,21 @@ export const uploadSong = async (
   const imageFile = formData.get("img") as File | undefined;
   const songFile = formData.get("song") as File | undefined;
   const title = (formData.get("title") as string | undefined)?.trim();
-  const author = (formData.get("author") as string | undefined)?.trim();
+  const artist = (formData.get("artist") as string | undefined)?.trim();
 
   if (
     !imageFile ||
     !songFile ||
     !title ||
-    !author ||
+    !artist ||
     typeof title !== "string" ||
-    typeof author !== "string"
+    typeof artist !== "string"
   ) {
     return { error: "Missing fields !" };
   }
 
-  if (title.length > 100 || author.length > 50) {
-    return { error: "Title or Author is too long!" };
+  if (title.length > 100 || artist.length > 50) {
+    return { error: "Title or Artist is too long!" };
   }
 
   if (!imageFile.type.startsWith("image/")) {
@@ -77,7 +77,7 @@ export const uploadSong = async (
   const newSong = {
     user_id: user.id,
     title,
-    author,
+    artist,
     img_path: imageData.path,
     song_path: songData.path,
   };
@@ -97,6 +97,7 @@ export const uploadSong = async (
   return {
     uploadedSong: {
       id: data.id,
+      author: user.user_metadata.name ?? "Guest",
       ...newSong,
     },
   };

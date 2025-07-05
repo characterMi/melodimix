@@ -6,6 +6,7 @@ export interface Song {
   id: string;
   user_id: string;
   author: string;
+  artist: string;
   title: string;
   song_path: string;
   img_path: string;

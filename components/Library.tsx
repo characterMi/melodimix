@@ -3,12 +3,12 @@
 import useOnPlay from "@/hooks/useOnPlay";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types";
+import Link from "next/link";
+import { MdArrowOutward } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
 import AddSongButton from "./AddSongButton";
 import NoSongFallback from "./NoSongFallback";
 import SongItem from "./SongItem";
-import Link from "next/link";
-import { MdArrowOutward } from "react-icons/md";
 
 const Library = ({ songs, isMobile }: { songs: Song[]; isMobile?: true }) => {
   const activeId = usePlayerStore((state) => state.activeId);
@@ -34,7 +34,12 @@ const Library = ({ songs, isMobile }: { songs: Song[]; isMobile?: true }) => {
 
       <div className="flex flex-col gap-y-2 mt-4">
         {songs.map((song) => (
-          <SongItem onClick={(id) => onPlay(id)} key={song.id} data={song} />
+          <SongItem
+            onClick={(id) => onPlay(id)}
+            key={song.id}
+            data={song}
+            showAuthor={false}
+          />
         ))}
       </div>
 

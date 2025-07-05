@@ -32,6 +32,16 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+.author {
+  background: #059669;
+  background: -webkit-linear-gradient(to left, #059669, #34d399);
+  background: linear-gradient(to left, #059669, #34d399);
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .loader {
   width: 100%;
   max-width: 50px;

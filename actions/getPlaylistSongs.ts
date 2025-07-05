@@ -56,7 +56,7 @@ export const getPlaylistSongs = async (
 
   const { data: songs, error: songsError } = await supabase
     .from("songs")
-    .select("*")
+    .select("*, users!public_songs_user_id_fkey(full_name)")
     .in("id", data.song_ids);
 
   if (songsError) {
@@ -73,5 +73,12 @@ export const getPlaylistSongs = async (
     return { data: [], errMessage: "No songs found.", playlist: undefined };
   }
 
-  return { data: songs, playlist: data, errMessage: undefined };
+  return {
+    data: songs.map((song) => ({
+      ...song,
+      author: song.users.full_name ?? "Guest",
+    })),
+    playlist: data,
+    errMessage: undefined,
+  };
 };

@@ -1,15 +1,17 @@
 import { useLoadImage } from "@/hooks/useLoadImage";
 import type { Song } from "@/types";
 import { twMerge } from "tailwind-merge";
+import Author from "./Author";
 import SongCover from "./SongCover";
 
 interface Props {
   data: Song;
   onClick?: (id: string) => void;
-  player?: boolean;
+  player?: true;
+  showAuthor?: boolean;
 }
 
-const SongItem = ({ data, onClick, player }: Props) => {
+const SongItem = ({ data, onClick, player, showAuthor = true }: Props) => {
   const imageUrl = useLoadImage(data);
 
   const handleClick = () => {
@@ -46,7 +48,10 @@ const SongItem = ({ data, onClick, player }: Props) => {
               player ? "scroll-animation w-full child_1" : "truncate"
             )}
           >
-            {data.title} &nbsp;
+            {showAuthor
+              ? `${data.title} - ${data.artist ?? "Anonymous"}`
+              : data.title}
+            &nbsp;
           </p>
 
           {player && (
@@ -59,7 +64,13 @@ const SongItem = ({ data, onClick, player }: Props) => {
           )}
         </div>
 
-        <p className="text-neutral-400 text-sm truncate">{data.author}</p>
+        <div className="text-neutral-400 text-sm truncate">
+          {showAuthor ? (
+            <Author name={data.author} userId={data.user_id} />
+          ) : (
+            data.artist ?? "Anonymous"
+          )}
+        </div>
       </div>
     </button>
   );

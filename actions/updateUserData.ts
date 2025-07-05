@@ -42,15 +42,26 @@ export const updateUserData = async (formData: FormData) => {
     imagePath = publicUrl;
   }
 
-  const { error: authError } = await supabase.auth.updateUser({
-    data: {
-      name: name || "Guest",
-      full_name: fullName || "Guest",
-      ...(imagePath ? { avatar_url: imagePath } : {}),
-    },
+  const userData = {
+    name: name || "Guest",
+    full_name: fullName || "Guest",
+    ...(imagePath ? { avatar_url: imagePath } : {}),
+  };
+
+  const dbUpdatePromise = supabase
+    .from("users")
+    .update(userData)
+    .eq("id", user.id);
+
+  const authUpdatePromise = supabase.auth.updateUser({
+    data: userData,
   });
 
-  if (authError) {
+  const [{ error: dbUpdateError }, { error: authUpdateError }] =
+    await Promise.all([dbUpdatePromise, authUpdatePromise]);
+
+  if (dbUpdateError || authUpdateError) {
+    console.error(dbUpdateError, authUpdateError);
     return { error: "Something went wrong while updating the user data!" };
   }
 

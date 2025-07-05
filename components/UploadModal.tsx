@@ -34,12 +34,12 @@ const UploadModal = () => {
         />
 
         <Input
-          defaultValue={isEditing ? initialData?.author : ""}
-          name="author"
+          defaultValue={isEditing ? initialData?.artist : ""}
+          name="artist"
           disabled={isUploading}
-          placeholder="Song author"
+          placeholder="Song artist"
           required
-          aria-label="Enter the author's name"
+          aria-label="Enter the artist's name"
           maxLength={50}
         />
 
