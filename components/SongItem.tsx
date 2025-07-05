@@ -49,7 +49,7 @@ const SongItem = ({ data, onClick, player, showAuthor = true }: Props) => {
             )}
           >
             {showAuthor
-              ? `${data.title} - ${data.artist ?? "Anonymous"}`
+              ? `${data.title} - ${data.artist ?? "Unknown artist"}`
               : data.title}
             &nbsp;
           </p>
@@ -68,7 +68,7 @@ const SongItem = ({ data, onClick, player, showAuthor = true }: Props) => {
           {showAuthor ? (
             <Author name={data.author} userId={data.user_id} />
           ) : (
-            data.artist ?? "Anonymous"
+            data.artist ?? "Unknown artist"
           )}
         </div>
       </div>

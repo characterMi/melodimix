@@ -1,14 +1,14 @@
+import { updatePlaylist } from "@/actions/updatePlaylist";
+import { usePlaylistModal } from "@/store/usePlaylistModal";
+import { Playlist } from "@/types";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
-import { AiOutlinePlus } from "react-icons/ai";
-import Loader from "./Loader";
-import { usePlaylistModal } from "@/store/usePlaylistModal";
-import { RiPlayListFill } from "react-icons/ri";
-import { MdArrowOutward } from "react-icons/md";
-import { updatePlaylist } from "@/actions/updatePlaylist";
-import { Playlist } from "@/types";
 import toast from "react-hot-toast";
+import { AiOutlinePlus } from "react-icons/ai";
+import { MdArrowOutward } from "react-icons/md";
+import { RiPlayListFill } from "react-icons/ri";
 import DropdownMenu from "./DropdownMenu";
+import Loader from "./Loader";
 
 const PlaylistItem = ({
   playlist,
@@ -34,6 +34,7 @@ const PlaylistItem = ({
       name: playlist.name,
       user_id: playlist.user_id,
       song_ids: [...playlist.song_ids, songId],
+      is_public: playlist.is_public,
     });
 
     if (error) {

@@ -5,9 +5,11 @@ import { getUserData } from "./getUserData";
 
 export const createPlaylist = async ({
   name,
+  isPublic,
   songIds,
 }: {
   name: string;
+  isPublic: boolean;
   songIds: string[];
 }): Promise<
   | { error: true; message: string; playlistId: null }
@@ -40,6 +42,7 @@ export const createPlaylist = async ({
     .insert({
       name,
       user_id: user.id,
+      is_public: isPublic,
       song_ids: songIds,
     })
     .select("id")

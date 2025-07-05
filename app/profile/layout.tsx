@@ -2,6 +2,7 @@ import { getUserPlaylists } from "@/actions/getUserPlaylists";
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
 import ProfileImage from "@/public/images/profile.png";
+import type { Playlist } from "@/types";
 import Image from "next/image";
 import React, { Suspense } from "react";
 import PlaylistContainer from "./components/PlaylistContainer";
@@ -12,7 +13,7 @@ export const metadata = {
 };
 
 async function GetPlaylists({ children }: { children: React.ReactNode }) {
-  const playlists = await getUserPlaylists();
+  const playlists = (await getUserPlaylists()) as Playlist[];
 
   const playlistsList = [
     { href: "/profile", name: "Uploaded songs", id: "uploaded" },
@@ -38,10 +39,7 @@ const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
     <section className="bg-neutral-900 rounded-lg w-full h-full overflow-hidden overflow-y-auto">
       <Header>
         <div className="mt-20 flex flex-col md:flex-row items-center gap-x-4">
-          <div
-            className="relative size-32 lg:size-44"
-            aria-labelledby="profile-title"
-          >
+          <div className="relative size-32 lg:size-44">
             <Image
               src={ProfileImage}
               alt="Profile"
@@ -59,10 +57,7 @@ const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
               Welcome back
             </p>
 
-            <h1
-              className="text-white text-4xl sm:text-7xl md:text-5xl lg:text-7xl"
-              id="profile-title"
-            >
+            <h1 className="text-white text-4xl sm:text-7xl md:text-5xl lg:text-7xl">
               Profile
             </h1>
           </div>

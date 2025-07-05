@@ -17,9 +17,11 @@ export interface Playlist {
   user_id: string;
   name: string;
   song_ids: string[];
+  is_public: boolean;
 }
 
 export interface User {
+  id: string;
   email: string;
   avatar_url: string | null;
   name: string | null;

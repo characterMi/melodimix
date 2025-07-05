@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "next/navigation";
 import { RxReload } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";

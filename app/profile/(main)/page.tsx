@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import PageContent from "./PageContent";
 
 async function GetUserSongs() {
-  const userSongs = await getUserSongs();
+  const userSongs = await getUserSongs(null);
 
   return (
     <div className="px-4">

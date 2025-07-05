@@ -90,6 +90,8 @@ const PlaylistModal = () => {
     initialData,
     name,
     setName,
+    isPublic,
+    setIsPublic,
     songIds,
     setSongIds,
     isSubmitting,
@@ -114,6 +116,23 @@ const PlaylistModal = () => {
         required
         aria-label="Enter the playlist name"
       />
+
+      <div className="my-6 flex gap-2 items-center justify-between">
+        <h3 className="text-lg font-semibold text-nowrap">
+          Is this Playlist public?
+        </h3>
+
+        <input
+          name="isPublic"
+          type="checkbox"
+          checked={isPublic}
+          onChange={(e) => setIsPublic(e.target.checked)}
+          aria-label="Make playlist public"
+          className="appearance-none size-5 border border-emerald-600 rounded-md checked:bg-emerald-500 checked:border-emerald-500 bg-neutral-700 transition-all cursor-pointer"
+        />
+      </div>
+
+      <hr className="border-neutral-600 my-4" />
 
       <div className="mt-6 flex flex-col gap-4">
         <h3 className="text-lg font-semibold">Search, and Add songs</h3>

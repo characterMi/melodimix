@@ -29,8 +29,8 @@ const SongCard = ({ data, onClick }: Props) => {
     }
 
     navigator.share({
-      title: `Melodimix | ${data.title}`,
-      text: "Melodimix - Your Ultimate Music Destination.",
+      title: "Melodimix - Your Ultimate Music Destination.",
+      text: `Listen to ${data.title} by ${data.artist ?? "Unknown artist"}`,
       url: `${process.env.NEXT_PUBLIC_BASE_URL}search?song_title=${data.title}`,
     });
   }
@@ -53,7 +53,7 @@ const SongCard = ({ data, onClick }: Props) => {
 
       <div className="flex flex-col items-start w-full py-4 gap-y-1">
         <h1 className="font-semibold truncate w-full">
-          {data.title} - {data.artist ?? "Anonymous"}
+          {data.title} - {data.artist ?? "Unknown artist"}
         </h1>
 
         <div className="text-neutral-400 text-sm pt-1 w-full truncate flex items-center gap-1">

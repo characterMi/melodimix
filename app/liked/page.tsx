@@ -2,10 +2,10 @@ import { getLikedSongs } from "@/actions/getLikedSongs";
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
 import LikedImage from "@/public/images/liked.png";
+import type { Song } from "@/types";
 import Image from "next/image";
 import { Suspense } from "react";
 import { LikedContent } from "./components/LikedContent";
-import type { Song } from "@/types";
 
 export const metadata = {
   title: "Liked Songs",
@@ -29,10 +29,7 @@ const LikedSongsPage = () => {
     <section className="bg-neutral-900 rounded-lg w-full h-full overflow-hidden overflow-y-auto">
       <Header>
         <div className="mt-20 flex flex-col md:flex-row items-center gap-x-4">
-          <div
-            className="relative size-32 lg:size-44"
-            aria-labelledby="like-title"
-          >
+          <div className="relative size-32 lg:size-44">
             <Image
               src={LikedImage}
               alt="Liked Songs"
@@ -48,10 +45,7 @@ const LikedSongsPage = () => {
           <div className="flex flex-col gap-y-2 mt-4 md:mt-0">
             <p className="hidden md:block font-semibold text-sm">Playlist</p>
 
-            <h1
-              className="text-white text-4xl sm:text-7xl md:text-5xl lg:text-7xl"
-              id="like-title"
-            >
+            <h1 className="text-white text-4xl sm:text-7xl md:text-5xl lg:text-7xl">
               Liked Songs
             </h1>
           </div>

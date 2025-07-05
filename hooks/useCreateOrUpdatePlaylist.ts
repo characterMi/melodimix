@@ -10,6 +10,7 @@ import { usePlaylistModal } from "../store/usePlaylistModal";
 export const useCreateOrUpdatePlaylist = () => {
   const { isOpen, onClose, initialData, clearInitialData } = usePlaylistModal();
   const [name, setName] = useState("");
+  const [isPublic, setIsPublic] = useState(false);
   const [songIds, setSongIds] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -44,6 +45,7 @@ export const useCreateOrUpdatePlaylist = () => {
       const { error, message } = await updatePlaylist({
         id: initialData.id,
         name: trimmedName,
+        is_public: isPublic,
         user_id: session.user.id,
         song_ids: songIds,
       });
@@ -56,6 +58,7 @@ export const useCreateOrUpdatePlaylist = () => {
     } else {
       const { error, message, playlistId } = await createPlaylist({
         name: trimmedName,
+        isPublic: isPublic,
         songIds,
       });
 
@@ -77,6 +80,7 @@ export const useCreateOrUpdatePlaylist = () => {
   useEffect(() => {
     if (isEditing) {
       setName(initialData.name);
+      setIsPublic(initialData.is_public);
       setSongIds(initialData.song_ids);
     }
   }, [isEditing]);
@@ -84,6 +88,7 @@ export const useCreateOrUpdatePlaylist = () => {
   useEffect(() => {
     if (!isOpen) {
       setName("");
+      setIsPublic(false);
       setSongIds([]);
       clearInitialData();
     }
@@ -96,6 +101,8 @@ export const useCreateOrUpdatePlaylist = () => {
     initialData,
     name,
     setName,
+    isPublic,
+    setIsPublic,
     songIds,
     setSongIds,
     isSubmitting,
