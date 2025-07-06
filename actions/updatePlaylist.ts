@@ -39,5 +39,10 @@ export const updatePlaylist = async (
   }
 
   revalidatePath(`/profile/playlists/${newData.id}`);
+  if (newData.is_public) {
+    revalidatePath(`/users/${user.id}/playlists`);
+    revalidatePath(`/users/${user.id}/playlists/${newData.id}`);
+  }
+
   return { error: false, message: null };
 };

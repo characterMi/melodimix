@@ -44,6 +44,7 @@ export const deleteSong = async (songId: string): Promise<boolean> => {
     return false;
 
   revalidatePath("/profile", "layout");
+  revalidatePath(`/users/${user.id}`, "layout");
   revalidatePath("/", "layout");
 
   return true;

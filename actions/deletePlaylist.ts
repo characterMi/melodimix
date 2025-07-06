@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getUserData } from "./getUserData";
 
-export const deletePlaylist = async (playlistId: string) => {
+export const deletePlaylist = async (playlistId: string, isPublic: boolean) => {
   const { supabase, user } = await getUserData();
 
   if (!user) return false;
@@ -21,6 +21,7 @@ export const deletePlaylist = async (playlistId: string) => {
   }
 
   revalidatePath("/profile");
+  isPublic && revalidatePath(`/users/${user.id}/playlists`);
 
   return true;
 };
