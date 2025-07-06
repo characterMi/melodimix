@@ -6,9 +6,9 @@ import { BiArrowToRight } from "react-icons/bi";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { IoShuffleOutline } from "react-icons/io5";
+import { PiRepeatOnce } from "react-icons/pi";
 import useSound from "use-sound";
 import { useLoadImage } from "./useLoadImage";
-import { PiRepeatOnce } from "react-icons/pi";
 
 export function usePlayer(song: Song, songUrl: string) {
   const songImageUrl = useLoadImage(song);

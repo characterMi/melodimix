@@ -54,7 +54,7 @@ const PlaylistLink = ({ href, name, id, ...props }: Props) => {
             is_public={props.is_public!}
           />
 
-          <DeleteButton playlistId={id} />
+          <DeleteButton playlistId={id} isPublic={props.is_public!} />
         </DropdownMenu>
       )}
     </Link>
@@ -80,7 +80,13 @@ const UpdateButton = (props: Required<Omit<Props, "href">>) => {
   );
 };
 
-const DeleteButton = ({ playlistId }: { playlistId: string }) => {
+const DeleteButton = ({
+  playlistId,
+  isPublic,
+}: {
+  playlistId: string;
+  isPublic: boolean;
+}) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
@@ -91,7 +97,7 @@ const DeleteButton = ({ playlistId }: { playlistId: string }) => {
 
     setIsDeleting(true);
 
-    const isDeleted = await deletePlaylist(playlistId);
+    const isDeleted = await deletePlaylist(playlistId, isPublic);
 
     if (!isDeleted) {
       toast.error("Something went wrong.");

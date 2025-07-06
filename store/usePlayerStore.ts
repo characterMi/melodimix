@@ -7,7 +7,6 @@ interface PlayerStore {
   activeId?: string;
   setId: (id?: string) => void;
   setIds: (ids: string[]) => void;
-  reset: () => void;
   playerType: PlayerType;
   setPlayerType: (type: PlayerType) => void;
   volume: number;
@@ -19,7 +18,6 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
   activeId: undefined,
   setId: (id) => set({ activeId: id }),
   setIds: (ids) => set({ ids }),
-  reset: () => set({ ids: [], activeId: undefined }),
   playerType: "next-song",
   setPlayerType: (type) => set({ playerType: type }),
   volume: 1,
