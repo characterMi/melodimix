@@ -48,8 +48,6 @@ const SongCard = ({ data, onClick }: Props) => {
           width={130}
           height={130}
           className="w-full"
-          loading="eager"
-          fetchPriority="high"
         />
       </div>
 
