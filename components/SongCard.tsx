@@ -30,7 +30,9 @@ const SongCard = ({ data, onClick }: Props) => {
 
     navigator.share({
       title: "Melodimix - Your Ultimate Music Destination.",
-      text: `Listen to ${data.title} by ${data.artist ?? "Unknown artist"}`,
+      text: `Listen to ${data.title} by ${
+        data.artist ?? "Unknown artist"
+      } in MelodiMix!`,
       url: `${process.env.NEXT_PUBLIC_BASE_URL}search?song_title=${data.title}`,
     });
   }

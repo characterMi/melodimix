@@ -44,8 +44,8 @@ const PageContent = ({
     navigator.share({
       title: "Melodimix - Your Ultimate Music Destination.",
       text: `Checkout ${playlist?.name} playlist by ${
-        playlist?.author ?? "a User"
-      }`,
+        playlist?.author === "Guest" ? "a User" : playlist?.author
+      } in MelodiMix!`,
       url: `${process.env.NEXT_PUBLIC_BASE_URL}users/${playlist?.user_id}/playlists/${playlist?.id}`,
     });
   }
