@@ -10,7 +10,7 @@ export const deleteSong = async (songId: string): Promise<boolean> => {
 
   const { data, error } = await supabase
     .from("songs")
-    .select("*")
+    .select("img_path, song_path")
     .eq("id", songId)
     .eq("user_id", user.id)
     .single();
@@ -20,7 +20,7 @@ export const deleteSong = async (songId: string): Promise<boolean> => {
   const dbDeletionPromise = supabase
     .from("songs")
     .delete()
-    .eq("id", data.id)
+    .eq("id", songId)
     .eq("user_id", user.id);
   const imageDeletionPromise = supabase.storage
     .from("images")

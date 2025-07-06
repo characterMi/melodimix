@@ -20,10 +20,7 @@ async function GetPlaylists({ children }: { children: React.ReactNode }) {
     { href: "/profile/liked", name: "Liked Songs", id: "liked" },
     ...playlists.map((playlist) => ({
       href: `/profile/playlists/${playlist.id}`,
-      name: playlist.name,
-      id: playlist.id,
-      user_id: playlist.user_id,
-      song_ids: playlist.song_ids,
+      ...playlist,
     })),
   ];
 
@@ -34,43 +31,39 @@ async function GetPlaylists({ children }: { children: React.ReactNode }) {
   );
 }
 
-const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <section className="bg-neutral-900 rounded-lg w-full h-full overflow-hidden overflow-y-auto">
-      <Header>
-        <div className="mt-20 flex flex-col md:flex-row items-center gap-x-4">
-          <div className="relative size-32 lg:size-44">
-            <Image
-              src={ProfileImage}
-              alt="Profile"
-              width={100}
-              height={100}
-              className="object-cover size-32 lg:size-44"
-              placeholder="blur"
-              loading="eager"
-              priority
-            />
-          </div>
-
-          <div className="flex flex-col gap-y-2 mt-4 md:mt-0">
-            <p className="hidden md:block font-semibold text-sm">
-              Welcome back
-            </p>
-
-            <h1 className="text-white text-4xl sm:text-7xl md:text-5xl lg:text-7xl">
-              Profile
-            </h1>
-          </div>
+const ProfileLayout = ({ children }: { children: React.ReactNode }) => (
+  <section className="bg-neutral-900 rounded-lg w-full h-full overflow-hidden overflow-y-auto">
+    <Header>
+      <div className="mt-20 flex flex-col md:flex-row items-center gap-x-4">
+        <div className="relative size-32 lg:size-44">
+          <Image
+            src={ProfileImage}
+            alt="Profile"
+            width={100}
+            height={100}
+            className="object-cover size-32 lg:size-44"
+            placeholder="blur"
+            loading="eager"
+            priority
+          />
         </div>
-      </Header>
 
-      <div className="px-2 w-full">
-        <Suspense fallback={<Loader className="ml-4" />}>
-          <GetPlaylists>{children}</GetPlaylists>
-        </Suspense>
+        <div className="flex flex-col gap-y-2 mt-4 md:mt-0">
+          <p className="hidden md:block font-semibold text-sm">Welcome back</p>
+
+          <h1 className="text-white text-4xl sm:text-7xl md:text-5xl lg:text-7xl">
+            Profile
+          </h1>
+        </div>
       </div>
-    </section>
-  );
-};
+    </Header>
+
+    <div className="px-2 w-full">
+      <Suspense fallback={<Loader className="ml-4" />}>
+        <GetPlaylists>{children}</GetPlaylists>
+      </Suspense>
+    </div>
+  </section>
+);
 
 export default ProfileLayout;

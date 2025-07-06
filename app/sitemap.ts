@@ -6,5 +6,5 @@ export default async function sitemap() {
     })
   );
 
-  return [...staticRoutes];
+  return staticRoutes;
 }

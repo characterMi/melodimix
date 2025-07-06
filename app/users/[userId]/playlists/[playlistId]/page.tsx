@@ -1,6 +1,4 @@
 import { getPlaylistSongs } from "@/actions/getPlaylistSongs";
-import Loader from "@/components/Loader";
-import { Suspense } from "react";
 import PageContent from "./PageContent";
 
 export async function generateMetadata({
@@ -8,10 +6,7 @@ export async function generateMetadata({
 }: {
   params: { userId: string; playlistId: string };
 }) {
-  const { data, errMessage, playlist } = await getPlaylistSongs(
-    params.playlistId,
-    params.userId
-  );
+  const { playlist } = await getPlaylistSongs(params.playlistId, params.userId);
 
   return {
     title: playlist
@@ -23,13 +18,12 @@ export async function generateMetadata({
   };
 }
 
-async function GetPlaylistSongs({
-  userId,
-  playlistId,
+const UsersPlaylistPage = async ({
+  params,
 }: {
-  userId: string;
-  playlistId: string;
-}) {
+  params: { userId: string; playlistId: string };
+}) => {
+  const { userId, playlistId } = params;
   const { data, errMessage, playlist } = await getPlaylistSongs(
     playlistId,
     userId
@@ -37,28 +31,6 @@ async function GetPlaylistSongs({
 
   return (
     <PageContent songs={data} errMessage={errMessage} playlist={playlist} />
-  );
-}
-
-const UsersPlaylistPage = ({
-  params,
-}: {
-  params: { userId: string; playlistId: string };
-}) => {
-  const { userId, playlistId } = params;
-
-  return (
-    <main className="w-full p-6">
-      <Suspense
-        fallback={
-          <div className="w-full flex justify-center items-center">
-            <Loader />
-          </div>
-        }
-      >
-        <GetPlaylistSongs userId={userId} playlistId={playlistId} />
-      </Suspense>
-    </main>
   );
 };
 

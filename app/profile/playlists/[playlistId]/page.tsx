@@ -1,7 +1,5 @@
-import Loader from "@/components/Loader";
-import { Suspense } from "react";
-import PageContent from "./PageContent";
 import { getPlaylistSongs } from "@/actions/getPlaylistSongs";
+import PageContent from "./PageContent";
 
 export async function generateMetadata({
   params,
@@ -11,36 +9,26 @@ export async function generateMetadata({
   const { playlist } = await getPlaylistSongs(params.playlistId);
 
   return {
-    title: `MelodiMix | ${playlist?.name} playlist`,
-    description: `Browse between ${playlist?.name} playlist songs!`,
+    title: `MelodiMix | ${
+      playlist ? `${playlist.name} playlist` : "Playlist not found"
+    }`,
+    description: playlist
+      ? `Browse between ${playlist.name} playlist songs!`
+      : "Couldn't find a playlist with this ID.",
   };
 }
 
-async function GetPlaylistSongs({ playlistId }: { playlistId: string }) {
+const PlaylistPage = async ({ params }: { params: { playlistId: string } }) => {
   const {
     data: songs,
     errMessage,
     playlist,
-  } = await getPlaylistSongs(playlistId);
+  } = await getPlaylistSongs(params.playlistId);
 
   return (
     <div className="px-4">
       <PageContent songs={songs} errMessage={errMessage} playlist={playlist} />
     </div>
-  );
-}
-
-const PlaylistPage = ({ params }: { params: { playlistId: string } }) => {
-  return (
-    <Suspense
-      fallback={
-        <div className="w-full flex justify-center items-center">
-          <Loader />
-        </div>
-      }
-    >
-      <GetPlaylistSongs playlistId={params.playlistId} />
-    </Suspense>
   );
 };
 

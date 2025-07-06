@@ -21,7 +21,7 @@ const SongCard = ({
   <div className="flex items-center text-left gap-x-3 bg-neutral-900/50 hover:bg-neutral-900/20 w-full py-2 px-4 rounded-md">
     <div className="flex flex-col gap-y-1 overflow-hidden w-full">
       <p className="text-white text-lg whitespace-nowrap select-none truncate">
-        {data.title}
+        {data.title} - {data.artist}
       </p>
 
       <p className="text-neutral-400 text-sm truncate">{data.author}</p>
@@ -128,7 +128,7 @@ const PlaylistModal = () => {
           checked={isPublic}
           onChange={(e) => setIsPublic(e.target.checked)}
           aria-label="Make playlist public"
-          className="appearance-none size-5 border border-emerald-600 rounded-md checked:bg-emerald-500 checked:border-emerald-500 bg-neutral-700 transition-all cursor-pointer"
+          className="appearance-none size-5 border-2 border-emerald-600 rounded-full checked:bg-emerald-500 checked:border-emerald-500 bg-neutral-700 transition-all cursor-pointer"
         />
       </div>
 

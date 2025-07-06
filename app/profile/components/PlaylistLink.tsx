@@ -15,7 +15,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
 
 type Props = { href: string; name: string; id: string } & Partial<
-  Omit<Playlist, "id" | "name">
+  Pick<Playlist, "song_ids" | "user_id" | "is_public">
 >;
 
 const PlaylistLink = ({ href, name, id, ...props }: Props) => {
@@ -49,8 +49,9 @@ const PlaylistLink = ({ href, name, id, ...props }: Props) => {
           <UpdateButton
             name={name}
             id={id}
-            user_id={props.user_id}
-            song_ids={props.song_ids}
+            user_id={props.user_id!}
+            song_ids={props.song_ids!}
+            is_public={props.is_public!}
           />
 
           <DeleteButton playlistId={id} />
@@ -60,30 +61,13 @@ const PlaylistLink = ({ href, name, id, ...props }: Props) => {
   );
 };
 
-const UpdateButton = ({
-  name,
-  id,
-  user_id,
-  song_ids,
-}: {
-  name: string;
-  id: string;
-  user_id?: string;
-  song_ids?: string[];
-}) => {
+const UpdateButton = (props: Required<Omit<Props, "href">>) => {
   const openModal = usePlaylistModal((state) => state.onOpen);
 
   return (
     <DropdownMenu.Item
       className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity"
-      onClick={() => {
-        openModal({
-          id,
-          name,
-          user_id: user_id!,
-          song_ids: song_ids!,
-        });
-      }}
+      onClick={() => openModal(props)}
     >
       <VariantButton
         variant="secondary"
@@ -130,7 +114,7 @@ const DeleteButton = ({ playlistId }: { playlistId: string }) => {
         className="w-full py-4 text-sm gap-1"
         tabIndex={-1}
       >
-        Delete playlist{" "}
+        Delete playlist
         {isDeleting ? <Spinner size="small" /> : <FiTrash2 size={16} />}
       </VariantButton>
     </DropdownMenu.Item>

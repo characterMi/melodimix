@@ -4,7 +4,22 @@ import type { Playlist, Song } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { getUserData } from "./getUserData";
 
-const getCurrentUserPlaylistSongs = async (playlistId: string) => {
+type PlaylistSongsResponse = {
+  data: Song[];
+} & (
+  | {
+      playlist: Playlist & { author?: string };
+      errMessage: undefined;
+    }
+  | {
+      playlist: undefined;
+      errMessage: string;
+    }
+);
+
+const getCurrentUserPlaylistSongs = async (
+  playlistId: string
+): Promise<PlaylistSongsResponse> => {
   const { supabase, user } = await getUserData();
 
   if (!user) {
@@ -72,20 +87,7 @@ const getCurrentUserPlaylistSongs = async (playlistId: string) => {
 export const getPlaylistSongs = async (
   playlistId: string,
   userId?: string
-): Promise<
-  {
-    data: Song[];
-  } & (
-    | {
-        playlist: Playlist & { author?: string };
-        errMessage: undefined;
-      }
-    | {
-        playlist: undefined;
-        errMessage: string;
-      }
-  )
-> => {
+): Promise<PlaylistSongsResponse> => {
   if (!userId) {
     return getCurrentUserPlaylistSongs(playlistId);
   }

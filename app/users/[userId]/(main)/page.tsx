@@ -1,7 +1,5 @@
 import { getUserById } from "@/actions/getUserById";
 import { getUserSongs } from "@/actions/getUserSongs";
-import Loader from "@/components/Loader";
-import { Suspense } from "react";
 import PageContent from "./PageContent";
 
 export async function generateMetadata({
@@ -19,26 +17,12 @@ export async function generateMetadata({
   };
 }
 
-async function GetUserSongs({ userId }: { userId: string }) {
+const UsersPage = async ({ params }: { params: { userId: string } }) => {
+  const { userId } = params;
+
   const songs = await getUserSongs({ userId, limit: 20, offset: 0 });
 
   return <PageContent initialSongs={songs} userId={userId} />;
-}
-
-const UsersPage = ({ params }: { params: { userId: string } }) => {
-  return (
-    <section>
-      <Suspense
-        fallback={
-          <div className="w-full flex justify-center items-center">
-            <Loader />
-          </div>
-        }
-      >
-        <GetUserSongs userId={params.userId} />
-      </Suspense>
-    </section>
-  );
 };
 
 export default UsersPage;

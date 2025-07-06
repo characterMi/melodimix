@@ -84,9 +84,7 @@ const PageContent = ({
           <DeleteSongFromPlaylistButton
             songTitle={song.title}
             newData={{
-              id: playlist!.id,
-              user_id: playlist!.user_id,
-              name: playlist!.name,
+              ...playlist!,
               song_ids: songs
                 .filter((currSong) => song.id !== currSong.id)
                 .map((song) => song.id),

@@ -26,7 +26,12 @@ const PageContent = ({
     return (
       <NoSongFallback
         className="-mt-2"
-        fallbackText={errMessage || "No song in this playlist."}
+        fallbackText={
+          errMessage ||
+          (songs.length < playlistSongsCount
+            ? `${playlistSongsCount - songs.length} songs has been deleted!`
+            : "") + "No song in this playlist."
+        }
       />
     );
 

@@ -51,7 +51,7 @@ const UsersPageLayout = async ({
         </div>
       </Header>
 
-      {children}
+      <main className="w-full p-6">{children}</main>
     </section>
   );
 };

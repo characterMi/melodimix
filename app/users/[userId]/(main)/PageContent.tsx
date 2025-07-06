@@ -70,7 +70,7 @@ const PageContent = ({
       style={{ marginBottom: activeId ? "7rem" : "0" }}
       className="flex flex-col gap-y-2 w-full"
     >
-      <div className="flex flex-col gap-y-2 p-2 sm:p-6 w-full">
+      <div className="flex flex-col gap-2 w-full">
         {songs.length === 0 &&
           initialSongs.map((song) => (
             <SongCard key={song.id} onPlay={onPlay} song={song} />

@@ -7,8 +7,8 @@ export const updateUserData = async (formData: FormData) => {
 
   if (!user) return { error: "Unauthenticated User." };
 
-  const name = formData.get("name") as string;
-  const fullName = formData.get("fullname") as string;
+  const name = (formData.get("name") as string | undefined)?.trim();
+  const fullName = (formData.get("fullname") as string | undefined)?.trim();
   const avatar = formData.get("avatar") as File | undefined;
 
   if (typeof name !== "string" || typeof fullName !== "string") {

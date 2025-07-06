@@ -41,8 +41,13 @@ export const updateSong = async (
     return { error: "Missing fields !" };
   }
 
-  if (title.length > 100 || artist.length > 50) {
-    return { error: "Title or Artist is too long!" };
+  if (
+    title.length > 100 ||
+    title.length < 3 ||
+    artist.length > 50 ||
+    artist.length < 3
+  ) {
+    return { error: "Either Title or Artist is too long or too short!" };
   }
 
   const dbUpdatePromise = supabase
@@ -106,12 +111,10 @@ export const updateSong = async (
 
   return {
     updatedSong: {
-      id: songData.id,
+      ...songData,
       title,
       author: user.user_metadata.name ?? "Guest",
       artist,
-      img_path: imageUpdateResult?.data.path ?? songData.img_path,
-      song_path: songUpdateResult?.data.path ?? songData.song_path,
       user_id: user.id,
     },
   };

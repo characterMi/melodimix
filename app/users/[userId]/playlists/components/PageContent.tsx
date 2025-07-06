@@ -17,6 +17,7 @@ const PageContent = ({
   if (playlists.length === 0)
     return (
       <NoPlaylistsFallback
+        className="-mt-2"
         fallbackText={`${author} doesn't have any public playlist`}
         showButton={false}
       />
@@ -28,12 +29,11 @@ const PageContent = ({
       className="flex flex-col gap-y-2 w-full"
     >
       {playlists.map((playlist) => (
-        <div className="flex items-center gap-x-4 w-full" key={playlist.id}>
-          <PlaylistItem
-            playlist={playlist}
-            firstSongId={playlist.song_ids[0]}
-          />
-        </div>
+        <PlaylistItem
+          playlist={playlist}
+          firstSongId={playlist.song_ids[0]}
+          key={playlist.id}
+        />
       ))}
     </div>
   );

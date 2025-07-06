@@ -33,6 +33,8 @@ const PlaylistItem = ({
           .getPublicUrl(data.img_path);
 
         setPlaylistThumbnail(imagePath.data.publicUrl);
+      } else {
+        setPlaylistThumbnail("/images/playlist.png");
       }
 
       hasFetched.current = true;

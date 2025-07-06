@@ -8,7 +8,7 @@ export const getLikedSongsWithoutLimit = async () => {
 
   const { data, error } = await supabase
     .from("liked_songs")
-    .select("*, songs(*), users!public_liked_songs_user_id_fkey(full_name)")
+    .select("*, songs(*), users(full_name)")
     .eq("user_id", user?.id)
     .order("created_at", { ascending: false });
 
@@ -39,7 +39,7 @@ export const getLikedSongs = async (
 
   const { data, error } = await supabase
     .from("liked_songs")
-    .select("*, songs(*), users!public_liked_songs_user_id_fkey(full_name)")
+    .select("*, songs(*), users(full_name)")
     .eq("user_id", user?.id)
     .order("created_at", { ascending: false })
     .range(from, to)

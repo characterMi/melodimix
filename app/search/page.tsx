@@ -19,26 +19,24 @@ async function GetSongs() {
   return <SearchContent songs={songs} />;
 }
 
-const SearchPage = () => {
-  return (
-    <section className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
-      <Header className="from-bg-neutral-900">
-        <div className="mb-2 flex flex-col gap-y-6">
-          <h1 className="text-white font-semibold text-3xl">Search</h1>
+const SearchPage = () => (
+  <section className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
+    <Header className="from-bg-neutral-900">
+      <div className="mb-2 flex flex-col gap-y-6">
+        <h1 className="text-white font-semibold text-3xl">Search</h1>
 
-          <SearchInput />
-        </div>
-      </Header>
+        <SearchInput />
+      </div>
+    </Header>
 
-      <Suspense
-        fallback={
-          <Loader className="flex justify-center md:px-6 md:justify-start" />
-        }
-      >
-        <GetSongs />
-      </Suspense>
-    </section>
-  );
-};
+    <Suspense
+      fallback={
+        <Loader className="flex justify-center md:px-6 md:justify-start" />
+      }
+    >
+      <GetSongs />
+    </Suspense>
+  </section>
+);
 
 export default SearchPage;

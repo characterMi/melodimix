@@ -39,8 +39,13 @@ export const uploadSong = async (
     return { error: "Missing fields !" };
   }
 
-  if (title.length > 100 || artist.length > 50) {
-    return { error: "Title or Artist is too long!" };
+  if (
+    title.length > 100 ||
+    title.length < 3 ||
+    artist.length > 50 ||
+    artist.length < 3
+  ) {
+    return { error: "Either Title or Artist is too long or too short!" };
   }
 
   if (!imageFile.type.startsWith("image/")) {

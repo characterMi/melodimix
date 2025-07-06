@@ -13,7 +13,7 @@ const ScrollableHeader = ({
   children,
 }: {
   playlistsList: ({ href: string; name: string; id: string } & Partial<
-    Omit<Playlist, "id" | "name">
+    Pick<Playlist, "song_ids" | "user_id" | "is_public">
   >)[];
   children: React.ReactNode;
 }) => {
