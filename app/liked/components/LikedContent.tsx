@@ -24,7 +24,7 @@ const SongCard = ({
 }) => (
   <div className="flex items-center gap-x-4 w-full">
     <div className="flex-1 overflow-hidden">
-      <SongItem data={song} onClick={(id) => onPlay(id)} />
+      <SongItem data={song} onClick={(id) => onPlay(id)} showAuthor={false} />
     </div>
 
     <LikeButton song={song} />

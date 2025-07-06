@@ -8,7 +8,7 @@ export const getLikedSongsWithoutLimit = async () => {
 
   const { data, error } = await supabase
     .from("liked_songs")
-    .select("*, songs(*), users(full_name)")
+    .select("*, songs(*)")
     .eq("user_id", user?.id)
     .order("created_at", { ascending: false });
 
@@ -24,7 +24,6 @@ export const getLikedSongsWithoutLimit = async () => {
 
   return data.map((item) => ({
     ...item.songs,
-    author: item.users.full_name ?? "Guest",
   }));
 };
 
@@ -39,7 +38,7 @@ export const getLikedSongs = async (
 
   const { data, error } = await supabase
     .from("liked_songs")
-    .select("*, songs(*), users(full_name)")
+    .select("*, songs(*)")
     .eq("user_id", user?.id)
     .order("created_at", { ascending: false })
     .range(from, to)
@@ -57,6 +56,5 @@ export const getLikedSongs = async (
 
   return data.map((item) => ({
     ...item.songs,
-    author: item.users.full_name ?? "Guest",
   }));
 };
