@@ -48,13 +48,15 @@ const SongCard = ({ data, onClick }: Props) => {
           width={130}
           height={130}
           className="w-full"
+          loading="eager"
+          fetchPriority="high"
         />
       </div>
 
       <div className="flex flex-col items-start w-full py-4 gap-y-1">
-        <h1 className="font-semibold truncate w-full">
+        <p className="font-semibold truncate w-full">
           {data.title} - {data.artist ?? "Unknown artist"}
-        </h1>
+        </p>
 
         <div className="text-neutral-400 text-sm pt-1 w-full truncate flex items-center gap-1">
           By <Author name={data.author} userId={data.user_id} shouldHighlight />
