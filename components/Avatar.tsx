@@ -50,7 +50,7 @@ export const Avatar = ({
                 ? "Your current profile picture"
                 : "an image picked by you"
             }
-            className="rounded-full object-cover"
+            className="rounded-full size-44 object-cover"
           />
         ) : (
           <FaUser
