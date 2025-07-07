@@ -14,7 +14,7 @@ import {
 import type { Song } from "@/types";
 import { useEffect, useMemo } from "react";
 
-const LIMIT = 10;
+const LIMIT = 20;
 
 const SongCard = ({
   song,

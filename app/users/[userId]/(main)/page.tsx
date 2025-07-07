@@ -24,7 +24,7 @@ const UsersPage = async ({ params }: { params: { userId: string } }) => {
   let songs: Song[];
 
   try {
-    songs = await getUserSongs({ userId, limit: 10, offset: 0 });
+    songs = await getUserSongs({ userId, limit: 20, offset: 0 });
   } catch {
     songs = [];
   }
