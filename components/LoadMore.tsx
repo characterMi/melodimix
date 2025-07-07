@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface Props {
-  numOfSongs: number;
+  initialStatus: "loadmore" | "ended";
   currentPage: number;
   setSongs: (songs: Song[], page: number) => void;
   getSongsPromise: (limit: number, offset: number) => Promise<Song[]>;
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const LoadMore = ({
-  numOfSongs,
+  initialStatus,
   currentPage,
   setSongs,
   getSongsPromise,
@@ -26,7 +26,7 @@ const LoadMore = ({
   const [ref, isInView] = useInView<HTMLDivElement>();
   const [status, setStatus] = useState<
     "loadmore" | "error" | "retrying" | "ended"
-  >(numOfSongs === limit ? "loadmore" : "ended");
+  >(initialStatus);
 
   useEffect(() => {
     if (!isInView || status !== "loadmore") return;

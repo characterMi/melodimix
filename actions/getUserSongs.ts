@@ -62,7 +62,7 @@ export const getUserSongs = async (params: Params): Promise<Song[]> => {
   if (error) {
     console.error(error);
 
-    return [];
+    throw error;
   }
 
   if (!data) {

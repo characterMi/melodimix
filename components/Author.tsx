@@ -12,19 +12,22 @@ interface Props {
 const Author = ({ name, userId, shouldHighlight }: Props) => (
   <Link
     href={`/users/${userId}`}
-    aria-label={"Go to " + name + " profile"}
     onClick={(e) => e.stopPropagation()}
     className={twMerge(
-      "inline-flex items-center justify-center gap-[2px] hover:opacity-75 focus-visible:opacity-75 outline-none transition",
+      "inline-flex items-center gap-[2px] hover:opacity-75 focus-visible:opacity-75 outline-none transition truncate",
       shouldHighlight && "font-bold gradient-text"
     )}
   >
-    {name}
+    <span className="truncate">{name}</span>
 
     {shouldHighlight ? (
-      <FaArrowUp size={12} className="rotate-45 text-emerald-600" aria-hidden />
+      <FaArrowUp
+        className="rotate-45 text-emerald-600 min-w-3 min-h-3"
+        size={12}
+        aria-hidden
+      />
     ) : (
-      <MdArrowOutward size={14} aria-hidden />
+      <MdArrowOutward size={14} aria-hidden className="min-w-3 min-h-3" />
     )}
   </Link>
 );

@@ -1,5 +1,6 @@
 import { getUserById } from "@/actions/getUserById";
 import { getUserSongs } from "@/actions/getUserSongs";
+import type { Song } from "@/types";
 import PageContent from "./PageContent";
 
 export async function generateMetadata({
@@ -20,7 +21,13 @@ export async function generateMetadata({
 const UsersPage = async ({ params }: { params: { userId: string } }) => {
   const { userId } = params;
 
-  const songs = await getUserSongs({ userId, limit: 20, offset: 0 });
+  let songs: Song[];
+
+  try {
+    songs = await getUserSongs({ userId, limit: 10, offset: 0 });
+  } catch {
+    songs = [];
+  }
 
   return <PageContent initialSongs={songs} userId={userId} />;
 };

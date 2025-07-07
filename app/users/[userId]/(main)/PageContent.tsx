@@ -14,7 +14,7 @@ import {
 import type { Song } from "@/types";
 import { useEffect, useMemo } from "react";
 
-const LIMIT = 20;
+const LIMIT = 10;
 
 const SongCard = ({
   song,
@@ -40,23 +40,25 @@ const PageContent = ({
   userId: string;
 }) => {
   const addAll = useUsersPageData((state) => state.addAll);
-  const { page, songs } = useCurrentUserPageData(userId);
+  const pageData = useCurrentUserPageData(userId);
 
-  const onPlay = useOnPlay(songs);
+  const onPlay = useOnPlay(pageData?.songs ?? []);
   const activeId = usePlayerStore((state) => state.activeId);
 
   const songsToRender = useMemo(() => {
-    return songs.map((song) => (
+    return pageData?.songs.map((song) => (
       <SongCard key={song.id} onPlay={onPlay} song={song} />
     ));
-  }, [songs]);
+  }, [pageData?.songs]);
 
   useEffect(() => {
-    if (initialSongs.length > 0 && songs.length === 0) {
+    if (initialSongs.length > 0 && (pageData?.songs.length ?? 0) === 0) {
       addAll(
         userId,
         initialSongs,
-        initialSongs.length === LIMIT ? page + 1 : page
+        initialSongs.length === LIMIT
+          ? (pageData?.page ?? 0) + 1
+          : pageData?.page ?? 0
       );
     }
   }, []);
@@ -76,7 +78,7 @@ const PageContent = ({
       className="flex flex-col gap-y-2 w-full"
     >
       <div className="flex flex-col gap-2 w-full">
-        {songs.length === 0 &&
+        {(pageData?.songs.length ?? 0) === 0 &&
           initialSongs.map((song) => (
             <SongCard key={song.id} onPlay={onPlay} song={song} />
           ))}
@@ -85,8 +87,16 @@ const PageContent = ({
       </div>
 
       <LoadMore
-        numOfSongs={initialSongs.length}
-        currentPage={page}
+        initialStatus={
+          pageData?.songs.length
+            ? pageData.songs.length % LIMIT
+              ? "ended"
+              : "loadmore"
+            : initialSongs.length === LIMIT
+            ? "loadmore"
+            : "ended"
+        }
+        currentPage={pageData?.page ?? 0}
         setSongs={(songs, page) => addAll(userId, songs, page)}
         getSongsPromise={(limit, offset) =>
           getUserSongs({ limit, offset, userId })

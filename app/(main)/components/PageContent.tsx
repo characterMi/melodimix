@@ -1,13 +1,13 @@
 "use client";
 
-import { getSongs } from "@/utils/getSongs";
 import LoadMore from "@/components/LoadMore";
 import NoSongFallback from "@/components/NoSongFallback";
 import SongCard from "@/components/SongCard";
 import { useOnPlay } from "@/hooks/useOnPlay";
+import { useHomePageData } from "@/store/useHomePageData";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types";
-import { useHomePageData } from "@/store/useHomePageData";
+import { getSongs } from "@/utils/getSongs";
 import { useEffect, useMemo } from "react";
 
 const LIMIT = 20;
@@ -48,7 +48,15 @@ const PageContent = ({ initialSongs }: { initialSongs: Song[] }) => {
       </section>
 
       <LoadMore
-        numOfSongs={initialSongs.length}
+        initialStatus={
+          songs.length
+            ? songs.length % LIMIT
+              ? "ended"
+              : "loadmore"
+            : initialSongs.length === LIMIT
+            ? "loadmore"
+            : "ended"
+        }
         currentPage={page}
         setSongs={addAll}
         getSongsPromise={getSongs}

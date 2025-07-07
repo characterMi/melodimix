@@ -81,29 +81,8 @@ self.addEventListener("fetch", (event) => {
   const eventUrl = new URL(event.request.url);
 
   if (eventUrl.hostname === SUPABASE_HOSTNAME) {
-    if (eventUrl.pathname.startsWith("/rest/v1/songs")) {
-      // Song by id...
-      if (eventUrl.searchParams.has("id")) {
-        event.respondWith(cacheOnly(event.request, "songs-data"));
-        return;
-      }
-
-      event.respondWith(networkFirst(event.request, "songs-data"));
-      return;
-    }
-
-    if (eventUrl.pathname.startsWith("/rest/v1/liked_songs")) {
-      event.respondWith(networkFirst(event.request, "songs-data"));
-      return;
-    }
-
     if (eventUrl.pathname.startsWith("/storage/v1/object/public/songs")) {
       event.respondWith(cacheOnly(event.request, "songs"));
-      return;
-    }
-
-    if (eventUrl.pathname.startsWith("/rest/v1/playlists")) {
-      event.respondWith(networkFirst(event.request, "songs-data"));
       return;
     }
 
@@ -112,6 +91,9 @@ self.addEventListener("fetch", (event) => {
       event.respondWith(fetchReq(event.request));
       return;
     }
+
+    event.respondWith(networkFirst(event.request, "songs-data"));
+    return;
   }
 
   // Next.js related things (React server components and client-side navigation)...
