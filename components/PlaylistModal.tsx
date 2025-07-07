@@ -108,9 +108,9 @@ const PlaylistModal = () => {
       handleChange={(open) => !open && onPlaylistModalClose()}
     >
       <Input
-        name="name"
         value={name}
         onChange={(e) => setName(e.target.value)}
+        disabled={isSubmitting}
         placeholder="Playlist name"
         maxLength={100}
         required
@@ -123,10 +123,10 @@ const PlaylistModal = () => {
         </h3>
 
         <input
-          name="isPublic"
           type="checkbox"
           checked={isPublic}
           onChange={(e) => setIsPublic(e.target.checked)}
+          disabled={isSubmitting}
           aria-label="Make playlist public"
           className="appearance-none size-5 border-2 border-emerald-600 rounded-full checked:bg-emerald-500 checked:border-emerald-500 bg-neutral-700 transition-all cursor-pointer"
         />
