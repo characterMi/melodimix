@@ -1,19 +1,24 @@
 import type { Song } from "@/types";
 import { create } from "zustand";
 
+type PageData = { page: number; songs: Song[] };
+type UserId = string;
+
 type Store = {
-  pageData: { page: number; songs: Song[] };
-  addAll: (songs: Song[], page: number) => void;
+  pagesData: Record<UserId, PageData>;
+  addAll: (userId: UserId, userSongs: Song[], page: number) => void;
 };
 
 export const useUsersPageData = create<Store>((set) => ({
-  pageData: { page: 0, songs: [] },
-  addAll(songs, page) {
-    set(({ pageData }) => ({
-      pageData: {
-        page,
-        songs: [...pageData.songs, ...songs],
+  pagesData: {} as Record<UserId, PageData>,
+  addAll: (userId, userSongs, page) =>
+    set(({ pagesData }) => ({
+      pagesData: {
+        ...pagesData,
+        [userId]: { songs: [...pagesData[userId].songs, ...userSongs], page },
       },
-    }));
-  },
+    })),
 }));
+
+export const useCurrentUserPageData = (userId: UserId) =>
+  useUsersPageData((state) => state.pagesData[userId]);

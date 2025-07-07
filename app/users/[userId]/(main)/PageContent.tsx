@@ -7,7 +7,10 @@ import NoSongFallback from "@/components/NoSongFallback";
 import SongItem from "@/components/SongItem";
 import { useOnPlay } from "@/hooks/useOnPlay";
 import { usePlayerStore } from "@/store/usePlayerStore";
-import { useUsersPageData } from "@/store/useUsersPageData";
+import {
+  useCurrentUserPageData,
+  useUsersPageData,
+} from "@/store/useUsersPageData";
 import type { Song } from "@/types";
 import { useEffect, useMemo } from "react";
 
@@ -36,10 +39,8 @@ const PageContent = ({
   initialSongs: Song[];
   userId: string;
 }) => {
-  const {
-    pageData: { songs, page },
-    addAll,
-  } = useUsersPageData();
+  const addAll = useUsersPageData((state) => state.addAll);
+  const { page, songs } = useCurrentUserPageData(userId);
 
   const onPlay = useOnPlay(songs);
   const activeId = usePlayerStore((state) => state.activeId);
@@ -52,7 +53,11 @@ const PageContent = ({
 
   useEffect(() => {
     if (initialSongs.length > 0 && songs.length === 0) {
-      addAll(initialSongs, initialSongs.length === LIMIT ? page + 1 : page);
+      addAll(
+        userId,
+        initialSongs,
+        initialSongs.length === LIMIT ? page + 1 : page
+      );
     }
   }, []);
 
@@ -82,7 +87,7 @@ const PageContent = ({
       <LoadMore
         numOfSongs={initialSongs.length}
         currentPage={page}
-        setSongs={addAll}
+        setSongs={(songs, page) => addAll(userId, songs, page)}
         getSongsPromise={(limit, offset) =>
           getUserSongs({ limit, offset, userId })
         }
