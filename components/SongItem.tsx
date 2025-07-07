@@ -35,7 +35,7 @@ const SongItem = ({ data, onClick, player, showAuthor = true }: Props) => {
         />
       </div>
 
-      <div className="flex flex-col gap-y-1 overflow-hidden w-full">
+      <div className="flex flex-col gap-1 overflow-hidden w-full">
         <div
           className={twMerge(
             "flex items-center shrink-0 text-lg scroll-animation__container",

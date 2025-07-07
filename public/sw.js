@@ -81,6 +81,15 @@ self.addEventListener("fetch", (event) => {
   const eventUrl = new URL(event.request.url);
 
   if (eventUrl.hostname === SUPABASE_HOSTNAME) {
+    // Song by id...
+    if (
+      eventUrl.pathname.startsWith("/rest/v1/songs") &&
+      eventUrl.searchParams.has("id")
+    ) {
+      event.respondWith(staleWhileRevalidate(event.request, "songs-data"));
+      return;
+    }
+
     if (eventUrl.pathname.startsWith("/storage/v1/object/public/songs")) {
       event.respondWith(cacheOnly(event.request, "songs"));
       return;
@@ -156,13 +165,13 @@ async function cacheOnly(req, cacheName) {
 async function staleWhileRevalidate(req, cacheName) {
   const cache = await caches.open(cacheName);
   const cachedResponse = await cache.match(req);
-  const fetchRes = await fetchReq(req, cache);
+  const fetchRes = fetchReq(req, cache, /* returnFallback */ true);
 
   if (cachedResponse) {
     return cachedResponse.clone();
   }
 
-  return fetchRes || responseFallback();
+  return fetchRes;
 }
 
 async function networkFirst(req, cacheName, isRequestingHTML = false) {
@@ -178,13 +187,14 @@ async function networkFirst(req, cacheName, isRequestingHTML = false) {
   return isRequestingHTML ? offlineHTMLFallback() : responseFallback();
 }
 
-async function fetchReq(req, cache = null) {
+async function fetchReq(req, cache = null, returnFallback = false) {
   return fetch(req, { cache: "no-cache" })
     .then(async (networkRes) => {
       if (cache && networkRes.ok) await cache.put(req, networkRes.clone());
       return networkRes;
     })
     .catch(() => {
+      if (returnFallback) return responseFallback();
       return null;
     });
 }
