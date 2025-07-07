@@ -26,7 +26,6 @@ const UsersPageLayout = async ({
               height={200}
               className="object-cover size-32 lg:size-44"
               loading="eager"
-              priority
             />
           </div>
 

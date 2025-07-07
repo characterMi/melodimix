@@ -9,9 +9,7 @@ export async function generateMetadata({
   const { playlist } = await getPlaylistSongs(params.playlistId);
 
   return {
-    title: `MelodiMix | ${
-      playlist ? `${playlist.name} playlist` : "Playlist not found"
-    }`,
+    title: `${playlist ? `${playlist.name} playlist` : "Playlist not found"}`,
     description: playlist
       ? `Browse between ${playlist.name} playlist songs!`
       : "Couldn't find a playlist with this ID.",

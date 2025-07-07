@@ -2,7 +2,7 @@ import { getLikedSongsWithoutLimit } from "@/actions/getLikedSongs";
 import PageContent from "./PageContent";
 
 export const metadata = {
-  title: "MelodiMix | Liked Songs",
+  title: "Liked Songs",
   description: "Browse between Your liked Songs!",
 };
 

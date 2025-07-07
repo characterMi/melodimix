@@ -1,6 +1,11 @@
 import { getUserSongs } from "@/actions/getUserSongs";
 import PageContent from "./PageContent";
 
+export const metadata = {
+  title: "Profile",
+  description: "Browse between Your Playlists!",
+};
+
 const ProfilePage = async () => {
   const userSongs = await getUserSongs(null);
 

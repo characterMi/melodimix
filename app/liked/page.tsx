@@ -38,7 +38,6 @@ const LikedSongsPage = () => {
               className="object-cover size-32 lg:size-44"
               placeholder="blur"
               loading="eager"
-              priority
             />
           </div>
 

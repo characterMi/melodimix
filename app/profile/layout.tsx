@@ -7,11 +7,6 @@ import Image from "next/image";
 import React, { Suspense } from "react";
 import PlaylistContainer from "./components/PlaylistContainer";
 
-export const metadata = {
-  title: "Profile",
-  description: "Browse between Your Playlists!",
-};
-
 async function GetPlaylists({ children }: { children: React.ReactNode }) {
   const playlists = (await getUserPlaylists()) as Playlist[];
 
@@ -44,7 +39,6 @@ const ProfileLayout = ({ children }: { children: React.ReactNode }) => (
             className="object-cover size-32 lg:size-44"
             placeholder="blur"
             loading="eager"
-            priority
           />
         </div>
 
