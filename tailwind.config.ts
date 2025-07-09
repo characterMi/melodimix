@@ -17,10 +17,15 @@ const config: Config = {
           "0%": { opacity: "1" },
           "100%": { opacity: "0" },
         },
+        grow: {
+          "0%": { transform: "scale(1, 1)" },
+          "50%": { transform: "scale(1, 0.4)" },
+        },
       },
       animation: {
         skeleton: "skeleton 8s linear infinite",
         spinner: "spinner 1s linear infinite",
+        grow: "grow 1.5s linear infinite",
       },
     },
   },

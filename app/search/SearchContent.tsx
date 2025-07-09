@@ -34,7 +34,11 @@ const SearchContent = ({ songs }: { songs: Song[] }) => {
       {filteredSongs.map((song) => (
         <div key={song.id} className="flex items-center gap-x-4 w-full">
           <div className="flex-1 overflow-hidden">
-            <SongItem onClick={(id) => onPlay(id)} data={song} />
+            <SongItem
+              onClick={(id) => onPlay(id)}
+              data={song}
+              shouldRunAnimationIfCurrentlyPlaying={false}
+            />
           </div>
 
           <LikeButton song={song} />

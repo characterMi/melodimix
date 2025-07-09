@@ -12,16 +12,25 @@ import { useLoadImage } from "./useLoadImage";
 
 export function usePlayer(song: Song, songUrl: string) {
   const songImageUrl = useLoadImage(song);
-  const { ids, playerType, setId, setPlayerType, setVolume, volume, activeId } =
-    usePlayerStore((state) => ({
-      ids: state.ids,
-      playerType: state.playerType,
-      setId: state.setId,
-      setPlayerType: state.setPlayerType,
-      setVolume: state.setVolume,
-      volume: state.volume,
-      activeId: state.activeId,
-    }));
+  const {
+    ids,
+    playerType,
+    setId,
+    setPlayerType,
+    setVolume,
+    volume,
+    activeId,
+    setCurrentlyPlayingSongId,
+  } = usePlayerStore((state) => ({
+    ids: state.ids,
+    playerType: state.playerType,
+    setId: state.setId,
+    setPlayerType: state.setPlayerType,
+    setVolume: state.setVolume,
+    volume: state.volume,
+    activeId: state.activeId,
+    setCurrentlyPlayingSongId: state.setCurrentlyPlayingSongId,
+  }));
 
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [isMusicLoading, setIsMusicLoading] = useState(true);
@@ -109,6 +118,7 @@ export function usePlayer(song: Song, songUrl: string) {
     if (!sound) return;
 
     sound.play();
+    setCurrentlyPlayingSongId(song.id);
 
     if (navigator.mediaSession) {
       navigator.mediaSession.metadata = new MediaMetadata({

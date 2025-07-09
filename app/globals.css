@@ -33,9 +33,9 @@ body {
 }
 
 .gradient-text {
-  background: #059669;
-  background: -webkit-linear-gradient(to left, #059669, #34d399);
-  background: linear-gradient(to left, #059669, #34d399);
+  background: #10b981;
+  background: -webkit-linear-gradient(to left, #10b981, #34d399);
+  background: linear-gradient(to left, #10b981, #34d399);
   -webkit-background-clip: text;
   -moz-background-clip: text;
   background-clip: text;

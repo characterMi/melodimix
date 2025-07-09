@@ -1,17 +1,76 @@
 import { useLoadImage } from "@/hooks/useLoadImage";
+import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types";
 import { twMerge } from "tailwind-merge";
 import Author from "./Author";
 import SongCover from "./SongCover";
 
-interface Props {
-  data: Song;
-  onClick?: (id: string) => void;
-  player?: true;
-  showAuthor?: boolean;
+interface SongTitleProps {
+  id: string;
+  title: string;
+  isPlayer?: boolean;
+  shouldRunAnimationIfCurrentlyPlaying?: boolean;
 }
 
-const SongItem = ({ data, onClick, player, showAuthor = true }: Props) => {
+const SongTitle = ({
+  id,
+  title,
+  isPlayer,
+  shouldRunAnimationIfCurrentlyPlaying,
+}: SongTitleProps) => {
+  const currentlyPlayingSongId = usePlayerStore(
+    (state) => state.currentlyPlayingSongId
+  );
+
+  return (
+    <>
+      {shouldRunAnimationIfCurrentlyPlaying &&
+        currentlyPlayingSongId === id && (
+          <div aria-hidden className="flex gap-[2px] mr-1">
+            <span
+              className="w-1.5 h-4 bg-green-500 rounded-sm animate-grow origin-bottom"
+              style={{ animationDelay: "300ms" }}
+            />
+            <span
+              className="w-1.5 h-4 bg-green-500 rounded-sm animate-grow origin-bottom"
+              style={{ animationDelay: "600ms" }}
+            />
+            <span
+              className="w-1.5 h-4 bg-green-500 rounded-sm animate-grow origin-bottom"
+              style={{ animationDelay: "0ms" }}
+            />
+          </div>
+        )}
+
+      <p
+        className={twMerge(
+          "text-white whitespace-nowrap select-none",
+          isPlayer ? "scroll-animation w-full child_1" : "truncate",
+          shouldRunAnimationIfCurrentlyPlaying &&
+            currentlyPlayingSongId === id &&
+            "text-green-500"
+        )}
+        dangerouslySetInnerHTML={{ __html: title }}
+      />
+    </>
+  );
+};
+
+interface SongItemProps {
+  data: Song;
+  onClick?: (id: string) => void;
+  isPlayer?: boolean;
+  showAuthor?: boolean;
+  shouldRunAnimationIfCurrentlyPlaying?: boolean;
+}
+
+const SongItem = ({
+  data,
+  onClick,
+  isPlayer = false,
+  showAuthor = true,
+  shouldRunAnimationIfCurrentlyPlaying = true,
+}: SongItemProps) => {
   const imageUrl = useLoadImage(data);
 
   const handleClick = () => {
@@ -39,22 +98,23 @@ const SongItem = ({ data, onClick, player, showAuthor = true }: Props) => {
         <div
           className={twMerge(
             "flex items-center shrink-0 text-lg scroll-animation__container",
-            player && "w-[200%]"
+            isPlayer && "w-[200%]"
           )}
         >
-          <p
-            className={twMerge(
-              "text-white whitespace-nowrap select-none",
-              player ? "scroll-animation w-full child_1" : "truncate"
-            )}
-          >
-            {showAuthor
-              ? `${data.title} - ${data.artist ?? "Unknown artist"}`
-              : data.title}
-            &nbsp;
-          </p>
+          <SongTitle
+            id={data.id}
+            title={
+              (showAuthor
+                ? `${data.title} - ${data.artist ?? "Unknown artist"}`
+                : data.title) + "&nbsp;"
+            }
+            isPlayer={isPlayer}
+            shouldRunAnimationIfCurrentlyPlaying={
+              shouldRunAnimationIfCurrentlyPlaying
+            }
+          />
 
-          {player && (
+          {isPlayer && (
             <p
               className="text-white whitespace-nowrap select-none w-full scroll-animation child_2"
               aria-hidden

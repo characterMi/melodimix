@@ -22,7 +22,12 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 h-full relative">
         <div className="flex w-full justify-start relative">
           <div className="flex items-center gap-x-4 w-full">
-            <SongItem player data={song} showAuthor={false} />
+            <SongItem
+              isPlayer
+              data={song}
+              showAuthor={false}
+              shouldRunAnimationIfCurrentlyPlaying={false}
+            />
             <div className="flex items-center gap-x-2 w-max bg-black h-full absolute top-0 right-0 pl-1 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:z-[1]">
               <LikeButton song={song} />
 
