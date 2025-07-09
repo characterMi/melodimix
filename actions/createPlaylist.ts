@@ -37,6 +37,26 @@ export const createPlaylist = async ({
     };
   }
 
+  const { data: songs, error: songsError } = await supabase
+    .from("songs")
+    .select("id");
+
+  if (songsError) {
+    return {
+      error: true,
+      message: "Something went wrong!",
+      playlistId: null,
+    };
+  }
+
+  if (songIds.length > songs.length) {
+    return {
+      error: true,
+      message: "Too many songs in this playlist, we don't have this much song.",
+      playlistId: null,
+    };
+  }
+
   const { error, data } = await supabase
     .from("playlists")
     .insert({
