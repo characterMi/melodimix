@@ -14,17 +14,18 @@ const MainTemplate = ({ children }: { children: React.ReactNode }) => {
       window.navigator.standalone === true;
 
     if (isStandAlone) {
-      setInterval(() => {
-        const viewportMetatag = document.querySelector<HTMLMetaElement>(
+      interval.current = setInterval(() => {
+        const viewportMeta = document.querySelector<HTMLMetaElement>(
           'meta[name="viewport"]'
         );
 
-        const metaContent = viewportMetatag?.content ?? "";
-
-        viewportMetatag?.setAttribute(
-          "content",
-          metaContent.replace("user-scalable=yes", "user-scalable=no")
-        );
+        if (viewportMeta) {
+           viewportMeta.setAttribute(
+             "content",
+             viewportMeta.content.replace("user-scalable=yes", "user-scalable=no")
+           );
+           clearInterval(interval.current);
+        }
       }, 10);
     }
 
