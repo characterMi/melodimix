@@ -20,12 +20,17 @@ export const useLikedPageData = create<Store>((set) => ({
     }));
   },
   addOne(song) {
-    set(({ pageData }) => ({
-      pageData: {
-        page: pageData.page,
-        songs: [song, ...pageData.songs],
-      },
-    }));
+    set(({ pageData }) => {
+      const songs =
+        pageData.songs.length > 0 ? [song, ...pageData.songs] : pageData.songs;
+
+      return {
+        pageData: {
+          page: pageData.page,
+          songs,
+        },
+      };
+    });
   },
   removeOne(songId) {
     set(({ pageData }) => ({

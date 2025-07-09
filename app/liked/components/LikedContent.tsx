@@ -51,7 +51,7 @@ export const LikedContent = ({ initialSongs }: { initialSongs: Song[] }) => {
     if (initialSongs.length > 0 && songs.length === 0) {
       addAll(initialSongs, initialSongs.length === LIMIT ? page + 1 : page);
     }
-  }, []);
+  }, [initialSongs]);
 
   if (isUserLoading) {
     return <Loader className="flex justify-center md:px-6 md:justify-start" />;
