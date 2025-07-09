@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useSearchMusic } from "@/store/useSearch";
 import Input from "./Input";
 
-const SearchInput = () => {
+const SearchInput = ({ placeholder }: { placeholder: string }) => {
   const [value, setValue] = useState<string>("");
   const setSearchValue = useSearchMusic((state) => state.setSearchValue);
 
@@ -26,7 +26,7 @@ const SearchInput = () => {
 
   return (
     <Input
-      placeholder="What do you want to listen to ?"
+      placeholder={placeholder}
       value={value}
       onChange={(e) => setValue(e.target.value)}
       role="searchbox"

@@ -137,7 +137,7 @@ const PlaylistModal = () => {
       <div className="mt-6 flex flex-col gap-4">
         <h3 className="text-lg font-semibold">Search, and Add songs</h3>
 
-        <SearchInput />
+        <SearchInput placeholder="What song do you want to add to your playlist ?" />
 
         <SearchResults songIds={songIds} setSongIds={setSongIds} />
       </div>

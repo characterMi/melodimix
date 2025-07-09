@@ -25,7 +25,7 @@ const SearchPage = () => (
       <div className="mb-2 flex flex-col gap-y-6">
         <h1 className="text-white font-semibold text-3xl">Search</h1>
 
-        <SearchInput />
+        <SearchInput placeholder="What do you want to listen to ?" />
       </div>
     </Header>
 
