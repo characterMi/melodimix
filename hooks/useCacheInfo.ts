@@ -6,7 +6,7 @@ export const useCacheInfo = (totalCacheSize: number, cacheData: CacheData) => {
   const cacheNames = Object.keys(cacheData) as CacheKeys[];
   const totalCacheSizeFormatted = formatBytes(totalCacheSize, 0).split(" ");
 
-  const cacheColors: Record<CacheKeys, string> = {
+  const cacheColors = {
     assets: "#34d399",
     songs: "#4216b8",
     "songs-data": "#065f46",
@@ -22,14 +22,14 @@ export const useCacheInfo = (totalCacheSize: number, cacheData: CacheData) => {
   });
 
   function conicGradient() {
-    let gradientString = "from 0deg at 50% 50%, ";
+    const gradientString = "from 0deg at 50% 50%, ";
     let startAngle = 0;
 
     const segments = cacheNames.map((name) => {
       const endAngle = startAngle + cachePercentages[name];
-      const segment = `${cacheColors[name]} ${startAngle.toFixed(
-        1
-      )}% ${endAngle.toFixed(1)}%`;
+      const segment = `${
+        cacheColors[name.startsWith("assets") ? "assets" : name]
+      } ${startAngle.toFixed(1)}% ${endAngle.toFixed(1)}%`;
       startAngle = endAngle;
       return segment;
     });

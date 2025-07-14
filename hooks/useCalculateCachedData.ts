@@ -33,10 +33,10 @@ export const useCalculateCachedData = () => {
     };
   }, []);
 
-  const totalCacheSize =
-    (cacheData.assets ?? 0) +
-    (cacheData.songs ?? 0) +
-    (cacheData["songs-data"] ?? 0);
+  const totalCacheSize = Object.values(cacheData).reduce(
+    (prev, curr) => prev + curr,
+    0
+  );
 
   return {
     cacheData,

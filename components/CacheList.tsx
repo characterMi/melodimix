@@ -33,7 +33,8 @@ const CacheList = ({
       <div className="w-full flex flex-col gap-4 bg-neutral-900/50 p-4 rounded-md">
         {cacheNames.map((item, i) => {
           const isSelected = selectedCaches.includes(item);
-          const color = cacheColors[item];
+          const color =
+            cacheColors[item.startsWith("assets") ? "assets" : item];
 
           return (
             <Fragment key={item}>
@@ -61,7 +62,7 @@ const CacheList = ({
                     />
                   </button>
                   <p className="capitalize font-thin">
-                    {item.replace("-", " ")}
+                    {item.split("~")[0].replace("-", " ")}
                   </p>
                   <span className="text-xs opacity-50">
                     {cachePercentages[item]}%

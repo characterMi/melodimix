@@ -3,8 +3,6 @@ import type { CacheData, CacheKeys } from "@/types";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-const VERSION = "1.7.1";
-
 export const useCacheList = (cacheNames: CacheKeys[], cacheData: CacheData) => {
   const closeModal = useManageCacheModal((state) => state.onClose);
   const [selectedCaches, setSelectedCaches] = useState(cacheNames);
@@ -30,9 +28,7 @@ export const useCacheList = (cacheNames: CacheKeys[], cacheData: CacheData) => {
 
     try {
       await Promise.allSettled(
-        selectedCaches.map((name) =>
-          caches.delete(name === "assets" ? name + VERSION : name)
-        )
+        selectedCaches.map((name) => caches.delete(name))
       );
       toast.success("Cache cleared successfully.");
       closeModal();

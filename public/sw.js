@@ -18,7 +18,7 @@ const assets = [
   "/icons/melodimix-512-maskable.png",
 ];
 
-const assetsCacheName = "assets" + VERSION;
+const assetsCacheName = "assets~" + VERSION;
 const cacheNames = new Set([assetsCacheName, "songs-data", "songs"]);
 
 const SUPABASE_HOSTNAME = "ibmcmrwzbejntporrerq.supabase.co";
