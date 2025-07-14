@@ -10,7 +10,9 @@ export function useSearchSong(songs?: Song[]) {
   const [filteredSongs, setFilteredSongs] = useState(songs ?? []);
 
   useEffect(() => {
-    if (!searchValue?.trim()) {
+    const trimmedSearch = searchValue?.trim();
+
+    if (!trimmedSearch) {
       setFilteredSongs(songs ?? []);
       return;
     }
@@ -20,7 +22,7 @@ export function useSearchSong(songs?: Song[]) {
     (async () => {
       try {
         setIsSearching(true);
-        const data = await searchForSongs(searchValue, controller.signal);
+        const data = await searchForSongs(trimmedSearch, controller.signal);
 
         setFilteredSongs(data);
       } catch (err: any) {
@@ -32,8 +34,8 @@ export function useSearchSong(songs?: Song[]) {
         setFilteredSongs(
           songs.filter(
             (song) =>
-              song.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-              song.artist.toLowerCase().includes(searchValue.toLowerCase())
+              song.title.toLowerCase().includes(trimmedSearch.toLowerCase()) ||
+              song.artist.toLowerCase().includes(trimmedSearch.toLowerCase())
           )
         );
       } finally {

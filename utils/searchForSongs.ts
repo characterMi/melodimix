@@ -2,10 +2,14 @@ import type { Song } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export async function searchForSongs(
-  title: string | undefined,
+  searchValue: string | undefined,
   signal: AbortSignal
 ): Promise<Song[]> {
-  if (typeof title !== "string" || title.length > 50 || !title.trim())
+  if (
+    typeof searchValue !== "string" ||
+    !searchValue ||
+    searchValue.length > 50
+  )
     return [];
 
   const supabase = createClientComponentClient();
@@ -13,7 +17,7 @@ export async function searchForSongs(
   const { data, error } = await supabase
     .from("songs")
     .select("*, users!public_songs_user_id_fkey(full_name)")
-    .or(`title.ilike.%${title}%,artist.ilike.%${title}%`)
+    .or(`title.ilike.%${searchValue}%,artist.ilike.%${searchValue}%`)
     .order("created_at", { ascending: false })
     .limit(10)
     .abortSignal(signal);
