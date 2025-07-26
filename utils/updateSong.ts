@@ -1,8 +1,6 @@
-"use server";
-
 import type { Song } from "@/types";
 import { revalidatePath } from "next/cache";
-import { getUserData } from "./getUserData";
+import { getUserData } from "../actions/getUserData";
 
 export const updateSong = async (
   newData: FormData,

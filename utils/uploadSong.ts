@@ -1,9 +1,7 @@
-"use server";
-
 import { sanitize } from "@/lib/sanitize";
 import type { Song } from "@/types";
 import { revalidatePath } from "next/cache";
-import { getUserData } from "./getUserData";
+import { getUserData } from "../actions/getUserData";
 
 export const uploadSong = async (
   formData: FormData

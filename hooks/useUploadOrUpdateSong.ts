@@ -3,9 +3,9 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import toast from "react-hot-toast";
-import { updateSong } from "../actions/updateSong";
-import { uploadSong } from "../actions/uploadSong";
 import { useUploadModal } from "../store/useUploadModal";
+import { updateSong } from "../utils/updateSong";
+import { uploadSong } from "../utils/uploadSong";
 
 export const useUploadOrUpdateSong = () => {
   const [isUploading, startTransition] = useTransition();
