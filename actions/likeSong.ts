@@ -1,13 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getUserData } from "./getUserData";
+import { getCurrentUser } from "./getCurrentUser";
 
 export const likeSong = async (
   isLiked: boolean,
   songId: string
 ): Promise<{ isLiked: boolean; error?: string; message?: string }> => {
-  const { supabase, user } = await getUserData();
+  const { supabase, user } = await getCurrentUser();
 
   if (!user) {
     return { error: "User not found", isLiked };

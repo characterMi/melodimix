@@ -1,10 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getUserData } from "./getUserData";
+import { getCurrentUser } from "./getCurrentUser";
 
 export const deletePlaylist = async (playlistId: string, isPublic: boolean) => {
-  const { supabase, user } = await getUserData();
+  const { supabase, user } = await getCurrentUser();
 
   if (!user) return false;
 

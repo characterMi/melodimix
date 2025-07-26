@@ -2,14 +2,14 @@
 
 import type { Playlist } from "@/types";
 import { revalidatePath } from "next/cache";
-import { getUserData } from "./getUserData";
+import { getCurrentUser } from "./getCurrentUser";
 
 export const updatePlaylist = async (
   newData: Playlist
 ): Promise<
   { error: true; message: string } | { error: false; message: null }
 > => {
-  const { supabase, user } = await getUserData();
+  const { supabase, user } = await getCurrentUser();
 
   if (!user) {
     return { error: true, message: "Unauthenticated User." };

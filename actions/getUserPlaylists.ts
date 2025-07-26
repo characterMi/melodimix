@@ -2,11 +2,11 @@
 
 import type { Playlist } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { getCurrentUser } from "./getCurrentUser";
 import { getUserById } from "./getUserById";
-import { getUserData } from "./getUserData";
 
 const getCurrentUsersPlaylists = async () => {
-  const { supabase, user } = await getUserData();
+  const { supabase, user } = await getCurrentUser();
 
   if (!user) return [];
 

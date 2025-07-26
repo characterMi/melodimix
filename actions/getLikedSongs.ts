@@ -1,10 +1,10 @@
 "use server";
 
 import type { Song } from "@/types";
-import { getUserData } from "./getUserData";
+import { getCurrentUser } from "./getCurrentUser";
 
 export const getLikedSongsWithoutLimit = async () => {
-  const { user, supabase } = await getUserData();
+  const { user, supabase } = await getCurrentUser();
 
   const { data, error } = await supabase
     .from("liked_songs")
@@ -31,7 +31,7 @@ export const getLikedSongs = async (
   limit: number = 25,
   offset: number = 0
 ): Promise<Song[]> => {
-  const { user, supabase } = await getUserData();
+  const { user, supabase } = await getCurrentUser();
 
   const from = offset * limit;
   const to = from + limit;

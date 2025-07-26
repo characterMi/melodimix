@@ -1,6 +1,6 @@
 import type { Song } from "@/types";
 import { revalidatePath } from "next/cache";
-import { getUserData } from "../actions/getUserData";
+import { getCurrentUser } from "../actions/getCurrentUser";
 
 export const updateSong = async (
   newData: FormData,
@@ -19,7 +19,7 @@ export const updateSong = async (
       error?: undefined;
     }
 > => {
-  const { supabase, user } = await getUserData();
+  const { supabase, user } = await getCurrentUser();
 
   if (!user) {
     return { error: "Unauthenticated User." };

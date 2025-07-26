@@ -1,9 +1,9 @@
 "use server";
 
-import { getUserData } from "./getUserData";
+import { getCurrentUser } from "./getCurrentUser";
 
 export const updateUserData = async (formData: FormData) => {
-  const { supabase, user } = await getUserData();
+  const { supabase, user } = await getCurrentUser();
 
   if (!user) return { error: "Unauthenticated User." };
 

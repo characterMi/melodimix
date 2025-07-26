@@ -2,7 +2,7 @@
 
 import type { Playlist, Song } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { getUserData } from "./getUserData";
+import { getCurrentUser } from "./getCurrentUser";
 
 type PlaylistSongsResponse = {
   data: Song[];
@@ -20,7 +20,7 @@ type PlaylistSongsResponse = {
 const getCurrentUserPlaylistSongs = async (
   playlistId: string
 ): Promise<PlaylistSongsResponse> => {
-  const { supabase, user } = await getUserData();
+  const { supabase, user } = await getCurrentUser();
 
   if (!user) {
     return {
