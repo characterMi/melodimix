@@ -84,6 +84,7 @@ const SongItem = ({
       onClick={handleClick}
       className="flex items-center text-left gap-x-3 cursor-pointer hover:bg-neutral-800/50 focus-visible:bg-neutral-800/50 outline-none w-full p-2 rounded-md"
       aria-label={"Play the " + data.title + " song"}
+      tabIndex={isPlayer ? -1 : 0}
     >
       <div className="relative rounded-md min-w-12 h-12 overflow-hidden bg-neutral-950">
         <SongCover
