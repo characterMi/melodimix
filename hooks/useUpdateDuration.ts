@@ -10,8 +10,8 @@ export type Duration =
 export function useUpdateDuration(song: any, duration: number) {
   const totalDuration = useRef<Duration>("00 : 00");
   const [currentDurationPercentage, setCurrentDurationPercentage] = useState(0);
+  const [showTotalDuration, setShowTotalDuration] = useState(true);
   const intervalRef = useRef<NodeJS.Timeout>();
-  let currentDuration: Duration = "00 : 00";
 
   useEffect(() => {
     const DURATION_IN_SECOND = duration / 1000;
@@ -40,14 +40,13 @@ export function useUpdateDuration(song: any, duration: number) {
     });
   }, [currentDurationPercentage]);
 
-  // We don't want to do this in a useEffect because re-assigning a variable is not going to trigger a re-render plus we don't need another state, we can simply do it in this way.
-
-  currentDuration = formatDuration(song?.seek() || 0);
-
   return {
     totalDuration: totalDuration.current,
     currentDurationPercentage,
     setCurrentDurationPercentage,
-    currentDuration,
+    showTotalDuration,
+    setShowTotalDuration,
+    currentDuration: formatDuration(song?.seek() || 0),
+    remaining: formatDuration(duration / 1000 - (song?.seek() || 0)),
   };
 }

@@ -13,7 +13,10 @@ function Duration({ song, duration }: DurationProps) {
     totalDuration,
     currentDuration,
     currentDurationPercentage,
+    showTotalDuration,
+    setShowTotalDuration,
     setCurrentDurationPercentage,
+    remaining,
   } = useUpdateDuration(song, duration);
 
   return (
@@ -41,9 +44,16 @@ function Duration({ song, duration }: DurationProps) {
         />
       </Slider>
 
-      <p className="relative bg-black px-2 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:pointer-events-none whitespace-nowrap duration-el">
-        {totalDuration}
-      </p>
+      <button
+        onClick={() => setShowTotalDuration(!showTotalDuration)}
+        className="hover:text-neutral-400 focus-visible:text-neutral-400 outline-none transition-colors"
+      >
+        <p className="relative bg-black px-2 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:pointer-events-none whitespace-nowrap duration-el">
+          <span className={twMerge(showTotalDuration && "opacity-0")}>-</span>
+
+          {showTotalDuration ? totalDuration : remaining}
+        </p>
+      </button>
     </div>
   );
 }
