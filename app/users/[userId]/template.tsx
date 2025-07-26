@@ -7,24 +7,26 @@ const MainTemplate = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     clearInterval(interval.current);
-
-    const isStandAlone =
+    const isPWA =
       window.matchMedia("(display-mode: standalone)").matches ||
       // @ts-ignore
       window.navigator.standalone === true;
 
-    if (isStandAlone) {
+    if (isPWA) {
       interval.current = setInterval(() => {
         const viewportMeta = document.querySelector<HTMLMetaElement>(
           'meta[name="viewport"]'
         );
 
         if (viewportMeta) {
-           viewportMeta.setAttribute(
-             "content",
-             viewportMeta.content.replace("user-scalable=yes", "user-scalable=no")
-           );
-           clearInterval(interval.current);
+          viewportMeta.setAttribute(
+            "content",
+            viewportMeta.content.replace(
+              "user-scalable=yes",
+              "user-scalable=no"
+            )
+          );
+          clearInterval(interval.current);
         }
       }, 10);
     }
