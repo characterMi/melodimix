@@ -60,7 +60,7 @@ export const LikedContent = ({ initialSongs }: { initialSongs: Song[] }) => {
   if (!session?.user) {
     return (
       <h2 className="flex flex-col gap-y-2 mx-6 mt-4">
-        Seems like you didn't sign-in 🤔 if that's true, Please first sign-in to
+        Seems like you're not logged in 🤔 if that's true, Please first login to
         Your account.
       </h2>
     );

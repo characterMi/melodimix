@@ -45,7 +45,7 @@ const ScrollableHeader = ({
   if (!session?.user) {
     return (
       <h2 className="m-4">
-        Seems like you didn't sign-in 🤔 if that's true, Please first sign-in to
+        Seems like you're not logged in 🤔 if that's true, Please first login to
         Your account.
       </h2>
     );

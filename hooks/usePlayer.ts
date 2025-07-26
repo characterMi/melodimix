@@ -52,7 +52,6 @@ export function usePlayer(song: Song, songUrl: string) {
       setIsMusicLoading(false);
       toast.error("Couldn't load the music!");
     },
-    loop: playerType === "repeat",
   });
 
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
@@ -82,24 +81,21 @@ export function usePlayer(song: Song, songUrl: string) {
 
     const currentIndex = ids.findIndex((id) => id === activeId);
 
-    let nextSongToPlay = ids[currentIndex];
-
-    if (playerType === "next-song") {
-      nextSongToPlay =
+    if (playerType === "next-song" || playerType === "repeat") {
+      const nextSongToPlay =
         type === "next" ? ids[currentIndex + 1] : ids[currentIndex - 1];
 
       if (!nextSongToPlay) {
-        nextSongToPlay = type === "next" ? ids[0] : ids[ids.length - 1];
+        setId(type === "next" ? ids[0] : ids[ids.length - 1]);
       }
+
+      setId(nextSongToPlay);
+      return;
     }
 
-    if (playerType === "shuffle") {
-      const randomId = generateNextSongIndex(currentIndex);
-
-      nextSongToPlay = ids[randomId];
-    }
-
-    setId(nextSongToPlay);
+    // Shuffle
+    const randomId = generateNextSongIndex(currentIndex);
+    setId(ids[randomId]);
   }
 
   const generateNextSongIndex = (currentIndex: number): number => {
@@ -165,6 +161,20 @@ export function usePlayer(song: Song, songUrl: string) {
       navigator.mediaSession.metadata = null;
     };
   }, [sound]);
+
+  // whenever the playerType changes, we add new properties to the howler instance
+  useEffect(() => {
+    if (!sound) return;
+
+    sound.off("end");
+
+    if (playerType === "repeat") {
+      sound.loop(true);
+    } else {
+      sound.on("end", () => onPlaySong("next"));
+      sound.loop(false);
+    }
+  }, [playerType, sound]);
 
   return {
     state: {

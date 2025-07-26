@@ -27,7 +27,7 @@ const Sidebar: FC<SidebarProps> = ({ children }) => {
             <DownloadApplication />
           </div>
         </Box>
-        <Box>
+        <Box className="h-full">
           <Suspense
             fallback={<Loader className="flex justify-center w-full mt-5" />}
           >
