@@ -3,7 +3,7 @@ import PageContent from "./PageContent";
 
 export const metadata = {
   title: "Profile",
-  description: "Browse between Your Playlists!",
+  description: "Browse between Your Playlists and change your info!",
 };
 
 const ProfilePage = async () => {

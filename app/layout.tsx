@@ -6,8 +6,10 @@ import { ToasterProvider } from "@/providers/ToasterProvider";
 import type { Metadata, Viewport } from "next";
 import { Figtree } from "next/font/google";
 
+import dynamic from "next/dynamic";
 import "./globals.css";
-import Root from "./root";
+
+const Root = dynamic(() => import("./root"), { ssr: false });
 
 const figtree = Figtree({ subsets: ["latin"] });
 
@@ -89,20 +91,21 @@ export default function RootLayout({
 }>) {
   return (
     <SupabaseProvider>
-      <Root>
-        <html lang="en">
-          <head>
-            <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-            <meta name="mobile-web-app-capable" content="yes" />
-          </head>
-          <body className={figtree.className}>
-            <ToasterProvider />
-            <ModalProvider />
+      <html lang="en">
+        <head>
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="mobile-web-app-capable" content="yes" />
+          <meta name="pinterest-rich-pin" content="true" />
+        </head>
+        <body className={figtree.className}>
+          <ToasterProvider />
+          <ModalProvider />
+          <Root>
             <Sidebar>{children}</Sidebar>
-            <Player />
-          </body>
-        </html>
-      </Root>
+          </Root>
+          <Player />
+        </body>
+      </html>
     </SupabaseProvider>
   );
 }
