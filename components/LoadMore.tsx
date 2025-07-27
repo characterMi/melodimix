@@ -63,6 +63,9 @@ const LoadMore = ({
     };
   }, [status]);
 
+  // this means we didn't hit the LIMIT, so we don't have to load any song
+  if (status === "ended" && currentPage === 0) return null;
+
   return (
     <div className="flex justify-center items-center py-8 relative">
       {(status === "loadmore" || status === "retrying") && (
@@ -83,7 +86,7 @@ const LoadMore = ({
 
       {status === "error" && <Text>Can't load more songs</Text>}
 
-      {status === "ended" && currentPage !== 0 && <Text>No more songs</Text>}
+      {status === "ended" && <Text>No more songs</Text>}
     </div>
   );
 };
