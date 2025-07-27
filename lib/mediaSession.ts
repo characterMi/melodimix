@@ -1,0 +1,75 @@
+import { Song } from "@/types";
+
+type Params = {
+  song: Song;
+  songImageUrl: string;
+  callbacks: {
+    onPlay: () => void;
+    onPause: () => void;
+    onStop: () => void;
+    onNexttrack: () => void;
+    onPrevtrack: () => void;
+    onSeekForward: () => void;
+    onSeekBackward: () => void;
+    onSeekTo: (params: MediaSessionActionDetails) => void;
+  };
+  positionState: {
+    duration: number;
+    position: number;
+    playbackRate: number;
+  };
+};
+
+export const initializeMediaSession = ({
+  song,
+  songImageUrl,
+  callbacks: {
+    onPlay,
+    onPause,
+    onStop,
+    onNexttrack,
+    onPrevtrack,
+    onSeekForward,
+    onSeekBackward,
+    onSeekTo,
+  },
+  positionState,
+}: Params) => {
+  if (navigator.mediaSession) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: song.title,
+      artist: song.artist,
+      album: "Unknown",
+      artwork: [
+        {
+          src: songImageUrl,
+          type: "image/*",
+        },
+      ],
+    });
+    navigator.mediaSession.setActionHandler("play", onPlay);
+    navigator.mediaSession.setActionHandler("pause", onPause);
+    navigator.mediaSession.setActionHandler("nexttrack", onNexttrack);
+    navigator.mediaSession.setActionHandler("previoustrack", onPrevtrack);
+    navigator.mediaSession.setActionHandler("seekforward", onSeekForward);
+    navigator.mediaSession.setActionHandler("seekbackward", onSeekBackward);
+    navigator.mediaSession.setActionHandler("seekto", onSeekTo);
+    navigator.mediaSession.setActionHandler("stop", onStop);
+    navigator.mediaSession.setPositionState(positionState);
+    navigator.mediaSession.playbackState = "playing";
+  }
+
+  return () => {
+    navigator.mediaSession.metadata = null;
+    navigator.mediaSession.setActionHandler("play", null);
+    navigator.mediaSession.setActionHandler("pause", null);
+    navigator.mediaSession.setActionHandler("nexttrack", null);
+    navigator.mediaSession.setActionHandler("previoustrack", null);
+    navigator.mediaSession.setActionHandler("seekforward", null);
+    navigator.mediaSession.setActionHandler("seekbackward", null);
+    navigator.mediaSession.setActionHandler("seekto", null);
+    navigator.mediaSession.setActionHandler("stop", null);
+    navigator.mediaSession.setPositionState(undefined);
+    navigator.mediaSession.playbackState = "none";
+  };
+};

@@ -1,3 +1,4 @@
+import { initializeMediaSession } from "@/lib/mediaSession";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import { Song } from "@/types";
 import { useEffect, useState } from "react";
@@ -41,11 +42,13 @@ export function usePlayer(song: Song, songUrl: string) {
     onplay: () => {
       setIsMusicPlaying(true);
       navigator.setAppBadge?.(1);
+      navigator.mediaSession.playbackState = "playing";
     },
     onend: () => onPlaySong("next"),
     onpause: () => {
       setIsMusicPlaying(false);
       navigator.clearAppBadge?.();
+      navigator.mediaSession.playbackState = "paused";
     },
     onload: () => setIsMusicLoading(false),
     onloaderror: () => {
@@ -116,55 +119,45 @@ export function usePlayer(song: Song, songUrl: string) {
     sound.play();
     setCurrentlyPlayingSongId(song.id);
 
-    if (navigator.mediaSession) {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: song.title,
-        artist: song.author,
-        album: "Unknown",
-        artwork: [
-          {
-            src: songImageUrl || "/images/liked.png",
-            type: "image/*",
-          },
-        ],
-      });
-      navigator.mediaSession.setActionHandler("play", () => play());
-      navigator.mediaSession.setActionHandler("pause", () => pause());
-      navigator.mediaSession.setActionHandler("nexttrack", () =>
-        onPlaySong("next")
-      );
-      navigator.mediaSession.setActionHandler("previoustrack", () =>
-        onPlaySong("previous")
-      );
-      navigator.mediaSession.setActionHandler("seekforward", () => {
-        sound.seek(sound.seek() + 10);
-      });
-      navigator.mediaSession.setActionHandler("seekbackward", () => {
-        sound.seek(sound.seek() - 10);
-      });
-      navigator.mediaSession.setActionHandler("seekto", ({ seekTime }) => {
-        sound.seek(seekTime);
-      });
-      navigator.mediaSession.setActionHandler("stop", () => {
-        sound.unload();
-        setId();
-      });
-      navigator.mediaSession.setPositionState({
+    const removeMediaSessionMetadata = initializeMediaSession({
+      song,
+      songImageUrl: songImageUrl || "/images/liked.png",
+      callbacks: {
+        onPlay: () => play(),
+        onPause: () => pause(),
+        onNexttrack: () => onPlaySong("next"),
+        onPrevtrack: () => onPlaySong("previous"),
+        onSeekForward: () => sound.seek(sound.seek() + 10),
+        onSeekBackward: () => sound.seek(sound.seek() - 10),
+        onSeekTo: ({ seekTime }) => sound.seek(seekTime ?? 0),
+        onStop: () => {
+          sound.unload();
+          setId();
+        },
+      },
+      positionState: {
         duration: sound.duration(),
         position: sound.seek(),
         playbackRate: 1.0,
-      });
-    }
+      },
+    });
 
     return () => {
       sound.unload();
-      navigator.mediaSession.metadata = null;
+      removeMediaSessionMetadata();
     };
   }, [sound]);
 
-  // whenever the playerType changes, we add new properties to the howler instance
+  // whenever the playerType changes, we add new properties to the howler instance and media session
   useEffect(() => {
     if (!sound) return;
+
+    navigator.mediaSession.setActionHandler("nexttrack", () =>
+      onPlaySong("next")
+    );
+    navigator.mediaSession.setActionHandler("previoustrack", () =>
+      onPlaySong("previous")
+    );
 
     sound.off("end");
 
