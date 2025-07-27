@@ -76,7 +76,7 @@ export const LikedContent = ({ initialSongs }: { initialSongs: Song[] }) => {
 
   return (
     <div style={{ marginBottom: activeId ? "7rem" : "0" }}>
-      <div className="flex flex-col gap-y-2 p-2 sm:p-6 w-full">
+      <div className="flex flex-col gap-y-2 p-2 sm:p-6 pb-0 w-full">
         {songs.length === 0 &&
           initialSongs.map((song) => (
             <SongCard key={song.id} onPlay={onPlay} song={song} />

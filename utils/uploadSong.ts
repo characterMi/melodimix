@@ -1,7 +1,7 @@
+import { revalidatePath } from "@/actions/revalidatePath";
 import { sanitize } from "@/lib/sanitize";
 import type { Song } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { revalidatePath } from "next/cache";
 
 export const uploadSong = async (
   formData: FormData
