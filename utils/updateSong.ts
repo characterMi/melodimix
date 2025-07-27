@@ -1,6 +1,6 @@
 import type { Song } from "@/types";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { revalidatePath } from "next/cache";
-import { getCurrentUser } from "../actions/getCurrentUser";
 
 export const updateSong = async (
   newData: FormData,
@@ -19,7 +19,10 @@ export const updateSong = async (
       error?: undefined;
     }
 > => {
-  const { supabase, user } = await getCurrentUser();
+  const supabase = createClientComponentClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
     return { error: "Unauthenticated User." };

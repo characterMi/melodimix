@@ -119,7 +119,7 @@ export function usePlayer(song: Song, songUrl: string) {
     sound.play();
     setCurrentlyPlayingSongId(song.id);
 
-    const removeMediaSessionMetadata = initializeMediaSession({
+    const clearMediaSessionMetadata = initializeMediaSession({
       song,
       songImageUrl: songImageUrl || "/images/liked.png",
       callbacks: {
@@ -144,7 +144,7 @@ export function usePlayer(song: Song, songUrl: string) {
 
     return () => {
       sound.unload();
-      removeMediaSessionMetadata();
+      clearMediaSessionMetadata();
     };
   }, [sound]);
 

@@ -1,7 +1,7 @@
 import { sanitize } from "@/lib/sanitize";
 import type { Song } from "@/types";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { revalidatePath } from "next/cache";
-import { getCurrentUser } from "../actions/getCurrentUser";
 
 export const uploadSong = async (
   formData: FormData
@@ -15,7 +15,10 @@ export const uploadSong = async (
       error?: undefined;
     }
 > => {
-  const { supabase, user } = await getCurrentUser();
+  const supabase = createClientComponentClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
     return { error: "Unauthenticated User." };
