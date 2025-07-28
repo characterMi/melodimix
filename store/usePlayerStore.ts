@@ -8,7 +8,7 @@ interface PlayerStore {
   setId: (id?: string) => void;
   setIds: (ids: string[]) => void;
   currentlyPlayingSongId?: string;
-  setCurrentlyPlayingSongId: (id: string) => void;
+  setCurrentlyPlayingSongId: (id?: string) => void;
   playerType: PlayerType;
   setPlayerType: (type: PlayerType) => void;
   volume: number;

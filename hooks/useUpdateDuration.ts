@@ -7,25 +7,23 @@ export type Duration =
   | `${number} : 0${number}`
   | `0${number} : 0${number}`;
 
-export function useUpdateDuration(song: any, duration: number) {
+export function useUpdateDuration(song: any) {
   const totalDuration = useRef<Duration>("00 : 00");
   const [currentDurationPercentage, setCurrentDurationPercentage] = useState(0);
   const [showTotalDuration, setShowTotalDuration] = useState(true);
   const intervalRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    const DURATION_IN_SECOND = duration / 1000;
+    if (!song) return;
 
     clearInterval(intervalRef.current);
 
     intervalRef.current = setInterval(() => {
       // song.seek gives us the current duration (in second)
-      setCurrentDurationPercentage(
-        ((song?.seek() || 0) / DURATION_IN_SECOND) * 100
-      );
+      setCurrentDurationPercentage((song.seek() / song._duration) * 100);
     }, 1000);
 
-    totalDuration.current = formatDuration(DURATION_IN_SECOND);
+    totalDuration.current = formatDuration(song._duration);
 
     return () => {
       clearInterval(intervalRef.current);
@@ -33,9 +31,11 @@ export function useUpdateDuration(song: any, duration: number) {
   }, [song]);
 
   useEffect(() => {
+    if (!song) return;
+
     navigator.mediaSession?.setPositionState({
-      duration: song?.duration() || 0,
-      position: song?.seek() || 0,
+      duration: song._duration,
+      position: song.seek(),
       playbackRate: 1.0,
     });
   }, [currentDurationPercentage]);
@@ -47,6 +47,6 @@ export function useUpdateDuration(song: any, duration: number) {
     showTotalDuration,
     setShowTotalDuration,
     currentDuration: formatDuration(song?.seek() || 0),
-    remaining: formatDuration(duration / 1000 - (song?.seek() || 0)),
+    remaining: formatDuration((song?._duration || 0) - (song?.seek() || 0)),
   };
 }

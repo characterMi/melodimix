@@ -9,29 +9,35 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { IoShareSocial } from "react-icons/io5";
 
-const PageContent = ({
-  songs,
-  errMessage,
-  playlist,
-}: {
+type Props = {
   songs: Song[];
-  errMessage?: string;
-  playlist?: Playlist & { author?: string };
-}) => {
+} & (
+  | {
+      errMessage: string;
+      playlist: undefined;
+    }
+  | {
+      errMessage: undefined;
+      playlist: Playlist & { author?: string };
+    }
+);
+
+const PageContent = ({ songs, errMessage, playlist }: Props) => {
   const onPlay = useOnPlay(songs);
   const activeId = usePlayerStore((state) => state.activeId);
   const playlistSongsCount = playlist?.song_ids.length || 0;
 
-  if (errMessage || songs.length === 0)
+  if (errMessage || songs.length <= 0)
     return (
       <NoSongFallback
         className="-mt-2"
         fallbackText={
           errMessage ||
-          (songs.length < playlistSongsCount
-            ? `${playlistSongsCount - songs.length} songs has been deleted!`
-            : "") + "No song in this playlist."
+          (playlistSongsCount > 0
+            ? `${playlistSongsCount} songs has been deleted!`
+            : "No song in this playlist.")
         }
+        showButton={!!errMessage}
       />
     );
 

@@ -69,13 +69,13 @@ export function usePlayer(song: Song, songUrl: string) {
   function handleChangePlayerType() {
     if (playerType === "next-song") {
       setPlayerType("shuffle");
-      toast.success('Change the type to "Shuffle"');
+      toast.success('"Shuffle"');
     } else if (playerType === "shuffle") {
       setPlayerType("repeat");
-      toast.success('Change the type to "Repeat"');
+      toast.success('"Repeat"');
     } else {
       setPlayerType("next-song");
-      toast.success('Change the type to "Next song"');
+      toast.success('"Next song"');
     }
   }
 
@@ -84,21 +84,22 @@ export function usePlayer(song: Song, songUrl: string) {
 
     const currentIndex = ids.findIndex((id) => id === activeId);
 
-    if (playerType === "next-song" || playerType === "repeat") {
-      const nextSongToPlay =
-        type === "next" ? ids[currentIndex + 1] : ids[currentIndex - 1];
+    if (playerType === "shuffle") {
+      const randomId = generateNextSongIndex(currentIndex);
+      setId(ids[randomId]);
 
-      if (!nextSongToPlay) {
-        setId(type === "next" ? ids[0] : ids[ids.length - 1]);
-      }
-
-      setId(nextSongToPlay);
       return;
     }
 
-    // Shuffle
-    const randomId = generateNextSongIndex(currentIndex);
-    setId(ids[randomId]);
+    // Next song...
+    const nextSongToPlay =
+      type === "next" ? ids[currentIndex + 1] : ids[currentIndex - 1];
+
+    if (nextSongToPlay) {
+      setId(nextSongToPlay);
+    } else {
+      setId(type === "next" ? ids[0] : ids[ids.length - 1]);
+    }
   }
 
   const generateNextSongIndex = (currentIndex: number): number => {
@@ -132,6 +133,7 @@ export function usePlayer(song: Song, songUrl: string) {
         onSeekTo: ({ seekTime }) => sound.seek(seekTime ?? 0),
         onStop: () => {
           sound.unload();
+          setCurrentlyPlayingSongId();
           setId();
         },
       },

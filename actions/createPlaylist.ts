@@ -79,5 +79,7 @@ export const createPlaylist = async ({
   }
 
   revalidatePath("/profile");
+  isPublic && revalidatePath(`/users/${user.id}/playlists`);
+
   return { playlistId: data.id, error: false, message: null };
 };

@@ -114,7 +114,7 @@ export const updateSong = async (
     updatedSong: {
       ...songData,
       title,
-      author: user.user_metadata.name ?? "Guest",
+      author: user.user_metadata.full_name ?? "Guest",
       artist,
       user_id: user.id,
     },

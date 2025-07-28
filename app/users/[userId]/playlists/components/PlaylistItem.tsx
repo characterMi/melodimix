@@ -46,14 +46,14 @@ const PlaylistItem = ({
       href={`/users/${playlist.user_id}/playlists/${playlist.id}`}
       className="flex items-center text-left gap-3 cursor-pointer hover:bg-neutral-800/50 focus-visible:bg-neutral-800/50 outline-none w-full p-2 rounded-md group"
     >
-      <div className="rounded-md min-w-16 h-16 overflow-hidden bg-neutral-950">
+      <div className="rounded-md min-w-16 bg-neutral-950 relative before:absolute before:-top-1 before:left-1/2 before:-translate-x-1/2 before:bg-neutral-800 before:rounded-[4px] before:w-10/12 before:h-full">
         {playlistThumbnail && (
           <Image
             src={playlistThumbnail}
             alt={playlist.name}
             width={100}
             height={100}
-            className="object-cover size-16"
+            className="object-cover size-16 rounded-md relative z-[1]"
           />
         )}
       </div>
@@ -65,7 +65,11 @@ const PlaylistItem = ({
           </p>
 
           <p className="text-neutral-400 text-sm truncate">
-            {playlist.song_ids.length} songs
+            {playlist.song_ids.length <= 0
+              ? "No song in this playlist"
+              : playlist.song_ids.length === 1
+              ? "1 Song"
+              : playlist.song_ids.length + " Songs"}
           </p>
         </div>
 

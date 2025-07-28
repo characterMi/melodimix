@@ -17,7 +17,7 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
 
   return (
     <>
-      <Duration duration={sound.duration || 0} song={sound.song} />
+      <Duration song={sound.song} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 h-full relative">
         <div className="flex w-full justify-start relative">
@@ -86,7 +86,7 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
         <div className="hidden md:flex w-full justify-end pr-2">
           <div className="flex items-center gap-x-2 w-[120px]">
             <button
-              className="cursor-pointer"
+              className="cursor-pointer outline-none hover:opacity-75 focus-visible:opacity-75 transition-opacity"
               onClick={toggleMute}
               aria-label={sound.volume === 0 ? "unmute" : "mute"}
             >

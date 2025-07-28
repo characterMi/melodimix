@@ -3,12 +3,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import Slider from "./Slider";
 
-interface DurationProps {
-  song: any;
-  duration: number;
-}
-
-function Duration({ song, duration }: DurationProps) {
+function Duration({ song }: { song: any }) {
   const {
     totalDuration,
     currentDuration,
@@ -17,7 +12,7 @@ function Duration({ song, duration }: DurationProps) {
     setShowTotalDuration,
     setCurrentDurationPercentage,
     remaining,
-  } = useUpdateDuration(song, duration);
+  } = useUpdateDuration(song);
 
   return (
     <div className="w-full h-10 flex items-center justify-center">
@@ -31,14 +26,15 @@ function Duration({ song, duration }: DurationProps) {
         onChange={(value) => {
           if (song) {
             setCurrentDurationPercentage(value);
-            song.seek(((value / 100) * duration) / 1000);
+            song.seek((value / 100) * (song?._duration || 0));
           }
         }}
         max={100}
-        step={1}
+        step={0.1}
         label="Song Duration"
       >
         <KeyboardNavigationHelper
+          song={song}
           durationPercentage={currentDurationPercentage}
           setDurationPercentage={setCurrentDurationPercentage}
         />
@@ -59,45 +55,56 @@ function Duration({ song, duration }: DurationProps) {
 }
 
 const KeyboardNavigationHelper = ({
+  song,
   durationPercentage,
   setDurationPercentage,
 }: {
+  song: any;
   durationPercentage: number;
   setDurationPercentage: Dispatch<SetStateAction<number>>;
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {
-    if (isFocused) {
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "ArrowLeft") {
-          setDurationPercentage((prev) => prev - 1);
-        } else if (e.key === "ArrowRight") {
-          setDurationPercentage((prev) => prev + 1);
-        }
-      };
+    if (!isFocused) return;
 
-      document.addEventListener("keydown", handleKeyDown);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const power = e.ctrlKey ? 10 : 0.1;
 
-      return () => {
-        document.removeEventListener("keydown", handleKeyDown);
-      };
-    }
+      if (e.key === "ArrowLeft") {
+        setDurationPercentage((prev) => {
+          const pos = prev - power;
+          song.seek((pos / 100) * (song?._duration || 0));
+
+          return pos;
+        });
+      } else if (e.key === "ArrowRight") {
+        setDurationPercentage((prev) => {
+          const pos = prev + power;
+          song.seek((pos / 100) * (song?._duration || 0));
+
+          return pos;
+        });
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, [isFocused]);
 
   return (
     <div
-      className={twMerge(
-        "absolute top-0 left-0 z-10 h-full w-1 bg-gradient-to-t from-transparent via-green-500 to-transparent opacity-0 transition-opacity outline-none",
-        isFocused && "opacity-100"
-      )}
+      className="absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 size-2 rounded-full bg-green-500 transition hover:opacity-75 focus-visible:scale-125 active:scale-125 cursor-pointer outline-none"
       style={{
         left: `${durationPercentage}%`,
       }}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
       tabIndex={0}
-      aria-description="You can use the arrow keys to navigate the song duration"
+      aria-description="You can use the arrow keys to navigate the song duration (hold the CTRL key to seek faster)"
     />
   );
 };
