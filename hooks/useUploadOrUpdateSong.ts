@@ -1,4 +1,5 @@
 import { useHomePageData } from "@/store/useHomePageData";
+import { useUserSongs } from "@/store/useUserSongsStore";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
@@ -15,6 +16,7 @@ export const useUploadOrUpdateSong = () => {
       addOne: state.addOne,
       updateOne: state.updateOne,
     }));
+  const addUploadedSongToUserSongs = useUserSongs((state) => state.addOneSong);
   const { session } = useSessionContext();
   const router = useRouter();
 
@@ -32,39 +34,34 @@ export const useUploadOrUpdateSong = () => {
     }
 
     startTransition(async () => {
-      try {
-        if (isEditing) {
-          const { error, updatedSong } = await updateSong(formData, {
-            id: initialData.id,
-            img_path: initialData.img_path,
-            song_path: initialData.song_path,
-          });
+      if (isEditing) {
+        const { error, updatedSong } = await updateSong(formData, {
+          id: initialData.id,
+          img_path: initialData.img_path,
+          song_path: initialData.song_path,
+        });
 
-          if (error) {
-            toast.error(error);
-            return;
-          }
-
-          updateUploadedSong(updatedSong!);
-        } else {
-          const { error, uploadedSong } = await uploadSong(formData);
-
-          if (error) {
-            toast.error(error);
-            return;
-          }
-
-          addUploadedSongToSongs(uploadedSong!);
+        if (error) {
+          toast.error(error);
+          return;
         }
 
-        toast.success(`Song ${isEditing ? "updated" : "created"}!`);
-        router.refresh();
-        onClose();
-      } catch (error: any) {
-        console.error(error);
+        updateUploadedSong(updatedSong!);
+      } else {
+        const { error, uploadedSong } = await uploadSong(formData);
 
-        toast.error("Something went wrong.");
+        if (error) {
+          toast.error(error);
+          return;
+        }
+
+        addUploadedSongToUserSongs(uploadedSong!);
+        addUploadedSongToSongs(uploadedSong!);
       }
+
+      toast.success(`Song ${isEditing ? "updated" : "created"}!`);
+      router.refresh();
+      onClose();
     });
   };
 

@@ -1,4 +1,4 @@
-import type { Song } from "@/types";
+import { useUserSongs } from "@/store/useUserSongsStore";
 import {
   useSessionContext,
   useSupabaseClient,
@@ -10,7 +10,7 @@ export const useGetUserSongs = () => {
 
   const supabaseClient = useSupabaseClient();
   const { session } = useSessionContext();
-  const [userSongs, setUserSongs] = useState<Song[]>([]);
+  const { userSongs, setUserSongs } = useUserSongs();
   const [isSongsLoading, setIsSongsLoading] = useState(true);
 
   useEffect(() => {

@@ -3,6 +3,7 @@ import DropdownMenu from "@/components/DropdownMenu";
 import Spinner from "@/components/Spinner";
 import VariantButton from "@/components/VariantButton";
 import { useUploadModal } from "@/store/useUploadModal";
+import { useUserSongs } from "@/store/useUserSongsStore";
 import type { Song } from "@/types";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -51,6 +52,7 @@ const UpdateButton = ({ song }: { song: Song }) => {
 
 const DeleteButton = ({ songId }: { songId: string }) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const deleteSongFromUserSongs = useUserSongs((state) => state.deleteSong);
 
   const handleDelete = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -66,6 +68,7 @@ const DeleteButton = ({ songId }: { songId: string }) => {
         toast.error("Something went wrong.");
       } else {
         toast.success("Song deleted.");
+        deleteSongFromUserSongs(songId);
       }
     } catch (error) {
       console.error(error);
