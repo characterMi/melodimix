@@ -1,5 +1,4 @@
 import { revalidatePath } from "@/actions/revalidatePath";
-import { sanitize } from "@/lib/sanitize";
 import type { Song } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
@@ -61,15 +60,14 @@ export const uploadSong = async (
     return { error: "Only .mp3 audio files are allowed." };
   }
 
-  const cleanTitle = sanitize(title);
   const uniqueId = crypto.randomUUID();
 
   const uploadSongPromise = supabase.storage
     .from("songs")
-    .upload(`song-${cleanTitle}-${uniqueId}`, songFile);
+    .upload(`song-${title}-${uniqueId}`, songFile);
   const uploadImagePromise = supabase.storage
     .from("images")
-    .upload(`image-${cleanTitle}-${uniqueId}`, imageFile);
+    .upload(`image-${title}-${uniqueId}`, imageFile);
 
   const [
     { data: songData, error: songError },
