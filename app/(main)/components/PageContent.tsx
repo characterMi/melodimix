@@ -10,7 +10,7 @@ import type { Song } from "@/types";
 import { getSongs } from "@/utils/getSongs";
 import { useEffect, useMemo } from "react";
 
-const LIMIT = 20;
+export const LIMIT = 20;
 
 const PageContent = ({ initialSongs }: { initialSongs: Song[] }) => {
   const {

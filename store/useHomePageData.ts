@@ -1,3 +1,4 @@
+import { LIMIT } from "@/app/(main)/components/PageContent";
 import type { Song } from "@/types";
 import { create } from "zustand";
 
@@ -19,12 +20,19 @@ export const useHomePageData = create<Store>((set) => ({
     }));
   },
   addOne(song) {
-    set(({ pageData }) => ({
-      pageData: {
-        page: pageData.page,
-        songs: [song, ...pageData.songs],
-      },
-    }));
+    set(({ pageData }) => {
+      // Removing duplicate data...
+      if (pageData.songs.length % LIMIT === 0) {
+        pageData.songs.pop();
+      }
+
+      return {
+        pageData: {
+          page: pageData.page,
+          songs: [song, ...pageData.songs],
+        },
+      };
+    });
   },
   updateOne(newData) {
     set(({ pageData }) => ({

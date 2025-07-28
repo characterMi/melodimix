@@ -13,7 +13,7 @@ import type { Song } from "@/types";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useEffect, useMemo } from "react";
 
-const LIMIT = 25;
+export const LIMIT = 25;
 
 const SongCard = ({
   song,

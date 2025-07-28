@@ -1,3 +1,4 @@
+import { LIMIT } from "@/app/liked/components/LikedContent";
 import type { Song } from "@/types";
 import { create } from "zustand";
 
@@ -21,6 +22,10 @@ export const useLikedPageData = create<Store>((set) => ({
   },
   addOne(song) {
     set(({ pageData }) => {
+      if (pageData.songs.length % LIMIT === 0) {
+        pageData.songs.pop();
+      }
+
       const songs =
         pageData.songs.length > 0 ? [song, ...pageData.songs] : pageData.songs;
 
