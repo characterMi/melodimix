@@ -68,14 +68,14 @@ const PageContent = ({ songs, errMessage, playlist }: Props) => {
           <span className="font-bold">{playlist?.name}</span> by{" "}
           <Link
             href={`/users/${playlist?.user_id}`}
-            className="gradient-text hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity"
+            className="gradient-text hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity"
           >
             {playlist?.author}
           </Link>
         </h2>
 
         <button
-          className="hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity mt-2"
+          className="hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity mt-2"
           aria-label="Share the playlist"
           onClick={handleShare}
         >

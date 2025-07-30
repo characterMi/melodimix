@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+const defaultTheme = require("tailwindcss/defaultTheme");
 
 const config: Config = {
   content: [
@@ -8,6 +9,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        xss: "440px",
+        ...defaultTheme.screens,
+      },
       keyframes: {
         skeleton: {
           "0%": { transform: "translate(-100%, -100%) rotateZ(45deg)" },

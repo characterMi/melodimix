@@ -34,7 +34,7 @@ export const Avatar = ({
   return (
     <>
       <button
-        className="size-44 flex items-center justify-center relative bg-emerald-600 outline-none transition-opacity hover:opacity-75 focus-visible:opacity-75 rounded-full"
+        className="size-44 flex items-center justify-center relative bg-emerald-600 outline-none transition-opacity hover:opacity-50 focus-visible:opacity-50 rounded-full"
         onClick={() => {
           if (isSubmitting) return;
           imageInput.current?.click();

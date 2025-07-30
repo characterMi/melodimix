@@ -41,7 +41,7 @@ const UsersPageLayout = async ({
             {user && (
               <Link
                 href={`/users/${params.userId}/playlists`}
-                className="font-semibold text-sm gradient-text outline-none transition hover:opacity-75 focus-visible:opacity-75 inline-block"
+                className="font-semibold text-sm gradient-text outline-none transition hover:opacity-50 focus-visible:opacity-50 inline-block"
               >
                 {user.name === "Guest" ? "User" : user.name}'s playlists
               </Link>

@@ -27,6 +27,11 @@ body {
   margin: auto;
 }
 
+.h-sm-screen {
+  height: 100vh;
+  height: 100svh;
+}
+
 .duration-el {
   font-feature-settings: "tnum";
   font-variant-numeric: tabular-nums;

@@ -7,7 +7,15 @@ import { TbMusicShare } from "react-icons/tb";
 import AddToPlaylist from "./AddToPlaylist";
 import DropdownMenu from "./DropdownMenu";
 
-const PlayerOptions = ({ song, songUrl }: { song: Song; songUrl: string }) => {
+const PlayerOptions = ({
+  song,
+  songUrl,
+  triggerEl,
+}: {
+  song: Song;
+  songUrl: string;
+  triggerEl?: React.ReactNode;
+}) => {
   const handleDownload = async () => {
     try {
       const response = await fetch(songUrl);
@@ -38,9 +46,11 @@ const PlayerOptions = ({ song, songUrl }: { song: Song; songUrl: string }) => {
   return (
     <DropdownMenu
       triggerProps={{
-        element: <BiDotsVerticalRounded size={24} aria-hidden />,
+        element: triggerEl ?? (
+          <BiDotsVerticalRounded size={24} aria-label="Options..." />
+        ),
         className:
-          "cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition",
+          "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition",
       }}
       contentProps={{
         className: "w-[200px] gap-3 mb-4",

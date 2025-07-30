@@ -1,37 +1,38 @@
 "use client";
 
 import { useGetLikedSongs } from "@/hooks/useGetLikedSongs";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { addPWAEventListeners } from "@/lib/addPWAEventListeners";
 import { registerServiceWorker } from "@/lib/registerServiceWorker";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
-const IS_PWA =
-  window.matchMedia("(display-mode: standalone)").matches ||
-  // @ts-ignore
-  window.navigator.standalone === true;
-
 const Root = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const interval = useRef<NodeJS.Timeout>();
+  const isPWA = useMediaQuery("(display-mode: standalone)");
 
   useGetLikedSongs();
 
   useEffect(() => {
     registerServiceWorker();
+  }, []);
 
-    if (!IS_PWA) return;
+  useEffect(() => {
+    /* @ts-ignore*/
+    if (!isPWA || window.navigator.standalone === true) return;
 
     const removeListeners = addPWAEventListeners();
 
     return () => removeListeners();
-  }, []);
+  }, [isPWA]);
 
   // Disable zooming...
   useEffect(() => {
     clearInterval(interval.current);
 
-    if (IS_PWA) {
+    /* @ts-ignore*/
+    if (isPWA || window.navigator.standalone === true) {
       interval.current = setInterval(() => {
         const viewportMeta = document.querySelector<HTMLMetaElement>(
           'meta[name="viewport"]'
@@ -53,7 +54,7 @@ const Root = ({ children }: { children: React.ReactNode }) => {
     return () => {
       clearInterval(interval.current);
     };
-  }, [pathname]);
+  }, [pathname, isPWA]);
 
   return children;
 };

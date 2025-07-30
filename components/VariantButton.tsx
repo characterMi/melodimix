@@ -20,7 +20,7 @@ const VariantButton = ({
   return (
     <button
       className={twMerge(
-        "cursor-pointer size-6 bg-gradient-to-b border rounded-sm flex items-center justify-center hover:opacity-75 focus-visible:opacity-75 outline-none transition",
+        "cursor-pointer size-6 bg-gradient-to-b border rounded-sm flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none transition",
         variantClasses[variant],
         className
       )}

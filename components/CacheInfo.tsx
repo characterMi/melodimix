@@ -27,7 +27,7 @@ const CacheInfo = ({ totalCacheSize, cacheData }: Props) => {
       >
         <div className="bg-neutral-800 size-full rounded-full flex items-center justify-center gap-1 flex-col">
           <p className="text-4xl font-bold text-white">{title[0]}</p>
-          <span className="opacity-75">{title[1]}</span>
+          <span className="opacity-50">{title[1]}</span>
         </div>
       </div>
 

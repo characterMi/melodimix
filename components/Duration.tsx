@@ -3,7 +3,13 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import Slider from "./Slider";
 
-function Duration({ song }: { song: any }) {
+function Duration({
+  song,
+  isMobilePlayer,
+}: {
+  song: any;
+  isMobilePlayer?: true;
+}) {
   const {
     totalDuration,
     currentDuration,
@@ -16,7 +22,14 @@ function Duration({ song }: { song: any }) {
 
   return (
     <div className="w-full h-10 flex items-center justify-center">
-      <p className="relative bg-black px-2 after:w-5 after:h-full after:absolute after:left-full after:top-0 after:bg-gradient-to-r after:from-black after:pointer-events-none z-[1] whitespace-nowrap duration-el">
+      <p
+        className={twMerge(
+          "relative z-[1] whitespace-nowrap duration-el",
+          !isMobilePlayer
+            ? "bg-black px-2 after:w-5 after:h-full after:absolute after:left-full after:top-0 after:bg-gradient-to-r after:from-black after:pointer-events-none"
+            : "pr-2"
+        )}
+      >
         {currentDuration}
       </p>
 
@@ -44,7 +57,14 @@ function Duration({ song }: { song: any }) {
         onClick={() => setShowTotalDuration(!showTotalDuration)}
         className="hover:text-neutral-400 focus-visible:text-neutral-400 outline-none transition-colors"
       >
-        <p className="relative bg-black px-2 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:pointer-events-none whitespace-nowrap duration-el">
+        <p
+          className={twMerge(
+            "relativ whitespace-nowrap duration-el",
+            !isMobilePlayer
+              ? "bg-black px-2 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:pointer-events-none"
+              : "pl-1"
+          )}
+        >
           <span className={twMerge(showTotalDuration && "opacity-0")}>-</span>
 
           {showTotalDuration ? totalDuration : remaining}
@@ -73,18 +93,16 @@ const KeyboardNavigationHelper = ({
 
       if (e.key === "ArrowLeft") {
         setDurationPercentage((prev) => {
-          if (prev <= 0) return 0;
+          const pos = Math.max(prev - power, 0);
 
-          const pos = prev - power;
           song.seek((pos / 100) * (song?._duration || 0));
 
           return pos;
         });
       } else if (e.key === "ArrowRight") {
         setDurationPercentage((prev) => {
-          if (prev > 100) return 100;
+          const pos = Math.min(prev + power, 100);
 
-          const pos = prev + power;
           song.seek((pos / 100) * (song?._duration || 0));
 
           return pos;
@@ -101,7 +119,7 @@ const KeyboardNavigationHelper = ({
 
   return (
     <div
-      className="absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 size-2 rounded-full bg-green-500 transition hover:opacity-75 focus-visible:scale-125 active:scale-125 cursor-pointer outline-none"
+      className="absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 size-2 rounded-full bg-green-500 transition hover:opacity-50 focus-visible:scale-125 active:scale-125 cursor-pointer outline-none"
       style={{
         left: `${durationPercentage}%`,
       }}

@@ -63,7 +63,7 @@ const DropdownMenu = ({ triggerProps, contentProps, children }: Props) => {
       <Trigger
         aria-label={triggerProps.label}
         className={twMerge(
-          "cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition",
+          "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition",
           triggerProps.className
         )}
         tabIndex={triggerProps.tabIndex}

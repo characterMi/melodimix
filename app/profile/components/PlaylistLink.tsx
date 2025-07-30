@@ -36,7 +36,9 @@ const PlaylistLink = ({ href, name, id, ...props }: Props) => {
       {id !== "liked" && id !== "uploaded" && (
         <DropdownMenu
           triggerProps={{
-            element: <BiDotsVerticalRounded size={20} aria-hidden />,
+            element: (
+              <BiDotsVerticalRounded size={20} aria-label="Options..." />
+            ),
             className: `absolute top-0 left-full -translate-x-2/3 opacity-0 transition hover:opacity-100 hover:text-emerald-300 hover:scale-105 group-hover:opacity-100 focus-visible:text-emerald-300 focus-visible:scale-105 focus-visible:opacity-100 group-focus-visible:opacity-100 outline-none transition ${
               pathname === href ? "block" : "hidden"
             }`,
@@ -66,7 +68,7 @@ const UpdateButton = (props: Required<Omit<Props, "href">>) => {
 
   return (
     <DropdownMenu.Item
-      className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity"
+      className="text-white cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity"
       onClick={() => openModal(props)}
     >
       <VariantButton
@@ -111,7 +113,7 @@ const DeleteButton = ({
 
   return (
     <DropdownMenu.Item
-      className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+      className="text-white cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
       disabled={isDeleting}
       onClick={handleDelete}
     >

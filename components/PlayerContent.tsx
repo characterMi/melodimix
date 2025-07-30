@@ -1,92 +1,100 @@
+import { TbMusicShare } from "react-icons/tb";
+
 import { usePlayer } from "@/hooks/usePlayer";
-import type { Song } from "@/types";
-import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
+import { handleShare } from "@/lib/shareSong";
+
 import Duration from "./Duration";
 import LikeButton from "./LikeButton";
-import PlayerOptions from "./PlayerOptions";
+import PlayerControls from "./PlayerControls";
+import PlayerSongCard from "./PlayerSongCard";
+import PlayerTypeButton from "./PlayerTypeButton";
 import Slider from "./Slider";
-import SongItem from "./SongItem";
 
-const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
+import type { Song } from "@/types";
+
+const PlayerContent = ({
+  song,
+  songUrl,
+  isSongLoading,
+}: {
+  song: Song;
+  songUrl: string;
+  isSongLoading: boolean;
+}) => {
   const { handlers, icons, sound, state } = usePlayer(song, songUrl);
 
   const { handleChangePlayerType, handlePlay, onPlaySong, toggleMute } =
     handlers;
   const { PauseOrPlayIcon, PlayerTypeIcon, VolumeIcon } = icons;
-  const { isMusicLoading, isMusicPlaying, playerType } = state;
+  const { isSoundLoading, isMusicPlaying, playerType } = state;
 
   return (
     <>
       <Duration song={sound.song} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 h-full relative">
-        <div className="flex w-full justify-start relative">
-          <div className="flex items-center gap-x-4 w-full">
-            <SongItem
-              isPlayer
-              data={song}
-              showAuthor={false}
-              shouldRunAnimationIfCurrentlyPlaying={false}
-            />
-            <div className="flex items-center gap-x-2 w-max bg-black h-full absolute top-0 right-0 pl-1 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:z-[1]">
-              <LikeButton song={song} />
-
-              <button
-                aria-label={
-                  "Change the type of player to " +
-                  (playerType === "next-song"
-                    ? "Shuffle"
-                    : playerType === "shuffle"
-                    ? "Repeat"
-                    : "Next song")
-                }
-                className="cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition"
-                onClick={handleChangePlayerType}
-              >
-                <PlayerTypeIcon size={30} aria-hidden />
-              </button>
-
-              <PlayerOptions song={song} songUrl={songUrl} />
+        <PlayerSongCard
+          song={song}
+          songUrl={songUrl}
+          handleChangePlayerType={handleChangePlayerType}
+          playerType={playerType}
+          playerTypeIcon={PlayerTypeIcon}
+        >
+          <div className="flex items-center justify-between gap-1">
+            <div className="flex flex-col gap-1 overflow-hidden w-full">
+              <h2 className="text-2xl xss:text-3xl font-semibold truncate">
+                {song.title}
+              </h2>
+              <p className="text-xs xss:text-sm font-thin opacity-80 truncate">
+                {song.artist}
+              </p>
             </div>
+
+            <button
+              aria-label="Share the song"
+              onClick={() => handleShare(song.title, song.artist)}
+              className="cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition hidden xss:block"
+            >
+              <TbMusicShare size={28} aria-hidden />
+            </button>
           </div>
-        </div>
 
-        <div className="z-[1] sm:h-full flex sm:justify-end md:justify-center items-center sm:w-full max-w-[722px] gap-x-2 sm:gap-x-6 absolute sm:relative -top-full sm:top-0 -translate-y-1/4 sm:translate-y-0 right-0">
-          <button
-            aria-label="Change the song (backward)"
-            className="text-black sm:text-neutral-400 size-[28px] sm:size-[30px] p-1 sm:p-0 rounded-full bg-white sm:bg-transparent cursor-pointer hover:opacity-75 sm:hover:text-white focus-visible:opacity-75 sm:focus-visible:text-white outline-none transition"
-            onClick={() => onPlaySong("previous")}
-          >
-            <AiFillStepBackward className="w-full h-full" aria-hidden />
-          </button>
+          <Duration song={sound.song} isMobilePlayer />
 
-          <button
-            onClick={handlePlay}
-            className="flex items-center justify-center size-10 rounded-full bg-white p-1 cursor-pointer overflow-hidden"
-            aria-label={(isMusicPlaying ? "Pause " : "Play ") + "the song"}
-          >
-            {isMusicLoading ? (
-              <div className="size-6 rounded-full border-4 animate-spin border-black relative after:size-3 after:bg-white after:absolute after:bottom-3/4 after:rotate-45">
-                <p className="sr-only">Loading the song...</p>
-              </div>
-            ) : (
-              <PauseOrPlayIcon size={30} className="text-black" aria-hidden />
-            )}
-          </button>
+          <div className="w-full flex items-center justify-between">
+            <LikeButton song={song} size="lg" />
 
-          <button
-            onClick={() => onPlaySong("next")}
-            className="text-black sm:text-neutral-400 size-[28px] sm:size-[30px] p-1 sm:p-0 rounded-full bg-white sm:bg-transparent cursor-pointer hover:opacity-75 sm:hover:text-white focus-visible:opacity-75 sm:focus-visible:text-white outline-none transition"
-            aria-label="Change the song (forward)"
-          >
-            <AiFillStepForward className="w-full h-full" aria-hidden />
-          </button>
-        </div>
+            <PlayerControls
+              isMobilePlayer
+              isSongLoading={isSongLoading}
+              onPlaySong={onPlaySong}
+              handlePlay={handlePlay}
+              isMusicPlaying={isMusicPlaying}
+              isSoundLoading={isSoundLoading}
+              icon={PauseOrPlayIcon}
+            />
+
+            <PlayerTypeButton
+              handleChangePlayerType={handleChangePlayerType}
+              icon={PlayerTypeIcon}
+              playerType={playerType}
+            />
+          </div>
+        </PlayerSongCard>
+
+        <PlayerControls
+          isSongLoading={isSongLoading}
+          onPlaySong={onPlaySong}
+          handlePlay={handlePlay}
+          isMusicPlaying={isMusicPlaying}
+          isSoundLoading={isSoundLoading}
+          icon={PauseOrPlayIcon}
+        />
 
         <div className="hidden md:flex w-full justify-end pr-2">
           <div className="flex items-center gap-x-2 w-[120px]">
             <button
-              className="cursor-pointer outline-none hover:opacity-75 focus-visible:opacity-75 transition-opacity"
+              className="cursor-pointer outline-none hover:opacity-50 focus-visible:opacity-50 transition-opacity"
               onClick={toggleMute}
               aria-label={sound.volume === 0 ? "unmute" : "mute"}
             >

@@ -15,9 +15,9 @@ const Options = ({ song }: { song: Song }) => {
   return (
     <DropdownMenu
       triggerProps={{
-        element: <BiDotsVerticalRounded size={20} aria-hidden />,
+        element: <BiDotsVerticalRounded size={20} aria-label="Options..." />,
         className:
-          "hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity",
+          "hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity",
         label: `Open options for ${song.title} song`,
       }}
       contentProps={{
@@ -36,7 +36,7 @@ const UpdateButton = ({ song }: { song: Song }) => {
 
   return (
     <DropdownMenu.Item
-      className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity"
+      className="text-white cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity"
       onClick={() => openModal(song)}
     >
       <VariantButton
@@ -81,7 +81,7 @@ const DeleteButton = ({ songId }: { songId: string }) => {
 
   return (
     <DropdownMenu.Item
-      className="text-white cursor-pointer hover:opacity-75 focus-visible:opacity-75 outline-none transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+      className="text-white cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
       disabled={isDeleting}
       onClick={handleDelete}
     >

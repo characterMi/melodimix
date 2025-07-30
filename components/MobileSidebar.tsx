@@ -1,5 +1,6 @@
 "use client";
 
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import type { Song } from "@/types";
 import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -19,63 +20,8 @@ const MobileSidebar = ({
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isActive || !sidebarContainerRef.current || e.key !== "Tab") return;
+  useFocusTrap<HTMLDivElement>(sidebarContainerRef, isActive);
 
-      const sidebarContainer = sidebarContainerRef.current;
-
-      const focusableElements = Array.from(
-        sidebarContainer.querySelectorAll(
-          [
-            "a[href]",
-            "button:not([disabled])",
-            "textarea:not([disabled])",
-            "input:not([disabled])",
-            "select:not([disabled])",
-            '[tabindex]:not([tabindex="-1"])',
-          ].join(",")
-        )
-      );
-
-      const firstElement = focusableElements[0] as HTMLElement;
-      const lastElement = focusableElements[
-        focusableElements.length - 1
-      ] as HTMLElement;
-
-      if (e.shiftKey) {
-        // Shift + Tab
-        if (document.activeElement === firstElement) {
-          e.preventDefault();
-          lastElement?.focus();
-        }
-      } else {
-        // Tab
-        if (document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement?.focus();
-        }
-      }
-    };
-
-    if (isActive) {
-      sidebarContainerRef.current?.addEventListener("keydown", handleKeyDown);
-    } else {
-      sidebarContainerRef.current?.removeEventListener(
-        "keydown",
-        handleKeyDown
-      );
-    }
-
-    return () => {
-      sidebarContainerRef.current?.removeEventListener(
-        "keydown",
-        handleKeyDown
-      );
-    };
-  }, [isActive]);
-
-  // Handle escape key to close sidebar
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape" && isActive) {

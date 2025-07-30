@@ -16,9 +16,14 @@ const Player = () => {
   if (!song || !songUrl || !activeId) return null;
 
   return (
-    <div className="fixed bottom-0 bg-black w-full py-2 pt-4 sm:pt-0 rounded-t-2xl px-4 player z-30">
+    <div className="fixed bottom-0 bg-black w-full py-2 rounded-t-2xl px-4 player z-30">
       <section className="h-full w-full relative" aria-live="assertive">
-        <PlayerContent song={song} songUrl={songUrl} key={songUrl} />
+        <PlayerContent
+          song={song}
+          songUrl={songUrl}
+          isSongLoading={isLoading}
+          key={songUrl}
+        />
         {isLoading && (
           <div
             className="w-full h-28 z-50 bg-black/60 backdrop-blur-sm"

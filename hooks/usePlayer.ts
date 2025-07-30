@@ -34,7 +34,7 @@ export function usePlayer(song: Song, songUrl: string) {
   }));
 
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
-  const [isMusicLoading, setIsMusicLoading] = useState(true);
+  const [isSoundLoading, setIsSoundLoading] = useState(true);
 
   const [play, { pause, sound, duration /* to ms */ }] = useSound(songUrl, {
     volume,
@@ -50,9 +50,9 @@ export function usePlayer(song: Song, songUrl: string) {
       navigator.clearAppBadge?.();
       navigator.mediaSession.playbackState = "paused";
     },
-    onload: () => setIsMusicLoading(false),
+    onload: () => setIsSoundLoading(false),
     onloaderror: () => {
-      setIsMusicLoading(false);
+      setIsSoundLoading(false);
       toast.error("Couldn't load the music!");
     },
   });
@@ -174,7 +174,7 @@ export function usePlayer(song: Song, songUrl: string) {
   return {
     state: {
       isMusicPlaying,
-      isMusicLoading,
+      isSoundLoading,
       playerType,
     },
     handlers: {

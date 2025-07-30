@@ -9,8 +9,9 @@ const SongCover = ({
   width,
   height,
   className,
+  renderLoadingComponent = true,
   ...props
-}: ImageProps) => {
+}: ImageProps & { renderLoadingComponent?: boolean }) => {
   const [imageStatus, setImageStatus] = useState<
     "loading" | "loaded" | "error"
   >("loading");
@@ -43,7 +44,7 @@ const SongCover = ({
         {...props}
       />
 
-      {imageStatus === "loading" && (
+      {imageStatus === "loading" && renderLoadingComponent && (
         <div
           aria-label="Image is loading"
           className="bg-gradient-to-r from-neutral-950 via-neutral-900 to-neutral-950 w-[300%] h-[200%] absolute top-0 left-0 animate-skeleton"

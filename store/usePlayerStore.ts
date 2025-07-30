@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type PlayerType = "next-song" | "shuffle" | "repeat";
+export type PlayerType = "next-song" | "shuffle" | "repeat";
 
 interface PlayerStore {
   ids: string[];
@@ -13,6 +13,8 @@ interface PlayerStore {
   setPlayerType: (type: PlayerType) => void;
   volume: number;
   setVolume: (volume: number) => void;
+  isMobilePlayerOpen: boolean;
+  setIsMobilePlayerOpen: (isOpen: boolean) => void;
 }
 
 export const usePlayerStore = create<PlayerStore>((set) => ({
@@ -26,4 +28,6 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
   setPlayerType: (type) => set({ playerType: type }),
   volume: 1,
   setVolume: (volume) => set({ volume }),
+  isMobilePlayerOpen: false,
+  setIsMobilePlayerOpen: (isOpen) => set({ isMobilePlayerOpen: isOpen }),
 }));

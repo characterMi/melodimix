@@ -14,7 +14,7 @@ const Author = ({ name, userId, shouldHighlight }: Props) => (
     href={`/users/${userId}`}
     onClick={(e) => e.stopPropagation()}
     className={twMerge(
-      "inline-flex items-center gap-[2px] hover:opacity-75 focus-visible:opacity-75 outline-none transition truncate",
+      "inline-flex items-center gap-[2px] hover:opacity-50 focus-visible:opacity-50 outline-none transition truncate",
       shouldHighlight && "font-bold gradient-text"
     )}
   >
