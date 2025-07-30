@@ -8,7 +8,7 @@ type PlaylistSongsResponse = {
   data: Song[];
 } & (
   | {
-      playlist: Playlist & { author?: string };
+      playlist: Playlist & { author: string };
       errMessage: undefined;
     }
   | {

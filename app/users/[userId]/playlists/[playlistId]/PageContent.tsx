@@ -11,16 +11,9 @@ import { IoShareSocial } from "react-icons/io5";
 
 type Props = {
   songs: Song[];
-} & (
-  | {
-      errMessage: string;
-      playlist: undefined;
-    }
-  | {
-      errMessage: undefined;
-      playlist: Playlist & { author: string };
-    }
-);
+  playlist?: Playlist & { author: string };
+  errMessage?: string;
+};
 
 const PageContent = ({ songs, errMessage, playlist }: Props) => {
   const onPlay = useOnPlay(songs);
