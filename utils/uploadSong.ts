@@ -75,7 +75,13 @@ export const uploadSong = async (
   ] = await Promise.all([uploadSongPromise, uploadImagePromise]);
 
   if (songError || imageError) {
-    return { error: "Failed to upload the song!" };
+    // Cleanup any uploaded files (no need to await)
+    if (songData) supabase.storage.from("songs").remove([songData.path]);
+    if (imageData) supabase.storage.from("images").remove([imageData.path]);
+
+    return {
+      error: songError?.message || imageError?.message || "Upload failed.",
+    };
   }
 
   const newSong = {
@@ -93,6 +99,9 @@ export const uploadSong = async (
     .single();
 
   if (supabaseError) {
+    supabase.storage.from("songs").remove([songData.path]);
+    supabase.storage.from("images").remove([imageData.path]);
+
     return { error: "Something went wrong while uploading the song!" };
   }
 

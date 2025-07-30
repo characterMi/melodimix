@@ -1,9 +1,9 @@
 import { usePlayer } from "@/hooks/usePlayer";
 import type { Song } from "@/types";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
-import AddToPlaylist from "./AddToPlaylist";
 import Duration from "./Duration";
 import LikeButton from "./LikeButton";
+import PlayerOptions from "./PlayerOptions";
 import Slider from "./Slider";
 import SongItem from "./SongItem";
 
@@ -46,7 +46,7 @@ const PlayerContent = ({ song, songUrl }: { song: Song; songUrl: string }) => {
                 <PlayerTypeIcon size={30} aria-hidden />
               </button>
 
-              <AddToPlaylist songId={song.id} />
+              <PlayerOptions song={song} songUrl={songUrl} />
             </div>
           </div>
         </div>

@@ -23,21 +23,11 @@ export const updatePlaylist = async (
     return { error: true, message: "Playlist name is too long or too short!" };
   }
 
-  const { data: songs, error: songsError } = await supabase
-    .from("songs")
-    .select("id");
-
-  if (songsError) {
+  if (newData.song_ids.length > 100) {
     return {
       error: true,
-      message: "Something went wrong!",
-    };
-  }
-
-  if (newData.song_ids.length > songs.length) {
-    return {
-      error: true,
-      message: "Too many songs in this playlist, we don't have this much song.",
+      message:
+        "Too many songs in this playlist, you can't add more than 100 songs to a playlist.",
     };
   }
 

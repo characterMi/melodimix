@@ -1,8 +1,13 @@
 "use client";
 
-import type { DropdownMenuItemProps } from "@radix-ui/react-dropdown-menu";
+import type {
+  DropdownMenuItemProps,
+  DropdownMenuSubContentProps,
+  DropdownMenuSubTriggerProps,
+} from "@radix-ui/react-dropdown-menu";
 import dynamic from "next/dynamic";
 import { forwardRef } from "react";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
 
 const Root = dynamic(() =>
@@ -26,6 +31,15 @@ const Item = dynamic(() =>
 const Separator = dynamic(() =>
   import("@radix-ui/react-dropdown-menu").then((mod) => mod.Separator)
 );
+const Sub = dynamic(() =>
+  import("@radix-ui/react-dropdown-menu").then((mod) => mod.Sub)
+);
+const SubTrigger = dynamic(() =>
+  import("@radix-ui/react-dropdown-menu").then((mod) => mod.SubTrigger)
+);
+const SubContent = dynamic(() =>
+  import("@radix-ui/react-dropdown-menu").then((mod) => mod.SubContent)
+);
 
 type Props = {
   triggerProps: {
@@ -39,6 +53,9 @@ type Props = {
   };
   children: React.ReactNode;
 };
+
+const CONTENT_CLASSES =
+  "bg-neutral-900 border border-neutral-700 p-4 rounded-lg shadow-2xl flex flex-col";
 
 const DropdownMenu = ({ triggerProps, contentProps, children }: Props) => {
   return (
@@ -55,10 +72,7 @@ const DropdownMenu = ({ triggerProps, contentProps, children }: Props) => {
       </Trigger>
 
       <Content
-        className={twMerge(
-          "bg-neutral-900 border border-neutral-700 p-4 rounded-lg shadow-2xl flex flex-col z-[2]",
-          contentProps?.className
-        )}
+        className={twMerge(CONTENT_CLASSES, "z-[2]", contentProps?.className)}
       >
         {children}
       </Content>
@@ -67,6 +81,37 @@ const DropdownMenu = ({ triggerProps, contentProps, children }: Props) => {
 };
 
 DropdownMenu.Group = Group;
+DropdownMenu.Sub = Sub;
+DropdownMenu.SubTrigger = forwardRef<
+  HTMLDivElement,
+  DropdownMenuSubTriggerProps
+>((props, ref) => (
+  <SubTrigger
+    {...props}
+    className={twMerge(
+      "font-thin text-sm flex items-center justify-between gap-2",
+      props.className
+    )}
+    ref={ref}
+  >
+    {props.children}
+
+    <MdOutlineKeyboardArrowRight size={24} aria-hidden className="-mr-1" />
+  </SubTrigger>
+));
+DropdownMenu.SubContent = forwardRef<
+  HTMLDivElement,
+  DropdownMenuSubContentProps
+>((props, ref) => (
+  <SubContent
+    {...props}
+    className={twMerge(CONTENT_CLASSES, "z-[3]", props.className)}
+    ref={ref}
+  >
+    {props.children}
+  </SubContent>
+));
+
 DropdownMenu.Label = ({
   children,
   className,

@@ -18,7 +18,7 @@ type Props = {
     }
   | {
       errMessage: undefined;
-      playlist: Playlist & { author?: string };
+      playlist: Playlist & { author: string };
     }
 );
 
@@ -34,7 +34,9 @@ const PageContent = ({ songs, errMessage, playlist }: Props) => {
         fallbackText={
           errMessage ||
           (playlistSongsCount > 0
-            ? `${playlistSongsCount} songs has been deleted!`
+            ? `${playlistSongsCount} ${
+                playlistSongsCount === 1 ? "song" : "songs"
+              } has been deleted!`
             : "No song in this playlist.")
         }
         showButton={!!errMessage}
@@ -52,7 +54,7 @@ const PageContent = ({ songs, errMessage, playlist }: Props) => {
       text: `Checkout ${playlist?.name} playlist by ${
         playlist?.author === "Guest" ? "a User" : playlist?.author
       } in MelodiMix!`,
-      url: `${process.env.NEXT_PUBLIC_BASE_URL}users/${playlist?.user_id}/playlists/${playlist?.id}`,
+      url: window.location.href,
     });
   }
 

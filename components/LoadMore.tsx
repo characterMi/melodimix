@@ -27,9 +27,12 @@ const LoadMore = ({
   const [status, setStatus] = useState<
     "loadmore" | "error" | "retrying" | "ended"
   >(initialStatus);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!isInView || status !== "loadmore") return;
+    if (!isInView || status !== "loadmore" || isLoading) return;
+
+    setIsLoading(true);
 
     getSongsPromise(limit, currentPage)
       .then((songs) => {
@@ -42,8 +45,11 @@ const LoadMore = ({
       .catch(() => {
         setStatus("retrying");
         retries.current += 1;
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-  }, [isInView, status]);
+  }, [isInView, status, isLoading]);
 
   useEffect(() => {
     clearTimeout(retryTimeout.current);

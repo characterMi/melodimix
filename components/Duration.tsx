@@ -73,6 +73,8 @@ const KeyboardNavigationHelper = ({
 
       if (e.key === "ArrowLeft") {
         setDurationPercentage((prev) => {
+          if (prev <= 0) return 0;
+
           const pos = prev - power;
           song.seek((pos / 100) * (song?._duration || 0));
 
@@ -80,6 +82,8 @@ const KeyboardNavigationHelper = ({
         });
       } else if (e.key === "ArrowRight") {
         setDurationPercentage((prev) => {
+          if (prev > 100) return 100;
+
           const pos = prev + power;
           song.seek((pos / 100) * (song?._duration || 0));
 

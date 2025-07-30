@@ -1,6 +1,6 @@
 import { useLoadImage } from "@/hooks/useLoadImage";
+import { handleShare } from "@/lib/shareSong";
 import type { Song } from "@/types";
-import toast from "react-hot-toast";
 import { FaPlay, FaShareAlt } from "react-icons/fa";
 import Author from "./Author";
 import SongCover from "./SongCover";
@@ -15,26 +15,13 @@ const SongCard = ({ data, onClick }: Props) => {
 
   function handleClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
-    handleShare();
+    handleShare(data.title, data.artist);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
-    if (e.key === "Enter" || e.key === " ") handleShare();
-  }
-
-  function handleShare() {
-    if (!navigator.share) {
-      toast.error("Share not supported on your browser");
-      return;
+    if (e.key === "Enter" || e.key === " ") {
+      handleShare(data.title, data.artist);
     }
-
-    navigator.share({
-      title: "Melodimix - Your Ultimate Music Destination.",
-      text: `Listen to ${data.title} by ${
-        data.artist ?? "Unknown artist"
-      } in MelodiMix!`,
-      url: `${process.env.NEXT_PUBLIC_BASE_URL}search?song_title=${data.title}`,
-    });
   }
 
   return (

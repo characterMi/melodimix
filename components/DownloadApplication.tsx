@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { HiDownload } from "react-icons/hi";
+import { HiOutlineDownload } from "react-icons/hi";
 
 const DownloadApplication = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
@@ -36,7 +36,7 @@ const DownloadApplication = () => {
       className="download-btn flex flex-row h-auto items-center w-full gap-x-[14px] text-sm font-medium cursor-pointer hover:text-white focus-visible:text-white outline-none transition text-neutral-400 py-1"
       onClick={handleDownload}
     >
-      <HiDownload size={24} aria-hidden />
+      <HiOutlineDownload size={24} aria-hidden />
       <p className="truncate">Download Application</p>
     </button>
   );
