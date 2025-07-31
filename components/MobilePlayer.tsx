@@ -30,13 +30,13 @@ const MobilePlayer = ({
   return createPortal(
     <div
       className={twMerge(
-        "w-full h-sm-screen bg-neutral-900 fixed top-0 left-0 z-[100] sm:hidden transition duration-300 flex flex-col justify-between items-center overflow-x-hidden overflow-y-auto",
+        "w-full h-sm-screen bg-black fixed top-0 left-0 z-[100] sm:hidden transition duration-300 flex flex-col justify-between items-center overflow-x-hidden overflow-y-auto",
         isMobilePlayerOpen ? "translate-y-0" : "translate-y-full"
       )}
       ref={mobilePlayerRef}
       aria-hidden={!isMobilePlayerOpen}
     >
-      <div className="w-full flex justify-between items-center p-6 xss:p-8 bg-gradient-to-b from-emerald-800 to-transparent">
+      <div className="w-full flex justify-between items-center p-6 xss:p-8">
         <button
           ref={closeMobilePlayerButton}
           className="hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity"
@@ -62,12 +62,14 @@ const MobilePlayer = ({
           alt={song.title}
           width={1}
           height={1}
-          className="size-full absolute z-[-1] blur-xl"
+          className="size-full absolute z-[-1] blur-lg"
           renderLoadingComponent={false}
+          renderErrorFallback={false}
         />
       )}
+      <div className="absolute top-0 left-0 w-full h-full z-[-1] bg-[linear-gradient(0deg,black_0%,transparent_75%,rgba(6,95,70,1)_100%)]" />
 
-      <div className="relative min-h-[250px] max-w-[90vw] aspect-square rounded-xl overflow-hidden bg-neutral-900 mx-6 xss:mx-8">
+      <div className="relative min-h-[250px] max-w-[90vw] aspect-square rounded-xl overflow-hidden bg-black mx-6 xss:mx-8">
         <SongCover
           src={songImage || "/images/liked.png"}
           alt={song.title}
@@ -78,7 +80,7 @@ const MobilePlayer = ({
         />
       </div>
 
-      <div className="w-full flex flex-col gap-4 pb-10 xss:pb-14 p-6 xss:p-8 bg-gradient-to-t from-black to-transparent">
+      <div className="w-full flex flex-col gap-4 pb-10 xss:pb-14 p-6 xss:p-8 bg-gradient-to-t from-black to-transparent mobile-player__controls">
         {children}
       </div>
     </div>,

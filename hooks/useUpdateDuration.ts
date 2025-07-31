@@ -7,26 +7,25 @@ export type Duration =
   | `${number} : 0${number}`
   | `0${number} : 0${number}`;
 
-export function useUpdateDuration(song: any) {
+export function useUpdateDuration(song: HTMLAudioElement | null) {
   const totalDuration = useRef<Duration>("00 : 00");
   const [currentDurationPercentage, setCurrentDurationPercentage] = useState(0);
   const [showTotalDuration, setShowTotalDuration] = useState(true);
-  const intervalRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
     if (!song) return;
 
-    clearInterval(intervalRef.current);
+    totalDuration.current = formatDuration(song.duration);
 
-    intervalRef.current = setInterval(() => {
-      // song.seek gives us the current duration (in second)
-      setCurrentDurationPercentage((song.seek() / song._duration) * 100);
-    }, 1000);
+    const onTimeupdate = (e: Event) => {
+      const { currentTime, duration } = e.currentTarget as HTMLAudioElement;
+      setCurrentDurationPercentage(currentTime / ((duration || 0) / 100));
+    };
 
-    totalDuration.current = formatDuration(song._duration);
+    song.addEventListener("timeupdate", onTimeupdate);
 
     return () => {
-      clearInterval(intervalRef.current);
+      song.removeEventListener("timeupdate", onTimeupdate);
     };
   }, [song]);
 
@@ -34,8 +33,8 @@ export function useUpdateDuration(song: any) {
     if (!song) return;
 
     navigator.mediaSession?.setPositionState({
-      duration: song._duration,
-      position: song.seek(),
+      duration: song.duration || 0,
+      position: song.currentTime,
       playbackRate: 1.0,
     });
   }, [currentDurationPercentage]);
@@ -46,7 +45,7 @@ export function useUpdateDuration(song: any) {
     setCurrentDurationPercentage,
     showTotalDuration,
     setShowTotalDuration,
-    currentDuration: formatDuration(song?.seek() || 0),
-    remaining: formatDuration((song?._duration || 0) - (song?.seek() || 0)),
+    currentDuration: formatDuration(song?.currentTime || 0),
+    remaining: formatDuration((song?.duration || 0) - (song?.currentTime || 0)),
   };
 }

@@ -91,7 +91,7 @@ const PlayerSongCard = ({
               <PlayerOptions song={song} songUrl={songUrl} />
             </div>
 
-            <IoIosArrowUp className="sm:hidden cursor-pointer" size={34} />
+            <IoIosArrowUp className="sm:hidden cursor-pointer" size={28} />
           </div>
         </div>
       </div>

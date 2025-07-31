@@ -1,15 +1,14 @@
 import { initializeMediaSession } from "@/lib/mediaSession";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import { Song } from "@/types";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { useCallback, useEffect, useState } from "react";
 import { BiArrowToRight } from "react-icons/bi";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { IoShuffleOutline } from "react-icons/io5";
 import { PiRepeatOnce } from "react-icons/pi";
-import useSound from "use-sound";
 import { useLoadImage } from "./useLoadImage";
+import { useLoadSong } from "./useLoadSong";
 
 export function usePlayer(song: Song, songUrl: string) {
   const songImageUrl = useLoadImage(song);
@@ -33,29 +32,10 @@ export function usePlayer(song: Song, songUrl: string) {
     setCurrentlyPlayingSongId: state.setCurrentlyPlayingSongId,
   }));
 
-  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
-  const [isSoundLoading, setIsSoundLoading] = useState(true);
+  const { audioSrc, isSoundLoading } = useLoadSong(songUrl);
+  const [sound, setSound] = useState<HTMLAudioElement | null>(null);
 
-  const [play, { pause, sound, duration /* to ms */ }] = useSound(songUrl, {
-    volume,
-    format: ["mp3"],
-    onplay: () => {
-      setIsMusicPlaying(true);
-      navigator.setAppBadge?.(1);
-      navigator.mediaSession.playbackState = "playing";
-    },
-    onend: () => onPlaySong("next"),
-    onpause: () => {
-      setIsMusicPlaying(false);
-      navigator.clearAppBadge?.();
-      navigator.mediaSession.playbackState = "paused";
-    },
-    onload: () => setIsSoundLoading(false),
-    onloaderror: () => {
-      setIsSoundLoading(false);
-      toast.error("Couldn't load the music!");
-    },
-  });
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
 
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
   const PlayerTypeIcon =
@@ -66,91 +46,161 @@ export function usePlayer(song: Song, songUrl: string) {
       : PiRepeatOnce;
   const PauseOrPlayIcon = isMusicPlaying ? BsPauseFill : BsPlayFill;
 
-  function handleChangePlayerType() {
-    if (playerType === "next-song") {
-      setPlayerType("shuffle");
-      toast.success('"Shuffle"');
-    } else if (playerType === "shuffle") {
-      setPlayerType("repeat");
-      toast.success('"Repeat"');
-    } else {
-      setPlayerType("next-song");
-      toast.success('"Next song"');
-    }
-  }
+  const onEnd = useCallback(
+    (e: Event) => {
+      const audio = e.currentTarget as HTMLAudioElement;
 
-  function onPlaySong(type: "next" | "previous") {
-    if (ids.length <= 1) return;
+      if (playerType === "repeat") {
+        audio.currentTime = 0;
+        audio.play();
+      } else {
+        onPlaySong("next");
+      }
+    },
+    [playerType]
+  );
 
-    const currentIndex = ids.findIndex((id) => id === activeId);
+  const onPlaySong = useCallback(
+    (type: "next" | "previous") => {
+      if (ids.length <= 1) return;
+      const currentIndex = ids.findIndex((id) => id === activeId);
 
-    if (playerType === "shuffle") {
-      const randomId = generateNextSongIndex(currentIndex);
-      setId(ids[randomId]);
+      if (playerType === "shuffle") {
+        const randomIndex = generateNextSongIndex(currentIndex);
+        setId(ids[randomIndex]);
+        return;
+      }
 
+      const nextSong =
+        type === "next" ? ids[currentIndex + 1] : ids[currentIndex - 1];
+      if (nextSong) {
+        setId(nextSong);
+      } else {
+        setId(type === "next" ? ids[0] : ids[ids.length - 1]);
+      }
+    },
+    [ids, activeId, playerType]
+  );
+
+  const generateNextSongIndex = useCallback(
+    (currentIndex: number): number => {
+      if (ids.length === 1) return 0;
+      let nextIndex = currentIndex;
+      while (nextIndex === currentIndex) {
+        nextIndex = Math.floor(Math.random() * ids.length);
+      }
+      return nextIndex;
+    },
+    [ids]
+  );
+
+  useEffect(() => {
+    if (!audioSrc) {
+      const emptyCallback = () => {};
+
+      // If the song is loading...
+      initializeMediaSession({
+        song: { ...song, title: "Loading", artist: "Loading the song..." },
+        songImageUrl: "/images/liked.png",
+        callbacks: {
+          onPlay: emptyCallback,
+          onPause: emptyCallback,
+          onNexttrack: emptyCallback,
+          onPrevtrack: emptyCallback,
+          onSeekForward: emptyCallback,
+          onSeekBackward: emptyCallback,
+          onSeekTo: emptyCallback,
+          onStop: emptyCallback,
+        },
+        positionState: {
+          duration: 0,
+          position: 0,
+          playbackRate: 1.0,
+        },
+      });
       return;
     }
 
-    // Next song...
-    const nextSongToPlay =
-      type === "next" ? ids[currentIndex + 1] : ids[currentIndex - 1];
+    const audio = new Audio(audioSrc);
+    audio.volume = volume;
 
-    if (nextSongToPlay) {
-      setId(nextSongToPlay);
-    } else {
-      setId(type === "next" ? ids[0] : ids[ids.length - 1]);
-    }
-  }
+    const onPlay = () => {
+      setIsMusicPlaying(true);
+      navigator.setAppBadge?.(1);
+      navigator.mediaSession.playbackState = "playing";
+    };
 
-  const generateNextSongIndex = (currentIndex: number): number => {
-    if (ids.length === 1) return 0; // if the length of our playlist is 1, we don't want to play a random music, but instead we want to play the current music
+    const onPause = () => {
+      setIsMusicPlaying(false);
+      navigator.clearAppBadge?.();
+      navigator.mediaSession.playbackState = "paused";
+    };
 
-    let nextSongIndex = currentIndex;
+    const onLoad = (e: Event) => {
+      const target = e.currentTarget as HTMLAudioElement;
 
-    while (nextSongIndex === currentIndex) {
-      nextSongIndex = Math.floor(Math.random() * ids.length);
-    }
+      setSound(target);
 
-    return nextSongIndex;
-  };
+      navigator.mediaSession?.setPositionState({
+        duration: target.duration || 0,
+        position: target.currentTime,
+        playbackRate: 1.0,
+      });
+    };
 
-  useEffect(() => {
-    if (!sound) return;
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
+    audio.addEventListener("ended", onEnd);
+    audio.addEventListener("loadedmetadata", onLoad);
 
-    sound.play();
     setCurrentlyPlayingSongId(song.id);
+    audio.play();
 
+    // Media Session Setup
     const clearMediaSessionMetadata = initializeMediaSession({
       song,
       songImageUrl: songImageUrl || "/images/liked.png",
       callbacks: {
-        onPlay: () => play(),
-        onPause: () => pause(),
+        onPlay: () => audio.play(),
+        onPause: () => audio.pause(),
         onNexttrack: () => onPlaySong("next"),
         onPrevtrack: () => onPlaySong("previous"),
-        onSeekForward: () => sound.seek(sound.seek() + 10),
-        onSeekBackward: () => sound.seek(sound.seek() - 10),
-        onSeekTo: ({ seekTime }) => sound.seek(seekTime ?? 0),
+        onSeekForward: () => (audio.currentTime += 10),
+        onSeekBackward: () => (audio.currentTime -= 10),
+        onSeekTo: ({ seekTime }) => (audio.currentTime = seekTime ?? 0),
         onStop: () => {
-          sound.unload();
+          audio.pause();
+          audio.src = "";
           setCurrentlyPlayingSongId();
           setId();
         },
       },
       positionState: {
-        duration: sound.duration(),
-        position: sound.seek(),
+        duration: audio.duration || 0,
+        position: audio.currentTime,
         playbackRate: 1.0,
       },
     });
 
     return () => {
-      sound.unload();
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onPause);
+      audio.removeEventListener("ended", onEnd);
+      audio.removeEventListener("loadedmetadata", onLoad);
+      audio.pause();
+      audio.src = "";
       clearMediaSessionMetadata();
     };
-  }, [sound]);
+  }, [audioSrc]);
 
-  // whenever the playerType changes, we add new properties to the howler instance and media session
+  // Sync volume changes
+  useEffect(() => {
+    if (sound) {
+      sound.volume = volume;
+    }
+  }, [volume, sound]);
+
+  // whenever the playerType changes, we add new properties to the audio instance and media session
   useEffect(() => {
     if (!sound) return;
 
@@ -161,14 +211,11 @@ export function usePlayer(song: Song, songUrl: string) {
       onPlaySong("previous")
     );
 
-    sound.off("end");
+    sound.removeEventListener("ended", onEnd);
 
-    if (playerType === "repeat") {
-      sound.loop(true);
-    } else {
-      sound.on("end", () => onPlaySong("next"));
-      sound.loop(false);
-    }
+    sound.addEventListener("ended", onEnd);
+
+    return () => sound.removeEventListener("ended", onEnd);
   }, [playerType, sound]);
 
   return {
@@ -178,13 +225,13 @@ export function usePlayer(song: Song, songUrl: string) {
       playerType,
     },
     handlers: {
-      handleChangePlayerType,
+      handleChangePlayerType: setPlayerType,
       onPlaySong,
       handlePlay: () => {
         if (!isMusicPlaying) {
-          play();
+          sound?.play();
         } else {
-          pause();
+          sound?.pause();
         }
       },
       toggleMute: () => {
@@ -202,7 +249,7 @@ export function usePlayer(song: Song, songUrl: string) {
     },
     sound: {
       song: sound,
-      duration,
+      duration: sound?.duration || 0,
       volume,
       setVolume,
     },

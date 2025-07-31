@@ -3,6 +3,11 @@ import { useState } from "react";
 import { HiOutlineStatusOffline } from "react-icons/hi";
 import { twMerge } from "tailwind-merge";
 
+type Props = ImageProps & {
+  renderLoadingComponent?: boolean;
+  renderErrorFallback?: boolean;
+};
+
 const SongCover = ({
   src,
   alt,
@@ -10,13 +15,14 @@ const SongCover = ({
   height,
   className,
   renderLoadingComponent = true,
+  renderErrorFallback = true,
   ...props
-}: ImageProps & { renderLoadingComponent?: boolean }) => {
+}: Props) => {
   const [imageStatus, setImageStatus] = useState<
     "loading" | "loaded" | "error"
   >("loading");
 
-  if (imageStatus === "error") {
+  if (imageStatus === "error" && renderErrorFallback) {
     return (
       <div
         className="flex justify-center items-center h-full w-full"

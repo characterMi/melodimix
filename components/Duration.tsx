@@ -7,7 +7,7 @@ function Duration({
   song,
   isMobilePlayer,
 }: {
-  song: any;
+  song: HTMLAudioElement | null;
   isMobilePlayer?: true;
 }) {
   const {
@@ -24,10 +24,9 @@ function Duration({
     <div className="w-full h-10 flex items-center justify-center">
       <p
         className={twMerge(
-          "relative z-[1] whitespace-nowrap duration-el",
-          !isMobilePlayer
-            ? "bg-black px-2 after:w-5 after:h-full after:absolute after:left-full after:top-0 after:bg-gradient-to-r after:from-black after:pointer-events-none"
-            : "pr-2"
+          "relative pr-2 whitespace-nowrap duration-el",
+          !isMobilePlayer &&
+            "bg-black after:w-5 after:h-full after:absolute after:left-full after:top-0 after:bg-gradient-to-r after:from-black after:pointer-events-none"
         )}
       >
         {currentDuration}
@@ -39,11 +38,11 @@ function Duration({
         onChange={(value) => {
           if (song) {
             setCurrentDurationPercentage(value);
-            song.seek((value / 100) * (song?._duration || 0));
+            song.currentTime = value * ((song.duration || 0) / 100);
           }
         }}
         max={100}
-        step={0.1}
+        step={1}
         label="Song Duration"
       >
         <KeyboardNavigationHelper
@@ -59,10 +58,9 @@ function Duration({
       >
         <p
           className={twMerge(
-            "relativ whitespace-nowrap duration-el",
-            !isMobilePlayer
-              ? "bg-black px-2 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:pointer-events-none"
-              : "pl-1"
+            "relative pl-2 whitespace-nowrap duration-el",
+            !isMobilePlayer &&
+              "bg-black after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:pointer-events-none"
           )}
         >
           <span className={twMerge(showTotalDuration && "opacity-0")}>-</span>
@@ -79,7 +77,7 @@ const KeyboardNavigationHelper = ({
   durationPercentage,
   setDurationPercentage,
 }: {
-  song: any;
+  song: HTMLAudioElement | null;
   durationPercentage: number;
   setDurationPercentage: Dispatch<SetStateAction<number>>;
 }) => {
@@ -89,13 +87,15 @@ const KeyboardNavigationHelper = ({
     if (!isFocused) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (!song) return;
+
       const power = e.ctrlKey ? 10 : 0.1;
 
       if (e.key === "ArrowLeft") {
         setDurationPercentage((prev) => {
           const pos = Math.max(prev - power, 0);
 
-          song.seek((pos / 100) * (song?._duration || 0));
+          song.currentTime = pos * ((song.duration || 0) / 100);
 
           return pos;
         });
@@ -103,7 +103,7 @@ const KeyboardNavigationHelper = ({
         setDurationPercentage((prev) => {
           const pos = Math.min(prev + power, 100);
 
-          song.seek((pos / 100) * (song?._duration || 0));
+          song.currentTime = pos * ((song.duration || 0) / 100);
 
           return pos;
         });

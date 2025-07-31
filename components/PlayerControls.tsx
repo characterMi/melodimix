@@ -35,16 +35,27 @@ const PlayerControls = ({
 
     <button
       onClick={handlePlay}
-      className="flex items-center justify-center size-14 sm:size-10 rounded-full bg-white p-1 cursor-pointer overflow-hidden"
+      className="flex items-center justify-center size-14 sm:size-10 rounded-full bg-white p-1 cursor-pointer overflow-hidden relative"
       aria-label={(isMusicPlaying ? "Pause " : "Play ") + "the song"}
     >
-      {isSoundLoading || isSongLoading ? (
-        <div className="size-6 rounded-full border-4 animate-spin border-black relative after:size-3 after:bg-white after:absolute after:bottom-3/4 after:rotate-45">
-          <p className="sr-only">Loading the song...</p>
-        </div>
-      ) : (
-        <Icon size={30} className="text-black" aria-hidden />
-      )}
+      <Icon
+        size={30}
+        className={twMerge(
+          "text-black transition-opacity",
+          isSongLoading || isSoundLoading ? "opacity-0" : "opacity-100"
+        )}
+        aria-hidden
+      />
+
+      <div
+        className={twMerge(
+          "absolute size-6 rounded-full border-4 animate-spin border-black after:size-3 after:bg-white after:absolute after:bottom-3/4 after:rotate-45 transition-opacity",
+          isSongLoading || isSoundLoading ? "opacity-100" : "opacity-0"
+        )}
+      >
+        {isSongLoading ||
+          (isSoundLoading && <p className="sr-only">Loading the song...</p>)}
+      </div>
     </button>
 
     <button

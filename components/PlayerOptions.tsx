@@ -60,7 +60,7 @@ const PlayerOptions = ({
         className="font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity flex items-center justify-between"
         onClick={handleDownload}
       >
-        Download
+        Save to Downloads
         <HiOutlineDownload size={18} aria-hidden />
       </DropdownMenu.Item>
 
