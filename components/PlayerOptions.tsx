@@ -17,30 +17,24 @@ const PlayerOptions = ({
   triggerEl?: React.ReactNode;
 }) => {
   const handleDownload = async () => {
-    try {
-      const response = await fetch(songUrl);
+    const cache = await caches.open("songs");
+    const cachedResponse = await cache.match(songUrl);
 
-      if (!response.ok) {
-        throw new Error(
-          `Failed to download: ${response.status} ${response.statusText}`
-        );
-      }
-
-      const blob = await response.blob();
-
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${song.title} - ${song.artist}`;
-      a.click();
-
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      toast.error(
-        "Couldn't download the song! checkout browser console for more information."
-      );
-      console.error(error);
+    if (!cachedResponse) {
+      toast.error("You need to download the song, in order to save it.");
+      return;
     }
+
+    const response = cachedResponse.clone();
+    const blob = await response.blob();
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${song.title} - ${song.artist}`;
+    a.click();
+
+    URL.revokeObjectURL(url);
   };
 
   return (
