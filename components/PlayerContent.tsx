@@ -55,7 +55,7 @@ const PlayerContent = ({
 
             <button
               aria-label="Share the song"
-              onClick={() => handleShare(song.title, song.artist)}
+              onClick={() => handleShare(song.title, song.artist, song.id)}
               className="cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition hidden xss:block"
             >
               <TbMusicShare size={28} aria-hidden />

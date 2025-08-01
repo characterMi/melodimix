@@ -114,8 +114,12 @@ export default function manifest(): Manifest {
     ],
     protocol_handlers: [
       {
-        protocol: "web+melodimixatb",
+        protocol: "web+melodimix-search",
         url: "/search?song_title=%s",
+      },
+      {
+        protocol: "web+melodimix-listen",
+        url: "/?song_id=%s",
       },
     ],
     categories: ["Song", "Song player", "Music player", "Spotify clone"],

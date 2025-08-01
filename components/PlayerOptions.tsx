@@ -59,7 +59,7 @@ const PlayerOptions = ({
 
       <DropdownMenu.Item
         className="font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity flex items-center justify-between"
-        onClick={() => handleShare(song.title, song.artist)}
+        onClick={() => handleShare(song.title, song.artist, song.id)}
       >
         Share
         <TbMusicShare size={18} aria-hidden />

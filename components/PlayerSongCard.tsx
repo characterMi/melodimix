@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
-import { usePlayerStore, type PlayerType } from "@/store/usePlayerStore";
+import { type PlayerType } from "@/store/usePlayerStore";
 
 import LikeButton from "./LikeButton";
 import MobilePlayer from "./MobilePlayer";
@@ -11,6 +11,7 @@ import PlayerOptions from "./PlayerOptions";
 import PlayerTypeButton from "./PlayerTypeButton";
 import SongItem from "./SongItem";
 
+import { useMobilePlayer } from "@/hooks/useMobilePlayer";
 import type { Song } from "@/types";
 import type { IconType } from "react-icons";
 
@@ -32,24 +33,8 @@ const PlayerSongCard = ({
   const isMobile = useMediaQuery("(max-width: 639px)");
 
   const closeMobilePlayerButton = useRef<HTMLButtonElement>(null);
-  const { isMobilePlayerOpen, setIsMobilePlayerOpen } = usePlayerStore(
-    (state) => ({
-      isMobilePlayerOpen: state.isMobilePlayerOpen,
-      setIsMobilePlayerOpen: state.setIsMobilePlayerOpen,
-    })
-  );
-
-  const openMobilePlayer = useCallback(() => {
-    if (isMobilePlayerOpen) return;
-
-    const url = new URL(window.location.href);
-
-    url.searchParams.set("isMobilePlayerOpen", "true");
-
-    // The reason we don't use router is because the router causes reload on offline mode.
-    window.history.pushState({ isMobilePlayerOpen: true }, "", url);
-    setIsMobilePlayerOpen(true);
-  }, [isMobilePlayerOpen]);
+  const { isMobilePlayerOpen, setIsMobilePlayerOpen, openMobilePlayer } =
+    useMobilePlayer();
 
   useEffect(() => {
     if (!isMobilePlayerOpen) return;

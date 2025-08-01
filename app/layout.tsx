@@ -9,6 +9,7 @@ import { Figtree } from "next/font/google";
 import dynamic from "next/dynamic";
 import "./globals.css";
 import Root from "./root";
+import SongInitializer from "./song-initializer";
 
 const PWAFeatures = dynamic(() => import("./pwa-features"), { ssr: false });
 
@@ -100,6 +101,7 @@ export default function RootLayout({
         </head>
         <body className={figtree.className}>
           <PWAFeatures />
+          <SongInitializer />
           <ToasterProvider />
           <ModalProvider />
           <Root>

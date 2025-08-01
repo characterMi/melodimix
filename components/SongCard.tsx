@@ -15,12 +15,12 @@ const SongCard = ({ data, onClick }: Props) => {
 
   function handleClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
-    handleShare(data.title, data.artist);
+    handleShare(data.title, data.artist, data.id);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     if (e.key === "Enter" || e.key === " ") {
-      handleShare(data.title, data.artist);
+      handleShare(data.title, data.artist, data.id);
     }
   }
 
