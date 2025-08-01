@@ -35,7 +35,7 @@ const PlayerControls = ({
 
     <button
       onClick={handlePlay}
-      className="flex items-center justify-center size-14 sm:size-10 rounded-full bg-white p-1 cursor-pointer overflow-hidden relative"
+      className="flex items-center justify-center size-14 sm:size-10 rounded-full bg-white p-1 cursor-pointer overflow-hidden relative hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity"
       aria-label={(isMusicPlaying ? "Pause" : "Play") + " the song"}
       aria-pressed={isMusicPlaying}
     >
