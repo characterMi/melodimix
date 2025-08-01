@@ -1,4 +1,3 @@
-import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 const getCleanParamValue = (value: string) => {
@@ -13,9 +12,9 @@ export const useCustomParams = (
   type: "search" | "listen",
   handler: (newValue: string) => void
 ) => {
-  const searchParams = useSearchParams();
-
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+
     if (type === "search") {
       const songTitle = searchParams.get("song_title");
       if (!songTitle) return;
