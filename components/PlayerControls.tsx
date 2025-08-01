@@ -36,7 +36,8 @@ const PlayerControls = ({
     <button
       onClick={handlePlay}
       className="flex items-center justify-center size-14 sm:size-10 rounded-full bg-white p-1 cursor-pointer overflow-hidden relative"
-      aria-label={(isMusicPlaying ? "Pause " : "Play ") + "the song"}
+      aria-label={(isMusicPlaying ? "Pause" : "Play") + " the song"}
+      aria-pressed={isMusicPlaying}
     >
       <Icon
         size={30}
@@ -53,8 +54,9 @@ const PlayerControls = ({
           isSongLoading || isSoundLoading ? "opacity-100" : "opacity-0"
         )}
       >
-        {isSongLoading ||
-          (isSoundLoading && <p className="sr-only">Loading the song...</p>)}
+        {(isSongLoading || isSoundLoading) && (
+          <p className="sr-only">Loading the song...</p>
+        )}
       </div>
     </button>
 

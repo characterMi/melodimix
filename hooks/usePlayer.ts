@@ -95,31 +95,7 @@ export function usePlayer(song: Song, songUrl: string) {
   );
 
   useEffect(() => {
-    if (!audioSrc) {
-      const emptyCallback = () => {};
-
-      // If the song is loading...
-      initializeMediaSession({
-        song: { ...song, title: "Loading", artist: "Loading the song..." },
-        songImageUrl: "/images/liked.png",
-        callbacks: {
-          onPlay: emptyCallback,
-          onPause: emptyCallback,
-          onNexttrack: emptyCallback,
-          onPrevtrack: emptyCallback,
-          onSeekForward: emptyCallback,
-          onSeekBackward: emptyCallback,
-          onSeekTo: emptyCallback,
-          onStop: emptyCallback,
-        },
-        positionState: {
-          duration: 0,
-          position: 0,
-          playbackRate: 1.0,
-        },
-      });
-      return;
-    }
+    if (!audioSrc) return;
 
     const audio = new Audio(audioSrc);
     audio.volume = volume;

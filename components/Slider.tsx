@@ -32,11 +32,15 @@ const Slider = ({
       onValueChange={handleChange}
       max={max}
       step={step}
-      aria-label={label}
     >
       <RadixSlider.Track className="bg-neutral-600 relative grow rounded-full h-[3px] cursor-pointer">
         <RadixSlider.Range
           className={twMerge("absolute rounded-full h-full", bgColor)}
+          role="slider"
+          aria-valuemin={0}
+          aria-valuemax={max}
+          aria-valuenow={value}
+          aria-label={label}
         />
       </RadixSlider.Track>
       {children}

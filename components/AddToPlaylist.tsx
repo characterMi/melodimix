@@ -1,4 +1,5 @@
 import { updatePlaylist } from "@/actions/updatePlaylist";
+import { useAuthModal } from "@/store/useAuthModal";
 import { usePlaylistModal } from "@/store/usePlaylistModal";
 import { Playlist } from "@/types";
 import { useSessionContext } from "@supabase/auth-helpers-react";
@@ -107,37 +108,54 @@ const Playlists = ({ songId }: { songId: string }) => {
   );
 };
 
-const AddToPlaylist = ({ songId }: { songId: string }) => {
+const CreatePlaylist = () => {
+  const { session, isLoading } = useSessionContext();
+  const onAuthModalOpen = useAuthModal((state) => state.onOpen);
   const openModal = usePlaylistModal((state) => state.onOpen);
 
+  const onOpen = () => {
+    if (isLoading) return;
+
+    if (!session) {
+      onAuthModalOpen();
+      return;
+    }
+
+    openModal();
+  };
+
   return (
-    <DropdownMenu.Sub>
-      <DropdownMenu.SubTrigger className="cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity">
-        Add to playlist
-      </DropdownMenu.SubTrigger>
-
-      <DropdownMenu.SubContent className="w-[180px] h-[160px] mx-2">
-        <DropdownMenu.Group className="flex items-center justify-between gap-x-2">
-          <DropdownMenu.Label className="font-bold text-sm">
-            Playlists
-          </DropdownMenu.Label>
-
-          <DropdownMenu.Item
-            className="text-white cursor-pointer hover:text-neutral-400 focus-visible:text-neutral-400 outline-none transition"
-            aria-label="Create a new playlist"
-            onClick={() => openModal()}
-          >
-            <AiOutlinePlus size={18} aria-hidden />
-          </DropdownMenu.Item>
-        </DropdownMenu.Group>
-        <DropdownMenu.Separator className="mt-2 mb-1" />
-
-        <DropdownMenu.Group className="flex flex-1 overflow-y-auto flex-col items-center justify-center p-0">
-          <Playlists songId={songId} />
-        </DropdownMenu.Group>
-      </DropdownMenu.SubContent>
-    </DropdownMenu.Sub>
+    <DropdownMenu.Item
+      className="text-white cursor-pointer hover:text-neutral-400 focus-visible:text-neutral-400 outline-none transition"
+      aria-label="Create a new playlist"
+      onClick={onOpen}
+    >
+      <AiOutlinePlus size={18} aria-hidden />
+    </DropdownMenu.Item>
   );
 };
+
+const AddToPlaylist = ({ songId }: { songId: string }) => (
+  <DropdownMenu.Sub>
+    <DropdownMenu.SubTrigger className="cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity">
+      Add to playlist
+    </DropdownMenu.SubTrigger>
+
+    <DropdownMenu.SubContent className="w-[180px] h-[160px] mx-2">
+      <DropdownMenu.Group className="flex items-center justify-between gap-x-2">
+        <DropdownMenu.Label className="font-bold text-sm">
+          Playlists
+        </DropdownMenu.Label>
+
+        <CreatePlaylist />
+      </DropdownMenu.Group>
+      <DropdownMenu.Separator className="mt-2 mb-1" />
+
+      <DropdownMenu.Group className="flex flex-1 overflow-y-auto flex-col items-center justify-center p-0">
+        <Playlists songId={songId} />
+      </DropdownMenu.Group>
+    </DropdownMenu.SubContent>
+  </DropdownMenu.Sub>
+);
 
 export default AddToPlaylist;

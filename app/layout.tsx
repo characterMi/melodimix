@@ -8,8 +8,9 @@ import { Figtree } from "next/font/google";
 
 import dynamic from "next/dynamic";
 import "./globals.css";
+import Root from "./root";
 
-const Root = dynamic(() => import("./root"), { ssr: false });
+const PWAFeatures = dynamic(() => import("./pwa-features"), { ssr: false });
 
 const figtree = Figtree({ subsets: ["latin"] });
 
@@ -98,6 +99,7 @@ export default function RootLayout({
           <meta name="pinterest-rich-pin" content="true" />
         </head>
         <body className={figtree.className}>
+          <PWAFeatures />
           <ToasterProvider />
           <ModalProvider />
           <Root>

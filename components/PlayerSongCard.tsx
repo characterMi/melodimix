@@ -73,9 +73,10 @@ const PlayerSongCard = ({
             showAuthor={false}
             shouldRunAnimationIfCurrentlyPlaying={false}
             onClick={isMobile ? openMobilePlayer : undefined}
+            ariaLive="polite"
           />
 
-          <div className="flex items-center pointer-events-none sm:pointer-events-auto bg-black h-full absolute top-0 right-0 pl-1 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:z-[1]">
+          <div className="flex items-center bg-black h-full absolute top-0 right-0 pl-1 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:z-[1]">
             <div
               className="hidden sm:flex items-center gap-2 h-full"
               aria-hidden={isMobile}
@@ -91,7 +92,16 @@ const PlayerSongCard = ({
               <PlayerOptions song={song} songUrl={songUrl} />
             </div>
 
-            <IoIosArrowUp className="sm:hidden cursor-pointer" size={28} />
+            <button
+              className="cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity sm:hidden"
+              onClick={openMobilePlayer}
+              aria-label="Expand mobile player"
+              aria-controls="mobile-player"
+              aria-expanded={isMobilePlayerOpen}
+              aria-hidden={!isMobile}
+            >
+              <IoIosArrowUp size={28} aria-hidden />
+            </button>
           </div>
         </div>
       </div>

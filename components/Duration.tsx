@@ -24,9 +24,9 @@ function Duration({
     <div className="w-full h-10 flex items-center justify-center">
       <p
         className={twMerge(
-          "relative pr-2 whitespace-nowrap duration-el",
+          "relative pr-3 whitespace-nowrap duration-el",
           !isMobilePlayer &&
-            "bg-black after:w-5 after:h-full after:absolute after:left-full after:top-0 after:bg-gradient-to-r after:from-black after:pointer-events-none"
+            "bg-black pl-2 after:w-5 after:h-full after:absolute after:left-full after:top-0 after:bg-gradient-to-r after:from-black after:pointer-events-none"
         )}
       >
         {currentDuration}
@@ -55,12 +55,13 @@ function Duration({
       <button
         onClick={() => setShowTotalDuration(!showTotalDuration)}
         className="hover:text-neutral-400 focus-visible:text-neutral-400 outline-none transition-colors"
+        aria-label={"Show " + (showTotalDuration ? "Remaining" : "Total")}
       >
         <p
           className={twMerge(
             "relative pl-2 whitespace-nowrap duration-el",
             !isMobilePlayer &&
-              "bg-black after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:pointer-events-none"
+              "bg-black after:w-5 px-2 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:pointer-events-none"
           )}
         >
           <span className={twMerge(showTotalDuration && "opacity-0")}>-</span>

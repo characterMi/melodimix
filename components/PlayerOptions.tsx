@@ -46,9 +46,8 @@ const PlayerOptions = ({
   return (
     <DropdownMenu
       triggerProps={{
-        element: triggerEl ?? (
-          <BiDotsVerticalRounded size={24} aria-label="Options..." />
-        ),
+        element: triggerEl ?? <BiDotsVerticalRounded size={24} aria-hidden />,
+        label: "Options...",
         className:
           "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition",
       }}

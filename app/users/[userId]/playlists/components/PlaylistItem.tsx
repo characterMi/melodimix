@@ -46,7 +46,7 @@ const PlaylistItem = ({
       href={`/users/${playlist.user_id}/playlists/${playlist.id}`}
       className="flex items-center text-left gap-3 cursor-pointer hover:bg-neutral-800/50 focus-visible:bg-neutral-800/50 outline-none w-full p-2 rounded-md group"
     >
-      <div className="rounded-md min-w-16 relative before:absolute before:-top-1 before:left-1/2 before:-translate-x-1/2 before:bg-neutral-800 before:rounded-[4px] before:w-10/12 before:h-full after:absolute after:inset-0 after:bg-neutral-950">
+      <div className="rounded-md min-w-16 size-16 relative before:absolute before:-top-1 before:left-1/2 before:-translate-x-1/2 before:bg-neutral-800 before:rounded-[4px] before:w-10/12 before:h-full after:absolute after:inset-0 after:bg-neutral-950 after:rounded-md">
         {playlistThumbnail && (
           <Image
             src={playlistThumbnail}

@@ -62,6 +62,7 @@ interface SongItemProps {
   isPlayer?: boolean;
   showAuthor?: boolean;
   shouldRunAnimationIfCurrentlyPlaying?: boolean;
+  ariaLive?: "polite" | "assertive" | "off";
 }
 
 const SongItem = ({
@@ -70,6 +71,7 @@ const SongItem = ({
   isPlayer = false,
   showAuthor = true,
   shouldRunAnimationIfCurrentlyPlaying = true,
+  ariaLive,
 }: SongItemProps) => {
   const imageUrl = useLoadImage(data);
 
@@ -83,19 +85,22 @@ const SongItem = ({
     <button
       onClick={handleClick}
       className="flex items-center text-left gap-x-3 cursor-pointer hover:bg-neutral-800/50 focus-visible:bg-neutral-800/50 outline-none w-full p-2 rounded-md"
-      aria-label={"Play the " + data.title + " song"}
+      aria-label={isPlayer ? undefined : "Play the " + data.title + " song"}
       tabIndex={!!onClick ? 0 : -1}
     >
       <div className="relative rounded-md min-w-12 h-12 overflow-hidden bg-neutral-950">
         <SongCover
           src={imageUrl || "/images/liked.png"}
-          alt={data.title}
+          alt={"Cover art for: " + data.title}
           width={50}
           height={50}
         />
       </div>
 
-      <div className="flex flex-col gap-1 overflow-hidden w-full">
+      <div
+        className="flex flex-col gap-1 overflow-hidden w-full"
+        aria-live={ariaLive}
+      >
         <div
           className={twMerge(
             "flex items-center shrink-0 text-lg scroll-animation__container",

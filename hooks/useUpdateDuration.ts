@@ -18,8 +18,18 @@ export function useUpdateDuration(song: HTMLAudioElement | null) {
     totalDuration.current = formatDuration(song.duration);
 
     const onTimeupdate = (e: Event) => {
-      const { currentTime, duration } = e.currentTarget as HTMLAudioElement;
-      setCurrentDurationPercentage(currentTime / ((duration || 0) / 100));
+      const { currentTime, duration, playbackRate } =
+        e.currentTarget as HTMLAudioElement;
+
+      if (!duration) return;
+
+      setCurrentDurationPercentage(currentTime / (duration / 100));
+
+      navigator.mediaSession?.setPositionState({
+        duration,
+        position: currentTime,
+        playbackRate: playbackRate || 1.0,
+      });
     };
 
     song.addEventListener("timeupdate", onTimeupdate);
@@ -28,16 +38,6 @@ export function useUpdateDuration(song: HTMLAudioElement | null) {
       song.removeEventListener("timeupdate", onTimeupdate);
     };
   }, [song]);
-
-  useEffect(() => {
-    if (!song) return;
-
-    navigator.mediaSession?.setPositionState({
-      duration: song.duration || 0,
-      position: song.currentTime,
-      playbackRate: 1.0,
-    });
-  }, [currentDurationPercentage]);
 
   return {
     totalDuration: totalDuration.current,

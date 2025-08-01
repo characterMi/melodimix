@@ -39,7 +39,6 @@ export const initializeMediaSession = ({
     navigator.mediaSession.metadata = new MediaMetadata({
       title: song.title,
       artist: song.artist,
-      album: "Unknown",
       artwork: [
         {
           src: songImageUrl,
@@ -60,6 +59,8 @@ export const initializeMediaSession = ({
   }
 
   return () => {
+    if (!navigator.mediaSession) return;
+
     navigator.mediaSession.metadata = null;
     navigator.mediaSession.setActionHandler("play", null);
     navigator.mediaSession.setActionHandler("pause", null);

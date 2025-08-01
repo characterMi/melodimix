@@ -41,10 +41,13 @@ const PlayerContent = ({
           playerTypeIcon={PlayerTypeIcon}
         >
           <div className="flex items-center justify-between gap-1">
-            <div className="flex flex-col gap-1 overflow-hidden w-full">
-              <h2 className="text-2xl xss:text-3xl font-semibold truncate">
+            <div
+              className="flex flex-col gap-1 overflow-hidden w-full"
+              aria-live="polite"
+            >
+              <h3 className="text-2xl xss:text-3xl font-semibold truncate">
                 {song.title}
-              </h2>
+              </h3>
               <p className="text-xs xss:text-sm font-thin opacity-80 truncate">
                 {song.artist}
               </p>
@@ -96,9 +99,10 @@ const PlayerContent = ({
             <button
               className="cursor-pointer outline-none hover:opacity-50 focus-visible:opacity-50 transition-opacity"
               onClick={toggleMute}
-              aria-label={sound.volume === 0 ? "unmute" : "mute"}
+              aria-label={sound.volume === 0 ? "Unmute" : "Mute"}
+              aria-pressed={sound.volume !== 0}
             >
-              <VolumeIcon size={24} />
+              <VolumeIcon size={24} aria-hidden />
             </button>
 
             <Slider
