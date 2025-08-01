@@ -11,27 +11,34 @@ export const useLoadSong = (songUrl: string) => {
   useEffect(() => {
     if (hasFetched.current) return;
 
-    const abortReason = {
-      code: "499",
-      message: "User Aborted the request",
-    };
-
-    abortController.current?.abort(abortReason);
+    abortController.current?.abort();
     abortController.current = new AbortController();
+
+    async function getSong() {
+      const cache = await caches.open("songs");
+      const cachedResponse = await cache.match(songUrl);
+
+      if (cachedResponse) return cachedResponse.clone();
+
+      const response = await fetch(songUrl, {
+        signal: abortController.current!.signal,
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to load the song: ${response.status} ${response.statusText}`
+        );
+      }
+
+      cache.put(songUrl, response.clone());
+      return response;
+    }
 
     (async () => {
       try {
         setIsSoundLoading(true);
 
-        const response = await fetch(songUrl, {
-          signal: abortController.current!.signal,
-        });
-
-        if (!response.ok) {
-          throw new Error(
-            `Failed to load the song: ${response.status} ${response.statusText}`
-          );
-        }
+        const response = await getSong();
 
         const blob = await response.blob();
         const url = URL.createObjectURL(blob);
@@ -44,7 +51,8 @@ export const useLoadSong = (songUrl: string) => {
         const errorText = "Couldn't load the music";
 
         console.error(`${errorText}: ${error}`);
-        if ((error as any)?.code === "499") return;
+        if (error instanceof DOMException && error?.name === "AbortError")
+          return;
 
         console.error(error);
         toast.error(errorText);
@@ -54,7 +62,7 @@ export const useLoadSong = (songUrl: string) => {
     })();
 
     return () => {
-      abortController.current?.abort(abortReason);
+      abortController.current?.abort();
       hasFetched.current = false;
       audioSrc && URL.revokeObjectURL(audioSrc);
     };

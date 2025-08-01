@@ -81,17 +81,15 @@ self.addEventListener("fetch", (event) => {
   const eventUrl = new URL(event.request.url);
 
   if (eventUrl.hostname === SUPABASE_HOSTNAME) {
+    // No need to fetch (we handle that in the useLoadSong hook)
+    if (eventUrl.pathname.startsWith("/storage/v1/object/public/songs")) return;
+
     // Song by id...
     if (
       eventUrl.pathname.startsWith("/rest/v1/songs") &&
       eventUrl.searchParams.has("id")
     ) {
       event.respondWith(staleWhileRevalidate(event.request, "songs-data"));
-      return;
-    }
-
-    if (eventUrl.pathname.startsWith("/storage/v1/object/public/songs")) {
-      event.respondWith(cacheOnly(event.request, "songs"));
       return;
     }
 
