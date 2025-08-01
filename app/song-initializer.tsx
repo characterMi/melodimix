@@ -1,3 +1,5 @@
+"use client";
+
 import { useCustomParams } from "@/hooks/useCustomParams";
 import { useMobilePlayer } from "@/hooks/useMobilePlayer";
 import { usePlayerStore } from "@/store/usePlayerStore";

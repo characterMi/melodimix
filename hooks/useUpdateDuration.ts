@@ -25,11 +25,13 @@ export function useUpdateDuration(song: HTMLAudioElement | null) {
 
       setCurrentDurationPercentage(currentTime / (duration / 100));
 
-      navigator.mediaSession?.setPositionState({
-        duration,
-        position: currentTime,
-        playbackRate: playbackRate || 1.0,
-      });
+      if ("setPositionState" in navigator.mediaSession) {
+        navigator.mediaSession.setPositionState({
+          duration,
+          position: currentTime,
+          playbackRate: playbackRate || 1.0,
+        });
+      }
     };
 
     song.addEventListener("timeupdate", onTimeupdate);

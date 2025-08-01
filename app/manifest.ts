@@ -114,11 +114,11 @@ export default function manifest(): Manifest {
     ],
     protocol_handlers: [
       {
-        protocol: "web+melodimix-search",
+        protocol: "web+melodimixsearch",
         url: "/search?song_title=%s",
       },
       {
-        protocol: "web+melodimix-listen",
+        protocol: "web+melodimixlisten",
         url: "/?song_id=%s",
       },
     ],

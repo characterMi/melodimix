@@ -6,17 +6,11 @@ type Params = {
   callbacks: {
     onPlay: () => void;
     onPause: () => void;
-    onStop: () => void;
     onNexttrack: () => void;
     onPrevtrack: () => void;
     onSeekForward: () => void;
     onSeekBackward: () => void;
     onSeekTo: (params: MediaSessionActionDetails) => void;
-  };
-  positionState: {
-    duration: number;
-    position: number;
-    playbackRate: number;
   };
 };
 
@@ -26,14 +20,12 @@ export const initializeMediaSession = ({
   callbacks: {
     onPlay,
     onPause,
-    onStop,
     onNexttrack,
     onPrevtrack,
     onSeekForward,
     onSeekBackward,
     onSeekTo,
   },
-  positionState,
 }: Params) => {
   if (navigator.mediaSession) {
     navigator.mediaSession.metadata = new MediaMetadata({
@@ -53,8 +45,6 @@ export const initializeMediaSession = ({
     navigator.mediaSession.setActionHandler("seekforward", onSeekForward);
     navigator.mediaSession.setActionHandler("seekbackward", onSeekBackward);
     navigator.mediaSession.setActionHandler("seekto", onSeekTo);
-    navigator.mediaSession.setActionHandler("stop", onStop);
-    navigator.mediaSession.setPositionState(positionState);
     navigator.mediaSession.playbackState = "playing";
   }
 
@@ -69,7 +59,6 @@ export const initializeMediaSession = ({
     navigator.mediaSession.setActionHandler("seekforward", null);
     navigator.mediaSession.setActionHandler("seekbackward", null);
     navigator.mediaSession.setActionHandler("seekto", null);
-    navigator.mediaSession.setActionHandler("stop", null);
     navigator.mediaSession.setPositionState(undefined);
     navigator.mediaSession.playbackState = "none";
   };

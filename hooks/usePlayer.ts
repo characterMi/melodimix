@@ -132,6 +132,14 @@ export function usePlayer(song: Song, songUrl: string) {
     setCurrentlyPlayingSongId(song.id);
     audio.play();
 
+    const updatePositionState = () => {
+      navigator.mediaSession.setPositionState({
+        duration: audio.duration || 0,
+        playbackRate: 1.0,
+        position: audio.currentTime || 0,
+      });
+    };
+
     // Media Session Setup
     const clearMediaSessionMetadata = initializeMediaSession({
       song,
@@ -141,20 +149,18 @@ export function usePlayer(song: Song, songUrl: string) {
         onPause: () => audio.pause(),
         onNexttrack: () => onPlaySong("next"),
         onPrevtrack: () => onPlaySong("previous"),
-        onSeekForward: () => (audio.currentTime += 10),
-        onSeekBackward: () => (audio.currentTime -= 10),
-        onSeekTo: ({ seekTime }) => (audio.currentTime = seekTime ?? 0),
-        onStop: () => {
-          audio.pause();
-          audio.src = "";
-          setCurrentlyPlayingSongId();
-          setId();
+        onSeekForward: () => {
+          audio.currentTime += 10;
+          updatePositionState();
         },
-      },
-      positionState: {
-        duration: audio.duration || 0,
-        position: audio.currentTime,
-        playbackRate: 1.0,
+        onSeekBackward: () => {
+          audio.currentTime -= 10;
+          updatePositionState();
+        },
+        onSeekTo: ({ seekTime }) => {
+          audio.currentTime = seekTime ?? 0;
+          updatePositionState();
+        },
       },
     });
 
