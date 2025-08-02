@@ -101,20 +101,9 @@ export function usePlayer(song: Song, songUrl: string) {
     };
 
     const onTimeupdate = (e: Event) => {
-      const { currentTime, duration, playbackRate } =
-        e.currentTarget as HTMLAudioElement;
+      const { currentTime, duration } = e.currentTarget as HTMLAudioElement;
 
-      if (!duration) return;
-
-      setDurationPercentage(currentTime / (duration / 100));
-
-      if ("setPositionState" in navigator.mediaSession) {
-        navigator.mediaSession.setPositionState({
-          duration,
-          position: currentTime,
-          playbackRate: playbackRate || 1.0,
-        });
-      }
+      setDurationPercentage(currentTime / ((duration || 0) / 100));
     };
 
     const onLoad = (e: Event) => {
