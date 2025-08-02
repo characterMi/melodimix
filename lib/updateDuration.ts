@@ -1,7 +1,7 @@
-import type { Duration } from "@/hooks/useUpdateDuration";
+import type { Duration } from "@/components/Duration";
 
 type Seconds = `0${number}` | number;
-type Minutes = Seconds;
+type Minutes = `0${number}` | number;
 
 export function formatDuration(duration: number): Duration {
   // ~~ is used to round down the number.

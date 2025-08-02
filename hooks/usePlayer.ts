@@ -17,14 +17,16 @@ export function usePlayer(song: Song, songUrl: string) {
     volume,
     activeId,
     setCurrentlyPlayingSongId,
+    setDurationPercentage,
   } = usePlayerStore((state) => ({
-    ids: state.ids,
     playerType: state.playerType,
+    ids: state.ids,
     setId: state.setId,
-    setVolume: state.setVolume,
     volume: state.volume,
+    setVolume: state.setVolume,
     activeId: state.activeId,
     setCurrentlyPlayingSongId: state.setCurrentlyPlayingSongId,
+    setDurationPercentage: state.setCurrentDurationPercentage,
   }));
 
   const { audioSrc, isSoundLoading } = useLoadSong(songUrl);
@@ -98,6 +100,23 @@ export function usePlayer(song: Song, songUrl: string) {
       navigator.mediaSession.playbackState = "paused";
     };
 
+    const onTimeupdate = (e: Event) => {
+      const { currentTime, duration, playbackRate } =
+        e.currentTarget as HTMLAudioElement;
+
+      if (!duration) return;
+
+      setDurationPercentage(currentTime / (duration / 100));
+
+      if ("setPositionState" in navigator.mediaSession) {
+        navigator.mediaSession.setPositionState({
+          duration,
+          position: currentTime,
+          playbackRate: playbackRate || 1.0,
+        });
+      }
+    };
+
     const onLoad = (e: Event) => {
       const target = e.currentTarget as HTMLAudioElement;
 
@@ -114,6 +133,7 @@ export function usePlayer(song: Song, songUrl: string) {
       ["play", onPlay],
       ["pause", onPause],
       ["ended", onEnd],
+      ["timeupdate", onTimeupdate],
       ["loadedmetadata", onLoad],
     ] as const;
 

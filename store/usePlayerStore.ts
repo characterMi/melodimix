@@ -14,6 +14,10 @@ interface PlayerStore {
   setPlayerType: () => void;
   volume: number;
   setVolume: (volume: number) => void;
+  durationPercentage: number;
+  setCurrentDurationPercentage: (
+    value: number | ((prev: number) => number)
+  ) => void;
   isMobilePlayerOpen: boolean;
   setIsMobilePlayerOpen: (isOpen: boolean) => void;
 }
@@ -54,6 +58,16 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
     }),
   volume: 1,
   setVolume: (volume) => set({ volume }),
+  durationPercentage: 0,
+  setCurrentDurationPercentage: (value) => {
+    if (typeof value === "function") {
+      set((state) => ({
+        durationPercentage: value(state.durationPercentage),
+      }));
+    } else {
+      set({ durationPercentage: value });
+    }
+  },
   isMobilePlayerOpen: false,
   setIsMobilePlayerOpen: (isOpen) => set({ isMobilePlayerOpen: isOpen }),
 }));
