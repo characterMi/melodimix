@@ -1,14 +1,11 @@
+import { useCallback, useEffect, useState } from "react";
+
 import { initializeMediaSession } from "@/lib/mediaSession";
 import { usePlayerStore } from "@/store/usePlayerStore";
-import { Song } from "@/types";
-import { useCallback, useEffect, useState } from "react";
-import { BiArrowToRight } from "react-icons/bi";
-import { BsPauseFill, BsPlayFill } from "react-icons/bs";
-import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
-import { IoShuffleOutline } from "react-icons/io5";
-import { PiRepeatOnce } from "react-icons/pi";
 import { useLoadImage } from "./useLoadImage";
 import { useLoadSong } from "./useLoadSong";
+
+import type { Song } from "@/types";
 
 export function usePlayer(song: Song, songUrl: string) {
   const songImageUrl = useLoadImage(song);
@@ -16,7 +13,6 @@ export function usePlayer(song: Song, songUrl: string) {
     ids,
     playerType,
     setId,
-    setPlayerType,
     setVolume,
     volume,
     activeId,
@@ -25,7 +21,6 @@ export function usePlayer(song: Song, songUrl: string) {
     ids: state.ids,
     playerType: state.playerType,
     setId: state.setId,
-    setPlayerType: state.setPlayerType,
     setVolume: state.setVolume,
     volume: state.volume,
     activeId: state.activeId,
@@ -36,15 +31,6 @@ export function usePlayer(song: Song, songUrl: string) {
   const [sound, setSound] = useState<HTMLAudioElement | null>(null);
 
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
-
-  const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
-  const PlayerTypeIcon =
-    playerType === "next-song"
-      ? BiArrowToRight
-      : playerType === "shuffle"
-      ? IoShuffleOutline
-      : PiRepeatOnce;
-  const PauseOrPlayIcon = isMusicPlaying ? BsPauseFill : BsPlayFill;
 
   const onEnd = useCallback(
     (e: Event) => {
@@ -119,56 +105,44 @@ export function usePlayer(song: Song, songUrl: string) {
 
       navigator.mediaSession?.setPositionState({
         duration: target.duration || 0,
-        position: target.currentTime,
+        position: target.currentTime || 0,
         playbackRate: 1.0,
       });
     };
 
-    audio.addEventListener("play", onPlay);
-    audio.addEventListener("pause", onPause);
-    audio.addEventListener("ended", onEnd);
-    audio.addEventListener("loadedmetadata", onLoad);
+    const events = [
+      ["play", onPlay],
+      ["pause", onPause],
+      ["ended", onEnd],
+      ["loadedmetadata", onLoad],
+    ] as const;
+
+    events.forEach(([action, handler]) =>
+      audio.addEventListener(action, handler)
+    );
 
     setCurrentlyPlayingSongId(song.id);
     audio.play();
-
-    const updatePositionState = () => {
-      navigator.mediaSession.setPositionState({
-        duration: audio.duration || 0,
-        playbackRate: 1.0,
-        position: audio.currentTime || 0,
-      });
-    };
 
     // Media Session Setup
     const clearMediaSessionMetadata = initializeMediaSession({
       song,
       songImageUrl: songImageUrl || "/images/liked.png",
       callbacks: {
-        onPlay: () => audio.play(),
-        onPause: () => audio.pause(),
-        onNexttrack: () => onPlaySong("next"),
-        onPrevtrack: () => onPlaySong("previous"),
-        onSeekForward: () => {
-          audio.currentTime += 10;
-          updatePositionState();
-        },
-        onSeekBackward: () => {
-          audio.currentTime -= 10;
-          updatePositionState();
-        },
-        onSeekTo: ({ seekTime }) => {
-          audio.currentTime = seekTime ?? 0;
-          updatePositionState();
-        },
+        play: () => audio.play(),
+        pause: () => audio.pause(),
+        nexttrack: () => onPlaySong("next"),
+        previoustrack: () => onPlaySong("previous"),
+        seekforward: () => (audio.currentTime += 10),
+        seekbackward: () => (audio.currentTime -= 10),
+        seekto: (event) => (audio.currentTime = event?.seekTime ?? 0),
       },
     });
 
     return () => {
-      audio.removeEventListener("play", onPlay);
-      audio.removeEventListener("pause", onPause);
-      audio.removeEventListener("ended", onEnd);
-      audio.removeEventListener("loadedmetadata", onLoad);
+      events.forEach(([action, handler]) =>
+        audio.removeEventListener(action, handler)
+      );
       audio.pause();
       audio.src = "";
       clearMediaSessionMetadata();
@@ -207,7 +181,6 @@ export function usePlayer(song: Song, songUrl: string) {
       playerType,
     },
     handlers: {
-      handleChangePlayerType: setPlayerType,
       onPlaySong,
       handlePlay: () => {
         if (!isMusicPlaying) {
@@ -223,11 +196,6 @@ export function usePlayer(song: Song, songUrl: string) {
           setVolume(0);
         }
       },
-    },
-    icons: {
-      VolumeIcon,
-      PlayerTypeIcon,
-      PauseOrPlayIcon,
     },
     sound: {
       song: sound,

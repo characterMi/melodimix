@@ -42,7 +42,7 @@ const SongCover = ({
           className
         )}
         src={src}
-        alt={alt + " poster"}
+        alt={alt}
         width={width}
         height={height}
         onLoad={() => setImageStatus("loaded")}

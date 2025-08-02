@@ -14,7 +14,7 @@ const SearchInput = ({ placeholder }: { placeholder: string }) => {
 
   const debouncedValue = useDebounce(value, 1500);
 
-  useCustomParams("search", (search) => setSearchValue(search));
+  useCustomParams("search", (searchValue) => setValue(searchValue));
 
   useEffect(() => {
     setSearchValue(debouncedValue);

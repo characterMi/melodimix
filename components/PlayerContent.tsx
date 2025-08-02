@@ -1,3 +1,4 @@
+import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { TbMusicShare } from "react-icons/tb";
 
 import { usePlayer } from "@/hooks/usePlayer";
@@ -21,11 +22,9 @@ const PlayerContent = ({
   songUrl: string;
   isSongLoading: boolean;
 }) => {
-  const { handlers, icons, sound, state } = usePlayer(song, songUrl);
+  const { handlers, sound, state } = usePlayer(song, songUrl);
 
-  const { handleChangePlayerType, handlePlay, onPlaySong, toggleMute } =
-    handlers;
-  const { PauseOrPlayIcon, PlayerTypeIcon, VolumeIcon } = icons;
+  const { handlePlay, onPlaySong, toggleMute } = handlers;
   const { isSoundLoading, isMusicPlaying, playerType } = state;
 
   return (
@@ -33,13 +32,7 @@ const PlayerContent = ({
       <Duration song={sound.song} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 h-full relative">
-        <PlayerSongCard
-          song={song}
-          songUrl={songUrl}
-          handleChangePlayerType={handleChangePlayerType}
-          playerType={playerType}
-          playerTypeIcon={PlayerTypeIcon}
-        >
+        <PlayerSongCard song={song} songUrl={songUrl} playerType={playerType}>
           <div className="flex items-center justify-between gap-1">
             <div
               className="flex flex-col gap-1 overflow-hidden w-full"
@@ -69,41 +62,26 @@ const PlayerContent = ({
 
             <PlayerControls
               isMobilePlayer
-              isSongLoading={isSongLoading}
+              isSongLoading={isSongLoading || isSoundLoading}
               onPlaySong={onPlaySong}
               handlePlay={handlePlay}
               isMusicPlaying={isMusicPlaying}
-              isSoundLoading={isSoundLoading}
-              icon={PauseOrPlayIcon}
             />
 
-            <PlayerTypeButton
-              handleChangePlayerType={handleChangePlayerType}
-              icon={PlayerTypeIcon}
-              playerType={playerType}
-            />
+            <PlayerTypeButton playerType={playerType} />
           </div>
         </PlayerSongCard>
 
         <PlayerControls
-          isSongLoading={isSongLoading}
+          isSongLoading={isSongLoading || isSoundLoading}
           onPlaySong={onPlaySong}
           handlePlay={handlePlay}
           isMusicPlaying={isMusicPlaying}
-          isSoundLoading={isSoundLoading}
-          icon={PauseOrPlayIcon}
         />
 
         <div className="hidden md:flex w-full justify-end pr-2">
           <div className="flex items-center gap-x-2 w-[120px]">
-            <button
-              className="cursor-pointer outline-none hover:opacity-50 focus-visible:opacity-50 transition-opacity"
-              onClick={toggleMute}
-              aria-label={sound.volume === 0 ? "Unmute" : "Mute"}
-              aria-pressed={sound.volume !== 0}
-            >
-              <VolumeIcon size={24} aria-hidden />
-            </button>
+            <VolumeButton toggleMute={toggleMute} volume={sound.volume} />
 
             <Slider
               value={sound.volume}
@@ -117,6 +95,27 @@ const PlayerContent = ({
         </div>
       </div>
     </>
+  );
+};
+
+const VolumeButton = ({
+  toggleMute,
+  volume,
+}: {
+  toggleMute: () => void;
+  volume: number;
+}) => {
+  const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
+
+  return (
+    <button
+      className="cursor-pointer outline-none hover:opacity-50 focus-visible:opacity-50 transition-opacity"
+      onClick={toggleMute}
+      aria-label={volume === 0 ? "Unmute" : "Mute"}
+      aria-pressed={volume !== 0}
+    >
+      <VolumeIcon size={24} aria-hidden />
+    </button>
   );
 };
 

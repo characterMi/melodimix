@@ -33,7 +33,7 @@ const SongCard = ({ data, onClick }: Props) => {
       <div className="relative aspect-square w-full h-full rounded-md overflow-hidden bg-neutral-950">
         <SongCover
           src={imagePath || "/images/liked.png"}
-          alt={data.title}
+          alt={"Cover art for: " + data.title}
           width={130}
           height={130}
           className="w-full"

@@ -2,8 +2,7 @@ import { useEffect, useRef } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-
-import { type PlayerType } from "@/store/usePlayerStore";
+import { useMobilePlayer } from "@/hooks/useMobilePlayer";
 
 import LikeButton from "./LikeButton";
 import MobilePlayer from "./MobilePlayer";
@@ -11,28 +10,24 @@ import PlayerOptions from "./PlayerOptions";
 import PlayerTypeButton from "./PlayerTypeButton";
 import SongItem from "./SongItem";
 
-import { useMobilePlayer } from "@/hooks/useMobilePlayer";
+import { type PlayerType } from "@/store/usePlayerStore";
 import type { Song } from "@/types";
-import type { IconType } from "react-icons";
 
 const PlayerSongCard = ({
   song,
   playerType,
-  handleChangePlayerType,
-  playerTypeIcon: PlayerTypeIcon,
   songUrl,
   children,
 }: {
   song: Song;
   playerType: PlayerType;
-  handleChangePlayerType: () => void;
-  playerTypeIcon: IconType;
   songUrl: string;
   children: React.ReactNode;
 }) => {
   const isMobile = useMediaQuery("(max-width: 639px)");
 
   const closeMobilePlayerButton = useRef<HTMLButtonElement>(null);
+
   const { isMobilePlayerOpen, setIsMobilePlayerOpen, openMobilePlayer } =
     useMobilePlayer();
 
@@ -68,11 +63,7 @@ const PlayerSongCard = ({
             >
               <LikeButton song={song} />
 
-              <PlayerTypeButton
-                icon={PlayerTypeIcon}
-                handleChangePlayerType={handleChangePlayerType}
-                playerType={playerType}
-              />
+              <PlayerTypeButton playerType={playerType} />
 
               <PlayerOptions song={song} songUrl={songUrl} />
             </div>

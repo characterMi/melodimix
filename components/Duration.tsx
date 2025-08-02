@@ -24,9 +24,9 @@ function Duration({
     <div className="w-full h-10 flex items-center justify-center">
       <p
         className={twMerge(
-          "relative pr-3 whitespace-nowrap duration-el",
+          "relative pr-3 z-[1] whitespace-nowrap duration-el",
           !isMobilePlayer &&
-            "bg-black pl-2 after:w-5 after:z-[1] after:h-full after:absolute after:left-full after:top-0 after:bg-gradient-to-r after:from-black after:pointer-events-none"
+            "bg-black pl-2 after:w-5 after:h-full after:absolute after:left-full after:top-0 after:bg-gradient-to-r after:from-black after:pointer-events-none"
         )}
       >
         {currentDuration}
@@ -59,9 +59,9 @@ function Duration({
       >
         <p
           className={twMerge(
-            "relative pl-2 whitespace-nowrap duration-el",
+            "relative pl-2 z-[1] whitespace-nowrap duration-el",
             !isMobilePlayer &&
-              "bg-black px-2 after:w-5 after:z-[1] after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:pointer-events-none"
+              "bg-black px-2 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:pointer-events-none"
           )}
         >
           <span className={twMerge(showTotalDuration && "opacity-0")}>-</span>

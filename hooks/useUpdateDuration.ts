@@ -25,6 +25,7 @@ export function useUpdateDuration(song: HTMLAudioElement | null) {
 
       setCurrentDurationPercentage(currentTime / (duration / 100));
 
+      navigator.mediaSession.playbackState = "playing";
       if ("setPositionState" in navigator.mediaSession) {
         navigator.mediaSession.setPositionState({
           duration,
