@@ -103,7 +103,7 @@ const MobilePlayer = ({
         />
       </div>
 
-      <div className="w-full flex flex-col gap-4 pb-10 xss:pb-14 p-6 xss:p-8">
+      <div className="w-full flex flex-col gap-4 pb-14 p-6 xss:p-8">
         {children}
       </div>
     </div>,

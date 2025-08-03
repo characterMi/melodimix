@@ -5,7 +5,7 @@ import { useMobilePlayer } from "@/hooks/useMobilePlayer";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import { useCallback } from "react";
 
-const SongInitializer = () => {
+const SongPlayerInitializer = () => {
   const setId = usePlayerStore((state) => state.setId);
   const { openMobilePlayer } = useMobilePlayer();
 
@@ -19,4 +19,4 @@ const SongInitializer = () => {
   return null;
 };
 
-export default SongInitializer;
+export default SongPlayerInitializer;

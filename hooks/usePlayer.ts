@@ -40,6 +40,13 @@ export function usePlayer(song: Song, songUrl: string) {
 
       if (playerType === "repeat") {
         audio.currentTime = 0;
+
+        navigator.mediaSession?.setPositionState({
+          duration: audio.duration || 0,
+          position: audio.currentTime || 0,
+          playbackRate: 1.0,
+        });
+
         audio.play();
       } else {
         onPlaySong("next");
@@ -110,12 +117,6 @@ export function usePlayer(song: Song, songUrl: string) {
       const target = e.currentTarget as HTMLAudioElement;
 
       setSound(target);
-
-      navigator.mediaSession?.setPositionState({
-        duration: target.duration || 0,
-        position: target.currentTime || 0,
-        playbackRate: 1.0,
-      });
     };
 
     const events = [
@@ -133,16 +134,6 @@ export function usePlayer(song: Song, songUrl: string) {
     setCurrentlyPlayingSongId(song.id);
     audio.play();
 
-    const updatePositionState = () => {
-      if (isNaN(audio.duration)) return;
-
-      navigator.mediaSession.setPositionState({
-        duration: audio.duration,
-        playbackRate: audio.playbackRate,
-        position: audio.currentTime,
-      });
-    };
-
     // Media Session Setup
     const clearMediaSessionMetadata = initializeMediaSession({
       song,
@@ -152,18 +143,9 @@ export function usePlayer(song: Song, songUrl: string) {
         pause: () => audio.pause(),
         nexttrack: () => onPlaySong("next"),
         previoustrack: () => onPlaySong("previous"),
-        seekforward: () => {
-          audio.currentTime += 10;
-          updatePositionState();
-        },
-        seekbackward: () => {
-          audio.currentTime -= 10;
-          updatePositionState();
-        },
-        seekto: (event) => {
-          audio.currentTime = event?.seekTime ?? 0;
-          updatePositionState();
-        },
+        seekforward: () => (audio.currentTime += 10),
+        seekbackward: () => (audio.currentTime -= 10),
+        seekto: (event) => (audio.currentTime = event?.seekTime ?? 0),
       },
     });
 
@@ -173,6 +155,7 @@ export function usePlayer(song: Song, songUrl: string) {
       );
       audio.pause();
       audio.src = "";
+      setDurationPercentage(0);
       clearMediaSessionMetadata();
     };
   }, [audioSrc]);

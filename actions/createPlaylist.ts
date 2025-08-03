@@ -37,22 +37,11 @@ export const createPlaylist = async ({
     };
   }
 
-  const { data: songs, error: songsError } = await supabase
-    .from("songs")
-    .select("id");
-
-  if (songsError) {
+  if (songIds.length > 100) {
     return {
       error: true,
-      message: "Something went wrong!",
-      playlistId: null,
-    };
-  }
-
-  if (songIds.length > songs.length) {
-    return {
-      error: true,
-      message: "Too many songs in this playlist, we don't have this much song.",
+      message:
+        "Too many songs in this playlist, you can't add more than 100 songs to a playlist.",
       playlistId: null,
     };
   }

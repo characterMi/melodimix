@@ -7,11 +7,14 @@ import type { Metadata, Viewport } from "next";
 import { Figtree } from "next/font/google";
 
 import dynamic from "next/dynamic";
+import SongPlayerInitializer from "../components/SongPlayerInitializer ";
 import "./globals.css";
 import Root from "./root";
-import SongInitializer from "./song-initializer";
 
-const PWAFeatures = dynamic(() => import("./pwa-features"), { ssr: false });
+const PWABehaviorManager = dynamic(
+  () => import("../components/PWABehaviorManager "),
+  { ssr: false }
+);
 
 const figtree = Figtree({ subsets: ["latin"] });
 
@@ -100,8 +103,8 @@ export default function RootLayout({
           <meta name="pinterest-rich-pin" content="true" />
         </head>
         <body className={figtree.className}>
-          <PWAFeatures />
-          <SongInitializer />
+          <PWABehaviorManager />
+          <SongPlayerInitializer />
           <ToasterProvider />
           <ModalProvider />
           <Root>

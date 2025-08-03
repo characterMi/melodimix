@@ -5,15 +5,17 @@ import { addPWAEventListeners } from "@/lib/addPWAEventListeners";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
-const PWAFeatures = () => {
+const PWABehaviorManager = () => {
   const pathname = usePathname();
   const interval = useRef<NodeJS.Timeout>();
-  const isPWA = useMediaQuery("(display-mode: standalone)");
+  const isPWA =
+    useMediaQuery("(display-mode: standalone)") ||
+    /* @ts-ignore*/
+    window.navigator.standalone === true;
 
   // PWA listeners...
   useEffect(() => {
-    /* @ts-ignore*/
-    if (!isPWA || window.navigator.standalone === true) return;
+    if (!isPWA) return;
 
     const removeListeners = addPWAEventListeners();
 
@@ -24,8 +26,7 @@ const PWAFeatures = () => {
   useEffect(() => {
     clearInterval(interval.current);
 
-    /* @ts-ignore*/
-    if (isPWA || window.navigator.standalone === true) {
+    if (isPWA) {
       interval.current = setInterval(() => {
         const viewportMeta = document.querySelector<HTMLMetaElement>(
           'meta[name="viewport"]'
@@ -39,6 +40,7 @@ const PWAFeatures = () => {
               "user-scalable=no"
             )
           );
+
           clearInterval(interval.current);
         }
       }, 10);
@@ -52,4 +54,4 @@ const PWAFeatures = () => {
   return null;
 };
 
-export default PWAFeatures;
+export default PWABehaviorManager;
