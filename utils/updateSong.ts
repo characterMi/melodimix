@@ -113,6 +113,7 @@ export const updateSong = async (
   return {
     updatedSong: {
       ...songData,
+      created_at: new Date().toISOString(),
       title,
       author: user.user_metadata.full_name ?? "Guest",
       artist,

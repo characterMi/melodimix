@@ -110,6 +110,7 @@ export const uploadSong = async (
   return {
     uploadedSong: {
       id: data.id,
+      created_at: new Date().toISOString(),
       author: user.user_metadata.full_name ?? "Guest",
       ...newSong,
     },
