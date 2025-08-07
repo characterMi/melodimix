@@ -1,3 +1,5 @@
+"use client";
+
 import { useLoadImage } from "@/hooks/useLoadImage";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types";

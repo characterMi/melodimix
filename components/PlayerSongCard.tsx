@@ -6,9 +6,9 @@ import { useMobilePlayer } from "@/hooks/useMobilePlayer";
 
 import LikeButton from "./LikeButton";
 import MobilePlayer from "./MobilePlayer";
-import PlayerOptions from "./PlayerOptions";
 import PlayerTypeButton from "./PlayerTypeButton";
 import SongItem from "./SongItem";
+import SongOptions from "./SongOptions";
 
 import type { PlayerType } from "@/store/usePlayerStore";
 import type { Song } from "@/types";
@@ -65,7 +65,7 @@ const PlayerSongCard = ({
 
               <PlayerTypeButton playerType={playerType} />
 
-              <PlayerOptions song={song} songUrl={songUrl} />
+              <SongOptions song={song} songUrl={songUrl} />
             </div>
 
             <button

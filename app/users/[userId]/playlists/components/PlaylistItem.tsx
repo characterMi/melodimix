@@ -1,9 +1,11 @@
-import type { Playlist } from "@/types";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { MdArrowOutward } from "react-icons/md";
+
+import FlipArrow from "@/components/FlipArrow";
+
+import type { Playlist } from "@/types";
 
 const PlaylistItem = ({
   playlist,
@@ -73,18 +75,7 @@ const PlaylistItem = ({
           </p>
         </div>
 
-        <div className="text-white h-[28px] overflow-hidden relative">
-          <MdArrowOutward
-            size={28}
-            aria-hidden
-            className="group-hover:-translate-y-full group-focus-visible:-translate-y-full transition-transform"
-          />
-          <MdArrowOutward
-            size={28}
-            aria-hidden
-            className="absolute top-0 left-0 translate-y-full w-full h-full group-hover:translate-y-0 group-focus-visible:translate-y-0 transition-transform"
-          />
-        </div>
+        <FlipArrow hidden size={28} />
       </div>
     </Link>
   );

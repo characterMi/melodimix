@@ -1,7 +1,7 @@
 "use client";
 
 import { getUserSongs } from "@/actions/getUserSongs";
-import LikeButton from "@/components/LikeButton";
+import FlipArrow from "@/components/FlipArrow";
 import LoadMore from "@/components/LoadMore";
 import NoSongFallback from "@/components/NoSongFallback";
 import SongItem from "@/components/SongItem";
@@ -12,23 +12,30 @@ import {
   useUsersPageData,
 } from "@/store/useUsersPageData";
 import type { Song } from "@/types";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 
 const LIMIT = 20;
 
 const SongCard = ({
   song,
+  onClick,
   onPlay,
 }: {
   song: Song;
+  onClick: () => void;
   onPlay: (id: string) => void;
 }) => (
-  <div className="flex items-center gap-x-4 w-full">
+  <div className="flex items-center gap-x-4 w-full group">
     <div className="flex-1 overflow-hidden">
       <SongItem data={song} onClick={(id) => onPlay(id)} showAuthor={false} />
     </div>
 
-    <LikeButton song={song} />
+    <FlipArrow
+      onClick={onClick}
+      role="link"
+      label={`Go to the ${song.title} song page`}
+    />
   </div>
 );
 
@@ -45,9 +52,16 @@ const PageContent = ({
   const onPlay = useOnPlay(pageData?.songs ?? []);
   const activeId = usePlayerStore((state) => state.activeId);
 
+  const router = useRouter();
+
   const songsToRender = useMemo(() => {
     return pageData?.songs.map((song) => (
-      <SongCard key={song.id} onPlay={onPlay} song={song} />
+      <SongCard
+        key={song.id}
+        onPlay={onPlay}
+        song={song}
+        onClick={() => router.push(`/songs/${song.id}`)}
+      />
     ));
   }, [pageData?.songs]);
 
@@ -80,7 +94,12 @@ const PageContent = ({
       <div className="flex flex-col gap-2 w-full">
         {(pageData?.songs.length ?? 0) === 0 &&
           initialSongs.map((song) => (
-            <SongCard key={song.id} onPlay={onPlay} song={song} />
+            <SongCard
+              key={song.id}
+              onPlay={onPlay}
+              song={song}
+              onClick={() => router.push(`/songs/${song.id}`)}
+            />
           ))}
 
         {songsToRender}

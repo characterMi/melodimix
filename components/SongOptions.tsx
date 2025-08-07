@@ -1,20 +1,22 @@
 import { shareSong } from "@/lib/share";
 import type { Song } from "@/types";
 import toast from "react-hot-toast";
-import { BiDotsVerticalRounded } from "react-icons/bi";
 import { HiOutlineDownload } from "react-icons/hi";
+import { RxDotsVertical } from "react-icons/rx";
 import { TbMusicShare } from "react-icons/tb";
 import AddToPlaylist from "./AddToPlaylist";
 import DropdownMenu from "./DropdownMenu";
 
-const PlayerOptions = ({
+const SongOptions = ({
   song,
   songUrl,
-  triggerEl,
+  triggerSize = 24,
+  triggerClasses,
 }: {
   song: Song;
   songUrl: string;
-  triggerEl?: React.ReactNode;
+  triggerSize?: number;
+  triggerClasses?: string;
 }) => {
   const handleDownload = async () => {
     const cache = await caches.open("songs");
@@ -40,10 +42,9 @@ const PlayerOptions = ({
   return (
     <DropdownMenu
       triggerProps={{
-        element: triggerEl ?? <BiDotsVerticalRounded size={24} aria-hidden />,
+        element: <RxDotsVertical size={triggerSize} aria-hidden />,
         label: "Options...",
-        className:
-          "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition",
+        className: `cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition ${triggerClasses}`,
       }}
       contentProps={{
         className: "w-[200px] gap-3 mb-4",
@@ -72,4 +73,4 @@ const PlayerOptions = ({
   );
 };
 
-export default PlayerOptions;
+export default SongOptions;

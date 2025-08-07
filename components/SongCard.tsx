@@ -1,8 +1,12 @@
+"use client";
+
 import { useLoadImage } from "@/hooks/useLoadImage";
 import { shareSong } from "@/lib/share";
 import type { Song } from "@/types";
-import { FaPlay, FaShareAlt } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { FaShareAlt } from "react-icons/fa";
 import Author from "./Author";
+import PlayButton from "./PlayButton";
 import SongCover from "./SongCover";
 
 interface Props {
@@ -12,6 +16,7 @@ interface Props {
 
 const SongCard = ({ data, onClick }: Props) => {
   const imagePath = useLoadImage(data);
+  const router = useRouter();
 
   function handleClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
@@ -62,12 +67,11 @@ const SongCard = ({ data, onClick }: Props) => {
           <FaShareAlt className="text-black" />
         </div>
 
-        <div
-          className="opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md transition translate-y-1/4 group-hover:opacity-100 group-hover:-translate-y-1/4 hover:scale-105 group-focus-visible:opacity-100 group-focus-visible:-translate-y-1/4 focus-visible:scale-105"
-          aria-hidden
-        >
-          <FaPlay className="text-black" />
-        </div>
+        <PlayButton
+          className="opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md transition translate-y-1/4 group-hover:opacity-100 group-hover:-translate-y-1/4 hover:scale-105 group-focus-visible:opacity-100 group-focus-visible:-translate-y-1/4 focus-visible:scale-105 focus-visible:-translate-y-1/4 focus-visible:opacity-100"
+          aria-label={`Go to the ${data.title} page`}
+          onClick={() => router.push(`/songs/${data.id}`)}
+        />
       </div>
     </button>
   );

@@ -1,3 +1,5 @@
+"use client";
+
 import Image, { ImageProps } from "next/image";
 import { useState } from "react";
 import { HiOutlineStatusOffline } from "react-icons/hi";

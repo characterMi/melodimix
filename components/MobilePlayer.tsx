@@ -1,15 +1,14 @@
 import { type KeyboardEvent, type RefObject, useCallback, useRef } from "react";
 
+import { createPortal } from "react-dom";
 import { GoArrowLeft } from "react-icons/go";
-import { TbDots } from "react-icons/tb";
 import { twMerge } from "tailwind-merge";
 
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useLoadImage } from "@/hooks/useLoadImage";
 
-import { createPortal } from "react-dom";
-import PlayerOptions from "./PlayerOptions";
 import SongCover from "./SongCover";
+import SongOptions from "./SongOptions";
 
 import type { Song } from "@/types";
 
@@ -67,10 +66,11 @@ const MobilePlayer = ({
 
         <h2 className="text-2xl text-neutral-200 font-thin">Now playing</h2>
 
-        <PlayerOptions
+        <SongOptions
           song={song}
           songUrl={songUrl}
-          triggerEl={<TbDots size={30} aria-hidden />}
+          triggerClasses="rotate-90"
+          triggerSize={30}
         />
       </div>
 

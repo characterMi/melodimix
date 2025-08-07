@@ -124,7 +124,7 @@ const MobileSidebar = ({
       </div>
 
       <div
-        onClick={() => setIsActive(false)}
+        onClick={openMobileSidebar}
         aria-hidden
         className={`layout md:hidden fixed w-screen h-screen top-0 left-0 bg-black/35 backdrop-blur-sm transition ${
           isActive ? "z-40 opacity-100" : "-z-10 opacity-0"

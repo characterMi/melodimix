@@ -30,7 +30,7 @@ const ProfileLayout = ({ children }: { children: React.ReactNode }) => (
   <section className="bg-neutral-900 rounded-lg w-full h-full overflow-hidden overflow-y-auto">
     <Header>
       <div className="mt-20 flex flex-col md:flex-row items-center gap-x-4">
-        <div className="relative size-32 lg:size-44">
+        <div className="relative size-32 min-w-32 lg:min-w-44 lg:size-44">
           <Image
             src={ProfileImage}
             alt="Profile"

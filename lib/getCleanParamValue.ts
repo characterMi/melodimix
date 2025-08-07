@@ -2,6 +2,10 @@ export const getCleanParamValue = (value: string) => {
   const decoded = decodeURIComponent(value);
 
   // Protocol handlers...
-  const parts = decoded.split("://");
-  return parts.length > 1 ? parts[1].replace(/\/$/, "") : decoded;
+  if (decoded.startsWith("web+melodimix")) {
+    const payload = decoded.slice(decoded.indexOf(":") + 1);
+    return payload.replace(/\//g, "").trim();
+  }
+
+  return decoded;
 };

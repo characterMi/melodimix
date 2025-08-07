@@ -1,18 +1,24 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { twMerge } from "tailwind-merge";
+
 import useOnPlay from "@/hooks/useOnPlay";
 import { useSearchSong } from "@/hooks/useSearchSong";
 import { usePlayerStore } from "@/store/usePlayerStore";
-import type { Song } from "@/types";
-import { twMerge } from "tailwind-merge";
-import LikeButton from "../../components/LikeButton";
+
+import FlipArrow from "@/components/FlipArrow";
 import NoSongFallback from "../../components/NoSongFallback";
 import SongItem from "../../components/SongItem";
+
+import type { Song } from "@/types";
 
 const SearchContent = ({ songs }: { songs: Song[] }) => {
   const { filteredSongs, isSearching } = useSearchSong(songs);
   const activeId = usePlayerStore((state) => state.activeId);
   const onPlay = useOnPlay(filteredSongs);
+
+  const router = useRouter();
 
   if (filteredSongs.length === 0)
     return (
@@ -32,7 +38,7 @@ const SearchContent = ({ songs }: { songs: Song[] }) => {
       )}
     >
       {filteredSongs.map((song) => (
-        <div key={song.id} className="flex items-center gap-x-4 w-full">
+        <div key={song.id} className="flex items-center gap-x-4 w-full group">
           <div className="flex-1 overflow-hidden">
             <SongItem
               onClick={(id) => onPlay(id)}
@@ -41,7 +47,11 @@ const SearchContent = ({ songs }: { songs: Song[] }) => {
             />
           </div>
 
-          <LikeButton song={song} />
+          <FlipArrow
+            onClick={() => router.push(`/songs/${song.id}`)}
+            role="link"
+            label={`Go to the ${song.title} song page`}
+          />
         </div>
       ))}
     </div>

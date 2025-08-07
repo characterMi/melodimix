@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { FaArrowUp } from "react-icons/fa";
 import { MdArrowOutward } from "react-icons/md";

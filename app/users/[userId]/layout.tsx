@@ -16,7 +16,7 @@ const UsersPageLayout = async ({
     <section className="bg-neutral-900 rounded-lg w-full h-full overflow-hidden overflow-y-auto">
       <Header>
         <div className="mt-20 flex flex-col md:flex-row items-center gap-x-4">
-          <div className="relative size-32 lg:size-44">
+          <div className="relative size-32 min-w-32 lg:min-w-44 lg:size-44">
             <Image
               src={user?.avatar_url ?? "/images/profile.png"}
               alt={
@@ -30,9 +30,11 @@ const UsersPageLayout = async ({
           </div>
 
           <div className="flex flex-col gap-y-2 mt-4 md:mt-0 text-center md:text-left">
-            <p className="hidden md:block font-semibold text-sm">
-              {user ? `${user.full_name || "Guest"}'s profile` : ""}
-            </p>
+            {user && (
+              <p className="hidden md:block font-semibold text-sm">
+                {user.full_name || "Guest"}'s profile
+              </p>
+            )}
 
             <h1 className="text-white text-4xl sm:text-7xl md:text-5xl lg:text-7xl">
               {user ? `${user.name || "Guest"}` : "User not found"}
@@ -50,7 +52,7 @@ const UsersPageLayout = async ({
         </div>
       </Header>
 
-      <main className="w-full p-2 sm:p-6 pb-0">{children}</main>
+      <main className="w-full p-6 pb-0">{children}</main>
     </section>
   );
 };
