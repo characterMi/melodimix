@@ -14,10 +14,6 @@ const config: Config = {
         ...defaultTheme.screens,
       },
       keyframes: {
-        skeleton: {
-          "0%": { transform: "translate(-100%, -100%) rotateZ(45deg)" },
-          "100%": { transform: "translate(100%, 150%) rotateZ(45deg)" },
-        },
         spinner: {
           "0%": { opacity: "1" },
           "100%": { opacity: "0" },
@@ -28,7 +24,6 @@ const config: Config = {
         },
       },
       animation: {
-        skeleton: "skeleton 8s linear infinite",
         spinner: "spinner 1s linear infinite",
         grow: "grow 1.5s linear infinite",
       },

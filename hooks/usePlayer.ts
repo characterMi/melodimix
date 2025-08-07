@@ -98,13 +98,17 @@ export function usePlayer(song: Song, songUrl: string) {
     const onPlay = () => {
       setIsMusicPlaying(true);
       navigator.setAppBadge?.(1);
-      navigator.mediaSession.playbackState = "playing";
+      if (navigator.mediaSession) {
+        navigator.mediaSession.playbackState = "playing";
+      }
     };
 
     const onPause = () => {
       setIsMusicPlaying(false);
       navigator.clearAppBadge?.();
-      navigator.mediaSession.playbackState = "paused";
+      if (navigator.mediaSession) {
+        navigator.mediaSession.playbackState = "paused";
+      }
     };
 
     const onTimeupdate = (e: Event) => {
@@ -134,6 +138,16 @@ export function usePlayer(song: Song, songUrl: string) {
     setCurrentlyPlayingSongId(song.id);
     audio.play();
 
+    const updatePositionState = () => {
+      if (isNaN(audio.duration)) return;
+
+      navigator.mediaSession.setPositionState({
+        duration: audio.duration,
+        playbackRate: audio.playbackRate,
+        position: audio.currentTime,
+      });
+    };
+
     // Media Session Setup
     const clearMediaSessionMetadata = initializeMediaSession({
       song,
@@ -143,9 +157,18 @@ export function usePlayer(song: Song, songUrl: string) {
         pause: () => audio.pause(),
         nexttrack: () => onPlaySong("next"),
         previoustrack: () => onPlaySong("previous"),
-        seekforward: () => (audio.currentTime += 10),
-        seekbackward: () => (audio.currentTime -= 10),
-        seekto: (event) => (audio.currentTime = event?.seekTime ?? 0),
+        seekforward: () => {
+          audio.currentTime += 10;
+          updatePositionState();
+        },
+        seekbackward: () => {
+          audio.currentTime -= 10;
+          updatePositionState();
+        },
+        seekto: (event) => {
+          audio.currentTime = event?.seekTime ?? 0;
+          updatePositionState();
+        },
       },
     });
 
@@ -171,12 +194,14 @@ export function usePlayer(song: Song, songUrl: string) {
   useEffect(() => {
     if (!sound) return;
 
-    navigator.mediaSession.setActionHandler("nexttrack", () =>
-      onPlaySong("next")
-    );
-    navigator.mediaSession.setActionHandler("previoustrack", () =>
-      onPlaySong("previous")
-    );
+    if (navigator.mediaSession) {
+      navigator.mediaSession.setActionHandler("nexttrack", () =>
+        onPlaySong("next")
+      );
+      navigator.mediaSession.setActionHandler("previoustrack", () =>
+        onPlaySong("previous")
+      );
+    }
 
     sound.removeEventListener("ended", onEnd);
 

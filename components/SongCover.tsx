@@ -4,7 +4,6 @@ import { HiOutlineStatusOffline } from "react-icons/hi";
 import { twMerge } from "tailwind-merge";
 
 type Props = ImageProps & {
-  renderLoadingComponent?: boolean;
   renderErrorFallback?: boolean;
 };
 
@@ -14,13 +13,10 @@ const SongCover = ({
   width,
   height,
   className,
-  renderLoadingComponent = true,
   renderErrorFallback = true,
   ...props
 }: Props) => {
-  const [imageStatus, setImageStatus] = useState<
-    "loading" | "loaded" | "error"
-  >("loading");
+  const [imageStatus, setImageStatus] = useState<"loaded" | "error">("loaded");
 
   if (imageStatus === "error" && renderErrorFallback) {
     return (
@@ -34,29 +30,19 @@ const SongCover = ({
   }
 
   return (
-    <>
-      <Image
-        className={twMerge(
-          "object-cover h-full transition-opacity opacity-0",
-          imageStatus === "loaded" && "opacity-100",
-          className
-        )}
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        onLoad={() => setImageStatus("loaded")}
-        onError={() => setImageStatus("error")}
-        {...props}
-      />
-
-      {imageStatus === "loading" && renderLoadingComponent && (
-        <div
-          aria-label="Image is loading"
-          className="bg-gradient-to-r from-neutral-950 via-neutral-900 to-neutral-950 w-[300%] h-[200%] absolute top-0 left-0 animate-skeleton"
-        />
+    <Image
+      className={twMerge(
+        "object-cover h-full transition-opacity opacity-0",
+        imageStatus === "loaded" && "opacity-100",
+        className
       )}
-    </>
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      onError={() => setImageStatus("error")}
+      {...props}
+    />
   );
 };
 

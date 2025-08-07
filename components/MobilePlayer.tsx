@@ -83,7 +83,6 @@ const MobilePlayer = ({
           width={1}
           height={1}
           className="size-full absolute z-[-1] blur-lg"
-          renderLoadingComponent={false}
           renderErrorFallback={false}
         />
       )}
@@ -99,7 +98,6 @@ const MobilePlayer = ({
           width={1000}
           height={1000}
           className="h-full"
-          renderLoadingComponent={false}
         />
       </div>
 
