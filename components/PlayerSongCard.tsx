@@ -10,7 +10,7 @@ import PlayerOptions from "./PlayerOptions";
 import PlayerTypeButton from "./PlayerTypeButton";
 import SongItem from "./SongItem";
 
-import { type PlayerType } from "@/store/usePlayerStore";
+import type { PlayerType } from "@/store/usePlayerStore";
 import type { Song } from "@/types";
 
 const PlayerSongCard = ({

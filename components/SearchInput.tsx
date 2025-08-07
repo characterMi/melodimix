@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-import { useCustomParams } from "@/hooks/useCustomParams";
 import { useDebounce } from "@/hooks/useDebounce";
+import { getCleanParamValue } from "@/lib/getCleanParamValue";
 import { useSearchMusic } from "@/store/useSearch";
 
 import Input from "./Input";
@@ -14,7 +14,14 @@ const SearchInput = ({ placeholder }: { placeholder: string }) => {
 
   const debouncedValue = useDebounce(value, 1500);
 
-  useCustomParams("search", (searchValue) => setValue(searchValue));
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    const songTitle = searchParams.get("song_title");
+    if (!songTitle) return;
+
+    setValue(getCleanParamValue(songTitle));
+  }, []);
 
   useEffect(() => {
     setSearchValue(debouncedValue);

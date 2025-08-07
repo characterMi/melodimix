@@ -15,9 +15,11 @@ export const useUserSongs = create<UserSongs>((setState) => ({
       userSongs: songs,
     })),
   addOneSong: (song) =>
-    setState((state) => ({
-      userSongs: [song, ...state.userSongs],
-    })),
+    setState(({ userSongs }) => {
+      if (userSongs.length === 10) userSongs.pop();
+
+      return { userSongs: [song, ...userSongs] };
+    }),
   deleteSong: (songId) =>
     setState((state) => ({
       userSongs: state.userSongs.filter((song) => song.id !== songId),

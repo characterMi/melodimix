@@ -73,19 +73,6 @@ export default function manifest(): Manifest {
     ],
     shortcuts: [
       {
-        name: "Explore",
-        short_name: "Explore",
-        description: "Explore",
-        url: "/",
-        icons: [
-          {
-            src: "/icons/melodimix-192.png",
-            sizes: "192x192",
-            type: "image/png",
-          },
-        ],
-      },
-      {
         name: "Liked Songs",
         short_name: "Liked Songs",
         description: "Liked Songs",
@@ -119,7 +106,7 @@ export default function manifest(): Manifest {
       },
       {
         protocol: "web+melodimixlisten",
-        url: "/?song_id=%s",
+        url: "/songs/%s",
       },
     ],
     categories: ["Song", "Song player", "Music player", "Spotify clone"],

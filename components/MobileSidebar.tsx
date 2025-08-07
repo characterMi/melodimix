@@ -2,7 +2,7 @@
 
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import type { Song } from "@/types";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import DownloadApplication from "./DownloadApplication";
 import Library from "./Library";
@@ -23,19 +23,38 @@ const MobileSidebar = ({
   useFocusTrap<HTMLDivElement>(sidebarContainerRef, isActive);
 
   useEffect(() => {
+    if (!isActive) return;
+
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && isActive) {
+      if (event.key === "Escape") {
         setIsActive(false);
       }
     };
 
-    if (isActive) {
-      document.addEventListener("keydown", handleEscape);
-    }
+    const onPopState = () => setIsActive(false);
+
+    document.addEventListener("keydown", handleEscape);
+    window.addEventListener("popstate", onPopState);
 
     return () => {
       document.removeEventListener("keydown", handleEscape);
+      window.removeEventListener("popstate", onPopState);
     };
+  }, [isActive]);
+
+  const openMobileSidebar = useCallback(() => {
+    if (isActive) {
+      window.history.back();
+      return;
+    }
+
+    const url = new URL(window.location.href);
+
+    url.searchParams.set("isMobileSidebarActive", "true");
+
+    // The reason we don't use router is because the router causes reload on offline mode.
+    window.history.pushState({ isMobileSidebarActive: true }, "", url);
+    setIsActive(true);
   }, [isActive]);
 
   return (
@@ -49,7 +68,7 @@ const MobileSidebar = ({
       >
         <button
           className="fixed top-[40%] -translate-y-[40%] left-full bg-neutral-900 size-14 flex flex-col gap-y-[6px] justify-center items-end pl-2 rounded-r-xl z-50 md:hidden cursor-pointer"
-          onClick={() => setIsActive((prev) => !prev)}
+          onClick={openMobileSidebar}
           style={{ direction: "rtl" }}
           aria-controls="sidebar"
           aria-expanded={isActive}

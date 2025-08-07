@@ -7,7 +7,6 @@ import type { Metadata, Viewport } from "next";
 import { Figtree } from "next/font/google";
 
 import dynamic from "next/dynamic";
-import SongPlayerInitializer from "../components/SongPlayerInitializer ";
 import "./globals.css";
 import Root from "./root";
 
@@ -104,7 +103,6 @@ export default function RootLayout({
         </head>
         <body className={figtree.className}>
           <PWABehaviorManager />
-          <SongPlayerInitializer />
           <ToasterProvider />
           <ModalProvider />
           <Root>
