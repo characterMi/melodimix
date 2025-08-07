@@ -1,5 +1,5 @@
 import { useLoadImage } from "@/hooks/useLoadImage";
-import { handleShare } from "@/lib/shareSong";
+import { shareSong } from "@/lib/share";
 import type { Song } from "@/types";
 import { FaPlay, FaShareAlt } from "react-icons/fa";
 import Author from "./Author";
@@ -15,12 +15,12 @@ const SongCard = ({ data, onClick }: Props) => {
 
   function handleClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
-    handleShare(data.title, data.artist, data.id);
+    shareSong(data.title, data.artist, data.id);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     if (e.key === "Enter" || e.key === " ") {
-      handleShare(data.title, data.artist, data.id);
+      shareSong(data.title, data.artist, data.id);
     }
   }
 

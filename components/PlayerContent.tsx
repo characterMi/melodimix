@@ -2,7 +2,7 @@ import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { TbMusicShare } from "react-icons/tb";
 
 import { usePlayer } from "@/hooks/usePlayer";
-import { handleShare } from "@/lib/shareSong";
+import { shareSong } from "@/lib/share";
 
 import Duration from "./Duration";
 import LikeButton from "./LikeButton";
@@ -48,7 +48,7 @@ const PlayerContent = ({
 
             <button
               aria-label="Share the song"
-              onClick={() => handleShare(song.title, song.artist, song.id)}
+              onClick={() => shareSong(song.title, song.artist, song.id)}
               className="cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition hidden xss:block"
             >
               <TbMusicShare size={28} aria-hidden />

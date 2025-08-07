@@ -1,4 +1,4 @@
-import { handleShare } from "@/lib/shareSong";
+import { shareSong } from "@/lib/share";
 import type { Song } from "@/types";
 import toast from "react-hot-toast";
 import { BiDotsVerticalRounded } from "react-icons/bi";
@@ -59,7 +59,7 @@ const PlayerOptions = ({
 
       <DropdownMenu.Item
         className="font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity flex items-center justify-between"
-        onClick={() => handleShare(song.title, song.artist, song.id)}
+        onClick={() => shareSong(song.title, song.artist, song.id)}
       >
         Share
         <TbMusicShare size={18} aria-hidden />

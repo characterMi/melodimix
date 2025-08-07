@@ -3,10 +3,10 @@
 import NoSongFallback from "@/components/NoSongFallback";
 import SongItem from "@/components/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
+import { sharePlaylist } from "@/lib/share";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import { Playlist, Song } from "@/types";
 import Link from "next/link";
-import toast from "react-hot-toast";
 import { IoShareSocial } from "react-icons/io5";
 
 type Props = {
@@ -36,21 +36,6 @@ const PageContent = ({ songs, errMessage, playlist }: Props) => {
       />
     );
 
-  function handleShare() {
-    if (!navigator.share) {
-      toast.error("Share not supported on your browser");
-      return;
-    }
-
-    navigator.share({
-      title: "Melodimix - Your Ultimate Music Destination.",
-      text: `Checkout ${playlist?.name} playlist by ${
-        playlist?.author === "Guest" ? "a User" : playlist?.author
-      } in MelodiMix!`,
-      url: window.location.href,
-    });
-  }
-
   return (
     <div
       style={{ marginBottom: activeId ? "7rem" : "0" }}
@@ -70,7 +55,7 @@ const PageContent = ({ songs, errMessage, playlist }: Props) => {
         <button
           className="hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity mt-2"
           aria-label="Share the playlist"
-          onClick={handleShare}
+          onClick={() => sharePlaylist(playlist!.name, playlist!.author)}
         >
           <IoShareSocial className="text-white -mb-1 size-5 sm:size-7" />
         </button>
