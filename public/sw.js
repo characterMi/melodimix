@@ -73,10 +73,7 @@ self.addEventListener("message", (event) => {
 
 self.addEventListener("fetch", (event) => {
   // we don't want to cache any method beside GET...
-  if (event.request.method !== "GET") {
-    event.respondWith(fetchReq(event.request));
-    return;
-  }
+  if (event.request.method !== "GET") return;
 
   const eventUrl = new URL(event.request.url);
 

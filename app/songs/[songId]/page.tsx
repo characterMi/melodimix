@@ -69,7 +69,7 @@ const SongIdPage = async ({ params }: { params: { songId: string } }) => {
                 <div className="flex items-center gap-2 font-semibold text-sm text-neutral-400 truncate">
                   <h2 className="truncate">{song.artist}</h2>
 
-                  <span>•</span>
+                  <span aria-hidden>•</span>
 
                   <p>{new Date(song.created_at).getFullYear()}</p>
                 </div>
