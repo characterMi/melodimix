@@ -205,7 +205,7 @@ async function handleRSC(req) {
   fetchReq(htmlUrl.toString(), cache);
 
   // rsc request
-  return (await fetchReq(req)) || responseFallback();
+  return networkFirst(req, assetsCacheName);
 }
 
 async function handleHTML(req) {
