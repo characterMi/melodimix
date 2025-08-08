@@ -16,7 +16,7 @@ const UsersPageLayout = async ({
     <section className="bg-neutral-900 rounded-lg w-full h-full overflow-hidden overflow-y-auto">
       <Header>
         <div className="mt-20 flex flex-col md:flex-row items-center gap-x-4">
-          <div className="relative size-32 min-w-32 lg:min-w-44 lg:size-44">
+          <div className="relative size-36 min-w-36 xss:size-40 xss:min-w-40 sm:size-44 sm:min-w-44 md:size-32 md:min-w-32 lg:size-44 lg:min-w-44 shadow-2xl">
             <Image
               src={user?.avatar_url ?? "/images/profile.png"}
               alt={
@@ -24,7 +24,7 @@ const UsersPageLayout = async ({
               }
               width={200}
               height={200}
-              className="object-cover size-32 lg:size-44"
+              className="object-cover size-36 xss:size-40 sm:size-44 md:size-32 lg:size-44"
               loading="eager"
             />
           </div>

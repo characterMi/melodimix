@@ -98,7 +98,7 @@ export function usePlayer(song: Song, songUrl: string) {
     const onPlay = () => {
       setIsMusicPlaying(true);
       navigator.setAppBadge?.(1);
-      if (navigator.mediaSession) {
+      if (navigator.mediaSession?.playbackState) {
         navigator.mediaSession.playbackState = "playing";
       }
     };
@@ -106,7 +106,7 @@ export function usePlayer(song: Song, songUrl: string) {
     const onPause = () => {
       setIsMusicPlaying(false);
       navigator.clearAppBadge?.();
-      if (navigator.mediaSession) {
+      if (navigator.mediaSession?.playbackState) {
         navigator.mediaSession.playbackState = "paused";
       }
     };
@@ -194,14 +194,12 @@ export function usePlayer(song: Song, songUrl: string) {
   useEffect(() => {
     if (!sound) return;
 
-    if (navigator.mediaSession) {
-      navigator.mediaSession.setActionHandler("nexttrack", () =>
-        onPlaySong("next")
-      );
-      navigator.mediaSession.setActionHandler("previoustrack", () =>
-        onPlaySong("previous")
-      );
-    }
+    navigator.mediaSession?.setActionHandler("nexttrack", () =>
+      onPlaySong("next")
+    );
+    navigator.mediaSession?.setActionHandler("previoustrack", () =>
+      onPlaySong("previous")
+    );
 
     sound.removeEventListener("ended", onEnd);
 

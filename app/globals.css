@@ -13,6 +13,11 @@
   display: none;
 }
 
+::selection {
+  @apply bg-emerald-600 text-white;
+  -webkit-text-fill-color: #ffffff;
+}
+
 html,
 body,
 :root {

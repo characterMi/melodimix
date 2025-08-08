@@ -1,5 +1,6 @@
 import { useLikeSong } from "@/hooks/useLikeSong";
 import type { Song } from "@/types";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 const LikeButton = ({
   song,
@@ -8,7 +9,9 @@ const LikeButton = ({
   song: Song;
   size?: "sm" | "lg";
 }) => {
-  const { isLiked, handleLike, pending, Icon, btnRef } = useLikeSong(song);
+  const { isLiked, handleLike, pending, btnRef } = useLikeSong(song);
+
+  const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
 
   return (
     <button

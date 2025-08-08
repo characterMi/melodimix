@@ -15,7 +15,7 @@ const SongImage = ({ song }: { song: Song | null }) => {
       alt={song ? `${song.title} image` : "Couldn't find the song!"}
       width={500}
       height={500}
-      className="object-cover size-32 sm:size-44 md:size-32 lg:size-44"
+      className="object-cover size-36 xss:size-40 sm:size-44 md:size-32 lg:size-44"
       loading="eager"
     />
   );

@@ -45,7 +45,7 @@ const SongIdPage = async ({ params }: { params: { songId: string } }) => {
     <section className="bg-neutral-900 rounded-lg w-full h-full overflow-hidden overflow-y-auto">
       <Header>
         <div className="mt-20 mb-6 flex flex-col md:flex-row items-center gap-4 overflow-hidden">
-          <div className="relative size-32 min-w-32 sm:size-44 sm:min-w-44 md:size-32 md:min-w-32 lg:size-44 lg:min-w-44 shadow-2xl">
+          <div className="relative size-36 min-w-36 xss:size-40 xss:min-w-40 sm:size-44 sm:min-w-44 md:size-32 md:min-w-32 lg:size-44 lg:min-w-44 shadow-2xl">
             <SongImage song={song} />
           </div>
 

@@ -6,7 +6,6 @@ import type { Song } from "@/types";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRef, useTransition } from "react";
 import toast from "react-hot-toast";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 export const useLikeSong = (song: Song) => {
   const btnRef = useRef<HTMLButtonElement>(null);
@@ -20,8 +19,6 @@ export const useLikeSong = (song: Song) => {
   const [pending, startTransition] = useTransition();
 
   const isLiked = likedSongs[song.id] ?? false;
-
-  const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
 
   const { session } = useSessionContext();
 
@@ -65,5 +62,5 @@ export const useLikeSong = (song: Song) => {
     });
   };
 
-  return { isLiked, handleLike, pending, Icon, btnRef };
+  return { isLiked, handleLike, pending, btnRef };
 };

@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { create } from "zustand";
 
-export type PlayerType = "next-song" | "shuffle" | "repeat";
+export type PlayerType = "sequential" | "shuffle" | "repeat";
 
 interface PlayerStore {
   ids: string[];
@@ -22,6 +22,18 @@ interface PlayerStore {
   setIsMobilePlayerOpen: (isOpen: boolean) => void;
 }
 
+const initialPlayerType = (() => {
+  if (typeof localStorage === "undefined") return "sequential";
+
+  const initialPlayerType = localStorage.getItem("player-type");
+  const isInitialPlayerTypeValid =
+    initialPlayerType === "sequential" ||
+    initialPlayerType === "shuffle" ||
+    initialPlayerType === "repeat";
+
+  return isInitialPlayerTypeValid ? initialPlayerType : "sequential";
+})();
+
 export const usePlayerStore = create<PlayerStore>((set) => ({
   ids: [],
   activeId: undefined,
@@ -29,20 +41,10 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
   setIds: (ids) => set({ ids }),
   currentlyPlayingSongId: undefined,
   setCurrentlyPlayingSongId: (id) => set({ currentlyPlayingSongId: id }),
-  playerType: (() => {
-    if (typeof localStorage === "undefined") return "next-song";
-
-    const initialPlayerType = localStorage.getItem("player-type");
-    const isInitialPlayerTypeValid =
-      initialPlayerType === "next-song" ||
-      initialPlayerType === "shuffle" ||
-      initialPlayerType === "repeat";
-
-    return isInitialPlayerTypeValid ? initialPlayerType : "next-song";
-  })(),
+  playerType: initialPlayerType,
   setPlayerType: () =>
     set(({ playerType }) => {
-      if (playerType === "next-song") {
+      if (playerType === "sequential") {
         toast.success('"Shuffle"');
         localStorage.setItem("player-type", "shuffle");
         return { playerType: "shuffle" };
@@ -51,9 +53,9 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
         localStorage.setItem("player-type", "repeat");
         return { playerType: "repeat" };
       } else {
-        toast.success('"Next song"');
-        localStorage.setItem("player-type", "next-song");
-        return { playerType: "next-song" };
+        toast.success('"Sequential"');
+        localStorage.setItem("player-type", "sequential");
+        return { playerType: "sequential" };
       }
     }),
   volume: 1,

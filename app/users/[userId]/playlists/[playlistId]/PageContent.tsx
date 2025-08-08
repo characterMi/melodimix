@@ -7,7 +7,7 @@ import { sharePlaylist } from "@/lib/share";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import { Playlist, Song } from "@/types";
 import Link from "next/link";
-import { IoShareSocial } from "react-icons/io5";
+import { IoShareSocialOutline } from "react-icons/io5";
 
 type Props = {
   songs: Song[];
@@ -42,7 +42,7 @@ const PageContent = ({ songs, errMessage, playlist }: Props) => {
       className="flex flex-col gap-6 w-full"
     >
       <div>
-        <h2 className="text-2xl sm:text-3xl font-thin inline mr-2">
+        <h2 className="text-2xl sm:text-3xl font-thin inline mr-4">
           <span className="font-bold">{playlist?.name}</span> by{" "}
           <Link
             href={`/users/${playlist?.user_id}`}
@@ -57,7 +57,7 @@ const PageContent = ({ songs, errMessage, playlist }: Props) => {
           aria-label="Share the playlist"
           onClick={() => sharePlaylist(playlist!.name, playlist!.author)}
         >
-          <IoShareSocial className="text-white -mb-1 size-5 sm:size-7" />
+          <IoShareSocialOutline className="text-white -mb-1.5 sm:-mb-1 size-7" />
         </button>
       </div>
 

@@ -97,7 +97,7 @@ const MobilePlayer = ({
           alt={`Album cover for ${song.title}`}
           width={1000}
           height={1000}
-          className="h-full"
+          className="h-full shadow-2xl"
         />
       </div>
 

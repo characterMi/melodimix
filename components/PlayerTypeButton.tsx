@@ -8,7 +8,7 @@ const PlayerTypeButton = ({ playerType }: { playerType: PlayerType }) => {
   const handleChangePlayerType = usePlayerStore((state) => state.setPlayerType);
 
   const PlayerTypeIcon =
-    playerType === "next-song"
+    playerType === "sequential"
       ? BiArrowToRight
       : playerType === "shuffle"
       ? IoShuffleOutline
@@ -18,11 +18,11 @@ const PlayerTypeButton = ({ playerType }: { playerType: PlayerType }) => {
     <button
       aria-label={
         "Change the mode to " +
-        (playerType === "next-song"
+        (playerType === "sequential"
           ? "Shuffle"
           : playerType === "shuffle"
           ? "Repeat"
-          : "Next song")
+          : "Sequential")
       }
       className="cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity"
       onClick={handleChangePlayerType}

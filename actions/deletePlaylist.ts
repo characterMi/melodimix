@@ -21,7 +21,10 @@ export const deletePlaylist = async (playlistId: string, isPublic: boolean) => {
   }
 
   revalidatePath("/profile");
-  isPublic && revalidatePath(`/users/${user.id}/playlists`);
+  if (isPublic) {
+    revalidatePath(`/users/${user.id}/playlists`);
+    revalidatePath(`/users/${user.id}/playlists/${playlistId}`);
+  }
 
   return true;
 };
