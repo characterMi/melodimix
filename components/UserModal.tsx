@@ -1,4 +1,5 @@
 import { updateUserData } from "@/actions/updateUserData";
+import { onError } from "@/lib/onError";
 import { useUserModal } from "@/store/useUserModal";
 import type { User } from "@/types";
 import { useSessionContext } from "@supabase/auth-helpers-react";
@@ -31,23 +32,24 @@ const UpdateUserForm = ({
       return;
     }
 
+    if (!navigator.onLine) {
+      onError(
+        "You're currently offline, make sure you're online, then try again."
+      );
+      return;
+    }
+
     startTransition(async () => {
-      try {
-        const { error } = await updateUserData(formData);
+      const { error } = await updateUserData(formData);
 
-        if (error) {
-          toast.error(error);
-          return;
-        }
-
-        await refreshSession();
-        toast.success("Your profile has been updated!");
-        closeUserModal();
-      } catch (error: any) {
-        console.error(error);
-
-        toast.error("Something went wrong.");
+      if (error) {
+        onError(error);
+        return;
       }
+
+      await refreshSession();
+      toast.success("Your profile has been updated!");
+      closeUserModal();
     });
   };
 

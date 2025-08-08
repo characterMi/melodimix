@@ -1,4 +1,5 @@
 import { updatePlaylist } from "@/actions/updatePlaylist";
+import { onError } from "@/lib/onError";
 import { useAuthModal } from "@/store/useAuthModal";
 import { usePlaylistModal } from "@/store/usePlaylistModal";
 import { Playlist } from "@/types";
@@ -22,6 +23,13 @@ const PlaylistItem = ({
   const handleClick = async () => {
     if (isAdding) return;
 
+    if (!navigator.onLine) {
+      onError(
+        "You're currently offline, make sure you're online, then try again."
+      );
+      return;
+    }
+
     if (playlist.song_ids.includes(songId)) {
       toast(`The song already exists in "${playlist.name}" playlist.`);
       return;
@@ -38,7 +46,7 @@ const PlaylistItem = ({
     });
 
     if (error) {
-      toast.error("Something went wrong.");
+      onError();
     } else {
       toast.success(`Song added to the "${playlist.name}" playlist.`);
     }

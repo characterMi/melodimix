@@ -1,4 +1,5 @@
 import { likeSong } from "@/actions/likeSong";
+import { onError } from "@/lib/onError";
 import { useAuthModal } from "@/store/useAuthModal";
 import { useLikedPageData } from "@/store/useLikedPageData";
 import { useLikedSongs } from "@/store/useLikedSongs";
@@ -27,12 +28,12 @@ export const useLikeSong = (song: Song) => {
 
     if (!session) return onAuthModalOpen();
 
-    startTransition(async () => {
-      if (!navigator.onLine) {
-        toast.error("No internet connection, please try again later.");
-        return;
-      }
+    if (!navigator.onLine) {
+      onError("No internet connection, please try again later.");
+      return;
+    }
 
+    startTransition(async () => {
       // Optimistic update...
       setLikedSongs(song.id, !isLiked);
 
@@ -53,7 +54,7 @@ export const useLikeSong = (song: Song) => {
       }
 
       if (likeInformation.error) {
-        toast.error(likeInformation.error);
+        onError(likeInformation.error);
       }
 
       if (likeInformation.message) {

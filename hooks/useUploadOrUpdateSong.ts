@@ -1,3 +1,4 @@
+import { onError } from "@/lib/onError";
 import { useHomePageData } from "@/store/useHomePageData";
 import { useUserSongs } from "@/store/useUserSongsStore";
 import { useSessionContext } from "@supabase/auth-helpers-react";
@@ -33,6 +34,13 @@ export const useUploadOrUpdateSong = () => {
       return;
     }
 
+    if (!navigator.onLine) {
+      onError(
+        "You're currently offline, make sure you're online, then try again."
+      );
+      return;
+    }
+
     startTransition(async () => {
       if (isEditing) {
         const { error, updatedSong } = await updateSong(formData, {
@@ -42,7 +50,7 @@ export const useUploadOrUpdateSong = () => {
         });
 
         if (error) {
-          toast.error(error);
+          onError(error);
           return;
         }
 
@@ -51,7 +59,7 @@ export const useUploadOrUpdateSong = () => {
         const { error, uploadedSong } = await uploadSong(formData);
 
         if (error) {
-          toast.error(error);
+          onError(error);
           return;
         }
 

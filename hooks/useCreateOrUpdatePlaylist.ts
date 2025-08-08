@@ -1,4 +1,5 @@
 import { createPlaylist } from "@/actions/createPlaylist";
+import { onError } from "@/lib/onError";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -27,15 +28,10 @@ export const useCreateOrUpdatePlaylist = () => {
       return;
     }
 
-    const trimmedName = name.trim();
-
-    if (trimmedName === "") {
-      toast.error("Playlist name is required!");
-      return;
-    }
-
-    if (trimmedName.length > 100) {
-      toast.error("Playlist name is too long!");
+    if (!navigator.onLine) {
+      onError(
+        "You're currently offline, make sure you're online, then try again."
+      );
       return;
     }
 
@@ -44,26 +40,26 @@ export const useCreateOrUpdatePlaylist = () => {
     if (isEditing) {
       const { error, message } = await updatePlaylist({
         id: initialData.id,
-        name: trimmedName,
+        name,
         is_public: isPublic,
         user_id: session.user.id,
         song_ids: songIds,
       });
 
       if (error) {
-        toast.error(message);
+        onError(message);
         setIsSubmitting(false);
         return;
       }
     } else {
       const { error, message, playlistId } = await createPlaylist({
-        name: trimmedName,
+        name,
         isPublic: isPublic,
         songIds,
       });
 
       if (error) {
-        toast.error(message);
+        onError(message);
         setIsSubmitting(false);
         return;
       }

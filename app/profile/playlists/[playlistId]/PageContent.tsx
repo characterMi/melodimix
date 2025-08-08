@@ -6,6 +6,7 @@ import SongItem from "@/components/SongItem";
 import Spinner from "@/components/Spinner";
 import VariantButton from "@/components/VariantButton";
 import { useOnPlay } from "@/hooks/useOnPlay";
+import { onError } from "@/lib/onError";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Playlist, Song } from "@/types";
 import { useState } from "react";
@@ -24,12 +25,19 @@ const DeleteSongFromPlaylistButton = ({
   const handleClick = async () => {
     if (isDeleting) return;
 
+    if (!navigator.onLine) {
+      onError(
+        "You're currently offline, make sure you're online, then try again."
+      );
+      return;
+    }
+
     setIsDeleting(true);
 
     const { error } = await updatePlaylist(newData);
 
     if (error) {
-      toast.error("Something went wrong.");
+      onError();
     } else {
       toast.success("Playlist updated.");
     }

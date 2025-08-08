@@ -2,6 +2,7 @@ import { deleteSong } from "@/actions/deleteSong";
 import DropdownMenu from "@/components/DropdownMenu";
 import Spinner from "@/components/Spinner";
 import VariantButton from "@/components/VariantButton";
+import { onError } from "@/lib/onError";
 import { useUploadModal } from "@/store/useUploadModal";
 import { useUserSongs } from "@/store/useUserSongsStore";
 import type { Song } from "@/types";
@@ -59,24 +60,25 @@ const DeleteButton = ({ songId }: { songId: string }) => {
 
     if (isDeleting) return;
 
-    try {
-      setIsDeleting(true);
-
-      const isDeleted = await deleteSong(songId);
-
-      if (!isDeleted) {
-        toast.error("Something went wrong.");
-      } else {
-        toast.success("Song deleted.");
-        deleteSongFromUserSongs(songId);
-      }
-    } catch (error) {
-      console.error(error);
-
-      toast.error("Something went wrong.");
-    } finally {
-      setIsDeleting(false);
+    if (!navigator.onLine) {
+      onError(
+        "You're currently offline, make sure you're online, then try again."
+      );
+      return;
     }
+
+    setIsDeleting(true);
+
+    const isDeleted = await deleteSong(songId);
+
+    if (!isDeleted) {
+      onError();
+    } else {
+      toast.success("Song deleted.");
+      deleteSongFromUserSongs(songId);
+    }
+
+    setIsDeleting(false);
   };
 
   return (

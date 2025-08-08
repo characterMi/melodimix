@@ -10,16 +10,17 @@ export const updatePlaylist = async (
   { error: true; message: string } | { error: false; message: null }
 > => {
   const { supabase, user } = await getCurrentUser();
+  const trimmedName = newData.name.trim();
 
   if (!user) {
     return { error: true, message: "Unauthenticated User." };
   }
 
-  if (typeof newData.name !== "string") {
+  if (typeof trimmedName !== "string") {
     return { error: true, message: "Playlist name is required!" };
   }
 
-  if (newData.name.length > 50 || newData.name.length < 3) {
+  if (trimmedName.length > 50 || trimmedName.length < 3) {
     return { error: true, message: "Playlist name is too long or too short!" };
   }
 
@@ -33,7 +34,7 @@ export const updatePlaylist = async (
 
   const { error } = await supabase
     .from("playlists")
-    .update(newData)
+    .update({ ...newData, name: trimmedName })
     .eq("user_id", user.id)
     .eq("id", newData.id);
 

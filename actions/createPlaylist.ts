@@ -2,6 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "./getCurrentUser";
+import { getUserPlaylists } from "./getUserPlaylists";
+
+import type { Playlist } from "@/types";
 
 export const createPlaylist = async ({
   name,
@@ -42,6 +45,16 @@ export const createPlaylist = async ({
       error: true,
       message:
         "Too many songs in this playlist, you can't add more than 100 songs to a playlist.",
+      playlistId: null,
+    };
+  }
+
+  const userPlaylists = (await getUserPlaylists()) as Playlist[];
+
+  if (userPlaylists.length >= 20) {
+    return {
+      error: true,
+      message: "You can't create more than 20 playlists.",
       playlistId: null,
     };
   }

@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { deletePlaylist } from "@/actions/deletePlaylist";
 import Spinner from "@/components/Spinner";
+import { onError } from "@/lib/onError";
 import { usePlaylistModal } from "@/store/usePlaylistModal";
 import type { Playlist } from "@/types";
 import { useState } from "react";
@@ -97,18 +98,25 @@ const DeleteButton = ({
 
     if (isDeleting) return;
 
+    if (!navigator.onLine) {
+      onError(
+        "You're currently offline, make sure you're online, then try again."
+      );
+      return;
+    }
+
     setIsDeleting(true);
 
     const isDeleted = await deletePlaylist(playlistId, isPublic);
 
     if (!isDeleted) {
-      toast.error("Something went wrong.");
+      onError();
     } else {
       toast.success("Playlist deleted.");
     }
 
-    setIsDeleting(false);
     router.replace("/profile");
+    setIsDeleting(false);
   };
 
   return (
