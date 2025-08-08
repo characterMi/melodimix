@@ -1,3 +1,4 @@
+import { getLikedSongs } from "@/actions/getLikedSongs";
 import { LIMIT } from "@/app/liked/components/LikedContent";
 import type { Song } from "@/types";
 import { create } from "zustand";
@@ -12,7 +13,7 @@ type Store = {
 
 export const useLikedPageData = create<Store>((set) => ({
   pageData: { page: 0, songs: [] },
-  addAll(songs, page) {
+  addAll: (songs, page) => {
     set(({ pageData }) => ({
       pageData: {
         page,
@@ -20,7 +21,7 @@ export const useLikedPageData = create<Store>((set) => ({
       },
     }));
   },
-  addOne(song) {
+  addOne: (song) => {
     set(({ pageData }) => {
       if (pageData.songs.length % LIMIT === 0) {
         pageData.songs.pop();
@@ -37,15 +38,28 @@ export const useLikedPageData = create<Store>((set) => ({
       };
     });
   },
-  removeOne(songId) {
-    set(({ pageData }) => ({
-      pageData: {
-        page: pageData.page,
-        songs: pageData.songs.filter((song) => song.id !== songId),
-      },
-    }));
-  },
-  removeAll() {
+  removeOne: (songId) =>
+    set(({ pageData }) => {
+      const songs = pageData.songs.filter((song) => song.id !== songId);
+
+      if (pageData.songs.length % LIMIT === 0) {
+        getLikedSongs(1, pageData.songs.length)
+          .then((songs) => {
+            // songs = [Song]
+            const newSong = songs[0];
+            if (newSong) songs.push(newSong);
+          })
+          .catch();
+      }
+
+      return {
+        pageData: {
+          page: pageData.page,
+          songs,
+        },
+      };
+    }),
+  removeAll: () => {
     set(() => ({
       pageData: {
         page: 0,

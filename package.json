@@ -1,6 +1,6 @@
 {
   "name": "spotify_clone",
-  "version": "2.9.2",
+  "version": "3.0.3",
   "private": true,
   "scripts": {
     "dev": "next dev",

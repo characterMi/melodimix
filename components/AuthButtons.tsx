@@ -1,8 +1,10 @@
 "use client";
 
 import { useAuthModal } from "@/store/useAuthModal";
+import { useLikedPageData } from "@/store/useLikedPageData";
 import { useLikedSongs } from "@/store/useLikedSongs";
 import { useUserModal } from "@/store/useUserModal";
+import { useUserSongs } from "@/store/useUserSongsStore";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import Link from "next/link";
@@ -19,6 +21,8 @@ const AuthButtons = ({ router }: { router: AppRouterInstance }) => {
   const isInProfilePage = pathname.startsWith("/profile");
 
   const clearLikedSongs = useLikedSongs((state) => state.clearLikedSongs);
+  const setUserSongs = useUserSongs((state) => state.setUserSongs);
+  const clearLikedPageData = useLikedPageData((state) => state.removeAll);
   const onAuthModalOpen = useAuthModal((state) => state.onOpen);
   const onUserModalOpen = useUserModal((state) => state.onOpen);
 
@@ -41,6 +45,8 @@ const AuthButtons = ({ router }: { router: AppRouterInstance }) => {
     toast.success("Logged out !");
     router.refresh();
     clearLikedSongs();
+    setUserSongs([]);
+    clearLikedPageData();
   };
 
   const AuthButtons = session?.user ? (
