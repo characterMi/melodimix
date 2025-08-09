@@ -102,7 +102,7 @@ self.addEventListener("fetch", (event) => {
 
   // Next.js related things (React server components and client-side navigation)...
   if (eventUrl.searchParams.has("_rsc")) {
-    event.respondWith(networkFirst(req, assetsCacheName));
+    event.respondWith(networkFirst(event.request, assetsCacheName));
     return;
   }
 
