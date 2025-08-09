@@ -55,7 +55,7 @@ const Library = ({ songs, isMobile }: { songs: Song[]; isMobile?: true }) => {
 
               if (isMobile) window.history.back();
 
-              router.push("/profile");
+              setTimeout(() => router.push("/profile"), 100);
             }}
           >
             See more <MdArrowOutward size={20} />

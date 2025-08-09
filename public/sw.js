@@ -102,7 +102,7 @@ self.addEventListener("fetch", (event) => {
 
   // Next.js related things (React server components and client-side navigation)...
   if (eventUrl.searchParams.has("_rsc")) {
-    event.respondWith(networkFirst(event.request, assetsCacheName));
+    event.respondWith(handleRSC(event.request));
     return;
   }
 
@@ -192,6 +192,17 @@ async function fetchReq(req, cache = null, returnFallback = false) {
       if (returnFallback) return responseFallback();
       return null;
     });
+}
+
+async function handleRSC(req) {
+  // Requesting for shell html page and caching it...
+  const htmlUrl = new URL(req.url);
+  htmlUrl.search = "";
+  const cache = await caches.open(assetsCacheName);
+  fetchReq(htmlUrl.toString(), cache);
+
+  // rsc request
+  return networkFirst(req, assetsCacheName);
 }
 
 async function handleHTML(req) {

@@ -44,13 +44,20 @@ body {
 
 .gradient-text {
   color: #10b981;
-  background: #10b981;
-  background: -webkit-linear-gradient(to left, #10b981, #34d399);
-  background: linear-gradient(to left, #10b981, #34d399);
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+}
+
+@supports (
+  (-webkit-background-clip: text) or (background-clip: text) or
+    (-moz-background-clip: text) or (-webkit-text-fill-color: transparent)
+) {
+  .gradient-text {
+    background: -webkit-linear-gradient(to left, #10b981, #34d399);
+    background: linear-gradient(to left, #10b981, #34d399);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 .loader {
