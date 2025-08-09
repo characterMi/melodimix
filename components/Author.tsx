@@ -17,10 +17,10 @@ const Author = ({ name, userId, shouldHighlight }: Props) => (
     onClick={(e) => e.stopPropagation()}
     className={twMerge(
       "inline-flex items-center gap-[2px] hover:opacity-50 focus-visible:opacity-50 outline-none transition truncate",
-      shouldHighlight && "font-bold gradient-text"
+      shouldHighlight && "font-bold"
     )}
   >
-    <span className="truncate">{name}</span>
+    <span className="truncate gradient-text">{name}</span>
 
     {shouldHighlight ? (
       <FaArrowUp

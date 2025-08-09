@@ -12,12 +12,12 @@ export function useMediaQuery(query: `(${string})`): boolean {
 
     const handler = (event: MediaQueryListEvent) => setMatches(event.matches);
     // Adding the ? for browser support
-    mediaQuery?.addEventListener("change", handler);
+    mediaQuery.addEventListener?.("change", handler);
     setMediaQueryState(mediaQuery);
-    setMatches(mediaQuery?.matches);
+    setMatches(mediaQuery.matches);
 
     return () => {
-      mediaQuery?.removeEventListener("change", handler);
+      mediaQuery.removeEventListener?.("change", handler);
       setMediaQueryState(undefined);
     };
   }, []);
