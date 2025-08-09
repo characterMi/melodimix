@@ -17,7 +17,6 @@ export function usePlayer(song: Song, songUrl: string) {
     volume,
     activeId,
     setCurrentlyPlayingSongId,
-    setDurationPercentage,
   } = usePlayerStore((state) => ({
     playerType: state.playerType,
     ids: state.ids,
@@ -26,7 +25,6 @@ export function usePlayer(song: Song, songUrl: string) {
     setVolume: state.setVolume,
     activeId: state.activeId,
     setCurrentlyPlayingSongId: state.setCurrentlyPlayingSongId,
-    setDurationPercentage: state.setCurrentDurationPercentage,
   }));
 
   const { audioSrc, isSoundLoading } = useLoadSong(songUrl);
@@ -111,12 +109,6 @@ export function usePlayer(song: Song, songUrl: string) {
       }
     };
 
-    const onTimeupdate = (e: Event) => {
-      const { currentTime, duration } = e.currentTarget as HTMLAudioElement;
-
-      setDurationPercentage(currentTime / ((duration || 0) / 100));
-    };
-
     const onLoad = (e: Event) => {
       const target = e.currentTarget as HTMLAudioElement;
 
@@ -127,7 +119,6 @@ export function usePlayer(song: Song, songUrl: string) {
       ["play", onPlay],
       ["pause", onPause],
       ["ended", onEnd],
-      ["timeupdate", onTimeupdate],
       ["loadedmetadata", onLoad],
     ] as const;
 
@@ -178,7 +169,6 @@ export function usePlayer(song: Song, songUrl: string) {
       );
       audio.pause();
       audio.src = "";
-      setDurationPercentage(0);
       clearMediaSessionMetadata();
     };
   }, [audioSrc]);

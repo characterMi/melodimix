@@ -1,4 +1,4 @@
-import type { Duration } from "@/components/Duration";
+import type { Duration } from "@/hooks/useSongDuration";
 
 type Seconds = `0${number}` | number;
 type Minutes = `0${number}` | number;

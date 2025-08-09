@@ -1,14 +1,7 @@
-import { formatDuration } from "@/lib/updateDuration";
-import { usePlayerStore } from "@/store/usePlayerStore";
-import { useEffect, useMemo, useState } from "react";
+import { useSongDuration } from "@/hooks/useSongDuration";
+import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import Slider from "./Slider";
-
-export type Duration =
-  | `${number} : ${number}`
-  | `0${number} : ${number}`
-  | `${number} : 0${number}`
-  | `0${number} : 0${number}`;
 
 function Duration({
   song,
@@ -17,22 +10,15 @@ function Duration({
   song: HTMLAudioElement | null;
   isMobilePlayer?: true;
 }) {
-  const { currentDurationPercentage, setCurrentDurationPercentage } =
-    usePlayerStore((state) => ({
-      currentDurationPercentage: state.durationPercentage,
-      setCurrentDurationPercentage: state.setCurrentDurationPercentage,
-    }));
-
-  const totalDuration = useMemo<Duration>(
-    () => formatDuration(song?.duration ?? 0),
-    [song]
-  );
-  const [showTotalDuration, setShowTotalDuration] = useState(true);
-
-  const currentDuration = formatDuration(song?.currentTime || 0);
-  const remaining = formatDuration(
-    (song?.duration || 0) - (song?.currentTime || 0)
-  );
+  const {
+    currentDuration,
+    currentDurationPercentage,
+    showTotalDuration,
+    totalDuration,
+    remaining,
+    setCurrentDurationPercentage,
+    setShowTotalDuration,
+  } = useSongDuration(song);
 
   return (
     <div className="w-full h-10 flex items-center justify-center">
@@ -94,7 +80,7 @@ const KeyboardNavigationHelper = ({
 }: {
   song: HTMLAudioElement | null;
   durationPercentage: number;
-  setDurationPercentage: (value: number | ((prev: number) => number)) => void;
+  setDurationPercentage: Dispatch<SetStateAction<number>>;
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
