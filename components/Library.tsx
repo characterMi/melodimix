@@ -3,7 +3,7 @@
 import useOnPlay from "@/hooks/useOnPlay";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { MdArrowOutward } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
 import AddSongButton from "./AddSongButton";
@@ -13,6 +13,8 @@ import SongItem from "./SongItem";
 const Library = ({ songs, isMobile }: { songs: Song[]; isMobile?: true }) => {
   const activeId = usePlayerStore((state) => state.activeId);
   const onPlay = useOnPlay(songs);
+
+  const router = useRouter();
 
   if (songs.length === 0) {
     return (
@@ -45,12 +47,19 @@ const Library = ({ songs, isMobile }: { songs: Song[]; isMobile?: true }) => {
 
       {songs.length === 10 && (
         <div className="flex items-center justify-center py-6">
-          <Link
+          <a
             href="/profile"
             className="inline-flex items-center justify-center gap-2 text-neutral-400 hover:text-white focus-visible:text-white outline-none transition-colors"
+            onClick={(e) => {
+              e.preventDefault();
+
+              if (isMobile) window.history.back();
+
+              router.push("/profile");
+            }}
           >
             See more <MdArrowOutward size={20} />
-          </Link>
+          </a>
         </div>
       )}
     </div>

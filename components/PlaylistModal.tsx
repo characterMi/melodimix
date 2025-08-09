@@ -118,7 +118,7 @@ const PlaylistModal = () => {
       />
 
       <div className="my-6 flex gap-2 items-center justify-between">
-        <h3 className="text-lg font-semibold text-nowrap">
+        <h3 className="text-lg font-semibold text-nowrap whitespace-nowrap">
           Is this Playlist public?
         </h3>
 

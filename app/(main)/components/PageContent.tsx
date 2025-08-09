@@ -31,7 +31,7 @@ const PageContent = ({ initialSongs }: { initialSongs: Song[] }) => {
     if (initialSongs.length > 0 && songs.length === 0) {
       addAll(initialSongs, initialSongs.length === LIMIT ? page + 1 : page);
     }
-  }, []);
+  }, [initialSongs]);
 
   if (initialSongs.length === 0)
     return <NoSongFallback className="px-6 text-xl" />;

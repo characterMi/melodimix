@@ -26,10 +26,13 @@ export const useHomePageData = create<Store>((set) => ({
         pageData.songs.pop();
       }
 
+      const songs =
+        pageData.songs.length > 0 ? [song, ...pageData.songs] : pageData.songs;
+
       return {
         pageData: {
           page: pageData.page,
-          songs: [song, ...pageData.songs],
+          songs,
         },
       };
     });

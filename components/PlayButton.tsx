@@ -7,7 +7,7 @@ type Props = ComponentProps<"div"> & { onClick: () => void };
 const PlayButton = ({ onClick, className, ...props }: Props) => (
   <div
     className={twMerge(
-      "rounded-full flex items-center justify-center bg-green-500 size-12 min-w-12 drop-shadow-md transition-opacity hover:opacity-50 focus-visible:opacity-50 outline-none",
+      "rounded-full flex items-center justify-center bg-green-500 size-12 min-w-12 drop-shadow-md transition-transform hover:scale-105 focus-visible:scale-105 outline-none",
       className
     )}
     onClick={(e) => {

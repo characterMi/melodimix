@@ -79,14 +79,14 @@ const AuthButtons = ({ router }: { router: AppRouterInstance }) => {
   ) : (
     <>
       <Button
-        className="bg-transparent text-neutral-300 font-medium text-nowrap py-[6px]"
+        className="bg-transparent text-neutral-300 font-medium text-nowrap py-[6px] whitespace-nowrap"
         onClick={onAuthModalOpen}
       >
         Sign up
       </Button>
 
       <Button
-        className="bg-white px-6 py-[6px] text-nowrap"
+        className="bg-white px-6 py-[6px] text-nowrap whitespace-nowrap"
         onClick={onAuthModalOpen}
       >
         Login

@@ -43,6 +43,7 @@ body {
 }
 
 .gradient-text {
+  color: #10b981;
   background: #10b981;
   background: -webkit-linear-gradient(to left, #10b981, #34d399);
   background: linear-gradient(to left, #10b981, #34d399);

@@ -68,9 +68,10 @@ const SongCard = ({ data, onClick }: Props) => {
         </div>
 
         <PlayButton
-          className="opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md transition translate-y-1/4 group-hover:opacity-100 group-hover:-translate-y-1/4 hover:scale-105 group-focus-visible:opacity-100 group-focus-visible:-translate-y-1/4 focus-visible:scale-105 focus-visible:-translate-y-1/4 focus-visible:opacity-100"
+          className="opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md transition translate-y-1/4 group-hover:opacity-100 group-hover:-translate-y-1/4 group-focus-visible:opacity-100 group-focus-visible:-translate-y-1/4 focus-visible:-translate-y-1/4 focus-visible:opacity-100"
           aria-label={`Go to the ${data.title} page`}
           onClick={() => router.push(`/songs/${data.id}`)}
+          role="link"
         />
       </div>
     </button>
