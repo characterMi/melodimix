@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useTransitionRouter } from "next-view-transitions";
 import { BiSearch } from "react-icons/bi";
 import { HiHome } from "react-icons/hi";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
@@ -15,7 +14,7 @@ const Header = ({
   children: React.ReactNode;
   className?: string;
 }) => {
-  const router = useRouter();
+  const router = useTransitionRouter();
 
   return (
     <header

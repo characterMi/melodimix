@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { useMobilePlayer } from "@/hooks/useMobilePlayer";
+import { usePlayerStore, type PlayerType } from "@/store/usePlayerStore";
 
 import LikeButton from "./LikeButton";
 import MobilePlayer from "./MobilePlayer";
@@ -10,7 +10,6 @@ import PlayerTypeButton from "./PlayerTypeButton";
 import SongItem from "./SongItem";
 import SongOptions from "./SongOptions";
 
-import type { PlayerType } from "@/store/usePlayerStore";
 import type { Song } from "@/types";
 
 const PlayerSongCard = ({
@@ -28,15 +27,36 @@ const PlayerSongCard = ({
 
   const closeMobilePlayerButton = useRef<HTMLButtonElement>(null);
 
-  const { isMobilePlayerOpen, setIsMobilePlayerOpen, openMobilePlayer } =
-    useMobilePlayer();
+  const { isMobilePlayerOpen, setIsMobilePlayerOpen } = usePlayerStore(
+    (state) => ({
+      isMobilePlayerOpen: state.isMobilePlayerOpen,
+      setIsMobilePlayerOpen: state.setIsMobilePlayerOpen,
+    })
+  );
+
+  const openMobilePlayer = useCallback(() => {
+    if (isMobilePlayerOpen) return;
+
+    // The reason we don't use router is because the router causes reload on offline mode.
+    window.history.pushState({ isMobilePlayerOpen: true }, "");
+    setIsMobilePlayerOpen(true);
+  }, [isMobilePlayerOpen]);
 
   useEffect(() => {
     if (!isMobilePlayerOpen) return;
 
     closeMobilePlayerButton.current?.focus();
 
-    const onPopState = () => setIsMobilePlayerOpen(false);
+    const onPopState = () => {
+      if (!document.startViewTransition) return setIsMobilePlayerOpen(false);
+
+      const transition = document.startViewTransition(() => {
+        setIsMobilePlayerOpen(false);
+      });
+
+      // ...but immediately call skipTransition() to prevent the browser's animation!
+      transition.skipTransition();
+    };
 
     window.addEventListener("popstate", onPopState);
 

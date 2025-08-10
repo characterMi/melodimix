@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import { FaArrowUp } from "react-icons/fa";
 import { MdArrowOutward } from "react-icons/md";
 import { twMerge } from "tailwind-merge";

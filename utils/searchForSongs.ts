@@ -1,10 +1,10 @@
 import type { Song } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-export async function searchForSongs(
+export const searchForSongs = async (
   searchValue: string | undefined,
   signal: AbortSignal
-): Promise<Song[]> {
+): Promise<Song[]> => {
   if (
     typeof searchValue !== "string" ||
     !searchValue ||
@@ -28,4 +28,4 @@ export async function searchForSongs(
     ...song,
     author: song.users.full_name ?? "Guest",
   }));
-}
+};

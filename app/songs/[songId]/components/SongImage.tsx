@@ -17,6 +17,7 @@ const SongImage = ({ song }: { song: Song | null }) => {
       height={500}
       className="object-cover size-36 xss:size-40 sm:size-44 md:size-32 lg:size-44"
       loading="eager"
+      style={{ viewTransitionName: `song-${song?.id}` }}
     />
   );
 };

@@ -12,7 +12,7 @@ import {
   useUsersPageData,
 } from "@/store/useUsersPageData";
 import type { Song } from "@/types";
-import { useRouter } from "next/navigation";
+import { useTransitionRouter } from "next-view-transitions";
 import { useEffect, useMemo } from "react";
 
 const LIMIT = 20;
@@ -52,7 +52,7 @@ const PageContent = ({
   const onPlay = useOnPlay(pageData?.songs ?? []);
   const activeId = usePlayerStore((state) => state.activeId);
 
-  const router = useRouter();
+  const router = useTransitionRouter();
 
   const songsToRender = useMemo(() => {
     return pageData?.songs.map((song) => (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useTransitionRouter } from "next-view-transitions";
 import { twMerge } from "tailwind-merge";
 
 import useOnPlay from "@/hooks/useOnPlay";
@@ -18,7 +18,7 @@ const SearchContent = ({ songs }: { songs: Song[] }) => {
   const activeId = usePlayerStore((state) => state.activeId);
   const onPlay = useOnPlay(filteredSongs);
 
-  const router = useRouter();
+  const router = useTransitionRouter();
 
   if (filteredSongs.length === 0)
     return (

@@ -6,7 +6,7 @@ import useOnPlay from "@/hooks/useOnPlay";
 import { sharePlaylist } from "@/lib/share";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import { Playlist, Song } from "@/types";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import { IoShareSocialOutline } from "react-icons/io5";
 
 type Props = {

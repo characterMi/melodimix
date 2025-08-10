@@ -1,14 +1,17 @@
-import Player from "@/components/Player";
-import Sidebar from "@/components/Sidebar";
+import type { Metadata, Viewport } from "next";
+import { ViewTransitions } from "next-view-transitions";
+import dynamic from "next/dynamic";
+import { Figtree } from "next/font/google";
+
 import { ModalProvider } from "@/providers/ModalProvider";
 import { SupabaseProvider } from "@/providers/SupabaseProvider";
 import { ToasterProvider } from "@/providers/ToasterProvider";
-import type { Metadata, Viewport } from "next";
-import { Figtree } from "next/font/google";
 
-import dynamic from "next/dynamic";
-import "./globals.css";
+import Player from "@/components/Player";
+import Sidebar from "@/components/Sidebar";
 import Root from "./root";
+
+import "./globals.css";
 
 const PWABehaviorManager = dynamic(
   () => import("../components/PWABehaviorManager "),
@@ -95,22 +98,24 @@ export default function RootLayout({
 }>) {
   return (
     <SupabaseProvider>
-      <html lang="en">
-        <head>
-          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <meta name="mobile-web-app-capable" content="yes" />
-          <meta name="pinterest-rich-pin" content="true" />
-        </head>
-        <body className={figtree.className}>
-          <PWABehaviorManager />
-          <ToasterProvider />
-          <ModalProvider />
-          <Root>
-            <Sidebar>{children}</Sidebar>
-          </Root>
-          <Player />
-        </body>
-      </html>
+      <ViewTransitions>
+        <html lang="en">
+          <head>
+            <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+            <meta name="mobile-web-app-capable" content="yes" />
+            <meta name="pinterest-rich-pin" content="true" />
+          </head>
+          <body className={figtree.className}>
+            <PWABehaviorManager />
+            <ToasterProvider />
+            <ModalProvider />
+            <Root>
+              <Sidebar>{children}</Sidebar>
+            </Root>
+            <Player />
+          </body>
+        </html>
+      </ViewTransitions>
     </SupabaseProvider>
   );
 }

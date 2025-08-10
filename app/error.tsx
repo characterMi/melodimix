@@ -14,4 +14,5 @@ const HomePageError = ({ err }: { err: string }) => {
     </div>
   );
 };
+
 export default HomePageError;

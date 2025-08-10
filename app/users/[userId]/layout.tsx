@@ -1,7 +1,7 @@
 import { getUserById } from "@/actions/getUserById";
 import Header from "@/components/Header";
+import { Link } from "next-view-transitions";
 import Image from "next/image";
-import Link from "next/link";
 
 const UsersPageLayout = async ({
   params,

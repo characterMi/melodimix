@@ -38,12 +38,7 @@ export const getUserSongs = async (params: Params): Promise<Song[]> => {
 
   // if no userId is provided, return the current user's songs
   if (!params?.userId) {
-    const ownedSongs = await getCurrentUserSongs(
-      supabase,
-      /* current user */ user?.id
-    );
-
-    return ownedSongs;
+    return getCurrentUserSongs(supabase, /* current user */ user?.id);
   }
 
   const { limit, offset, userId } = params;

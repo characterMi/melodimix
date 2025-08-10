@@ -68,6 +68,7 @@ const MobileSidebarTrigger = ({
         top: `${positionY}%`,
         transform: "translateY(-50%)",
         direction: "rtl",
+        viewTransitionName: "mobile-sidebar-trigger",
       }}
       aria-controls="sidebar"
       aria-expanded={isActive}
@@ -116,11 +117,20 @@ const MobileSidebar = ({
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsActive(false);
+        window.history.back();
       }
     };
 
-    const onPopState = () => setIsActive(false);
+    const onPopState = () => {
+      if (!document.startViewTransition) return setIsActive(false);
+
+      const transition = document.startViewTransition(() => {
+        setIsActive(false);
+      });
+
+      // ...but immediately call skipTransition() to prevent the browser's animation!
+      transition.skipTransition();
+    };
 
     document.addEventListener("keydown", handleEscape);
     window.addEventListener("popstate", onPopState);

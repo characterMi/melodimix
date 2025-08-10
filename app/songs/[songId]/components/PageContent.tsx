@@ -1,5 +1,7 @@
 "use client";
 
+import { useTransitionRouter } from "next-view-transitions";
+
 import useOnPlay from "@/hooks/useOnPlay";
 import { usePlayerStore } from "@/store/usePlayerStore";
 
@@ -8,7 +10,6 @@ import NoSongFallback from "@/components/NoSongFallback";
 import SongItem from "@/components/SongItem";
 
 import type { Song } from "@/types";
-import { useRouter } from "next/navigation";
 
 const PageContent = ({
   songs,
@@ -19,7 +20,7 @@ const PageContent = ({
 }) => {
   const onPlay = useOnPlay(songs ?? []);
   const activeId = usePlayerStore((state) => state.activeId);
-  const router = useRouter();
+  const router = useTransitionRouter();
 
   if (!songs)
     return (

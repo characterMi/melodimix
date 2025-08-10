@@ -3,7 +3,7 @@
 import useOnPlay from "@/hooks/useOnPlay";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types";
-import { useRouter } from "next/navigation";
+import { useTransitionRouter } from "next-view-transitions";
 import { MdArrowOutward } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
 import AddSongButton from "./AddSongButton";
@@ -14,7 +14,7 @@ const Library = ({ songs, isMobile }: { songs: Song[]; isMobile?: true }) => {
   const activeId = usePlayerStore((state) => state.activeId);
   const onPlay = useOnPlay(songs);
 
-  const router = useRouter();
+  const router = useTransitionRouter();
 
   if (songs.length === 0) {
     return (
