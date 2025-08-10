@@ -51,8 +51,8 @@ body {
     (-moz-background-clip: text) or (-webkit-text-fill-color: transparent)
 ) {
   .gradient-text {
-    background: -webkit-linear-gradient(to left, #10b981, #34d399);
-    background: linear-gradient(to left, #10b981, #34d399);
+    background: -webkit-linear-gradient(to left, #065f46, #34d399);
+    background: linear-gradient(to left, #065f46, #34d399);
     -webkit-background-clip: text;
     -moz-background-clip: text;
     background-clip: text;

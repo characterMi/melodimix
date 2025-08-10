@@ -1,13 +1,102 @@
 "use client";
 
-import { useFocusTrap } from "@/hooks/useFocusTrap";
-import type { Song } from "@/types";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
+
+import { useFocusTrap } from "@/hooks/useFocusTrap";
+
 import DownloadApplication from "./DownloadApplication";
 import Library from "./Library";
 import Loader from "./Loader";
 import ManageCacheButton from "./ManageCacheButton";
+
+import type { Song } from "@/types";
+
+const MobileSidebarTrigger = ({
+  openMobileSidebar,
+  isActive,
+}: {
+  openMobileSidebar: () => void;
+  isActive: boolean;
+}) => {
+  const dragTimeoutRef = useRef<NodeJS.Timeout>();
+
+  const [positionY, setPositionY] = useState(40);
+  const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    const savedPosition = localStorage.getItem("sidebar-trigger-y");
+    if (!savedPosition || isNaN(Number(savedPosition))) return;
+
+    setPositionY(+savedPosition);
+  }, []);
+
+  useEffect(() => {
+    if (isDragging) return;
+
+    localStorage.setItem("sidebar-trigger-y", String(positionY));
+  }, [positionY, isDragging]);
+
+  return (
+    <button
+      className={twMerge(
+        "fixed left-full bg-neutral-900 size-14 flex flex-col gap-y-[6px] justify-center items-end pl-2 rounded-r-xl z-50 md:hidden cursor-pointer",
+        isDragging && "outline outline-2 outline-green-500"
+      )}
+      onPointerDown={() => {
+        dragTimeoutRef.current = setTimeout(() => {
+          setIsDragging(true);
+        }, 500);
+      }}
+      onPointerUp={() => {
+        clearTimeout(dragTimeoutRef.current);
+
+        if (isDragging) {
+          setIsDragging(false);
+        } else {
+          openMobileSidebar();
+        }
+      }}
+      onPointerMove={(e) => {
+        if (!isDragging) return;
+
+        const newYPercentage = (e.clientY / window.innerHeight) * 100;
+        const clampedY = Math.max(5, Math.min(newYPercentage, 95));
+        setPositionY(clampedY);
+      }}
+      style={{
+        top: `${positionY}%`,
+        transform: "translateY(-50%)",
+        direction: "rtl",
+      }}
+      aria-controls="sidebar"
+      aria-expanded={isActive}
+      aria-label="Menu toggle button"
+    >
+      <span
+        className={twMerge(
+          "h-1 rounded-full w-[60%] bg-white transition",
+          isActive && "opacity-0"
+        )}
+        aria-hidden
+      />
+      <span
+        className={twMerge(
+          "h-1 rounded-full w-[85%] bg-white transition",
+          isActive && "rotate-45 -mt-[10px]"
+        )}
+        aria-hidden
+      />
+      <span
+        className={twMerge(
+          "h-1 rounded-full w-[85%] bg-white transition",
+          isActive && "-rotate-45 -mt-[10px]"
+        )}
+        aria-hidden
+      />
+    </button>
+  );
+};
 
 const MobileSidebar = ({
   songs,
@@ -66,36 +155,10 @@ const MobileSidebar = ({
         )}
         ref={sidebarContainerRef}
       >
-        <button
-          className="fixed top-[40%] -translate-y-[40%] left-full bg-neutral-900 size-14 flex flex-col gap-y-[6px] justify-center items-end pl-2 rounded-r-xl z-50 md:hidden cursor-pointer"
-          onClick={openMobileSidebar}
-          style={{ direction: "rtl" }}
-          aria-controls="sidebar"
-          aria-expanded={isActive}
-          aria-label="Menu toggle button"
-        >
-          <span
-            className={twMerge(
-              "h-1 rounded-full w-[60%] bg-white transition",
-              isActive && "opacity-0"
-            )}
-            aria-hidden
-          />
-          <span
-            className={twMerge(
-              "h-1 rounded-full w-[85%] bg-white transition",
-              isActive && "rotate-45 -mt-[10px]"
-            )}
-            aria-hidden
-          />
-          <span
-            className={twMerge(
-              "h-1 rounded-full w-[85%] bg-white transition",
-              isActive && "-rotate-45 -mt-[10px]"
-            )}
-            aria-hidden
-          />
-        </button>
+        <MobileSidebarTrigger
+          isActive={isActive}
+          openMobileSidebar={openMobileSidebar}
+        />
 
         <aside
           ref={sidebarRef}
