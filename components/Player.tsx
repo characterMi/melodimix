@@ -20,7 +20,6 @@ const Player = () => {
       className="fixed bottom-0 bg-black w-full py-2 rounded-t-2xl px-4 player z-30"
       role="region"
       aria-label="Music Player"
-      style={{ viewTransitionName: "music-player" }}
     >
       <section className="h-full w-full relative" aria-busy={isLoading}>
         <PlayerContent

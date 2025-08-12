@@ -3,7 +3,7 @@
 import { useLoadImage } from "@/hooks/useLoadImage";
 import { shareSong } from "@/lib/share";
 import type { Song } from "@/types";
-import { useTransitionRouter } from "next-view-transitions";
+import { useRouter } from "next/navigation";
 import { FaShareAlt } from "react-icons/fa";
 import Author from "./Author";
 import PlayButton from "./PlayButton";
@@ -16,7 +16,7 @@ interface Props {
 
 const SongCard = ({ data, onClick }: Props) => {
   const imagePath = useLoadImage(data);
-  const router = useTransitionRouter();
+  const router = useRouter();
 
   function handleClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
@@ -42,7 +42,6 @@ const SongCard = ({ data, onClick }: Props) => {
           width={130}
           height={130}
           className="w-full"
-          style={{ viewTransitionName: `song-${data.id}` }}
         />
       </div>
 
@@ -71,7 +70,7 @@ const SongCard = ({ data, onClick }: Props) => {
         <PlayButton
           className="opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md transition translate-y-1/4 group-hover:opacity-100 group-hover:-translate-y-1/4 group-focus-visible:opacity-100 group-focus-visible:-translate-y-1/4 focus-visible:-translate-y-1/4 focus-visible:opacity-100"
           aria-label={`Go to the ${data.title} page`}
-          onClick={() => router.push(`/songs/${data.id}`)}
+          onClick={() => router.push(`/songs/${data.id}`, { scroll: false })}
           role="link"
         />
       </div>

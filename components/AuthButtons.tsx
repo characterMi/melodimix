@@ -6,8 +6,8 @@ import { useLikedSongs } from "@/store/useLikedSongs";
 import { useUserModal } from "@/store/useUserModal";
 import { useUserSongs } from "@/store/useUserSongsStore";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import { Link } from "next-view-transitions";
 import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import toast from "react-hot-toast";
 import { BiDotsVerticalRounded } from "react-icons/bi";
@@ -60,6 +60,7 @@ const AuthButtons = ({ router }: { router: AppRouterInstance }) => {
       </Button>
 
       <Link
+        scroll={false}
         href="/profile"
         className="rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none"
         aria-label="Go to profile page"

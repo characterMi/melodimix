@@ -1,7 +1,7 @@
 import { getUserById } from "@/actions/getUserById";
 import Header from "@/components/Header";
-import { Link } from "next-view-transitions";
 import Image from "next/image";
+import Link from "next/link";
 
 const UsersPageLayout = async ({
   params,
@@ -42,6 +42,7 @@ const UsersPageLayout = async ({
 
             {user && (
               <Link
+                scroll={false}
                 href={`/users/${params.userId}/playlists`}
                 className="font-semibold text-sm gradient-text outline-none transition hover:opacity-50 focus-visible:opacity-50 inline-block"
               >

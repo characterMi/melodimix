@@ -2,8 +2,8 @@ import { getSongs } from "@/actions/getSongs";
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
 import LikedImage from "@/public/images/liked.png";
-import { Link } from "next-view-transitions";
 import Image from "next/image";
+import Link from "next/link";
 import { Suspense } from "react";
 import { FaPlay } from "react-icons/fa";
 import PageContent from "./components/PageContent";
@@ -35,6 +35,7 @@ export default async function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 mt-4">
             <Link
+              scroll={false}
               href={"/liked"}
               className="relative group flex items-center rounded-md overflow-hidden gap-x-4 bg-neutral-100/10 hover:bg-neutral-100/20 focus-visible:bg-neutral-100/20 outline-none transition pr-4"
             >

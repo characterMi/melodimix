@@ -3,7 +3,7 @@
 import useOnPlay from "@/hooks/useOnPlay";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types";
-import { useTransitionRouter } from "next-view-transitions";
+import { useRouter } from "next/navigation";
 import { MdArrowOutward } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
 import AddSongButton from "./AddSongButton";
@@ -14,7 +14,7 @@ const Library = ({ songs, isMobile }: { songs: Song[]; isMobile?: true }) => {
   const activeId = usePlayerStore((state) => state.activeId);
   const onPlay = useOnPlay(songs);
 
-  const router = useTransitionRouter();
+  const router = useRouter();
 
   if (songs.length === 0) {
     return (
@@ -55,7 +55,7 @@ const Library = ({ songs, isMobile }: { songs: Song[]; isMobile?: true }) => {
 
               if (isMobile) window.history.back();
 
-              setTimeout(() => router.push("/profile"), 100);
+              setTimeout(() => router.push("/profile", { scroll: false }), 100);
             }}
           >
             See more <MdArrowOutward size={20} />

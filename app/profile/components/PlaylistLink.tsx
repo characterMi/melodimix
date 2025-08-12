@@ -24,6 +24,7 @@ const PlaylistLink = ({ href, name, id, ...props }: Props) => {
 
   return (
     <Link
+      scroll={false}
       href={href}
       key={href}
       className={twMerge(

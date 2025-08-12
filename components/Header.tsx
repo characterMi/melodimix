@@ -1,6 +1,7 @@
 "use client";
 
-import { Link, useTransitionRouter } from "next-view-transitions";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { BiSearch } from "react-icons/bi";
 import { HiHome } from "react-icons/hi";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
@@ -14,7 +15,7 @@ const Header = ({
   children: React.ReactNode;
   className?: string;
 }) => {
-  const router = useTransitionRouter();
+  const router = useRouter();
 
   return (
     <header
@@ -44,6 +45,7 @@ const Header = ({
 
         <div className="flex md:hidden gap-x-2 items-center">
           <Link
+            scroll={false}
             href="/"
             className="rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none"
             aria-label="Go to home page"
@@ -52,6 +54,7 @@ const Header = ({
           </Link>
 
           <Link
+            scroll={false}
             href="/search"
             className="rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none"
             aria-label="Go to search page"

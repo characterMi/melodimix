@@ -43,12 +43,12 @@ const MobileSidebarTrigger = ({
         "fixed left-full bg-neutral-900 size-14 flex flex-col gap-y-[6px] justify-center items-end pl-2 rounded-r-xl z-50 md:hidden cursor-pointer",
         isDragging && "outline outline-2 outline-green-500"
       )}
-      onPointerDown={() => {
+      onMouseDown={() => {
         dragTimeoutRef.current = setTimeout(() => {
           setIsDragging(true);
         }, 500);
       }}
-      onPointerUp={() => {
+      onMouseUp={() => {
         clearTimeout(dragTimeoutRef.current);
 
         if (isDragging) {
@@ -57,7 +57,7 @@ const MobileSidebarTrigger = ({
           openMobileSidebar();
         }
       }}
-      onPointerMove={(e) => {
+      onMouseMove={(e) => {
         if (!isDragging) return;
 
         const newYPercentage = (e.clientY / window.innerHeight) * 100;
@@ -68,7 +68,6 @@ const MobileSidebarTrigger = ({
         top: `${positionY}%`,
         transform: "translateY(-50%)",
         direction: "rtl",
-        viewTransitionName: "mobile-sidebar-trigger",
       }}
       aria-controls="sidebar"
       aria-expanded={isActive}
@@ -121,16 +120,7 @@ const MobileSidebar = ({
       }
     };
 
-    const onPopState = () => {
-      if (!document.startViewTransition) return setIsActive(false);
-
-      const transition = document.startViewTransition(() => {
-        setIsActive(false);
-      });
-
-      // ...but immediately call skipTransition() to prevent the browser's animation!
-      transition.skipTransition();
-    };
+    const onPopState = () => setIsActive(false);
 
     document.addEventListener("keydown", handleEscape);
     window.addEventListener("popstate", onPopState);

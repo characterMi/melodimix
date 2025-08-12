@@ -1,11 +1,11 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import FlipArrow from "@/components/FlipArrow";
 
 import type { Playlist } from "@/types";
-import { Link } from "next-view-transitions";
 
 const PlaylistItem = ({
   playlist,
@@ -45,6 +45,7 @@ const PlaylistItem = ({
 
   return (
     <Link
+      scroll={false}
       href={`/users/${playlist.user_id}/playlists/${playlist.id}`}
       className="flex items-center text-left gap-3 cursor-pointer hover:bg-neutral-800/50 focus-visible:bg-neutral-800/50 outline-none w-full p-2 rounded-md group"
     >

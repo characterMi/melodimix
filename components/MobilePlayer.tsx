@@ -53,7 +53,6 @@ const MobilePlayer = ({
       aria-label="Mobile player"
       aria-modal
       onKeyDown={onKeyDown}
-      style={{ viewTransitionName: "mobile-player" }}
     >
       <div className="w-full flex justify-between items-center p-6 xss:p-8">
         <button

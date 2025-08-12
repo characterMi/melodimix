@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { ViewTransitions } from "next-view-transitions";
 import dynamic from "next/dynamic";
 import { Figtree } from "next/font/google";
 
@@ -98,24 +97,22 @@ export default function RootLayout({
 }>) {
   return (
     <SupabaseProvider>
-      <ViewTransitions>
-        <html lang="en">
-          <head>
-            <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-            <meta name="mobile-web-app-capable" content="yes" />
-            <meta name="pinterest-rich-pin" content="true" />
-          </head>
-          <body className={figtree.className}>
-            <PWABehaviorManager />
-            <ToasterProvider />
-            <ModalProvider />
-            <Root>
-              <Sidebar>{children}</Sidebar>
-            </Root>
-            <Player />
-          </body>
-        </html>
-      </ViewTransitions>
+      <html lang="en">
+        <head>
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="mobile-web-app-capable" content="yes" />
+          <meta name="pinterest-rich-pin" content="true" />
+        </head>
+        <body className={figtree.className}>
+          <PWABehaviorManager />
+          <ToasterProvider />
+          <ModalProvider />
+          <Root>
+            <Sidebar>{children}</Sidebar>
+          </Root>
+          <Player />
+        </body>
+      </html>
     </SupabaseProvider>
   );
 }

@@ -47,16 +47,7 @@ const PlayerSongCard = ({
 
     closeMobilePlayerButton.current?.focus();
 
-    const onPopState = () => {
-      if (!document.startViewTransition) return setIsMobilePlayerOpen(false);
-
-      const transition = document.startViewTransition(() => {
-        setIsMobilePlayerOpen(false);
-      });
-
-      // ...but immediately call skipTransition() to prevent the browser's animation!
-      transition.skipTransition();
-    };
+    const onPopState = () => setIsMobilePlayerOpen(false);
 
     window.addEventListener("popstate", onPopState);
 

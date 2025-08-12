@@ -1,6 +1,6 @@
 "use client";
 
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { FaArrowUp } from "react-icons/fa";
 import { MdArrowOutward } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
@@ -13,6 +13,7 @@ interface Props {
 
 const Author = ({ name, userId, shouldHighlight }: Props) => (
   <Link
+    scroll={false}
     href={`/users/${userId}`}
     onClick={(e) => e.stopPropagation()}
     className="inline-flex items-center gap-[2px] hover:opacity-50 focus-visible:opacity-50 outline-none transition truncate"

@@ -6,7 +6,7 @@ import useOnPlay from "@/hooks/useOnPlay";
 import { sharePlaylist } from "@/lib/share";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import { Playlist, Song } from "@/types";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { IoShareSocialOutline } from "react-icons/io5";
 
 type Props = {
@@ -45,6 +45,7 @@ const PageContent = ({ songs, errMessage, playlist }: Props) => {
         <h2 className="text-2xl sm:text-3xl font-thin inline mr-4">
           <span className="font-bold">{playlist?.name}</span> by{" "}
           <Link
+            scroll={false}
             href={`/users/${playlist?.user_id}`}
             className="gradient-text hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity"
           >

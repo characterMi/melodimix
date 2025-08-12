@@ -8,7 +8,7 @@ import { useEffect, useRef } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import PlaylistLink from "./PlaylistLink";
 
-const ScrollableHeader = ({
+const PlaylistContainer = ({
   playlistsList,
   children,
 }: {
@@ -78,4 +78,4 @@ const ScrollableHeader = ({
   );
 };
 
-export default ScrollableHeader;
+export default PlaylistContainer;
