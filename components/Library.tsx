@@ -18,10 +18,10 @@ const Library = ({ songs, isMobile }: { songs: Song[]; isMobile?: true }) => {
 
   if (songs.length === 0) {
     return (
-      <>
+      <div className="h-screen w-full">
         <AddSongButton />
         <NoSongFallback className="m-4" />
-      </>
+      </div>
     );
   }
 

@@ -1,27 +1,28 @@
 "use client";
 
+import { useScrollProgress } from "@/store/useScrollProgress";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { type RefObject, useEffect, useRef } from "react";
 
-const MainContent = ({ children }: { children: React.ReactNode }) => {
-  const scrollPositions = useRef<Record<`scroll-position${string}`, number>>(
-    {}
-  );
-  const container = useRef<HTMLDivElement>(null);
+const SaveScrollProgress = ({
+  container,
+}: {
+  container: RefObject<HTMLDivElement>;
+}) => {
+  const { scrollPositions, setScrollPosition } = useScrollProgress();
   const pathname = usePathname();
 
   useEffect(() => {
     if (!container.current) return;
 
-    const scrollPosition =
-      scrollPositions.current[`scroll-position-${pathname}`];
+    const scrollPosition = scrollPositions[`scroll-position-${pathname}`];
     if (scrollPosition) {
       container.current.scrollTop = scrollPosition;
     }
 
     const onScrollEnd = (e: Event) => {
       const { scrollTop } = e.currentTarget as HTMLDivElement;
-      scrollPositions.current[`scroll-position-${pathname}`] = scrollTop;
+      setScrollPosition(pathname, scrollTop);
     };
 
     container.current.addEventListener("scrollend", onScrollEnd);
@@ -30,10 +31,20 @@ const MainContent = ({ children }: { children: React.ReactNode }) => {
       container.current?.removeEventListener("scrollend", onScrollEnd);
   }, [pathname]);
 
+  return null;
+};
+
+const MainContent = ({ children }: { children: React.ReactNode }) => {
+  const container = useRef<HTMLDivElement>(null);
+
   return (
-    <main className="h-full py-2 overflow-y-auto flex-1" ref={container}>
+    <section
+      className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto"
+      ref={container}
+    >
+      <SaveScrollProgress container={container} />
       {children}
-    </main>
+    </section>
   );
 };
 

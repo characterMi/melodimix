@@ -8,8 +8,13 @@ import MobileSidebar from "./MobileSidebar";
 const UserSongs = ({ isMobile }: { isMobile?: boolean }) => {
   const { isSongsLoading, userSongs } = useGetUserSongs();
 
-  if (isSongsLoading && !isMobile)
-    return <Loader className="flex justify-center w-full mt-5" />;
+  if (isSongsLoading && !isMobile) {
+    return (
+      <div className="h-screen w-full flex justify-center">
+        <Loader className="mt-5" />
+      </div>
+    );
+  }
 
   return isMobile ? (
     <MobileSidebar songs={userSongs} isSongsLoading={isSongsLoading} />

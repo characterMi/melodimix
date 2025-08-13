@@ -1,6 +1,7 @@
 import { getSongs } from "@/actions/getSongs";
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
+import MainContent from "@/components/MainContent";
 import LikedImage from "@/public/images/liked.png";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,7 +29,7 @@ async function GetSongs() {
 
 export default async function Home() {
   return (
-    <section className="bg-neutral-900 rounded-lg h-full w-full">
+    <MainContent>
       <Header>
         <div className="mb-2">
           <h1 className="text-white text-3xl font-semibold">Welcome back</h1>
@@ -76,6 +77,6 @@ export default async function Home() {
       >
         <GetSongs />
       </Suspense>
-    </section>
+    </MainContent>
   );
 }

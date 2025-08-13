@@ -1,6 +1,7 @@
 import { getSongs } from "@/actions/getSongs";
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
+import MainContent from "@/components/MainContent";
 import SearchInput from "@/components/SearchInput";
 import { Suspense } from "react";
 import SearchContent from "./SearchContent";
@@ -20,7 +21,7 @@ async function GetSongs() {
 }
 
 const SearchPage = () => (
-  <section className="bg-neutral-900 rounded-lg h-full w-full">
+  <MainContent>
     <Header className="from-bg-neutral-900">
       <div className="mb-2 flex flex-col gap-y-6">
         <h1 className="text-white font-semibold text-3xl">Search</h1>
@@ -36,7 +37,7 @@ const SearchPage = () => (
     >
       <GetSongs />
     </Suspense>
-  </section>
+  </MainContent>
 );
 
 export default SearchPage;

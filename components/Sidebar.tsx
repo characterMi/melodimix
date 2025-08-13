@@ -1,9 +1,7 @@
 import { routes } from "@/constants";
-import { FC, Suspense } from "react";
+import { FC } from "react";
 import Box from "./Box";
 import DownloadApplication from "./DownloadApplication";
-import Loader from "./Loader";
-import MainContent from "./MainContent";
 import ManageCacheButton from "./ManageCacheButton";
 import SidebarItem from "./SidebarItem";
 import UserSongs from "./UserSongs";
@@ -28,16 +26,12 @@ const Sidebar: FC<SidebarProps> = ({ children }) => {
             <DownloadApplication />
           </div>
         </Box>
-        <Box className="h-full">
-          <Suspense
-            fallback={<Loader className="flex justify-center w-full mt-5" />}
-          >
-            <UserSongs />
-          </Suspense>
+        <Box>
+          <UserSongs />
         </Box>
       </aside>
 
-      <MainContent>{children}</MainContent>
+      <main className="h-full py-2 overflow-y-auto flex-1">{children}</main>
     </div>
   );
 };

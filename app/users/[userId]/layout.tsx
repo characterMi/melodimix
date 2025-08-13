@@ -1,5 +1,6 @@
 import { getUserById } from "@/actions/getUserById";
 import Header from "@/components/Header";
+import MainContent from "@/components/MainContent";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,7 +14,7 @@ const UsersPageLayout = async ({
   const user = await getUserById(params.userId);
 
   return (
-    <section className="bg-neutral-900 rounded-lg w-full h-full">
+    <MainContent>
       <Header>
         <div className="mt-20 flex flex-col md:flex-row items-center gap-x-4">
           <div className="relative size-36 min-w-36 xss:size-40 xss:min-w-40 sm:size-44 sm:min-w-44 md:size-32 md:min-w-32 lg:size-44 lg:min-w-44 shadow-2xl">
@@ -54,7 +55,7 @@ const UsersPageLayout = async ({
       </Header>
 
       <div className="w-full p-6 pb-0">{children}</div>
-    </section>
+    </MainContent>
   );
 };
 
