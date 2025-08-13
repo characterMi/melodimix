@@ -3,6 +3,7 @@ import { FC, Suspense } from "react";
 import Box from "./Box";
 import DownloadApplication from "./DownloadApplication";
 import Loader from "./Loader";
+import MainContent from "./MainContent";
 import ManageCacheButton from "./ManageCacheButton";
 import SidebarItem from "./SidebarItem";
 import UserSongs from "./UserSongs";
@@ -36,7 +37,7 @@ const Sidebar: FC<SidebarProps> = ({ children }) => {
         </Box>
       </aside>
 
-      <main className="h-full py-2 overflow-y-auto flex-1">{children}</main>
+      <MainContent>{children}</MainContent>
     </div>
   );
 };

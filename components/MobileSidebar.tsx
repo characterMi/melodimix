@@ -43,12 +43,12 @@ const MobileSidebarTrigger = ({
         "fixed left-full bg-neutral-900 size-14 flex flex-col gap-y-[6px] justify-center items-end pl-2 rounded-r-xl z-50 md:hidden cursor-pointer",
         isDragging && "outline outline-2 outline-green-500"
       )}
-      onMouseDown={() => {
+      onTouchStart={() => {
         dragTimeoutRef.current = setTimeout(() => {
           setIsDragging(true);
         }, 500);
       }}
-      onMouseUp={() => {
+      onTouchEnd={() => {
         clearTimeout(dragTimeoutRef.current);
 
         if (isDragging) {
@@ -57,10 +57,12 @@ const MobileSidebarTrigger = ({
           openMobileSidebar();
         }
       }}
-      onMouseMove={(e) => {
+      onTouchMove={(e) => {
         if (!isDragging) return;
 
-        const newYPercentage = (e.clientY / window.innerHeight) * 100;
+        const { clientY } = e.touches[0];
+
+        const newYPercentage = (clientY / window.innerHeight) * 100;
         const clampedY = Math.max(5, Math.min(newYPercentage, 95));
         setPositionY(clampedY);
       }}

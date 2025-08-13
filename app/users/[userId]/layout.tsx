@@ -53,7 +53,7 @@ const UsersPageLayout = async ({
         </div>
       </Header>
 
-      <main className="w-full p-6 pb-0">{children}</main>
+      <div className="w-full p-6 pb-0">{children}</div>
     </section>
   );
 };
