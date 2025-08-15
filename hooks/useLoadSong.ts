@@ -30,7 +30,7 @@ export const useLoadSong = (songUrl: string) => {
         );
       }
 
-      cache.put(songUrl, response.clone());
+      cache.put(songUrl, response.clone()).catch((err) => console.error(err));
       return response;
     }
 

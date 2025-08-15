@@ -47,7 +47,9 @@ const SongTitle = ({
       <p
         className={twMerge(
           "text-white whitespace-nowrap select-none",
-          isPlayer ? "scroll-animation w-full child_1" : "truncate",
+          isPlayer
+            ? "scroll-animation child_1 min-w-full flex-shrink-0 pr-4"
+            : "truncate",
           shouldRunAnimationIfCurrentlyPlaying &&
             currentlyPlayingSongId === id &&
             "text-green-500"
@@ -103,18 +105,13 @@ const SongItem = ({
         className="flex flex-col gap-1 overflow-hidden w-full"
         aria-live={ariaLive}
       >
-        <div
-          className={twMerge(
-            "flex items-center shrink-0 text-lg scroll-animation__container",
-            isPlayer && "w-[200%]"
-          )}
-        >
+        <div className="flex items-center shrink-0 text-lg scroll-animation__container">
           <SongTitle
             id={data.id}
             title={
-              (showAuthor
+              showAuthor
                 ? `${data.title} - ${data.artist ?? "Unknown artist"}`
-                : data.title) + "&nbsp;"
+                : data.title
             }
             isPlayer={isPlayer}
             shouldRunAnimationIfCurrentlyPlaying={
@@ -124,10 +121,10 @@ const SongItem = ({
 
           {isPlayer && (
             <p
-              className="text-white whitespace-nowrap select-none w-full scroll-animation child_2"
+              className="text-white whitespace-nowrap select-none scroll-animation child_2 min-w-full flex-shrink-0 pr-4"
               aria-hidden
             >
-              {data.title} &nbsp;
+              {data.title}
             </p>
           )}
         </div>

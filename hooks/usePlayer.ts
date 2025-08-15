@@ -132,7 +132,7 @@ export function usePlayer(song: Song, songUrl: string) {
     const updatePositionState = () => {
       if (isNaN(audio.duration)) return;
 
-      navigator.mediaSession.setPositionState({
+      navigator.mediaSession?.setPositionState({
         duration: audio.duration,
         playbackRate: audio.playbackRate,
         position: audio.currentTime,

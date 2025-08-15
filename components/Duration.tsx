@@ -38,7 +38,14 @@ function Duration({
         onChange={(value) => {
           if (song) {
             setCurrentDurationPercentage(value);
-            song.currentTime = value * ((song.duration || 0) / 100);
+            const newTime = value * ((song.duration || 0) / 100);
+            song.currentTime = newTime;
+
+            navigator.mediaSession?.setPositionState?.({
+              duration: song.duration,
+              playbackRate: song.playbackRate,
+              position: newTime,
+            });
           }
         }}
         max={100}
@@ -92,22 +99,31 @@ const KeyboardNavigationHelper = ({
 
       const power = e.ctrlKey ? 10 : 0.1;
 
+      const updateDuration = (
+        currDuration: number,
+        type: "forward" | "backward"
+      ) => {
+        const pos =
+          type === "backward"
+            ? Math.max(currDuration - power, 0)
+            : Math.min(currDuration + power, 100);
+        const newTime = pos * ((song.duration || 0) / 100);
+
+        song.currentTime = newTime;
+
+        navigator.mediaSession?.setPositionState?.({
+          duration: song.duration,
+          playbackRate: song.playbackRate,
+          position: newTime,
+        });
+
+        return pos;
+      };
+
       if (e.key === "ArrowLeft") {
-        setDurationPercentage((prev) => {
-          const pos = Math.max(prev - power, 0);
-
-          song.currentTime = pos * ((song.duration || 0) / 100);
-
-          return pos;
-        });
+        setDurationPercentage((prev) => updateDuration(prev, "backward"));
       } else if (e.key === "ArrowRight") {
-        setDurationPercentage((prev) => {
-          const pos = Math.min(prev + power, 100);
-
-          song.currentTime = pos * ((song.duration || 0) / 100);
-
-          return pos;
-        });
+        setDurationPercentage((prev) => updateDuration(prev, "forward"));
       }
     };
 

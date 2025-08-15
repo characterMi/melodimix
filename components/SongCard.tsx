@@ -19,12 +19,15 @@ const SongCard = ({ data, onClick }: Props) => {
   const router = useRouter();
 
   function handleClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    e.preventDefault();
     e.stopPropagation();
     shareSong(data.title, data.artist, data.id);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
       shareSong(data.title, data.artist, data.id);
     }
   }
@@ -45,16 +48,6 @@ const SongCard = ({ data, onClick }: Props) => {
         />
       </div>
 
-      <div className="flex flex-col items-start w-full py-4 gap-y-1">
-        <p className="font-semibold truncate w-full">
-          {data.title} - {data.artist ?? "Unknown artist"}
-        </p>
-
-        <div className="text-neutral-400 text-sm pt-1 w-full truncate flex items-center gap-1">
-          By <Author name={data.author} userId={data.user_id} shouldHighlight />
-        </div>
-      </div>
-
       <div className="absolute bottom-24 right-5">
         <div
           className="opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md delay-75 transition translate-y-2/4 group-hover:opacity-100 group-hover:-translate-y-2/4 hover:scale-105 group-focus-visible:opacity-100 group-focus-visible:-translate-y-2/4 focus-visible:opacity-100 focus-visible:translate-y-3/4 focus-visible:scale-105 outline-none"
@@ -73,6 +66,16 @@ const SongCard = ({ data, onClick }: Props) => {
           onClick={() => router.push(`/songs/${data.id}`, { scroll: false })}
           role="link"
         />
+      </div>
+
+      <div className="flex flex-col items-start w-full py-4 gap-y-1">
+        <p className="font-semibold truncate w-full">
+          {data.title} - {data.artist ?? "Unknown artist"}
+        </p>
+
+        <div className="text-neutral-400 text-sm pt-1 w-full truncate flex items-center gap-1">
+          By <Author name={data.author} userId={data.user_id} shouldHighlight />
+        </div>
       </div>
     </button>
   );

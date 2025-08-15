@@ -1,5 +1,6 @@
 "use server";
 
+import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
 import type { Playlist } from "@/types";
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "./getCurrentUser";
@@ -34,7 +35,7 @@ export const updatePlaylist = async (
 
   const { error } = await supabase
     .from("playlists")
-    .update({ ...newData, name: trimmedName })
+    .update({ ...newData, name: removeDuplicatedSpaces(trimmedName) })
     .eq("user_id", user.id)
     .eq("id", newData.id);
 

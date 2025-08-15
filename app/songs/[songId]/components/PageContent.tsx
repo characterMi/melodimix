@@ -22,7 +22,7 @@ const PageContent = ({
   const activeId = usePlayerStore((state) => state.activeId);
   const router = useRouter();
 
-  if (!songs)
+  if (!songs || songs.length <= 0) {
     return (
       <NoSongFallback
         className="-mt-2"
@@ -30,6 +30,7 @@ const PageContent = ({
         showButton={false}
       />
     );
+  }
 
   return (
     <div
@@ -37,7 +38,7 @@ const PageContent = ({
       className="flex flex-col gap-2 w-full"
     >
       <h3 className="font-semibold text-lg mb-4">
-        More Songs by {artist ?? "Unknown artist"}
+        {songs.length === 10 ? "Top 10" : "More"} Songs by {artist}
       </h3>
 
       {songs.map((song) => (

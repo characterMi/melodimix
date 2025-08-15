@@ -1,4 +1,5 @@
 import { revalidatePath } from "@/actions/revalidatePath";
+import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
 import type { Song } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
@@ -8,6 +9,7 @@ export const updateSong = async (
     id: string;
     img_path: string;
     song_path: string;
+    created_at: string;
   }
 ): Promise<
   | {
@@ -54,8 +56,8 @@ export const updateSong = async (
   const dbUpdatePromise = supabase
     .from("songs")
     .update({
-      title,
-      artist,
+      title: removeDuplicatedSpaces(title),
+      artist: removeDuplicatedSpaces(artist),
     })
     .eq("user_id", user.id)
     .eq("id", songData.id);
@@ -113,7 +115,6 @@ export const updateSong = async (
   return {
     updatedSong: {
       ...songData,
-      created_at: new Date().toISOString(),
       title,
       author: user.user_metadata.full_name ?? "Guest",
       artist,

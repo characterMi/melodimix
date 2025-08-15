@@ -1,5 +1,6 @@
 "use server";
 
+import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
 import { getCurrentUser } from "./getCurrentUser";
 
 export const updateUserData = async (formData: FormData) => {
@@ -43,8 +44,8 @@ export const updateUserData = async (formData: FormData) => {
   }
 
   const userData = {
-    name: name || "Guest",
-    full_name: fullName || "Guest",
+    name: removeDuplicatedSpaces(name || "Guest"),
+    full_name: removeDuplicatedSpaces(fullName || "Guest"),
     ...(imagePath ? { avatar_url: imagePath } : {}),
   };
 

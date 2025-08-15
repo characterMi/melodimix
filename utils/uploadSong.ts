@@ -1,6 +1,8 @@
 import { revalidatePath } from "@/actions/revalidatePath";
-import type { Song } from "@/types";
+import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+
+import type { Song } from "@/types";
 
 export const uploadSong = async (
   formData: FormData
@@ -86,8 +88,8 @@ export const uploadSong = async (
 
   const newSong = {
     user_id: user.id,
-    title,
-    artist,
+    title: removeDuplicatedSpaces(title),
+    artist: removeDuplicatedSpaces(artist),
     img_path: imageData.path,
     song_path: songData.path,
   };

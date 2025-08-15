@@ -1,6 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+
+import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
 import { getCurrentUser } from "./getCurrentUser";
 import { getUserPlaylists } from "./getUserPlaylists";
 
@@ -32,7 +34,9 @@ export const createPlaylist = async ({
     };
   }
 
-  if (name.length > 50 || name.length < 3) {
+  const trimmedName = name.trim();
+
+  if (trimmedName.length > 50 || trimmedName.length < 3) {
     return {
       error: true,
       message: "Playlist name is too long or too short!",
@@ -62,7 +66,7 @@ export const createPlaylist = async ({
   const { error, data } = await supabase
     .from("playlists")
     .insert({
-      name,
+      name: removeDuplicatedSpaces(trimmedName),
       user_id: user.id,
       is_public: isPublic,
       song_ids: songIds,

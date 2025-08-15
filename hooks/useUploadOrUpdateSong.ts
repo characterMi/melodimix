@@ -1,10 +1,11 @@
-import { onError } from "@/lib/onError";
-import { useHomePageData } from "@/store/useHomePageData";
-import { useUserSongs } from "@/store/useUserSongsStore";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import toast from "react-hot-toast";
+
+import { onError } from "@/lib/onError";
+import { useHomePageData } from "@/store/useHomePageData";
+import { useUserSongs } from "@/store/useUserSongsStore";
 import { useUploadModal } from "../store/useUploadModal";
 import { updateSong } from "../utils/updateSong";
 import { uploadSong } from "../utils/uploadSong";
@@ -47,6 +48,7 @@ export const useUploadOrUpdateSong = () => {
           id: initialData.id,
           img_path: initialData.img_path,
           song_path: initialData.song_path,
+          created_at: initialData.created_at,
         });
 
         if (error) {
