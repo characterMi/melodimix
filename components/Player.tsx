@@ -4,6 +4,7 @@ import { useGetSongById } from "@/hooks/useGetSongById";
 import { useLoadSongUrl } from "@/hooks/useLoadSongUrl";
 import { usePlayerStore } from "@/store/usePlayerStore";
 
+import { twMerge } from "tailwind-merge";
 import Loader from "./Loader";
 import PlayerContent from "./PlayerContent";
 
@@ -18,7 +19,10 @@ const Player = () => {
 
   return (
     <div
-      className="fixed bottom-0 bg-black w-full py-2 rounded-t-2xl px-4 player z-30"
+      className={twMerge(
+        "fixed bottom-0 bg-black w-full py-2 rounded-t-2xl px-4 player z-30",
+        !song && "h-[124px]"
+      )}
       role="region"
       aria-label="Music Player"
     >
