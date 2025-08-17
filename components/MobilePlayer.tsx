@@ -43,7 +43,7 @@ const MobilePlayer = ({
   return createPortal(
     <div
       className={twMerge(
-        "w-full h-sm-screen bg-black fixed top-0 left-0 z-[100] sm:hidden transition duration-300 flex flex-col justify-between items-center overflow-x-hidden overflow-y-auto mobile-player__container",
+        "w-full h-sm-screen bg-gradient-to-t from-black to-emerald-800 fixed top-0 left-0 z-[100] sm:hidden transition duration-300 flex flex-col justify-between items-center overflow-x-hidden overflow-y-auto mobile-player__container",
         isMobilePlayerOpen ? "translate-y-0" : "translate-y-full"
       )}
       ref={mobilePlayerRef}
@@ -87,7 +87,7 @@ const MobilePlayer = ({
         />
       )}
       <div
-        className="absolute top-0 left-0 w-full h-full z-[-1] bg-[linear-gradient(0deg,black_0%,transparent_75%,rgba(6,95,70,1)_100%)]"
+        className="absolute top-0 left-0 w-full h-full z-[-1] bg-gradient-to-t from-black from-0% via-transparent via-75% to-emerald-800 to-100%"
         aria-hidden
       />
 

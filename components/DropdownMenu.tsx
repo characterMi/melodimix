@@ -5,41 +5,21 @@ import type {
   DropdownMenuSubContentProps,
   DropdownMenuSubTriggerProps,
 } from "@radix-ui/react-dropdown-menu";
-import dynamic from "next/dynamic";
+import {
+  Content,
+  Group,
+  Item,
+  Label,
+  Root,
+  Separator,
+  Sub,
+  SubContent,
+  SubTrigger,
+  Trigger,
+} from "@radix-ui/react-dropdown-menu";
 import { forwardRef } from "react";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
-
-const Root = dynamic(() =>
-  import("@radix-ui/react-dropdown-menu").then((mod) => mod.Root)
-);
-const Trigger = dynamic(() =>
-  import("@radix-ui/react-dropdown-menu").then((mod) => mod.Trigger)
-);
-const Content = dynamic(() =>
-  import("@radix-ui/react-dropdown-menu").then((mod) => mod.Content)
-);
-const Group = dynamic(() =>
-  import("@radix-ui/react-dropdown-menu").then((mod) => mod.Group)
-);
-const Label = dynamic(() =>
-  import("@radix-ui/react-dropdown-menu").then((mod) => mod.Label)
-);
-const Item = dynamic(() =>
-  import("@radix-ui/react-dropdown-menu").then((mod) => mod.Item)
-);
-const Separator = dynamic(() =>
-  import("@radix-ui/react-dropdown-menu").then((mod) => mod.Separator)
-);
-const Sub = dynamic(() =>
-  import("@radix-ui/react-dropdown-menu").then((mod) => mod.Sub)
-);
-const SubTrigger = dynamic(() =>
-  import("@radix-ui/react-dropdown-menu").then((mod) => mod.SubTrigger)
-);
-const SubContent = dynamic(() =>
-  import("@radix-ui/react-dropdown-menu").then((mod) => mod.SubContent)
-);
 
 type Props = {
   triggerProps: {

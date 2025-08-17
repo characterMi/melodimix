@@ -3,6 +3,7 @@
 import { useGetSongById } from "@/hooks/useGetSongById";
 import { useLoadSongUrl } from "@/hooks/useLoadSongUrl";
 import { usePlayerStore } from "@/store/usePlayerStore";
+
 import Loader from "./Loader";
 import PlayerContent from "./PlayerContent";
 
@@ -13,7 +14,7 @@ const Player = () => {
 
   const songUrl = useLoadSongUrl(song!);
 
-  if (!song || !songUrl || !activeId) return null;
+  if (!activeId) return null;
 
   return (
     <div
@@ -22,12 +23,15 @@ const Player = () => {
       aria-label="Music Player"
     >
       <section className="h-full w-full relative" aria-busy={isLoading}>
-        <PlayerContent
-          song={song}
-          songUrl={songUrl}
-          isSongLoading={isLoading}
-          key={songUrl}
-        />
+        {song && (
+          <PlayerContent
+            song={song}
+            songUrl={songUrl}
+            isSongLoading={isLoading}
+            key={songUrl}
+          />
+        )}
+
         {isLoading && (
           <div
             className="w-full h-28 z-50 bg-black/60 backdrop-blur-sm"
