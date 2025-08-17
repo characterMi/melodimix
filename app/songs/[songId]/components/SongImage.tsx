@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
-
 import { useLoadImage } from "@/hooks/useLoadImage";
+
+import SongCover from "@/components/SongCover";
 
 import type { Song } from "@/types";
 
@@ -10,7 +10,7 @@ const SongImage = ({ song }: { song: Song | null }) => {
   const image = useLoadImage(song);
 
   return (
-    <Image
+    <SongCover
       src={image || "/images/song.png"}
       alt={song ? `${song.title} image` : "Couldn't find the song!"}
       width={500}
