@@ -1,7 +1,8 @@
 import { revalidatePath } from "@/actions/revalidatePath";
 import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
+import { supabaseClient } from "@/lib/supabaseClient";
+
 import type { Song } from "@/types";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export const updateSong = async (
   newData: FormData,
@@ -21,10 +22,9 @@ export const updateSong = async (
       error?: undefined;
     }
 > => {
-  const supabase = createClientComponentClient();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabaseClient.auth.getUser();
 
   if (!user) {
     return { error: "Unauthenticated User." };
@@ -53,7 +53,7 @@ export const updateSong = async (
     return { error: "Either Title or Artist is too long or too short!" };
   }
 
-  const dbUpdatePromise = supabase
+  const dbUpdatePromise = supabaseClient
     .from("songs")
     .update({
       title: removeDuplicatedSpaces(title),
@@ -71,7 +71,7 @@ export const updateSong = async (
     }
 
     updates.push(
-      supabase.storage
+      supabaseClient.storage
         .from("images")
         .update(songData.img_path, imageFile, { upsert: true })
     );
@@ -87,7 +87,7 @@ export const updateSong = async (
     }
 
     updates.push(
-      supabase.storage
+      supabaseClient.storage
         .from("songs")
         .update(songData.song_path, songFile, { upsert: true })
     );

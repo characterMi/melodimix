@@ -78,13 +78,8 @@ self.addEventListener("fetch", (event) => {
   const eventUrl = new URL(event.request.url);
 
   if (eventUrl.hostname === SUPABASE_HOSTNAME) {
-    if (
-      // don't cache any token...
-      eventUrl.pathname.startsWith("/auth/v1/token") ||
-      // No need to fetch (we handle that in the useLoadSong hook)
-      eventUrl.pathname.startsWith("/storage/v1/object/public/songs")
-    )
-      return;
+    // No need to fetch (we handle that in the useLoadSong hook)
+    if (eventUrl.pathname.startsWith("/storage/v1/object/public/songs")) return;
 
     // Song by id...
     if (
@@ -92,6 +87,12 @@ self.addEventListener("fetch", (event) => {
       eventUrl.searchParams.has("id")
     ) {
       event.respondWith(staleWhileRevalidate(event.request, "songs-data"));
+      return;
+    }
+
+    // refresh token handling...
+    if (eventUrl.pathname.startsWith("/auth/v1/token")) {
+      event.respondWith(handleRefreshToken(event.request));
       return;
     }
 
@@ -186,6 +187,23 @@ async function fetchReq(req, cache = null, returnFallback = false) {
       if (returnFallback) return responseFallback();
       return null;
     });
+}
+
+function handleRefreshToken(req) {
+  if (!self.navigator.onLine) {
+    return new Response(
+      JSON.stringify({
+        error: "offline",
+        message: "You're currently offline. we can't refresh the token.",
+      }),
+      {
+        status: 503,
+        headers: { "content-type": "application/json", "retry-after": "120" },
+      }
+    );
+  }
+
+  return fetchReq(req);
 }
 
 async function handleRSC(req) {

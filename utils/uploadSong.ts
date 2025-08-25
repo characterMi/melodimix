@@ -1,6 +1,6 @@
 import { revalidatePath } from "@/actions/revalidatePath";
 import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { supabaseClient } from "@/lib/supabaseClient";
 
 import type { Song } from "@/types";
 
@@ -16,10 +16,9 @@ export const uploadSong = async (
       error?: undefined;
     }
 > => {
-  const supabase = createClientComponentClient();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabaseClient.auth.getUser();
 
   if (!user) {
     return { error: "Unauthenticated User." };
@@ -64,10 +63,10 @@ export const uploadSong = async (
 
   const uniqueId = crypto.randomUUID();
 
-  const uploadSongPromise = supabase.storage
+  const uploadSongPromise = supabaseClient.storage
     .from("songs")
     .upload(`song-${title}-${uniqueId}`, songFile);
-  const uploadImagePromise = supabase.storage
+  const uploadImagePromise = supabaseClient.storage
     .from("images")
     .upload(`image-${title}-${uniqueId}`, imageFile);
 
@@ -78,8 +77,9 @@ export const uploadSong = async (
 
   if (songError || imageError) {
     // Cleanup any uploaded files (no need to await)
-    if (songData) supabase.storage.from("songs").remove([songData.path]);
-    if (imageData) supabase.storage.from("images").remove([imageData.path]);
+    if (songData) supabaseClient.storage.from("songs").remove([songData.path]);
+    if (imageData)
+      supabaseClient.storage.from("images").remove([imageData.path]);
 
     return {
       error: songError?.message || imageError?.message || "Upload failed.",
@@ -94,15 +94,15 @@ export const uploadSong = async (
     song_path: songData.path,
   };
 
-  const { error: supabaseError, data } = await supabase
+  const { error: supabaseError, data } = await supabaseClient
     .from("songs")
     .insert(newSong)
     .select("id")
     .single();
 
   if (supabaseError) {
-    supabase.storage.from("songs").remove([songData.path]);
-    supabase.storage.from("images").remove([imageData.path]);
+    supabaseClient.storage.from("songs").remove([songData.path]);
+    supabaseClient.storage.from("images").remove([imageData.path]);
 
     return { error: "Something went wrong while uploading the song!" };
   }

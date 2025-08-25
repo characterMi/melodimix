@@ -30,7 +30,7 @@ const LoadMore = ({
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!isInView || status !== "loadmore" || isLoading) return;
+    if (isLoading || !isInView || status !== "loadmore") return;
 
     setIsLoading(true);
 
@@ -47,7 +47,7 @@ const LoadMore = ({
         retries.current += 1;
       })
       .finally(() => {
-        setIsLoading(false);
+        setTimeout(() => setIsLoading(false), 500);
       });
   }, [isInView, status, isLoading]);
 

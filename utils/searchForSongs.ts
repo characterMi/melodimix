@@ -1,5 +1,5 @@
+import { supabaseClient } from "@/lib/supabaseClient";
 import type { Song } from "@/types";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export const searchForSongs = async (
   searchValue: string | undefined,
@@ -12,9 +12,7 @@ export const searchForSongs = async (
   )
     return [];
 
-  const supabase = createClientComponentClient();
-
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from("songs")
     .select("*, users!public_songs_user_id_fkey(full_name)")
     .or(`title.ilike.%${searchValue}%,artist.ilike.%${searchValue}%`)
