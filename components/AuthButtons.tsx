@@ -1,20 +1,24 @@
 "use client";
 
-import { useAuthModal } from "@/store/useAuthModal";
-import { useLikedPageData } from "@/store/useLikedPageData";
-import { useLikedSongs } from "@/store/useLikedSongs";
-import { useUserModal } from "@/store/useUserModal";
-import { useUserSongs } from "@/store/useUserSongsStore";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import toast from "react-hot-toast";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { FiLogOut } from "react-icons/fi";
 import { RiUserFill } from "react-icons/ri";
+
+import { onError } from "@/lib/onError";
+import { useAuthModal } from "@/store/useAuthModal";
+import { useLikedPageData } from "@/store/useLikedPageData";
+import { useLikedSongs } from "@/store/useLikedSongs";
+import { useUserModal } from "@/store/useUserModal";
+import { useUserSongs } from "@/store/useUserSongsStore";
+
 import Button from "./Button";
 import Loader from "./Loader";
+
+import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 const AuthButtons = ({ router }: { router: AppRouterInstance }) => {
   const pathname = usePathname();
@@ -36,9 +40,7 @@ const AuthButtons = ({ router }: { router: AppRouterInstance }) => {
     const { error } = await supabaseClient.auth.signOut();
 
     if (error) {
-      toast.error("There was an error when logging you out, try again!", {
-        ariaProps: { role: "alert", "aria-live": "assertive" },
-      });
+      onError("There was an error when logging you out, try again!", error);
       return;
     }
 
