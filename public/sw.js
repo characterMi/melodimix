@@ -90,9 +90,9 @@ self.addEventListener("fetch", (event) => {
       return;
     }
 
-    // refresh token handling...
+    // don't cache any token...
     if (eventUrl.pathname.startsWith("/auth/v1/token")) {
-      event.respondWith(handleRefreshToken(event.request));
+      event.respondWith(fetchReq(event.request));
       return;
     }
 
@@ -187,23 +187,6 @@ async function fetchReq(req, cache = null, returnFallback = false) {
       if (returnFallback) return responseFallback();
       return null;
     });
-}
-
-function handleRefreshToken(req) {
-  if (!self.navigator.onLine) {
-    return new Response(
-      JSON.stringify({
-        error: "offline",
-        message: "You're currently offline. we can't refresh the token.",
-      }),
-      {
-        status: 503,
-        headers: { "content-type": "application/json", "retry-after": "120" },
-      }
-    );
-  }
-
-  return fetchReq(req);
 }
 
 async function handleRSC(req) {

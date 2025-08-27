@@ -39,9 +39,9 @@ export function usePlayer(song: Song, songUrl: string) {
       if (playerType === "repeat") {
         audio.currentTime = 0;
 
-        navigator.mediaSession?.setPositionState({
+        navigator.mediaSession?.setPositionState?.({
           duration: audio.duration || 0,
-          position: audio.currentTime || 0,
+          position: 0,
           playbackRate: 1.0,
         });
 
@@ -113,6 +113,12 @@ export function usePlayer(song: Song, songUrl: string) {
       const target = e.currentTarget as HTMLAudioElement;
 
       setSound(target);
+
+      navigator.mediaSession?.setPositionState?.({
+        duration: audio.duration || 0,
+        playbackRate: 1.0,
+        position: 0,
+      });
     };
 
     const events = [
@@ -132,7 +138,7 @@ export function usePlayer(song: Song, songUrl: string) {
     const updatePositionState = () => {
       if (isNaN(audio.duration)) return;
 
-      navigator.mediaSession?.setPositionState({
+      navigator.mediaSession?.setPositionState?.({
         duration: audio.duration,
         playbackRate: audio.playbackRate,
         position: audio.currentTime,
