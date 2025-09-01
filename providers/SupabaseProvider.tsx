@@ -1,18 +1,31 @@
 "use client";
 
-import { useState } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { supabaseClient as supabase } from "@/lib/supabaseClient";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
-import type { Database } from "@/types/types_supabase";
+import { useEffect, useState } from "react";
 
 interface Props {
   children: React.ReactNode;
 }
 
 export const SupabaseProvider = ({ children }: Props) => {
-  const [supabaseClient] = useState(() =>
-    createClientComponentClient<Database>()
-  );
+  const [supabaseClient] = useState(supabase);
+
+  useEffect(() => {
+    const handleOnline = () => supabaseClient.auth.startAutoRefresh();
+
+    const handleOffline = () => supabaseClient.auth.stopAutoRefresh();
+
+    if (!navigator.onLine) handleOffline();
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, [supabaseClient]);
 
   return (
     <SessionContextProvider supabaseClient={supabaseClient}>
