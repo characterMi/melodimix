@@ -6,13 +6,13 @@ import SongCard from "@/components/SongCard";
 import { useOnPlay } from "@/hooks/useOnPlay";
 import { useHomePageData } from "@/store/useHomePageData";
 import { usePlayerStore } from "@/store/usePlayerStore";
-import type { Song } from "@/types";
+import type { SongWithAuthor } from "@/types";
 import { getSongs } from "@/utils/getSongs";
 import { useEffect, useMemo } from "react";
 
 export const LIMIT = 20;
 
-const PageContent = ({ initialSongs }: { initialSongs: Song[] }) => {
+const PageContent = ({ initialSongs }: { initialSongs: SongWithAuthor[] }) => {
   const {
     pageData: { songs, page },
     addAll,

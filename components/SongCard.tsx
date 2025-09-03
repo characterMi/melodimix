@@ -2,7 +2,7 @@
 
 import { useLoadImage } from "@/hooks/useLoadImage";
 import { shareSong } from "@/lib/share";
-import type { Song } from "@/types";
+import type { SongWithAuthor } from "@/types";
 import { useRouter } from "next/navigation";
 import { FaShareAlt } from "react-icons/fa";
 import Author from "./Author";
@@ -10,8 +10,8 @@ import PlayButton from "./PlayButton";
 import SongCover from "./SongCover";
 
 interface Props {
-  data: Song;
-  onClick: (id: string) => void;
+  data: SongWithAuthor;
+  onClick: (id: number) => void;
 }
 
 const SongCard = ({ data, onClick }: Props) => {

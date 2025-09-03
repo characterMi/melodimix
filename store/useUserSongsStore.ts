@@ -5,7 +5,7 @@ interface UserSongs {
   userSongs: Song[];
   setUserSongs: (songs: Song[]) => void;
   addOneSong: (song: Song) => void;
-  deleteSong: (songId: string) => void;
+  deleteSong: (songId: number) => void;
 }
 
 export const useUserSongs = create<UserSongs>((setState) => ({

@@ -1,9 +1,9 @@
 import { create } from "zustand";
 
 interface LikedSongs {
-  likedSongs: Record<string, boolean>;
-  setLikedSongs: (songId: string, isLiked: boolean) => void;
-  removeIdFromLikedSongs: (songId: string) => void;
+  likedSongs: Record<number, boolean>;
+  setLikedSongs: (songId: number, isLiked: boolean) => void;
+  removeIdFromLikedSongs: (songId: number) => void;
   clearLikedSongs: () => void;
 }
 

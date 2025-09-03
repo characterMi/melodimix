@@ -1,12 +1,12 @@
 import { LIMIT } from "@/app/(main)/components/PageContent";
-import type { Song } from "@/types";
+import type { SongWithAuthor } from "@/types";
 import { create } from "zustand";
 
 type Store = {
-  pageData: { page: number; songs: Song[] };
-  addOne: (song: Song) => void;
-  addAll: (songs: Song[], page: number) => void;
-  updateOne: (newData: Song) => void;
+  pageData: { page: number; songs: SongWithAuthor[] };
+  addOne: (song: SongWithAuthor) => void;
+  addAll: (songs: SongWithAuthor[], page: number) => void;
+  updateOne: (newData: SongWithAuthor) => void;
 };
 
 export const useHomePageData = create<Store>((set) => ({

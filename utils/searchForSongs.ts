@@ -1,10 +1,10 @@
 import { supabaseClient } from "@/lib/supabaseClient";
-import type { Song } from "@/types";
+import type { SongWithAuthor } from "@/types";
 
 export const searchForSongs = async (
   searchValue: string | undefined,
   signal: AbortSignal
-): Promise<Song[]> => {
+): Promise<SongWithAuthor[]> => {
   if (
     typeof searchValue !== "string" ||
     !searchValue ||

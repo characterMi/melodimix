@@ -1,6 +1,6 @@
 "use server";
 
-import type { Song } from "@/types";
+import type { SongWithAuthor } from "@/types";
 import { SupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { getCurrentUser } from "./getCurrentUser";
 
@@ -33,7 +33,9 @@ type Params = {
   offset: number;
 } | null;
 
-export const getUserSongs = async (params: Params): Promise<Song[]> => {
+export const getUserSongs = async (
+  params: Params
+): Promise<SongWithAuthor[]> => {
   const { supabase, user } = await getCurrentUser();
 
   // if no userId is provided, return the current user's songs

@@ -20,7 +20,7 @@ const SongCard = ({
   onPlay,
 }: {
   song: Song;
-  onPlay: (id: string) => void;
+  onPlay: (id: number) => void;
 }) => (
   <div className="flex items-center gap-x-4 w-full">
     <div className="flex-1 overflow-hidden">

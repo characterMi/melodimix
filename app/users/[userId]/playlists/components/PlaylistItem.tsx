@@ -12,7 +12,7 @@ const PlaylistItem = ({
   firstSongId,
 }: {
   playlist: Playlist;
-  firstSongId: string;
+  firstSongId: number;
 }) => {
   const hasFetched = useRef(false);
   const [playlistThumbnail, setPlaylistThumbnail] = useState("");

@@ -5,7 +5,7 @@ import { getCurrentUser } from "./getCurrentUser";
 
 export const likeSong = async (
   isLiked: boolean,
-  songId: string
+  songId: number
 ): Promise<{ isLiked: boolean; error?: string; message?: string }> => {
   const { supabase, user } = await getCurrentUser();
 

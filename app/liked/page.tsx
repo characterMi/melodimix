@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Loader from "@/components/Loader";
 import MainContent from "@/components/MainContent";
 import LikedImage from "@/public/images/liked.png";
-import type { Song } from "@/types";
+import type { SongWithAuthor } from "@/types";
 import Image from "next/image";
 import { Suspense } from "react";
 import { LikedContent } from "./components/LikedContent";
@@ -14,7 +14,7 @@ export const metadata = {
 };
 
 async function GetSongs() {
-  let songs: Song[];
+  let songs: SongWithAuthor[];
 
   try {
     songs = await getLikedSongs();

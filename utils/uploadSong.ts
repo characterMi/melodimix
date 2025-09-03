@@ -2,7 +2,7 @@ import { revalidatePath } from "@/actions/revalidatePath";
 import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
 import { supabaseClient } from "@/lib/supabaseClient";
 
-import type { Song } from "@/types";
+import type { SongWithAuthor } from "@/types";
 
 export const uploadSong = async (
   formData: FormData
@@ -12,7 +12,7 @@ export const uploadSong = async (
       uploadedSong?: undefined;
     }
   | {
-      uploadedSong: Song;
+      uploadedSong: SongWithAuthor;
       error?: undefined;
     }
 > => {

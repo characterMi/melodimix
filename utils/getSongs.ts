@@ -1,10 +1,10 @@
 import { supabaseClient } from "@/lib/supabaseClient";
-import type { Song } from "@/types";
+import type { SongWithAuthor } from "@/types";
 
 export const getSongs = async (
   limit: number,
   offset: number
-): Promise<Song[]> => {
+): Promise<SongWithAuthor[]> => {
   const from = offset * limit;
   const to = from + limit;
 

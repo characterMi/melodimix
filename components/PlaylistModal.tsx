@@ -1,6 +1,6 @@
 import { useCreateOrUpdatePlaylist } from "@/hooks/useCreateOrUpdatePlaylist";
 import { useSearchSong } from "@/hooks/useSearchSong";
-import type { Song } from "@/types";
+import type { SongWithAuthor } from "@/types";
 import { TbMinus, TbPlus } from "react-icons/tb";
 import { twMerge } from "tailwind-merge";
 import Button from "./Button";
@@ -14,7 +14,7 @@ const SongCard = ({
   isActive,
   onClick,
 }: {
-  data: Song;
+  data: SongWithAuthor;
   isActive: boolean;
   onClick: () => void;
 }) => (
@@ -44,8 +44,8 @@ const SearchResults = ({
   songIds,
   setSongIds,
 }: {
-  songIds: string[];
-  setSongIds: (ids: string[]) => void;
+  songIds: number[];
+  setSongIds: (ids: number[]) => void;
 }) => {
   const { filteredSongs, isSearching } = useSearchSong();
 

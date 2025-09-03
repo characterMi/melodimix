@@ -51,7 +51,7 @@ const UpdateButton = ({ song }: { song: Song }) => {
   );
 };
 
-const DeleteButton = ({ songId }: { songId: string }) => {
+const DeleteButton = ({ songId }: { songId: number }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const deleteSongFromUserSongs = useUserSongs((state) => state.deleteSong);
 

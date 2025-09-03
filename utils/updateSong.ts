@@ -2,12 +2,12 @@ import { revalidatePath } from "@/actions/revalidatePath";
 import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
 import { supabaseClient } from "@/lib/supabaseClient";
 
-import type { Song } from "@/types";
+import type { SongWithAuthor } from "@/types";
 
 export const updateSong = async (
   newData: FormData,
   songData: {
-    id: string;
+    id: number;
     img_path: string;
     song_path: string;
     created_at: string;
@@ -18,7 +18,7 @@ export const updateSong = async (
       updatedSong?: undefined;
     }
   | {
-      updatedSong: Song;
+      updatedSong: SongWithAuthor;
       error?: undefined;
     }
 > => {

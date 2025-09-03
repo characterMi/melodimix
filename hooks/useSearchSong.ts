@@ -1,10 +1,10 @@
-import { Song } from "@/types";
+import { SongWithAuthor } from "@/types";
 import { searchForSongs } from "@/utils/searchForSongs";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSearchMusic } from "../store/useSearch";
 
-export function useSearchSong(songs?: Song[]) {
+export function useSearchSong(songs?: SongWithAuthor[]) {
   const searchValue = useSearchMusic((state) => state.searchValue);
   const [isSearching, setIsSearching] = useState(false);
   const [filteredSongs, setFilteredSongs] = useState(songs ?? []);

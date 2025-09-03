@@ -12,9 +12,11 @@ const PlaylistContainer = ({
   playlistsList,
   children,
 }: {
-  playlistsList: ({ href: string; name: string; id: string } & Partial<
-    Pick<Playlist, "song_ids" | "user_id" | "is_public">
-  >)[];
+  playlistsList: ({
+    href: string;
+    name: string;
+    id: number | "liked" | "uploaded";
+  } & Partial<Pick<Playlist, "song_ids" | "user_id" | "is_public">>)[];
   children: React.ReactNode;
 }) => {
   const openPlaylistModal = usePlaylistModal((state) => state.onOpen);

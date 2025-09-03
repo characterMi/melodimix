@@ -4,12 +4,12 @@ import { create } from "zustand";
 export type PlayerType = "sequential" | "shuffle" | "repeat";
 
 interface PlayerStore {
-  ids: string[];
-  activeId?: string;
-  setId: (id?: string) => void;
-  setIds: (ids: string[]) => void;
-  currentlyPlayingSongId?: string;
-  setCurrentlyPlayingSongId: (id?: string) => void;
+  ids: number[];
+  activeId?: number;
+  setId: (id?: number) => void;
+  setIds: (ids: number[]) => void;
+  currentlyPlayingSongId?: number;
+  setCurrentlyPlayingSongId: (id?: number) => void;
   playerType: PlayerType;
   setPlayerType: () => void;
   volume: number;

@@ -1,22 +1,17 @@
 "use server";
 
-import type { Song } from "@/types";
+import type { SongWithAuthor } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export const getSongs = async (
-  limit: number = 20,
-  offset: number = 0
-): Promise<Song[]> => {
+  limit: number = 20
+): Promise<SongWithAuthor[]> => {
   const supabase = createClientComponentClient();
-
-  const from = offset * limit;
-  const to = from + limit;
 
   const { data, error } = await supabase
     .from("songs")
     .select("*, users!public_songs_user_id_fkey(full_name)")
     .order("created_at", { ascending: false })
-    .range(from, to)
     .limit(limit);
 
   if (error) {

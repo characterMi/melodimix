@@ -1,6 +1,6 @@
 "use server";
 
-import type { Song } from "@/types";
+import type { SongWithAuthor } from "@/types";
 import { getCurrentUser } from "./getCurrentUser";
 
 export const getLikedSongsWithoutLimit = async () => {
@@ -30,7 +30,7 @@ export const getLikedSongsWithoutLimit = async () => {
 export const getLikedSongs = async (
   limit: number = 25,
   offset: number = 0
-): Promise<Song[]> => {
+): Promise<SongWithAuthor[]> => {
   const { user, supabase } = await getCurrentUser();
 
   const from = offset * limit;

@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "./getCurrentUser";
 
-export const deleteSong = async (songId: string): Promise<boolean> => {
+export const deleteSong = async (songId: number): Promise<boolean> => {
   const { supabase, user } = await getCurrentUser();
 
   if (!user) return false;

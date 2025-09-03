@@ -7,7 +7,7 @@ type Store = {
   pageData: { page: number; songs: Song[] };
   addOne: (song: Song) => void;
   addAll: (songs: Song[], page: number) => void;
-  removeOne: (songId: string) => void;
+  removeOne: (songId: number) => void;
   removeAll: () => void;
 };
 

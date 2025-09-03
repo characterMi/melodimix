@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "./getCurrentUser";
 
-export const deletePlaylist = async (playlistId: string, isPublic: boolean) => {
+export const deletePlaylist = async (playlistId: number, isPublic: boolean) => {
   const { supabase, user } = await getCurrentUser();
 
   if (!user) return false;

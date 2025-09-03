@@ -15,7 +15,7 @@ export const createPlaylist = async ({
 }: {
   name: string;
   isPublic: boolean;
-  songIds: string[];
+  songIds: number[];
 }): Promise<
   | { error: true; message: string; playlistId: null }
   | { playlistId: string; error: false; message: null }

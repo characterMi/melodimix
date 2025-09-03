@@ -10,10 +10,10 @@ import FlipArrow from "@/components/FlipArrow";
 import NoSongFallback from "../../components/NoSongFallback";
 import SongItem from "../../components/SongItem";
 
-import type { Song } from "@/types";
+import type { SongWithAuthor } from "@/types";
 import { useRouter } from "next/navigation";
 
-const SearchContent = ({ songs }: { songs: Song[] }) => {
+const SearchContent = ({ songs }: { songs: SongWithAuthor[] }) => {
   const { filteredSongs, isSearching } = useSearchSong(songs);
   const activeId = usePlayerStore((state) => state.activeId);
   const onPlay = useOnPlay(filteredSongs);

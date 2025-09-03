@@ -12,7 +12,7 @@ export const useCreateOrUpdatePlaylist = () => {
   const { isOpen, onClose, initialData, clearInitialData } = usePlaylistModal();
   const [name, setName] = useState("");
   const [isPublic, setIsPublic] = useState(false);
-  const [songIds, setSongIds] = useState<string[]>([]);
+  const [songIds, setSongIds] = useState<number[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const openAuthModal = useAuthModal((state) => state.onOpen);

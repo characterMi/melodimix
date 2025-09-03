@@ -1,12 +1,12 @@
 "use server";
 
 import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
-import type { Playlist } from "@/types";
+import type { PlaylistWithoutCreatedAt } from "@/types";
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "./getCurrentUser";
 
 export const updatePlaylist = async (
-  newData: Playlist
+  newData: PlaylistWithoutCreatedAt
 ): Promise<
   { error: true; message: string } | { error: false; message: null }
 > => {

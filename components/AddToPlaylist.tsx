@@ -16,7 +16,7 @@ const PlaylistItem = ({
   songId,
 }: {
   playlist: Playlist;
-  songId: string;
+  songId: number;
 }) => {
   const [isAdding, setIsAdding] = useState(false);
 
@@ -67,7 +67,7 @@ const PlaylistItem = ({
   );
 };
 
-const Playlists = ({ songId }: { songId: string }) => {
+const Playlists = ({ songId }: { songId: number }) => {
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -143,7 +143,7 @@ const CreatePlaylist = () => {
   );
 };
 
-const AddToPlaylist = ({ songId }: { songId: string }) => (
+const AddToPlaylist = ({ songId }: { songId: number }) => (
   <DropdownMenu.Sub>
     <DropdownMenu.SubTrigger className="cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity">
       Add to playlist

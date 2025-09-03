@@ -15,9 +15,11 @@ import { FiTrash2 } from "react-icons/fi";
 import { MdOutlineEdit } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
 
-type Props = { href: string; name: string; id: string } & Partial<
-  Pick<Playlist, "song_ids" | "user_id" | "is_public">
->;
+type Props = {
+  href: string;
+  name: string;
+  id: "liked" | "uploaded" | number;
+} & Partial<Pick<Playlist, "song_ids" | "user_id" | "is_public">>;
 
 const PlaylistLink = ({ href, name, id, ...props }: Props) => {
   const pathname = usePathname();
@@ -65,7 +67,9 @@ const PlaylistLink = ({ href, name, id, ...props }: Props) => {
   );
 };
 
-const UpdateButton = (props: Required<Omit<Props, "href">>) => {
+const UpdateButton = (
+  props: Required<Omit<Props, "href" | "id"> & { id: number }>
+) => {
   const openModal = usePlaylistModal((state) => state.onOpen);
 
   return (
@@ -88,7 +92,7 @@ const DeleteButton = ({
   playlistId,
   isPublic,
 }: {
-  playlistId: string;
+  playlistId: number;
   isPublic: boolean;
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);

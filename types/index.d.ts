@@ -1,30 +1,17 @@
+import { Database } from "./db";
+
 export type CacheKeys = "assets" | "songs" | "songs-data";
 
 export type CacheData = Record<CacheKeys, number>;
 
-export interface Song {
-  id: string;
-  user_id: string;
-  author: string;
-  artist: string;
-  title: string;
-  song_path: string;
-  img_path: string;
-  created_at: string;
-}
+export type Song = Database["public"]["Tables"]["songs"]["Row"];
 
-export interface Playlist {
-  id: string;
-  user_id: string;
-  name: string;
-  song_ids: string[];
-  is_public: boolean;
-}
+export type SongWithAuthor = Song & { author: string };
 
-export interface User {
-  id: string;
+export type Playlist = Database["public"]["Tables"]["playlists"]["Row"];
+
+export type PlaylistWithoutCreatedAt = Omit<Playlist, "created_at">;
+
+export type User = Database["public"]["Tables"]["users"]["Row"] & {
   email: string;
-  avatar_url: string | null;
-  name: string | null;
-  full_name: string | null;
-}
+};

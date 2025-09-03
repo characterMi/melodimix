@@ -1,13 +1,13 @@
 import useInView from "@/hooks/useInView";
-import type { Song } from "@/types";
+import type { SongWithAuthor } from "@/types";
 import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface Props {
   initialStatus: "loadmore" | "ended";
   currentPage: number;
-  setSongs: (songs: Song[], page: number) => void;
-  getSongsPromise: (limit: number, offset: number) => Promise<Song[]>;
+  setSongs: (songs: SongWithAuthor[], page: number) => void;
+  getSongsPromise: (limit: number, offset: number) => Promise<SongWithAuthor[]>;
   numberOfRetries?: number;
   limit?: number;
 }

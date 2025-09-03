@@ -2,9 +2,11 @@
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import type { Song } from "@/types";
+import type { SongWithAuthor } from "@/types";
 
-export const getSong = async (songId: string): Promise<Song | null> => {
+export const getSong = async (
+  songId: string
+): Promise<SongWithAuthor | null> => {
   const supabase = createClientComponentClient();
 
   const { data, error } = await supabase

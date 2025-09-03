@@ -1,11 +1,11 @@
-import type { Playlist } from "@/types";
+import type { PlaylistWithoutCreatedAt } from "@/types";
 import { create } from "zustand";
 
 interface PlaylistModalStore {
   isOpen: boolean;
-  initialData: Playlist | undefined;
+  initialData: PlaylistWithoutCreatedAt | undefined;
   clearInitialData: () => void;
-  onOpen: (data?: Playlist) => void;
+  onOpen: (data?: PlaylistWithoutCreatedAt) => void;
   onClose: () => void;
 }
 

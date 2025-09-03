@@ -8,7 +8,7 @@ import Author from "./Author";
 import SongCover from "./SongCover";
 
 interface SongTitleProps {
-  id: string;
+  id: number;
   title: string;
   isPlayer?: boolean;
   shouldRunAnimationIfCurrentlyPlaying?: boolean;
@@ -61,8 +61,8 @@ const SongTitle = ({
 };
 
 interface SongItemProps {
-  data: Song;
-  onClick?: (id: string) => void;
+  data: Song & { author?: string };
+  onClick?: (id: number) => void;
   isPlayer?: boolean;
   showAuthor?: boolean;
   shouldRunAnimationIfCurrentlyPlaying?: boolean;
@@ -131,7 +131,7 @@ const SongItem = ({
 
         <div className="text-neutral-400 text-sm truncate">
           {showAuthor ? (
-            <Author name={data.author} userId={data.user_id} />
+            <Author name={data.author!} userId={data.user_id} />
           ) : (
             data.artist ?? "Unknown artist"
           )}
