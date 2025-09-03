@@ -75,17 +75,18 @@ const MobilePlayer = ({
       </div>
 
       {/* Backdrop */}
-      {isMobilePlayerOpen && (
-        <SongCover
-          src={songImage || "/images/liked.png"}
-          alt={""}
-          aria-hidden
-          width={1}
-          height={1}
-          className="size-full absolute z-[-1] blur-lg"
-          renderErrorFallback={false}
-        />
-      )}
+      <SongCover
+        src={songImage || "/images/liked.png"}
+        alt={""}
+        aria-hidden
+        width={1}
+        height={1}
+        className={twMerge(
+          "size-full absolute z-[-1]",
+          isMobilePlayerOpen && "blur-lg"
+        )}
+        renderErrorFallback={false}
+      />
       <div
         className="absolute top-0 left-0 w-full h-full z-[-1] bg-gradient-to-t from-black from-0% via-transparent via-75% to-emerald-800 to-100%"
         aria-hidden
