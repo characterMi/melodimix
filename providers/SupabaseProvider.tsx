@@ -2,7 +2,7 @@
 
 import { supabaseClient as supabase } from "@/lib/supabaseClient";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
-import { useInsertionEffect, useState } from "react";
+import { useState } from "react";
 
 interface Props {
   children: React.ReactNode;
@@ -10,22 +10,6 @@ interface Props {
 
 export const SupabaseProvider = ({ children }: Props) => {
   const [supabaseClient] = useState(supabase);
-
-  useInsertionEffect(() => {
-    const handleOnline = () => supabaseClient.auth.startAutoRefresh();
-
-    const handleOffline = () => supabaseClient.auth.stopAutoRefresh();
-
-    if (!navigator.onLine) handleOffline();
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, [supabaseClient]);
 
   return (
     <SessionContextProvider supabaseClient={supabaseClient}>
