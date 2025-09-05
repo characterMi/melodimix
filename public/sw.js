@@ -109,7 +109,7 @@ self.addEventListener("fetch", (event) => {
     event.request.mode === "navigate" ||
     event.request.headers.get("accept")?.includes("text/html")
   ) {
-    event.respondWith(handleHTML(eventUrl));
+    event.respondWith(handleHTML(event.request));
     return;
   }
 
@@ -191,19 +191,21 @@ async function handleRSC(req) {
   return networkFirst(req, assetsCacheName);
 }
 
-async function handleHTML(reqUrl) {
-  const hasSearch = reqUrl.searchParams.size > 0;
-  const hasHash = reqUrl.hash !== "";
+async function handleHTML(req) {
+  const requestedUrl = new URL(req.url);
 
-  // handling requests with search params...
+  const hasSearch = requestedUrl.searchParams.size > 0;
+  const hasHash = requestedUrl.hash !== "";
+
+  // handling requests with search params and hash...
   if (hasSearch || hasHash) {
-    const htmlResponse = await fetch(reqUrl.toString());
+    const htmlResponse = await fetch(req);
     if (htmlResponse) return htmlResponse;
 
-    reqUrl.search = reqUrl.hash = "";
+    requestedUrl.search = requestedUrl.hash = "";
 
     const cache = await caches.open(assetsCacheName);
-    const cachedResponse = await cache.match(reqUrl.toString(), {
+    const cachedResponse = await cache.match(requestedUrl.toString(), {
       ignoreSearch: true,
     });
 
