@@ -143,13 +143,13 @@ async function cacheOnly(req, cacheName) {
     return cachedResponse.clone();
   }
 
-  return fetchReq(req, cache);
+  return fetchReq(req, cache, true);
 }
 
 async function staleWhileRevalidate(req, cacheName) {
   const cache = await caches.open(cacheName);
   const cachedResponse = await cache.match(req);
-  const fetchRes = fetchReq(req, cache);
+  const fetchRes = fetchReq(req, cache, true);
 
   if (cachedResponse) {
     return cachedResponse.clone();
@@ -171,13 +171,16 @@ async function networkFirst(req, cacheName, isRequestingHTML = false) {
   return isRequestingHTML ? offlineHTMLFallback() : responseFallback();
 }
 
-async function fetchReq(req, cache) {
+async function fetchReq(req, cache = null, returnFallback = false) {
   return fetch(req, { cache: "no-cache" })
     .then(async (networkRes) => {
-      if (networkRes.ok) await cache.put(req, networkRes.clone());
+      if (cache && networkRes.ok) await cache.put(req, networkRes.clone());
       return networkRes;
     })
-    .catch(() => responseFallback());
+    .catch(() => {
+      if (returnFallback) return responseFallback();
+      return null;
+    });
 }
 
 async function handleRSC(req) {
