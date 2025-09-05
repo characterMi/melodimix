@@ -10,10 +10,7 @@ export const SessionProvider = () => {
 
   useEffect(() => {
     const init = async () => {
-      if (!navigator.onLine) {
-        updateSessionStore(null, false);
-        return;
-      }
+      if (!navigator.onLine) return;
 
       const {
         data: { session },
@@ -29,7 +26,7 @@ export const SessionProvider = () => {
         subscription: { unsubscribe },
       },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN") {
+      if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
         updateSessionStore(session, false);
       }
 
