@@ -10,7 +10,10 @@ export const SessionProvider = () => {
 
   useEffect(() => {
     const init = async () => {
-      if (!navigator.onLine) return;
+      if (!navigator.onLine) {
+        updateSessionStore(null, false);
+        return;
+      }
 
       const {
         data: { session },
