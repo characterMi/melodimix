@@ -199,7 +199,7 @@ async function handleHTML(req) {
 
   // handling requests with search params and hash...
   if (hasSearch || hasHash) {
-    const htmlResponse = await fetch(req);
+    const htmlResponse = await fetchReq(req);
     if (htmlResponse) return htmlResponse;
 
     requestedUrl.search = requestedUrl.hash = "";
