@@ -31,8 +31,8 @@ export async function generateMetadata({
   const supabase = createClientComponentClient();
   const songUrl = supabase.storage.from("songs").getPublicUrl(song.song_path)
     .data.publicUrl;
-  const title = `Listen to the ${song.title} by ${song.artist}`,
-    description = `Checkout the ${song.title} by ${song.artist} and find more songs by this artist!`;
+  const title = `Listen to ${song.title} by ${song.artist}`,
+    description = `Checkout ${song.title} by ${song.artist} and find more songs by this artist!`;
 
   return {
     title,

@@ -14,7 +14,12 @@ export const supabaseClient = createClientComponentClient<Database>({
         ) {
           return new Promise((res) => {
             toast.error("You're offline, cannot validate the token.");
-            res(new Response("You're offline, cannot validate the token."));
+            res(
+              new Response(null, {
+                status: 200,
+                statusText: "You're offline, cannot validate the token.",
+              })
+            );
           });
         }
 
