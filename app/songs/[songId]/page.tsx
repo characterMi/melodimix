@@ -4,7 +4,10 @@ import Author from "@/components/Author";
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
 import MainContent from "@/components/MainContent";
+import { openGraph, twitter } from "@/constants";
 import { getCleanParamValue } from "@/lib/getCleanParamValue";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import PageContent from "./components/PageContent";
 import SongButtons from "./components/SongButtons";
@@ -14,17 +17,46 @@ export async function generateMetadata({
   params,
 }: {
   params: { songId: string };
-}) {
+}): Promise<Metadata> {
   const cleanSongId = getCleanParamValue(params.songId);
   const song = await getSong(cleanSongId);
 
+  if (!song) {
+    return {
+      title: "Song not found.",
+      description: "Couldn't find a song with this ID.",
+    };
+  }
+
+  const supabase = createClientComponentClient();
+  const songUrl = supabase.storage.from("songs").getPublicUrl(song.song_path)
+    .data.publicUrl;
+  const title = `Listen to the ${song.title} by ${song.artist}`,
+    description = `Checkout the ${song.title} by ${song.artist} and find more songs by this artist!`;
+
   return {
-    title: song
-      ? `Listen to the ${song.title} by ${song.artist}`
-      : "Song not found.",
-    description: song
-      ? `Checkout the ${song.title} song by ${song.artist} and find more songs by this artist!`
-      : "Couldn't find a song with this ID.",
+    title,
+    description,
+    openGraph: openGraph({
+      title,
+      description,
+      type: "music.song",
+      audio: [songUrl],
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}songs/${cleanSongId}`,
+    }),
+    twitter: twitter({
+      title,
+      description,
+      card: "player",
+      players: [
+        {
+          playerUrl: songUrl,
+          streamUrl: songUrl,
+          width: 512,
+          height: 512,
+        },
+      ],
+    }),
   };
 }
 

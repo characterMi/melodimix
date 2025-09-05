@@ -36,6 +36,7 @@ const SongButtons = ({ song }: { song: Song }) => {
           song={song}
           songUrl={songUrl}
           triggerSize={isMobile ? 25 : 28}
+          renderShareButton={false}
         />
       </div>
 

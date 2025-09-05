@@ -38,7 +38,11 @@ const PlayerSongCard = ({
     if (isMobilePlayerOpen) return;
 
     // The reason we don't use router is because the router causes reload on offline mode.
-    window.history.pushState({ isMobilePlayerOpen: true }, "");
+    window.history.pushState(
+      { isMobilePlayerOpen: true },
+      "",
+      window.location.href + "?isMobilePlayerOpen=true"
+    );
     setIsMobilePlayerOpen(true);
   }, [isMobilePlayerOpen]);
 

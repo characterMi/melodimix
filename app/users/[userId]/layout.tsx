@@ -1,8 +1,45 @@
 import { getUserById } from "@/actions/getUserById";
 import Header from "@/components/Header";
 import MainContent from "@/components/MainContent";
+import { openGraph, twitter } from "@/constants";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { userId: string };
+}): Promise<Metadata> {
+  const user = await getUserById(params.userId);
+
+  if (user) {
+    const title = `${user.name || "Guest"}'s profile`,
+      description = `Checkout the ${user.name || "Guest"}'s profile!`;
+
+    return {
+      title,
+      description,
+      openGraph: openGraph({
+        title,
+        description,
+        url: `${process.env.NEXT_PUBLIC_BASE_URL}users/${params.userId}`,
+        type: "profile",
+        firstName: user.full_name,
+        username: user.name,
+      }),
+      twitter: twitter({
+        title,
+        description,
+      }),
+    };
+  }
+
+  return {
+    title: "User not found",
+    description: "Couldn't find a user with this ID.",
+  };
+}
 
 const UsersPageLayout = async ({
   params,

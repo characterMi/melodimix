@@ -81,10 +81,7 @@ const MobilePlayer = ({
         aria-hidden
         width={1}
         height={1}
-        className={twMerge(
-          "size-full absolute z-[-1]",
-          isMobilePlayerOpen && "blur-lg"
-        )}
+        className="size-full absolute z-[-1]"
         renderErrorFallback={false}
       />
       <div

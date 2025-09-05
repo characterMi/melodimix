@@ -10,6 +10,7 @@ import Player from "@/components/Player";
 import Sidebar from "@/components/Sidebar";
 import Root from "./root";
 
+import { openGraph, twitter } from "@/constants";
 import "./globals.css";
 
 const PWABehaviorManager = dynamic(
@@ -19,7 +20,7 @@ const PWABehaviorManager = dynamic(
 
 const figtree = Figtree({ subsets: ["latin"] });
 
-const APP_NAME = "MelodiMix";
+export const APP_NAME = "MelodiMix";
 const DESCRIPTION =
   "MelodiMix: Your Ultimate Music Destination. Discover personalized playlists, seamless streaming, and a vibrant music community. Join us today for the perfect soundtrack to every moment.";
 
@@ -48,36 +49,14 @@ export const metadata: Metadata = {
   creator: "Abolfazl taghadosi",
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL!),
   publisher: "Abolfazl taghadosi",
-  openGraph: {
+  openGraph: openGraph({
     title: APP_NAME,
     description: DESCRIPTION,
-    url: process.env.NEXT_PUBLIC_BASE_URL,
-    type: "website",
-    images: [
-      {
-        url: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/melodimix-512-maskable.png`,
-        width: 512,
-        height: 512,
-        alt: "Website Logo",
-      },
-    ],
-    locale: "en_US",
-    siteName: APP_NAME,
-  },
-  twitter: {
+  }),
+  twitter: twitter({
     title: APP_NAME,
     description: DESCRIPTION,
-    site: process.env.NEXT_PUBLIC_BASE_URL,
-    images: [
-      {
-        url: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/melodimix-512-maskable.png`,
-        width: 512,
-        height: 512,
-        alt: "Website Logo",
-      },
-    ],
-    card: "summary",
-  },
+  }),
 };
 
 export const viewport: Viewport = {

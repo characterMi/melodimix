@@ -5,12 +5,12 @@ import SongItem from "@/components/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
 import { sharePlaylist } from "@/lib/share";
 import { usePlayerStore } from "@/store/usePlayerStore";
-import { Playlist, Song } from "@/types";
+import { Playlist, SongWithAuthor } from "@/types";
 import Link from "next/link";
 import { IoShareSocialOutline } from "react-icons/io5";
 
 type Props = {
-  songs: Song[];
+  songs: SongWithAuthor[];
   playlist?: Playlist & { author: string };
   errMessage?: string;
 };

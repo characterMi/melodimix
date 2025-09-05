@@ -2,6 +2,7 @@ import { shareSong } from "@/lib/share";
 import type { Song } from "@/types";
 import toast from "react-hot-toast";
 import { HiOutlineDownload } from "react-icons/hi";
+import { LuTrash2 } from "react-icons/lu";
 import { RxDotsVertical } from "react-icons/rx";
 import { TbMusicShare } from "react-icons/tb";
 import AddToPlaylist from "./AddToPlaylist";
@@ -12,11 +13,13 @@ const SongOptions = ({
   songUrl,
   triggerSize = 24,
   triggerClasses,
+  renderShareButton = true,
 }: {
   song: Song;
   songUrl: string;
   triggerSize?: number;
   triggerClasses?: string;
+  renderShareButton?: boolean;
 }) => {
   const handleDownload = async () => {
     const cache = await caches.open("songs");
@@ -37,6 +40,24 @@ const SongOptions = ({
     a.click();
 
     URL.revokeObjectURL(url);
+  };
+
+  const handleDelete = async () => {
+    const cache = await caches.open("songs");
+    const cachedResponse = await cache.match(songUrl);
+
+    if (!cachedResponse) {
+      toast.error("Song not found in the cache.");
+      return;
+    }
+
+    const result = await cache.delete(songUrl);
+
+    if (result) {
+      toast.success("Song deleted from the cache.");
+    } else {
+      toast.error("Couldn't delete the song.");
+    }
   };
 
   return (
@@ -60,11 +81,21 @@ const SongOptions = ({
 
       <DropdownMenu.Item
         className="font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity flex items-center justify-between"
-        onClick={() => shareSong(song.title, song.artist, song.id)}
+        onClick={handleDelete}
       >
-        Share
-        <TbMusicShare size={18} aria-hidden />
+        Delete the song
+        <LuTrash2 size={18} aria-hidden />
       </DropdownMenu.Item>
+
+      {renderShareButton && (
+        <DropdownMenu.Item
+          className="font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity flex xss:hidden sm:flex items-center justify-between"
+          onClick={() => shareSong(song.title, song.artist, song.id)}
+        >
+          Share
+          <TbMusicShare size={18} aria-hidden />
+        </DropdownMenu.Item>
+      )}
 
       <DropdownMenu.Separator />
 

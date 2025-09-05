@@ -8,7 +8,7 @@ import VariantButton from "@/components/VariantButton";
 import { useOnPlay } from "@/hooks/useOnPlay";
 import { onError } from "@/lib/onError";
 import { usePlayerStore } from "@/store/usePlayerStore";
-import type { Playlist, Song } from "@/types";
+import type { Playlist, SongWithAuthor } from "@/types";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { FiTrash2 } from "react-icons/fi";
@@ -63,7 +63,7 @@ const PageContent = ({
   errMessage,
   playlist,
 }: {
-  songs: Song[];
+  songs: SongWithAuthor[];
   errMessage?: string;
   playlist?: Playlist;
 }) => {

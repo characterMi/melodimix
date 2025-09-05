@@ -1,11 +1,11 @@
 "use server";
 
-import type { Playlist, Song } from "@/types";
+import type { Playlist, SongWithAuthor } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { getCurrentUser } from "./getCurrentUser";
 
 type PlaylistSongsResponse = {
-  data: Song[];
+  data: SongWithAuthor[];
 } & (
   | {
       playlist: Playlist & { author: string };
