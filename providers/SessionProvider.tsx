@@ -26,7 +26,7 @@ export const SessionProvider = () => {
         subscription: { unsubscribe },
       },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
+      if (event === "SIGNED_IN") {
         updateSessionStore(session, false);
       }
 
