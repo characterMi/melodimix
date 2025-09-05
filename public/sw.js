@@ -214,11 +214,7 @@ async function handleHTML(req) {
     return offlineHTMLFallback();
   }
 
-  return networkFirst(
-    reqUrl.toString(),
-    assetsCacheName,
-    /* isRequestingHTML= */ true
-  );
+  return networkFirst(req, assetsCacheName, /* isRequestingHTML= */ true);
 }
 
 function responseFallback() {
