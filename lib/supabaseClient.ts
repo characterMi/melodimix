@@ -1,4 +1,5 @@
 import type { Database } from "@/types/db";
+import { BrowserCookieAuthStorageAdapter } from "@supabase/auth-helpers-shared";
 import { createClient } from "@supabase/supabase-js";
 
 const isOnline = typeof navigator === "undefined" ? true : navigator.onLine;
@@ -10,6 +11,7 @@ export const supabaseClient = createClient<Database>(
     auth: {
       autoRefreshToken: isOnline,
       detectSessionInUrl: isOnline,
+      storage: new BrowserCookieAuthStorageAdapter(),
     },
   }
 );
