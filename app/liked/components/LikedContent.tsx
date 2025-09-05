@@ -7,10 +7,10 @@ import LoadMore from "@/components/LoadMore";
 import NoSongFallback from "@/components/NoSongFallback";
 import SongItem from "@/components/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
+import { useSession } from "@/hooks/useSession";
 import { useLikedPageData } from "@/store/useLikedPageData";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types";
-import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useEffect, useMemo } from "react";
 
 export const LIMIT = 25;
@@ -39,7 +39,7 @@ export const LikedContent = ({ initialSongs }: { initialSongs: Song[] }) => {
 
   const onPlay = useOnPlay(songs);
   const activeId = usePlayerStore((state) => state.activeId);
-  const { isLoading: isUserLoading, session } = useSessionContext();
+  const { isLoading: isUserLoading, session } = useSession();
 
   const songsToRender = useMemo(() => {
     return songs.map((song) => (

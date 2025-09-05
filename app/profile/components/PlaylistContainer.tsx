@@ -1,9 +1,9 @@
 "use client";
 
 import Loader from "@/components/Loader";
+import { useSession } from "@/hooks/useSession";
 import { usePlaylistModal } from "@/store/usePlaylistModal";
 import type { Playlist } from "@/types";
-import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useEffect, useRef } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import PlaylistLink from "./PlaylistLink";
@@ -22,7 +22,7 @@ const PlaylistContainer = ({
   const openPlaylistModal = usePlaylistModal((state) => state.onOpen);
 
   const playlistContainer = useRef<HTMLDivElement>(null);
-  const { session, isLoading: isUserLoading } = useSessionContext();
+  const { session, isLoading: isUserLoading } = useSession();
 
   useEffect(() => {
     const el = playlistContainer.current;

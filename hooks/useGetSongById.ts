@@ -1,6 +1,7 @@
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
+
+import { useSupabaseClient } from "./useSupabaseClient";
 
 import { Song } from "@/types";
 

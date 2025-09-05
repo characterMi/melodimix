@@ -1,4 +1,4 @@
-import { useSessionContext } from "@supabase/auth-helpers-react";
+import { useSession } from "@/hooks/useSession";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import toast from "react-hot-toast";
@@ -19,7 +19,7 @@ export const useUploadOrUpdateSong = () => {
       updateOne: state.updateOne,
     }));
   const addUploadedSongToUserSongs = useUserSongs((state) => state.addOneSong);
-  const { session } = useSessionContext();
+  const { session } = useSession();
   const router = useRouter();
 
   const isEditing = !!initialData;

@@ -1,15 +1,11 @@
 import { useUserSongs } from "@/store/useUserSongsStore";
-import {
-  useSessionContext,
-  useSupabaseClient,
-} from "@supabase/auth-helpers-react";
 import { useEffect, useRef, useState } from "react";
+import { useSession } from "./useSession";
 
 export const useGetUserSongs = () => {
   const hasFetched = useRef(false);
 
-  const supabaseClient = useSupabaseClient();
-  const { session } = useSessionContext();
+  const { session, supabaseClient } = useSession();
   const { userSongs, setUserSongs } = useUserSongs();
   const [isSongsLoading, setIsSongsLoading] = useState(true);
 

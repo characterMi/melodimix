@@ -1,9 +1,9 @@
 import { updatePlaylist } from "@/actions/updatePlaylist";
+import { useSession } from "@/hooks/useSession";
 import { onError } from "@/lib/onError";
 import { useAuthModal } from "@/store/useAuthModal";
 import { usePlaylistModal } from "@/store/usePlaylistModal";
 import { Playlist } from "@/types";
-import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -71,11 +71,7 @@ const Playlists = ({ songId }: { songId: number }) => {
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const {
-    session,
-    supabaseClient,
-    isLoading: isUserLoading,
-  } = useSessionContext();
+  const { session, supabaseClient, isLoading: isUserLoading } = useSession();
 
   useEffect(() => {
     if (!session) {
@@ -117,7 +113,7 @@ const Playlists = ({ songId }: { songId: number }) => {
 };
 
 const CreatePlaylist = () => {
-  const { session, isLoading } = useSessionContext();
+  const { session, isLoading } = useSession();
   const onAuthModalOpen = useAuthModal((state) => state.onOpen);
   const openModal = usePlaylistModal((state) => state.onOpen);
 

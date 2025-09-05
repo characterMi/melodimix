@@ -1,8 +1,8 @@
 import { updateUserData } from "@/actions/updateUserData";
+import { useSession } from "@/hooks/useSession";
 import { onError } from "@/lib/onError";
 import { useUserModal } from "@/store/useUserModal";
 import type { User } from "@/types";
-import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useTransition } from "react";
 import toast from "react-hot-toast";
 import { Avatar } from "./Avatar";
@@ -97,11 +97,7 @@ const UpdateUserForm = ({
 
 const UserModal = () => {
   const { isOpen, onClose } = useUserModal();
-  const {
-    session,
-    isLoading: isUserLoading,
-    supabaseClient,
-  } = useSessionContext();
+  const { session, isLoading: isUserLoading, supabaseClient } = useSession();
 
   return (
     <Modal

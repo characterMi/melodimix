@@ -1,7 +1,8 @@
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+
+import { useSupabaseClient } from "@/hooks/useSupabaseClient";
 
 import FlipArrow from "@/components/FlipArrow";
 

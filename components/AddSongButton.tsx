@@ -1,6 +1,6 @@
+import { useSession } from "@/hooks/useSession";
 import { useAuthModal } from "@/store/useAuthModal";
 import { useUploadModal } from "@/store/useUploadModal";
-import { useSessionContext } from "@supabase/auth-helpers-react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { TbPlaylist } from "react-icons/tb";
 
@@ -8,7 +8,7 @@ const AddSongButton = () => {
   const openAuthModal = useAuthModal((state) => state.onOpen);
   const openUploadModal = useUploadModal((state) => state.onOpen);
 
-  const { session } = useSessionContext();
+  const { session } = useSession();
 
   const handleClick = () => {
     if (!session?.user) return openAuthModal();

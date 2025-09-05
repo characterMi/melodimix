@@ -1,6 +1,5 @@
 "use client";
 
-import { useSessionContext } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import toast from "react-hot-toast";
@@ -8,6 +7,7 @@ import { BiDotsVerticalRounded } from "react-icons/bi";
 import { FiLogOut } from "react-icons/fi";
 import { RiUserFill } from "react-icons/ri";
 
+import { useSession } from "@/hooks/useSession";
 import { onError } from "@/lib/onError";
 import { useAuthModal } from "@/store/useAuthModal";
 import { useLikedPageData } from "@/store/useLikedPageData";
@@ -30,11 +30,7 @@ const AuthButtons = ({ router }: { router: AppRouterInstance }) => {
   const onAuthModalOpen = useAuthModal((state) => state.onOpen);
   const onUserModalOpen = useUserModal((state) => state.onOpen);
 
-  const {
-    session,
-    isLoading: isUserLoading,
-    supabaseClient,
-  } = useSessionContext();
+  const { session, isLoading: isUserLoading, supabaseClient } = useSession();
 
   const handleLogOut = async () => {
     const { error } = await supabaseClient.auth.signOut();

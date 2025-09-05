@@ -4,9 +4,9 @@ import { useAuthModal } from "@/store/useAuthModal";
 import { useLikedPageData } from "@/store/useLikedPageData";
 import { useLikedSongs } from "@/store/useLikedSongs";
 import type { Song } from "@/types";
-import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRef, useTransition } from "react";
 import toast from "react-hot-toast";
+import { useSession } from "./useSession";
 
 export const useLikeSong = (song: Song) => {
   const btnRef = useRef<HTMLButtonElement>(null);
@@ -21,7 +21,7 @@ export const useLikeSong = (song: Song) => {
 
   const isLiked = likedSongs[song.id] ?? false;
 
-  const { session } = useSessionContext();
+  const { session } = useSession();
 
   const handleLike = async () => {
     if (pending) return;

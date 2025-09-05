@@ -1,9 +1,6 @@
 import { useLikedSongs } from "@/store/useLikedSongs";
-import {
-  useSessionContext,
-  useSupabaseClient,
-} from "@supabase/auth-helpers-react";
 import { useEffect, useRef } from "react";
+import { useSession } from "./useSession";
 
 export const useGetLikedSongs = () => {
   const hasFetched = useRef(false);
@@ -12,8 +9,7 @@ export const useGetLikedSongs = () => {
     setLikedSongs: state.setLikedSongs,
     clearLikedSongs: state.clearLikedSongs,
   }));
-  const supabaseClient = useSupabaseClient();
-  const { session } = useSessionContext();
+  const { session, supabaseClient } = useSession();
 
   useEffect(() => {
     if (!session) {

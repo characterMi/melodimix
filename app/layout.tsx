@@ -2,15 +2,16 @@ import type { Metadata, Viewport } from "next";
 import dynamic from "next/dynamic";
 import { Figtree } from "next/font/google";
 
+import { openGraph, twitter } from "@/constants";
+
 import { ModalProvider } from "@/providers/ModalProvider";
-import { SupabaseProvider } from "@/providers/SupabaseProvider";
+import { SessionProvider } from "@/providers/SessionProvider";
 import { ToasterProvider } from "@/providers/ToasterProvider";
 
 import Player from "@/components/Player";
 import Sidebar from "@/components/Sidebar";
 import Root from "./root";
 
-import { openGraph, twitter } from "@/constants";
 import "./globals.css";
 
 const PWABehaviorManager = dynamic(
@@ -75,23 +76,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SupabaseProvider>
-      <html lang="en">
-        <head>
-          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <meta name="mobile-web-app-capable" content="yes" />
-          <meta name="pinterest-rich-pin" content="true" />
-        </head>
-        <body className={figtree.className}>
-          <PWABehaviorManager />
-          <ToasterProvider />
-          <ModalProvider />
-          <Root>
-            <Sidebar>{children}</Sidebar>
-          </Root>
-          <Player />
-        </body>
-      </html>
-    </SupabaseProvider>
+    <html lang="en">
+      <head>
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="pinterest-rich-pin" content="true" />
+      </head>
+      <body className={figtree.className}>
+        <SessionProvider />
+        <PWABehaviorManager />
+        <ToasterProvider />
+        <ModalProvider />
+        <Root>
+          <Sidebar>{children}</Sidebar>
+        </Root>
+        <Player />
+      </body>
+    </html>
   );
 }

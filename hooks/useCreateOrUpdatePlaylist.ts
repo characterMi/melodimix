@@ -1,12 +1,12 @@
 import { createPlaylist } from "@/actions/createPlaylist";
 import { onError } from "@/lib/onError";
-import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { updatePlaylist } from "../actions/updatePlaylist";
 import { useAuthModal } from "../store/useAuthModal";
 import { usePlaylistModal } from "../store/usePlaylistModal";
+import { useSession } from "./useSession";
 
 export const useCreateOrUpdatePlaylist = () => {
   const { isOpen, onClose, initialData, clearInitialData } = usePlaylistModal();
@@ -16,7 +16,7 @@ export const useCreateOrUpdatePlaylist = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const openAuthModal = useAuthModal((state) => state.onOpen);
-  const { session } = useSessionContext();
+  const { session } = useSession();
 
   const router = useRouter();
 
