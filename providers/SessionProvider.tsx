@@ -18,7 +18,7 @@ export const SessionProvider = () => {
       if (!navigator.onLine) return;
 
       const expirationDate = new Date(
-        Date.now() + 36000 /*00 one hour */
+        Date.now() + 3600000 /* one hour */
       ).toUTCString();
       document.cookie = `persist-session=true; path=/; expires=${expirationDate}`;
     };
