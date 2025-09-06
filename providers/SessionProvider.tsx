@@ -1,6 +1,7 @@
 "use client";
 
 import { useSupabaseClient } from "@/hooks/useSupabaseClient";
+import { onError } from "@/lib/onError";
 import { useSessionStore } from "@/store/useSessionStore";
 import { useEffect } from "react";
 
@@ -14,7 +15,7 @@ export const SessionProvider = () => {
     // we should persist the session or not, the cookie expiration time will be updated only if we check the app online, but as soon as we
     // go offline, after one hour this persist-session cookie expires, so now supabase wont persist the session and we're not going to
     // have that retry loop. smart isn't it? (check the lib/supabaseClient.ts file to see the full code)
-    const init = () => {
+    const setPersistSessionCookie = () => {
       if (!navigator.onLine) return;
 
       const expirationDate = new Date(
@@ -23,7 +24,7 @@ export const SessionProvider = () => {
       document.cookie = `persist-session=true; path=/; expires=${expirationDate}`;
     };
 
-    init();
+    setPersistSessionCookie();
 
     const {
       data: {
@@ -39,12 +40,26 @@ export const SessionProvider = () => {
       }
     });
 
-    const handleOnline = () => supabase.auth.refreshSession();
+    const onOnline = async () => {
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.refreshSession();
 
-    window.addEventListener("online", handleOnline);
+      if (error) {
+        onError("Couldn't refresh the session.");
+      }
+
+      if (session) {
+        setPersistSessionCookie();
+        updateSessionStore(session, false);
+      }
+    };
+
+    window.addEventListener("online", onOnline);
 
     return () => {
-      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("online", onOnline);
       unsubscribe();
     };
   }, []);
