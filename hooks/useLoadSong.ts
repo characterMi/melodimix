@@ -1,5 +1,5 @@
+import { onError } from "@/lib/onError";
 import { useEffect, useRef, useState } from "react";
-import toast from "react-hot-toast";
 
 export const useLoadSong = (songUrl: string) => {
   const hasFetched = useRef(false);
@@ -54,8 +54,7 @@ export const useLoadSong = (songUrl: string) => {
         if (error instanceof DOMException && error?.name === "AbortError")
           return;
 
-        console.error(error);
-        toast.error(errorText);
+        onError(errorText);
       } finally {
         setIsSoundLoading(false);
       }

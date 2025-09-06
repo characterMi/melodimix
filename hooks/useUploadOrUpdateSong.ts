@@ -28,9 +28,7 @@ export const useUploadOrUpdateSong = () => {
     if (!isOpen || isUploading) return;
 
     if (!session?.user) {
-      toast.error("Unauthenticated User.", {
-        ariaProps: { role: "alert", "aria-live": "polite" },
-      });
+      onError("Unauthenticated User.");
 
       return;
     }

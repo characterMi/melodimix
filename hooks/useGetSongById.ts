@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { toast } from "react-hot-toast";
 
+import { onError } from "@/lib/onError";
 import { useSupabaseClient } from "./useSupabaseClient";
 
-import { Song } from "@/types";
+import type { Song } from "@/types";
 
 export const useGetSongById = (id?: number) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -25,11 +25,11 @@ export const useGetSongById = (id?: number) => {
         .single();
 
       if (error) {
-        setIsLoading(false);
-        return toast.error(error.message);
+        onError(error.message);
+      } else {
+        setSong(data as Song);
       }
 
-      setSong(data as Song);
       setIsLoading(false);
     };
 

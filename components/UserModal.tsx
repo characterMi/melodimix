@@ -26,9 +26,7 @@ const UpdateUserForm = ({
     if (isSubmitting) return;
 
     if (!user) {
-      toast.error("Unauthenticated User.", {
-        ariaProps: { role: "alert", "aria-live": "polite" },
-      });
+      onError("Unauthenticated User.");
       return;
     }
 

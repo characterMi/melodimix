@@ -1,3 +1,4 @@
+import { onError } from "@/lib/onError";
 import { shareSong } from "@/lib/share";
 import type { Song } from "@/types";
 import toast from "react-hot-toast";
@@ -26,7 +27,7 @@ const SongOptions = ({
     const cachedResponse = await cache.match(songUrl);
 
     if (!cachedResponse) {
-      toast.error("You need to download the song, in order to save it.");
+      onError("You need to download the song, in order to save it.");
       return;
     }
 
@@ -47,7 +48,7 @@ const SongOptions = ({
     const cachedResponse = await cache.match(songUrl);
 
     if (!cachedResponse) {
-      toast.error("Song not found in the cache.");
+      onError("Song not found in the cache.");
       return;
     }
 
@@ -56,7 +57,7 @@ const SongOptions = ({
     if (result) {
       toast.success("Song deleted from the cache.");
     } else {
-      toast.error("Couldn't delete the song.");
+      onError("Couldn't delete the song.");
     }
   };
 

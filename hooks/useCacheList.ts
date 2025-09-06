@@ -1,3 +1,4 @@
+import { onError } from "@/lib/onError";
 import { useManageCacheModal } from "@/store/useManageCacheModal";
 import type { CacheData, CacheKeys } from "@/types";
 import { useState } from "react";
@@ -33,7 +34,7 @@ export const useCacheList = (cacheNames: CacheKeys[], cacheData: CacheData) => {
       toast.success("Cache cleared successfully.");
       closeModal();
     } catch (error) {
-      toast.error("Something went wrong while clearing the cache.");
+      onError("Something went wrong while clearing the cache.");
     }
   }
 

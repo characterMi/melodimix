@@ -1,7 +1,7 @@
+import { onError } from "@/lib/onError";
 import { SongWithAuthor } from "@/types";
 import { searchForSongs } from "@/utils/searchForSongs";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { useSearchMusic } from "../store/useSearch";
 
 export function useSearchSong(songs?: SongWithAuthor[]) {
@@ -29,7 +29,7 @@ export function useSearchSong(songs?: SongWithAuthor[]) {
         console.error("No song found. Reason: ", err);
         if (err?.code === "499" || !songs) return;
 
-        toast.error("No song found. trying to search locally.");
+        onError("No song found. trying to search locally.");
 
         setFilteredSongs(
           songs.filter(

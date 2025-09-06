@@ -1,8 +1,8 @@
-import toast from "react-hot-toast";
+import { onError } from "./onError";
 
 export function shareSong(title: string, artist: string, id: number) {
   if (!navigator.share) {
-    toast.error("Share not supported on your browser");
+    onError("Share not supported on your browser");
     return;
   }
 
@@ -15,7 +15,7 @@ export function shareSong(title: string, artist: string, id: number) {
 
 export function sharePlaylist(name: string, author: string) {
   if (!navigator.share) {
-    toast.error("Share not supported on your browser");
+    onError("Share not supported on your browser");
     return;
   }
 
