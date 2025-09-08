@@ -3,7 +3,20 @@
 import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
 import { getCurrentUser } from "./getCurrentUser";
 
-export const updateUserData = async (formData: FormData) => {
+import type { UserMetadata } from "@supabase/supabase-js";
+
+export const updateUserData = async (
+  formData: FormData
+): Promise<
+  | {
+      error: string;
+      updatedUser?: undefined;
+    }
+  | {
+      error: null;
+      updatedUser: UserMetadata;
+    }
+> => {
   const { supabase, user } = await getCurrentUser();
 
   if (!user) return { error: "Unauthenticated User." };
@@ -58,13 +71,15 @@ export const updateUserData = async (formData: FormData) => {
     data: userData,
   });
 
-  const [{ error: dbUpdateError }, { error: authUpdateError }] =
-    await Promise.all([dbUpdatePromise, authUpdatePromise]);
+  const [
+    { error: dbUpdateError },
+    { data: updatedUser, error: authUpdateError },
+  ] = await Promise.all([dbUpdatePromise, authUpdatePromise]);
 
   if (dbUpdateError || authUpdateError) {
     console.error(dbUpdateError, authUpdateError);
     return { error: "Something went wrong while updating the user data!" };
   }
 
-  return { error: null };
+  return { error: null, updatedUser: updatedUser.user.user_metadata };
 };

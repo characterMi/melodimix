@@ -1,31 +1,38 @@
+import { useTransition } from "react";
+import toast from "react-hot-toast";
+
 import { updateUserData } from "@/actions/updateUserData";
 import { useSession } from "@/hooks/useSession";
 import { onError } from "@/lib/onError";
+import { useSessionStore } from "@/store/useSessionStore";
 import { useUserModal } from "@/store/useUserModal";
-import type { User } from "@/types";
-import { useTransition } from "react";
-import toast from "react-hot-toast";
+
 import { Avatar } from "./Avatar";
 import Button from "./Button";
 import Input from "./Input";
 import Loader from "./Loader";
 import Modal from "./Modal";
 
+import type { AuthResponse, Session } from "@supabase/supabase-js";
+
 const UpdateUserForm = ({
-  user,
+  session,
   closeUserModal,
   refreshSession,
 }: {
-  user: User;
+  session: Session;
   closeUserModal: () => void;
-  refreshSession: () => Promise<void>;
+  refreshSession: () => Promise<AuthResponse>;
 }) => {
   const [isSubmitting, startTransition] = useTransition();
+  const updateSessionStore = useSessionStore((state) => state.updateStore);
+
+  const user = session.user.user_metadata;
 
   const handleSubmit = (formData: FormData) => {
     if (isSubmitting) return;
 
-    if (!user) {
+    if (!session) {
       onError("Unauthenticated User.");
       return;
     }
@@ -38,14 +45,27 @@ const UpdateUserForm = ({
     }
 
     startTransition(async () => {
-      const { error } = await updateUserData(formData);
+      const { error, updatedUser } = await updateUserData(formData);
 
       if (error) {
         onError(error);
         return;
       }
 
-      await refreshSession();
+      const { error: refreshError } = await refreshSession();
+
+      if (refreshError) {
+        onError(
+          "Couldn't refresh the session (No worries though, your data has been successfully updated).",
+          refreshError
+        );
+        return;
+      }
+
+      updateSessionStore(
+        { ...session, user: { ...session.user, user_metadata: updatedUser! } },
+        false
+      );
       toast.success("Your profile has been updated!");
       closeUserModal();
     });
@@ -116,12 +136,10 @@ const UserModal = () => {
 
           {!isUserLoading && session && (
             <UpdateUserForm
-              user={session.user.user_metadata as User}
+              session={session}
               closeUserModal={onClose}
               refreshSession={async () => {
-                await supabaseClient.auth.refreshSession({
-                  refresh_token: session.refresh_token,
-                });
+                return await supabaseClient.auth.refreshSession(session);
               }}
             />
           )}
