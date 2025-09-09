@@ -13,6 +13,7 @@ import Input from "./Input";
 import Loader from "./Loader";
 import Modal from "./Modal";
 
+import { setPersistSessionCookie } from "@/lib/getPersistSessionCookie";
 import type { AuthResponse, Session } from "@supabase/supabase-js";
 
 const UpdateUserForm = ({
@@ -56,12 +57,13 @@ const UpdateUserForm = ({
 
       if (refreshError) {
         onError(
-          "Couldn't refresh the session (No worries though, your data has been successfully updated).",
+          "Couldn't refresh the session (No worries though, your data has been successfully updated in the Database).",
           refreshError
         );
         return;
       }
 
+      setPersistSessionCookie();
       updateSessionStore(
         { ...session, user: { ...session.user, user_metadata: updatedUser! } },
         false
