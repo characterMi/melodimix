@@ -1,3 +1,6 @@
+"use client";
+
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -9,7 +12,8 @@ const Button = forwardRef<HTMLButtonElement, Props>(
       <button
         type={type}
         className={twMerge(
-          "w-full rounded-full bg-green-500 border border-transparent p-3 disabled:cursor-not-allowed disabled:opacity-50 text-black font-bold hover:opacity-50 focus-visible:opacity-50 outline-none transition",
+          "w-full rounded-full bg-green-500 border border-transparent p-3 disabled:cursor-not-allowed disabled:opacity-50 text-black font-bold hover:opacity-50 focus-visible:opacity-50 outline-none",
+          !shouldReduceMotion && "transition-opacity",
           className
         )}
         disabled={disabled}

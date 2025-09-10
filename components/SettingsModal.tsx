@@ -12,6 +12,8 @@ import { getItemFromLocalStorage } from "@/lib/getItemFromLocalStorage";
 import { useManageCacheModal } from "@/store/useManageCacheModal";
 import { useSettingsModal } from "@/store/useSettingsModal";
 
+import { shouldReduceMotion } from "@/lib/reduceMotion";
+import { twMerge } from "tailwind-merge";
 import Modal from "./Modal";
 
 const settingItems = [
@@ -81,7 +83,10 @@ const SettingsModal = () => {
               {type === "button" ? (
                 <button
                   onClick={onClick}
-                  className="hover:opacity-50 focus-visible:opacity-50 transition-opacity"
+                  className={twMerge(
+                    "hover:opacity-50 focus-visible:opacity-50",
+                    !shouldReduceMotion && "transition-opacity"
+                  )}
                   aria-label={title}
                 >
                   <MdArrowOutward size={28} aria-hidden />
@@ -89,7 +94,10 @@ const SettingsModal = () => {
               ) : (
                 <Root
                   checked={checkBoxes[name!]}
-                  className="relative h-[16px] w-[32px] rounded-full bg-white shadow-none outline-none focus:shadow-[0_0_0_2px] focus:shadow-emerald-400 data-[state=checked]:bg-emerald-400 transition-shadow duration-100"
+                  className={twMerge(
+                    "relative h-[16px] w-[32px] rounded-full bg-white shadow-none outline-none focus:shadow-[0_0_0_2px] focus:shadow-emerald-400 data-[state=checked]:bg-emerald-400 duration-100",
+                    !shouldReduceMotion && "transition-shadow"
+                  )}
                   name={name}
                   aria-label={title}
                   onCheckedChange={() =>
@@ -105,7 +113,12 @@ const SettingsModal = () => {
                     })
                   }
                 >
-                  <Thumb className="block size-[12px] translate-x-[2px] rounded-full bg-black transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[18px]" />
+                  <Thumb
+                    className={twMerge(
+                      "block size-[12px] translate-x-[2px] rounded-full bg-black duration-100 will-change-transform data-[state=checked]:translate-x-[18px]",
+                      !shouldReduceMotion && "transition-transform"
+                    )}
+                  />
                 </Root>
               )}
             </div>

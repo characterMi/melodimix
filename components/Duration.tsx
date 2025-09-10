@@ -1,4 +1,5 @@
 import { useSongDuration } from "@/hooks/useSongDuration";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import Slider from "./Slider";
@@ -61,7 +62,10 @@ function Duration({
 
       <button
         onClick={() => setShowTotalDuration(!showTotalDuration)}
-        className="hover:text-neutral-400 focus-visible:text-neutral-400 outline-none transition-colors"
+        className={twMerge(
+          "hover:text-neutral-400 focus-visible:text-neutral-400 outline-none",
+          !shouldReduceMotion && "transition-opacity"
+        )}
         aria-label={"Show " + (showTotalDuration ? "Remaining" : "Total")}
       >
         <p
@@ -136,7 +140,10 @@ const KeyboardNavigationHelper = ({
 
   return (
     <div
-      className="absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 size-2 rounded-full bg-green-500 transition hover:opacity-50 focus-visible:scale-125 active:scale-125 cursor-pointer outline-none"
+      className={twMerge(
+        "absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 size-2 rounded-full bg-green-500 hover:opacity-50 focus-visible:scale-125 active:scale-125 cursor-pointer outline-none",
+        !shouldReduceMotion && "transition"
+      )}
       style={{
         left: `${durationPercentage}%`,
       }}

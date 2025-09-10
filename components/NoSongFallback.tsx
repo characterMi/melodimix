@@ -1,5 +1,6 @@
 "use client";
 
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { useRouter } from "next/navigation";
 import { RxReload } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
@@ -27,7 +28,10 @@ const NoSongFallback = ({
       <p>{fallbackText}</p>
       {showButton && (
         <button
-          className="flex items-center gap-x-1 underline outline-none hover:text-white focus-visible:text-white transition"
+          className={twMerge(
+            "flex items-center gap-x-1 underline outline-none hover:text-white focus-visible:text-white",
+            !shouldReduceMotion && "transition-colors"
+          )}
           onClick={() => router.refresh()}
         >
           Refresh

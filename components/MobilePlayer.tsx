@@ -10,6 +10,7 @@ import { useLoadImage } from "@/hooks/useLoadImage";
 import SongCover from "./SongCover";
 import SongOptions from "./SongOptions";
 
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import type { Song } from "@/types";
 
 const MobilePlayer = ({
@@ -43,7 +44,8 @@ const MobilePlayer = ({
   return createPortal(
     <div
       className={twMerge(
-        "w-full h-sm-screen bg-gradient-to-t from-black to-emerald-800 fixed top-0 left-0 z-[100] sm:hidden transition duration-300 flex flex-col justify-between items-center overflow-x-hidden overflow-y-auto mobile-player__container",
+        "w-full h-sm-screen bg-gradient-to-t from-black to-emerald-800 fixed top-0 left-0 z-[100] sm:hidden duration-300 flex flex-col justify-between items-center overflow-x-hidden overflow-y-auto mobile-player__container",
+        !shouldReduceMotion && "transition-transform",
         isMobilePlayerOpen ? "translate-y-0" : "translate-y-full"
       )}
       ref={mobilePlayerRef}
@@ -57,7 +59,10 @@ const MobilePlayer = ({
       <div className="w-full flex justify-between items-center p-6 xss:p-8">
         <button
           ref={closeMobilePlayerButton}
-          className="hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity"
+          className={twMerge(
+            "hover:opacity-50 focus-visible:opacity-50 outline-none",
+            !shouldReduceMotion && "transition-opacity"
+          )}
           onClick={onMobilePlayerClose}
           aria-label="Close the mobile player"
         >

@@ -1,5 +1,6 @@
 import { useCreateOrUpdatePlaylist } from "@/hooks/useCreateOrUpdatePlaylist";
 import { useSearchSong } from "@/hooks/useSearchSong";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import type { SongWithAuthor } from "@/types";
 import { TbMinus, TbPlus } from "react-icons/tb";
 import { twMerge } from "tailwind-merge";
@@ -128,7 +129,10 @@ const PlaylistModal = () => {
           onChange={(e) => setIsPublic(e.target.checked)}
           disabled={isSubmitting}
           aria-label="Make playlist public"
-          className="appearance-none size-5 border-2 border-emerald-600 rounded-full checked:bg-emerald-500 checked:border-emerald-500 bg-neutral-700 transition-all cursor-pointer"
+          className={twMerge(
+            "appearance-none size-5 border-2 border-emerald-600 rounded-full checked:bg-emerald-500 checked:border-emerald-500 bg-neutral-700 cursor-pointer",
+            !shouldReduceMotion && "transition-colors"
+          )}
         />
       </div>
 

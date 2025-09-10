@@ -4,7 +4,7 @@ import MainContent from "@/components/MainContent";
 import { openGraph, twitter } from "@/constants";
 import { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import UserPlaylistsLink from "./(main)/components/UserPlaylistsLink";
 
 export async function generateMetadata({
   params,
@@ -79,13 +79,7 @@ const UsersPageLayout = async ({
             </h1>
 
             {user && (
-              <Link
-                scroll={false}
-                href={`/users/${params.userId}/playlists`}
-                className="font-semibold text-sm gradient-text outline-none transition hover:opacity-50 focus-visible:opacity-50 inline-block"
-              >
-                {user.name === "Guest" ? "User" : user.name}'s playlists
-              </Link>
+              <UserPlaylistsLink name={user.name!} userId={params.userId} />
             )}
           </div>
         </div>

@@ -11,7 +11,9 @@ import PlayerSongCard from "./PlayerSongCard";
 import PlayerTypeButton from "./PlayerTypeButton";
 import Slider from "./Slider";
 
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import type { Song } from "@/types";
+import { twMerge } from "tailwind-merge";
 
 const PlayerContent = ({
   song,
@@ -49,7 +51,10 @@ const PlayerContent = ({
             <button
               aria-label="Share the song"
               onClick={() => shareSong(song.title, song.artist, song.id)}
-              className="cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition hidden xss:block"
+              className={twMerge(
+                "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none hidden xss:block",
+                !shouldReduceMotion && "transition-opacity"
+              )}
             >
               <TbMusicShare size={28} aria-hidden />
             </button>
@@ -109,7 +114,10 @@ const VolumeButton = ({
 
   return (
     <button
-      className="cursor-pointer outline-none hover:opacity-50 focus-visible:opacity-50 transition-opacity"
+      className={twMerge(
+        "cursor-pointer outline-none hover:opacity-50 focus-visible:opacity-50",
+        !shouldReduceMotion && "transition-opacity"
+      )}
       onClick={toggleMute}
       aria-label={volume === 0 ? "Unmute" : "Mute"}
       aria-pressed={volume !== 0}

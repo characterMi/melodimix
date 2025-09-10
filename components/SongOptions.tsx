@@ -1,11 +1,13 @@
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { shareSong } from "@/lib/share";
 import type { Song } from "@/types";
 import { HiOutlineDownload } from "react-icons/hi";
 import { LuTrash2 } from "react-icons/lu";
 import { RxDotsVertical } from "react-icons/rx";
 import { TbMusicShare } from "react-icons/tb";
+import { twMerge } from "tailwind-merge";
 import AddToPlaylist from "./AddToPlaylist";
 import DropdownMenu from "./DropdownMenu";
 
@@ -66,14 +68,21 @@ const SongOptions = ({
       triggerProps={{
         element: <RxDotsVertical size={triggerSize} aria-hidden />,
         label: "Options...",
-        className: `cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition ${triggerClasses}`,
+        className: twMerge(
+          "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none",
+          !shouldReduceMotion && "transition-opacity",
+          triggerClasses
+        ),
       }}
       contentProps={{
         className: "w-[200px] gap-3 mb-4",
       }}
     >
       <DropdownMenu.Item
-        className="font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity flex items-center justify-between"
+        className={twMerge(
+          "font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none flex items-center justify-between",
+          !shouldReduceMotion && "transition-opacity"
+        )}
         onClick={handleDownload}
       >
         Save to Downloads
@@ -81,7 +90,10 @@ const SongOptions = ({
       </DropdownMenu.Item>
 
       <DropdownMenu.Item
-        className="font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity flex items-center justify-between"
+        className={twMerge(
+          "font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none flex items-center justify-between",
+          !shouldReduceMotion && "transition-opacity"
+        )}
         onClick={handleDelete}
       >
         Delete the song
@@ -90,7 +102,10 @@ const SongOptions = ({
 
       {renderShareButton && (
         <DropdownMenu.Item
-          className="font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity flex xss:hidden sm:flex items-center justify-between"
+          className={twMerge(
+            "font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none flex xss:hidden sm:flex items-center justify-between",
+            !shouldReduceMotion && "transition-opacity"
+          )}
           onClick={() => shareSong(song.title, song.artist, song.id)}
         >
           Share

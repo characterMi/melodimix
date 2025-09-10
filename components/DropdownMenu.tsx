@@ -1,5 +1,6 @@
 "use client";
 
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import type {
   DropdownMenuItemProps,
   DropdownMenuSubContentProps,
@@ -43,7 +44,8 @@ const DropdownMenu = ({ triggerProps, contentProps, children }: Props) => {
       <Trigger
         aria-label={triggerProps.label}
         className={twMerge(
-          "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition",
+          "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none",
+          !shouldReduceMotion && "transition-opacity",
           triggerProps.className
         )}
         tabIndex={triggerProps.tabIndex}

@@ -2,6 +2,7 @@ import { updatePlaylist } from "@/actions/updatePlaylist";
 import { useSession } from "@/hooks/useSession";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { useAuthModal } from "@/store/useAuthModal";
 import { usePlaylistModal } from "@/store/usePlaylistModal";
 import { Playlist } from "@/types";
@@ -9,6 +10,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlinePlus } from "react-icons/ai";
 import { MdArrowOutward } from "react-icons/md";
+import { twMerge } from "tailwind-merge";
 import DropdownMenu from "./DropdownMenu";
 import Loader from "./Loader";
 
@@ -57,7 +59,10 @@ const PlaylistItem = ({
 
   return (
     <DropdownMenu.Item
-      className="cursor-pointer hover:opacity-50 focus-visible:opacity-50 opacity-80 outline-none transition-opacity w-full flex items-center justify-between disabled:opacity-25 text-sm font-thin"
+      className={twMerge(
+        "cursor-pointer hover:opacity-50 focus-visible:opacity-50 opacity-80 outline-none w-full flex items-center justify-between disabled:opacity-25 text-sm font-thin",
+        !shouldReduceMotion && "transition-opacity"
+      )}
       disabled={isAdding}
       onClick={handleClick}
     >
@@ -131,7 +136,10 @@ const CreatePlaylist = () => {
 
   return (
     <DropdownMenu.Item
-      className="text-white cursor-pointer hover:text-neutral-400 focus-visible:text-neutral-400 outline-none transition"
+      className={twMerge(
+        "text-white cursor-pointer hover:text-neutral-400 focus-visible:text-neutral-400 outline-none",
+        !shouldReduceMotion && "transition-colors"
+      )}
       aria-label="Create a new playlist"
       onClick={onOpen}
     >
@@ -142,7 +150,12 @@ const CreatePlaylist = () => {
 
 const AddToPlaylist = ({ songId }: { songId: number }) => (
   <DropdownMenu.Sub>
-    <DropdownMenu.SubTrigger className="cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity">
+    <DropdownMenu.SubTrigger
+      className={twMerge(
+        "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none",
+        !shouldReduceMotion && "transition-opacity"
+      )}
+    >
       Add to playlist
     </DropdownMenu.SubTrigger>
 

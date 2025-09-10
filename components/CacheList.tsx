@@ -1,5 +1,6 @@
 import { useCacheList } from "@/hooks/useCacheList";
 import { formatBytes } from "@/lib/formatBytes";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import type { CacheData, CacheKeys } from "@/types";
 import { Fragment } from "react";
 import { CheckmarkIcon } from "react-hot-toast";
@@ -49,15 +50,18 @@ const CacheList = ({
                     <CheckmarkIcon
                       style={{
                         background: isSelected ? color : "transparent",
-                        transition: "50ms background ease-in",
+                        transition: shouldReduceMotion
+                          ? "none"
+                          : "50ms background ease-in",
                         animationDelay: i * 0.1 + "s",
                         border: `1px solid ${color}`,
                       }}
                       className={twMerge(
-                        "after:!bottom-1 after:!transition-[border] after:!duration-[50ms]",
+                        "after:!bottom-1 after:!duration-[50ms]",
                         isSelected
                           ? "after:!border-white"
-                          : "after:!border-transparent"
+                          : "after:!border-transparent",
+                        !shouldReduceMotion && "after:!transition-[border]"
                       )}
                     />
                   </button>
@@ -70,7 +74,10 @@ const CacheList = ({
                 </div>
 
                 <p
-                  className="text-sm opacity-80 transition-opacity group-hover:opacity-100 underline"
+                  className={twMerge(
+                    "text-sm opacity-80 group-hover:opacity-100 underline",
+                    !shouldReduceMotion && "transition-opacity"
+                  )}
                   style={{ textDecorationColor: color }}
                 >
                   {cacheSizesFormatted[item]}

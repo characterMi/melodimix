@@ -1,6 +1,7 @@
 "use client";
 
 import useOnPlay from "@/hooks/useOnPlay";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types";
 import { useRouter } from "next/navigation";
@@ -49,7 +50,10 @@ const Library = ({ songs, isMobile }: { songs: Song[]; isMobile?: true }) => {
         <div className="flex items-center justify-center py-6">
           <a
             href="/profile"
-            className="inline-flex items-center justify-center gap-2 text-neutral-400 hover:text-white focus-visible:text-white outline-none transition-colors"
+            className={twMerge(
+              "inline-flex items-center justify-center gap-2 text-neutral-400 hover:text-white focus-visible:text-white outline-none",
+              !shouldReduceMotion && "transition-colors"
+            )}
             onClick={(e) => {
               e.preventDefault();
 

@@ -9,6 +9,7 @@ import DownloadApplication from "./DownloadApplication";
 import Library from "./Library";
 import Loader from "./Loader";
 
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import type { Song } from "@/types";
 import OpenSettingsButton from "./OpenSettingsButton";
 
@@ -77,21 +78,23 @@ const MobileSidebarTrigger = ({
     >
       <span
         className={twMerge(
-          "h-1 rounded-full w-[60%] bg-white transition",
+          "h-1 rounded-full w-[60%] bg-white",
           isActive && "opacity-0"
         )}
         aria-hidden
       />
       <span
         className={twMerge(
-          "h-1 rounded-full w-[85%] bg-white transition",
+          "h-1 rounded-full w-[85%] bg-white",
+          !shouldReduceMotion && "transition-transform",
           isActive && "rotate-45 -mt-[10px]"
         )}
         aria-hidden
       />
       <span
         className={twMerge(
-          "h-1 rounded-full w-[85%] bg-white transition",
+          "h-1 rounded-full w-[85%] bg-white",
+          !shouldReduceMotion && "transition-transform",
           isActive && "-rotate-45 -mt-[10px]"
         )}
         aria-hidden
@@ -152,7 +155,8 @@ const MobileSidebar = ({
     <>
       <div
         className={twMerge(
-          "fixed bg-neutral-900 flex flex-col z-50 transition left-0 top-0 h-screen w-[200px] min-[360px]:w-[300px] sm:w-[360px] md:hidden",
+          "fixed bg-neutral-900 flex flex-col z-50 left-0 top-0 h-screen w-[200px] min-[360px]:w-[300px] sm:w-[360px] md:hidden",
+          !shouldReduceMotion && "transition-transform",
           isActive ? "translate-x-0" : "-translate-x-full"
         )}
         ref={sidebarContainerRef}
@@ -191,9 +195,11 @@ const MobileSidebar = ({
       <div
         onClick={openMobileSidebar}
         aria-hidden
-        className={`layout md:hidden fixed w-screen h-screen top-0 left-0 bg-black/35 backdrop-blur-sm transition ${
+        className={twMerge(
+          "md:hidden fixed w-screen h-screen top-0 left-0 bg-black/35 backdrop-blur-sm",
+          !shouldReduceMotion && "transition-opacity",
           isActive ? "z-40 opacity-100" : "-z-10 opacity-0"
-        }`}
+        )}
       />
     </>
   );

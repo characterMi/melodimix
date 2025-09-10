@@ -18,7 +18,7 @@ const SongCover = ({
   renderErrorFallback = true,
   ...props
 }: Props) => {
-  const [imageStatus, setImageStatus] = useState<"loaded" | "error">("loaded");
+  const [imageStatus, setImageStatus] = useState<"error">();
 
   if (imageStatus === "error" && renderErrorFallback) {
     return (
@@ -33,11 +33,7 @@ const SongCover = ({
 
   return (
     <Image
-      className={twMerge(
-        "object-cover h-full transition-opacity opacity-0",
-        imageStatus === "loaded" && "opacity-100",
-        className
-      )}
+      className={twMerge("object-cover h-full", className)}
       src={src}
       alt={alt}
       width={width}

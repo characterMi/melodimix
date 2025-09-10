@@ -10,7 +10,9 @@ import PlayerTypeButton from "./PlayerTypeButton";
 import SongItem from "./SongItem";
 import SongOptions from "./SongOptions";
 
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import type { Song } from "@/types";
+import { twMerge } from "tailwind-merge";
 
 const PlayerSongCard = ({
   song,
@@ -84,7 +86,10 @@ const PlayerSongCard = ({
             </div>
 
             <button
-              className="cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity sm:hidden"
+              className={twMerge(
+                "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none sm:hidden",
+                !shouldReduceMotion && "transition-opacity"
+              )}
               onClick={openMobilePlayer}
               aria-label="Expand mobile player"
               aria-controls="mobile-player"

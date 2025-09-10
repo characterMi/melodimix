@@ -1,6 +1,7 @@
 "use client";
 
 import { useLoadImage } from "@/hooks/useLoadImage";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types";
 import { twMerge } from "tailwind-merge";
@@ -26,7 +27,8 @@ const SongTitle = ({
 
   return (
     <>
-      {shouldRunAnimationIfCurrentlyPlaying &&
+      {!shouldReduceMotion &&
+        shouldRunAnimationIfCurrentlyPlaying &&
         currentlyPlayingSongId === id && (
           <div aria-hidden className="flex gap-[2px] mr-1">
             <span

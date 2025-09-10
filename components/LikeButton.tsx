@@ -1,6 +1,8 @@
 import { useLikeSong } from "@/hooks/useLikeSong";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import type { Song } from "@/types";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { twMerge } from "tailwind-merge";
 
 const LikeButton = ({
   song,
@@ -15,7 +17,10 @@ const LikeButton = ({
 
   return (
     <button
-      className="hover:opacity-50 transition disabled:opacity-50 disabled:cursor-not-allowed active:scale-90 focus-visible:opacity-50 outline-none relative duration-200 ease-out"
+      className={twMerge(
+        "hover:opacity-50 disabled:opacity-50 disabled:cursor-not-allowed active:scale-90 focus-visible:opacity-50 outline-none relative duration-200 ease-out",
+        !shouldReduceMotion && "transition"
+      )}
       onClick={handleLike}
       disabled={pending}
       aria-label={`Like the ${song.title} song`}

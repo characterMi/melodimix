@@ -1,3 +1,4 @@
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { ComponentProps } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -20,7 +21,8 @@ const VariantButton = ({
   return (
     <button
       className={twMerge(
-        "cursor-pointer size-6 bg-gradient-to-b border rounded-sm flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none transition",
+        "cursor-pointer size-6 bg-gradient-to-b border rounded-sm flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none",
+        !shouldReduceMotion && "transition-opacity",
         variantClasses[variant],
         className
       )}

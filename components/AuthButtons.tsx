@@ -18,7 +18,9 @@ import Button from "./Button";
 import Loader from "./Loader";
 
 import { onSuccess } from "@/lib/onSuccess";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { twMerge } from "tailwind-merge";
 
 const AuthButtons = ({ router }: { router: AppRouterInstance }) => {
   const pathname = usePathname();
@@ -60,7 +62,10 @@ const AuthButtons = ({ router }: { router: AppRouterInstance }) => {
       <Link
         scroll={false}
         href="/profile"
-        className="rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none"
+        className={twMerge(
+          "rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none",
+          !shouldReduceMotion && "transition-opacity"
+        )}
         aria-label="Go to profile page"
       >
         <RiUserFill size={20} className="text-black" aria-hidden />
@@ -69,7 +74,7 @@ const AuthButtons = ({ router }: { router: AppRouterInstance }) => {
       {isInProfilePage && (
         <Button
           onClick={onUserModalOpen}
-          className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none"
+          className="rounded-full p-2 bg-white flex items-center justify-center"
         >
           <BiDotsVerticalRounded size={20} aria-hidden />
         </Button>

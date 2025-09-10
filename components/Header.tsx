@@ -1,5 +1,6 @@
 "use client";
 
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { BiSearch } from "react-icons/bi";
@@ -28,7 +29,10 @@ const Header = ({
         <div className="hidden md:flex gap-x-2 items-center">
           <button
             onClick={() => router.back()}
-            className="rounded-full bg-black flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none p-[1.5px]"
+            className={twMerge(
+              "rounded-full bg-black flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none p-[1.5px]",
+              !shouldReduceMotion && "transition-opacity"
+            )}
             aria-label="Go back to the previous page (from browser's history)"
           >
             <RxCaretLeft size={35} className="text-white" />
@@ -36,7 +40,10 @@ const Header = ({
 
           <button
             onClick={() => router.forward()}
-            className="rounded-full bg-black flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none p-[1.5px]"
+            className={twMerge(
+              "rounded-full bg-black flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none p-[1.5px]",
+              !shouldReduceMotion && "transition-opacity"
+            )}
             aria-label="Go to the next page (from browser's history)"
           >
             <RxCaretRight size={35} className="text-white" />
@@ -47,7 +54,10 @@ const Header = ({
           <Link
             scroll={false}
             href="/"
-            className="rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none"
+            className={twMerge(
+              "rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none",
+              !shouldReduceMotion && "transition-opacity"
+            )}
             aria-label="Go to home page"
           >
             <HiHome size={20} className="text-black" aria-hidden />
@@ -56,7 +66,10 @@ const Header = ({
           <Link
             scroll={false}
             href="/search"
-            className="rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-35 focus-visible:opacity-35 transition outline-none"
+            className={twMerge(
+              "rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none",
+              !shouldReduceMotion && "transition-opacity"
+            )}
             aria-label="Go to search page"
           >
             <BiSearch size={20} className="text-black" aria-hidden />

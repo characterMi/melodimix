@@ -1,9 +1,11 @@
 "use client";
 
 import { IoShareSocialOutline } from "react-icons/io5";
+import { twMerge } from "tailwind-merge";
 
 import { useLoadSongUrl } from "@/hooks/useLoadSongUrl";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { shareSong } from "@/lib/share";
 
 import LikeButton from "@/components/LikeButton";
@@ -11,6 +13,7 @@ import PlayButton from "@/components/PlayButton";
 import SongOptions from "@/components/SongOptions";
 
 import { usePlayerStore } from "@/store/usePlayerStore";
+
 import type { Song } from "@/types";
 
 const SongButtons = ({ song }: { song: Song }) => {
@@ -25,7 +28,10 @@ const SongButtons = ({ song }: { song: Song }) => {
         <LikeButton song={song} size={isMobile ? "sm" : "lg"} />
 
         <button
-          className="transition-opacity hover:opacity-50 focus-visible:opacity-50 outline-none"
+          className={twMerge(
+            "hover:opacity-50 focus-visible:opacity-50 outline-none",
+            !shouldReduceMotion && "transition-opacity"
+          )}
           aria-label="Share the song"
           onClick={() => shareSong(song.title, song.artist, song.id)}
         >

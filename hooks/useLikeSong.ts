@@ -1,6 +1,7 @@
 import { likeSong } from "@/actions/likeSong";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { useAuthModal } from "@/store/useAuthModal";
 import { useLikedPageData } from "@/store/useLikedPageData";
 import { useLikedSongs } from "@/store/useLikedSongs";
@@ -38,7 +39,9 @@ export const useLikeSong = (song: Song) => {
       setLikedSongs(song.id, !isLiked);
 
       // animation when we like a song...
-      if (!isLiked) btnRef.current?.classList.add("like-button-animation");
+      if (!isLiked && !shouldReduceMotion) {
+        btnRef.current?.classList.add("like-button-animation");
+      }
 
       // Updating the song in DB
       const likeInformation = await likeSong(isLiked, song.id);

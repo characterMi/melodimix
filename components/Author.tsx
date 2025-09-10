@@ -1,5 +1,6 @@
 "use client";
 
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import Link from "next/link";
 import { FaArrowUp } from "react-icons/fa";
 import { MdArrowOutward } from "react-icons/md";
@@ -16,7 +17,10 @@ const Author = ({ name, userId, shouldHighlight }: Props) => (
     scroll={false}
     href={`/users/${userId}`}
     onClick={(e) => e.stopPropagation()}
-    className="inline-flex items-center gap-[2px] hover:opacity-50 focus-visible:opacity-50 outline-none transition truncate"
+    className={twMerge(
+      "inline-flex items-center gap-[2px] hover:opacity-50 focus-visible:opacity-50 outline-none truncate",
+      !shouldReduceMotion && "transition-opacity"
+    )}
   >
     <span
       className={twMerge(
