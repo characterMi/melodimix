@@ -2,18 +2,20 @@
 
 import { Root, Thumb } from "@radix-ui/react-switch";
 import { Fragment, useState } from "react";
-import { FiDownloadCloud } from "react-icons/fi";
+import { AiFillHeart } from "react-icons/ai";
 import { GrStorage } from "react-icons/gr";
+import { HiOutlineCloudDownload } from "react-icons/hi";
 import { MdAnimation, MdArrowOutward } from "react-icons/md";
 import { PiVibrateBold } from "react-icons/pi";
 import { TbMessageReport } from "react-icons/tb";
+import { twMerge } from "tailwind-merge";
 
 import { getItemFromLocalStorage } from "@/lib/getItemFromLocalStorage";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
+import { useDownloadedSongsModal } from "@/store/useDownloadedSongsModal";
 import { useManageCacheModal } from "@/store/useManageCacheModal";
 import { useSettingsModal } from "@/store/useSettingsModal";
 
-import { shouldReduceMotion } from "@/lib/reduceMotion";
-import { twMerge } from "tailwind-merge";
 import Modal from "./Modal";
 
 const settingItems = [
@@ -45,8 +47,8 @@ const settingItems = [
   {
     type: "button",
     title: "Downloaded Songs",
-    icon: FiDownloadCloud,
-    // onClick: () => useDownloadedSongsModal.getState().onOpen(),
+    icon: HiOutlineCloudDownload,
+    onClick: () => useDownloadedSongsModal.getState().onOpen(),
   },
 ];
 
@@ -75,7 +77,7 @@ const SettingsModal = () => {
 
             <div className="flex items-center gap-2 justify-between w-full">
               <div className="flex gap-2 items-center justify-center truncate">
-                <Icon size={28} className="min-w-[28px]" aria-hidden />
+                <Icon size={24} className="min-w-[28px]" aria-hidden />
 
                 <p className="truncate text-lg font-thin">{title}</p>
               </div>
@@ -125,6 +127,16 @@ const SettingsModal = () => {
           </Fragment>
         ))}
       </div>
+
+      <pre className="flex items-center justify-center text-xs text-neutral-400 mt-6">
+        Created with{" "}
+        <AiFillHeart
+          size={16}
+          className="text-green-500 mr-2"
+          aria-label="Love"
+        />
+        by <b className="gradient-text">Abolfazl Taghadosi</b>
+      </pre>
     </Modal>
   );
 };
