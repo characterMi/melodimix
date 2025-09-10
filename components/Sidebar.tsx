@@ -2,7 +2,6 @@ import { routes } from "@/constants";
 import { FC } from "react";
 import Box from "./Box";
 import DownloadApplication from "./DownloadApplication";
-import ManageCacheButton from "./ManageCacheButton";
 import OpenSettingsButton from "./OpenSettingsButton";
 import SidebarItem from "./SidebarItem";
 import UserSongs from "./UserSongs";
@@ -23,7 +22,6 @@ const Sidebar: FC<SidebarProps> = ({ children }) => {
               <SidebarItem key={route.label} {...route} />
             ))}
 
-            <ManageCacheButton />
             <OpenSettingsButton />
             <DownloadApplication />
           </div>

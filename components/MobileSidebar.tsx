@@ -8,9 +8,9 @@ import { useFocusTrap } from "@/hooks/useFocusTrap";
 import DownloadApplication from "./DownloadApplication";
 import Library from "./Library";
 import Loader from "./Loader";
-import ManageCacheButton from "./ManageCacheButton";
 
 import type { Song } from "@/types";
+import OpenSettingsButton from "./OpenSettingsButton";
 
 const MobileSidebarTrigger = ({
   openMobileSidebar,
@@ -172,7 +172,7 @@ const MobileSidebar = ({
           aria-hidden={!isActive}
         >
           <div className="flex flex-col gap-4 p-4">
-            <ManageCacheButton />
+            <OpenSettingsButton />
             <DownloadApplication />
 
             <hr className="border-neutral-600" />
