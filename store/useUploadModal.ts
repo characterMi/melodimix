@@ -1,13 +1,11 @@
 import type { Song } from "@/types";
 import { create } from "zustand";
 
-interface UploadModalStore {
-  isOpen: boolean;
+type UploadModalStore = Omit<ModalStore, "onOpen"> & {
   initialData: Song | undefined;
   clearInitialData: () => void;
   onOpen: (data?: Song) => void;
-  onClose: () => void;
-}
+};
 
 export const useUploadModal = create<UploadModalStore>((setState) => ({
   isOpen: false,
