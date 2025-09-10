@@ -21,7 +21,7 @@ import type { Playlist } from "@/types";
 type Props = {
   href: string;
   name: string;
-  id: "liked" | "uploaded" | number;
+  id: "liked" | "uploaded" | "interests" | number;
 } & Partial<Pick<Playlist, "song_ids" | "user_id" | "is_public">>;
 
 const PlaylistLink = ({ href, name, id, ...props }: Props) => {
@@ -40,8 +40,8 @@ const PlaylistLink = ({ href, name, id, ...props }: Props) => {
     >
       <h2 className="text-xl font-thin">{name}</h2>
 
-      {/* Playlists are editable, except for "liked" and "uploaded" songs */}
-      {id !== "liked" && id !== "uploaded" && (
+      {/* Playlists are editable, except for "liked", "uploaded", and "interests" songs */}
+      {id !== "liked" && id !== "uploaded" && id !== "interests" && (
         <DropdownMenu
           triggerProps={{
             element: (

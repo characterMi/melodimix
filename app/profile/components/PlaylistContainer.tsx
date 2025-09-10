@@ -17,7 +17,7 @@ const PlaylistContainer = ({
   playlistsList: ({
     href: string;
     name: string;
-    id: number | "liked" | "uploaded";
+    id: number | "liked" | "uploaded" | "interests";
   } & Partial<Pick<Playlist, "song_ids" | "user_id" | "is_public">>)[];
   children: React.ReactNode;
 }) => {

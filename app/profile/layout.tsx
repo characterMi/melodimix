@@ -14,6 +14,11 @@ async function GetPlaylists({ children }: { children: React.ReactNode }) {
   const playlistsList = [
     { href: "/profile", name: "Uploaded songs", id: "uploaded" as const },
     { href: "/profile/liked", name: "Liked Songs", id: "liked" as const },
+    {
+      href: "/profile/interests",
+      name: "Your interests",
+      id: "interests" as const,
+    },
     ...playlists.map((playlist) => ({
       href: `/profile/playlists/${playlist.id}`,
       ...playlist,

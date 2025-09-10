@@ -4,7 +4,7 @@ import MainContent from "@/components/MainContent";
 import { openGraph, twitter } from "@/constants";
 import { Metadata } from "next";
 import Image from "next/image";
-import UserPlaylistsLink from "./(main)/components/UserPlaylistsLink";
+import GradientLink from "./(main)/components/GradientLink";
 
 export async function generateMetadata({
   params,
@@ -79,7 +79,19 @@ const UsersPageLayout = async ({
             </h1>
 
             {user && (
-              <UserPlaylistsLink name={user.name!} userId={params.userId} />
+              <div className="flex items-center gap-2 font-semibold text-sm text-neutral-400 truncate">
+                <GradientLink
+                  href={`/users/${user.id}/playlists`}
+                  text={"Playlists"}
+                />
+
+                <span aria-hidden>•</span>
+
+                <GradientLink
+                  href={`/users/${user.id}/interests`}
+                  text={"Interests"}
+                />
+              </div>
             )}
           </div>
         </div>
