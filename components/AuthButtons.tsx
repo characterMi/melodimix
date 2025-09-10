@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import toast from "react-hot-toast";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { FiLogOut } from "react-icons/fi";
 import { RiUserFill } from "react-icons/ri";
@@ -18,6 +17,7 @@ import { useUserSongs } from "@/store/useUserSongsStore";
 import Button from "./Button";
 import Loader from "./Loader";
 
+import { onSuccess } from "@/lib/onSuccess";
 import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 const AuthButtons = ({ router }: { router: AppRouterInstance }) => {
@@ -40,7 +40,7 @@ const AuthButtons = ({ router }: { router: AppRouterInstance }) => {
       return;
     }
 
-    toast.success("Logged out !");
+    onSuccess("Logged out !");
     router.refresh();
     clearLikedSongs();
     setUserSongs([]);

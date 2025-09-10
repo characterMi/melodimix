@@ -1,6 +1,7 @@
 import { updatePlaylist } from "@/actions/updatePlaylist";
 import { useSession } from "@/hooks/useSession";
 import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
 import { useAuthModal } from "@/store/useAuthModal";
 import { usePlaylistModal } from "@/store/usePlaylistModal";
 import { Playlist } from "@/types";
@@ -48,7 +49,7 @@ const PlaylistItem = ({
     if (error) {
       onError();
     } else {
-      toast.success(`Song added to the "${playlist.name}" playlist.`);
+      onSuccess(`Song added to the "${playlist.name}" playlist.`);
     }
 
     setIsAdding(false);

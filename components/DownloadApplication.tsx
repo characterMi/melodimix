@@ -1,7 +1,7 @@
 "use client";
 
+import { onSuccess } from "@/lib/onSuccess";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { HiOutlineDownload } from "react-icons/hi";
 
 interface RelatedApp {
@@ -23,7 +23,7 @@ const DownloadApplication = () => {
       // @ts-ignore: There no specific type for "beforeInstallPrompt" event.
       deferredPrompt.prompt();
     } else {
-      toast.success(
+      onSuccess(
         `To install the app look for "Add to Homescreen" or install in your browser's menu.`
       );
     }

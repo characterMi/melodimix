@@ -3,11 +3,11 @@ import DropdownMenu from "@/components/DropdownMenu";
 import Spinner from "@/components/Spinner";
 import VariantButton from "@/components/VariantButton";
 import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
 import { useUploadModal } from "@/store/useUploadModal";
 import { useUserSongs } from "@/store/useUserSongsStore";
 import type { Song } from "@/types";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { FiTrash2 } from "react-icons/fi";
 import { MdOutlineEdit } from "react-icons/md";
@@ -74,7 +74,7 @@ const DeleteButton = ({ songId }: { songId: number }) => {
     if (!isDeleted) {
       onError();
     } else {
-      toast.success("Song deleted.");
+      onSuccess("Song deleted.");
       deleteSongFromUserSongs(songId);
     }
 

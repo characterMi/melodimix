@@ -1,13 +1,14 @@
-export const getItemFromLocalStorage = (
+export const getItemFromLocalStorage = <T extends string>(
   name: string,
-  expectedValues: string[],
-  defaultValue: string
-) => {
+  expectedValues: T[],
+  defaultValue: T
+): T => {
   if (typeof localStorage === "undefined") return defaultValue;
 
   const storedItem = localStorage.getItem(name);
 
-  if (!storedItem || !expectedValues.includes(storedItem)) return defaultValue;
+  if (!storedItem || !expectedValues.includes(storedItem as T))
+    return defaultValue;
 
-  return storedItem;
+  return storedItem as T;
 };

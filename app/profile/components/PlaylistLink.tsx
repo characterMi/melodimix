@@ -1,19 +1,21 @@
-import DropdownMenu from "@/components/DropdownMenu";
-import VariantButton from "@/components/VariantButton";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-
-import { deletePlaylist } from "@/actions/deletePlaylist";
-import Spinner from "@/components/Spinner";
-import { onError } from "@/lib/onError";
-import { usePlaylistModal } from "@/store/usePlaylistModal";
-import type { Playlist } from "@/types";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { FiTrash2 } from "react-icons/fi";
 import { MdOutlineEdit } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
+
+import { deletePlaylist } from "@/actions/deletePlaylist";
+import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
+import { usePlaylistModal } from "@/store/usePlaylistModal";
+
+import DropdownMenu from "@/components/DropdownMenu";
+import Spinner from "@/components/Spinner";
+import VariantButton from "@/components/VariantButton";
+
+import type { Playlist } from "@/types";
 
 type Props = {
   href: string;
@@ -117,7 +119,7 @@ const DeleteButton = ({
     if (!isDeleted) {
       onError();
     } else {
-      toast.success("Playlist deleted.");
+      onSuccess("Playlist deleted.");
     }
 
     router.replace("/profile");

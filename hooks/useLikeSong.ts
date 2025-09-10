@@ -1,11 +1,11 @@
 import { likeSong } from "@/actions/likeSong";
 import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
 import { useAuthModal } from "@/store/useAuthModal";
 import { useLikedPageData } from "@/store/useLikedPageData";
 import { useLikedSongs } from "@/store/useLikedSongs";
 import type { Song } from "@/types";
 import { useRef, useTransition } from "react";
-import toast from "react-hot-toast";
 import { useSession } from "./useSession";
 
 export const useLikeSong = (song: Song) => {
@@ -58,7 +58,7 @@ export const useLikeSong = (song: Song) => {
       }
 
       if (likeInformation.message) {
-        toast.success(likeInformation.message);
+        onSuccess(likeInformation.message);
       }
     });
   };

@@ -1,4 +1,4 @@
-import toast from "react-hot-toast";
+import { onSuccess } from "@/lib/onSuccess";
 import { create } from "zustand";
 
 export type PlayerType = "sequential" | "shuffle" | "repeat";
@@ -41,15 +41,15 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
   setPlayerType: () =>
     set(({ playerType }) => {
       if (playerType === "sequential") {
-        toast.success('"Shuffle"');
+        onSuccess('"Shuffle"');
         localStorage.setItem("player-type", "shuffle");
         return { playerType: "shuffle" };
       } else if (playerType === "shuffle") {
-        toast.success('"Repeat"');
+        onSuccess('"Repeat"');
         localStorage.setItem("player-type", "repeat");
         return { playerType: "repeat" };
       } else {
-        toast.success('"Sequential"');
+        onSuccess('"Sequential"');
         localStorage.setItem("player-type", "sequential");
         return { playerType: "sequential" };
       }

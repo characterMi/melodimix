@@ -1,9 +1,9 @@
 import { useSession } from "@/hooks/useSession";
 import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
-import toast from "react-hot-toast";
 
 import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
 import { useHomePageData } from "@/store/useHomePageData";
 import { useUserSongs } from "@/store/useUserSongsStore";
 import { useUploadModal } from "../store/useUploadModal";
@@ -67,7 +67,7 @@ export const useUploadOrUpdateSong = () => {
         addUploadedSongToSongs(uploadedSong!);
       }
 
-      toast.success(`Song ${isEditing ? "updated" : "created"}!`);
+      onSuccess(`Song ${isEditing ? "updated" : "created"}!`);
       router.refresh();
       onClose();
     });

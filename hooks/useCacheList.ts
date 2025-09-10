@@ -1,8 +1,8 @@
 import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
 import { useManageCacheModal } from "@/store/useManageCacheModal";
 import type { CacheData, CacheKeys } from "@/types";
 import { useState } from "react";
-import toast from "react-hot-toast";
 
 export const useCacheList = (cacheNames: CacheKeys[], cacheData: CacheData) => {
   const closeModal = useManageCacheModal((state) => state.onClose);
@@ -31,7 +31,7 @@ export const useCacheList = (cacheNames: CacheKeys[], cacheData: CacheData) => {
       await Promise.allSettled(
         selectedCaches.map((name) => caches.delete(name))
       );
-      toast.success("Cache cleared successfully.");
+      onSuccess("Cache cleared successfully.");
       closeModal();
     } catch (error) {
       onError("Something went wrong while clearing the cache.");

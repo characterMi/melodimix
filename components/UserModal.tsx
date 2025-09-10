@@ -1,5 +1,4 @@
 import { useTransition } from "react";
-import toast from "react-hot-toast";
 
 import { updateUserData } from "@/actions/updateUserData";
 import { useSession } from "@/hooks/useSession";
@@ -14,6 +13,7 @@ import Loader from "./Loader";
 import Modal from "./Modal";
 
 import { setPersistSessionCookie } from "@/lib/getPersistSessionCookie";
+import { onSuccess } from "@/lib/onSuccess";
 import type { AuthResponse, Session } from "@supabase/supabase-js";
 
 const UpdateUserForm = ({
@@ -68,7 +68,7 @@ const UpdateUserForm = ({
         { ...session, user: { ...session.user, user_metadata: updatedUser! } },
         false
       );
-      toast.success("Your profile has been updated!");
+      onSuccess("Your profile has been updated!");
       closeUserModal();
     });
   };

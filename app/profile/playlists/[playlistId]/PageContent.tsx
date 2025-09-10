@@ -7,10 +7,10 @@ import Spinner from "@/components/Spinner";
 import VariantButton from "@/components/VariantButton";
 import { useOnPlay } from "@/hooks/useOnPlay";
 import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Playlist, SongWithAuthor } from "@/types";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { FiTrash2 } from "react-icons/fi";
 
 const DeleteSongFromPlaylistButton = ({
@@ -39,7 +39,7 @@ const DeleteSongFromPlaylistButton = ({
     if (error) {
       onError();
     } else {
-      toast.success("Playlist updated.");
+      onSuccess("Playlist updated.");
     }
 
     setIsDeleting(false);

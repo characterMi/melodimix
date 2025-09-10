@@ -1,7 +1,7 @@
 import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
 import { shareSong } from "@/lib/share";
 import type { Song } from "@/types";
-import toast from "react-hot-toast";
 import { HiOutlineDownload } from "react-icons/hi";
 import { LuTrash2 } from "react-icons/lu";
 import { RxDotsVertical } from "react-icons/rx";
@@ -55,7 +55,7 @@ const SongOptions = ({
     const result = await cache.delete(songUrl);
 
     if (result) {
-      toast.success("Song deleted from the cache.");
+      onSuccess("Song deleted from the cache.");
     } else {
       onError("Couldn't delete the song.");
     }

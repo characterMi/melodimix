@@ -1,8 +1,8 @@
 import { createPlaylist } from "@/actions/createPlaylist";
 import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
 import { updatePlaylist } from "../actions/updatePlaylist";
 import { useAuthModal } from "../store/useAuthModal";
 import { usePlaylistModal } from "../store/usePlaylistModal";
@@ -67,7 +67,7 @@ export const useCreateOrUpdatePlaylist = () => {
       router.push(`/profile/playlists/${playlistId}`, { scroll: false });
     }
 
-    toast.success(`Playlist ${isEditing ? "updated" : "created"}!`);
+    onSuccess(`Playlist ${isEditing ? "updated" : "created"}!`);
 
     onClose();
     setIsSubmitting(false);
