@@ -1,8 +1,14 @@
 "use server";
 
-import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
-import { getCurrentUser } from "./getCurrentUser";
+import {
+  createClientComponentClient,
+  createServerComponentClient,
+} from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 
+import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
+
+import type { User } from "@/types";
 import type { UserMetadata } from "@supabase/supabase-js";
 
 export const updateUserData = async (
@@ -82,4 +88,33 @@ export const updateUserData = async (
   }
 
   return { error: null, updatedUser: updatedUser.user.user_metadata };
+};
+
+export const getCurrentUser = async () => {
+  const supabase = createServerComponentClient({
+    cookies,
+  });
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  return { user, supabase };
+};
+
+export const getUserById = async (userId: string) => {
+  const supabase = createClientComponentClient();
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", userId)
+    .single();
+
+  if (error) {
+    console.error("Error fetching user by ID:", error);
+    return null;
+  }
+
+  return data as User;
 };

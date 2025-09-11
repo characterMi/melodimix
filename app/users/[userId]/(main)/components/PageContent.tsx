@@ -1,6 +1,6 @@
 "use client";
 
-import { getUserSongs } from "@/actions/getUserSongs";
+import { getUserSongs } from "@/actions/song.actions";
 import FlipArrow from "@/components/FlipArrow";
 import LoadMore from "@/components/LoadMore";
 import NoSongFallback from "@/components/NoSongFallback";

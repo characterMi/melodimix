@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef } from "react";
 import { IoIosArrowUp } from "react-icons/io";
+import { twMerge } from "tailwind-merge";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { usePlayerStore, type PlayerType } from "@/store/usePlayerStore";
 
 import LikeButton from "./LikeButton";
@@ -10,9 +12,7 @@ import PlayerTypeButton from "./PlayerTypeButton";
 import SongItem from "./SongItem";
 import SongOptions from "./SongOptions";
 
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 import type { Song } from "@/types";
-import { twMerge } from "tailwind-merge";
 
 const PlayerSongCard = ({
   song,

@@ -1,4 +1,4 @@
-import { getUserSongs } from "@/actions/getUserSongs";
+import { getUserSongs } from "@/actions/song.actions";
 import type { Song } from "@/types";
 import PageContent from "./components/PageContent";
 

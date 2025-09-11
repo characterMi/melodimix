@@ -1,18 +1,21 @@
-import { addSongToProfile } from "@/actions/addSongToProfile";
-import { onError } from "@/lib/onError";
-import { onSuccess } from "@/lib/onSuccess";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
-import { shareSong } from "@/lib/share";
-import { useSessionStore } from "@/store/useSessionStore";
-import type { Song } from "@/types";
 import { HiOutlineDownload } from "react-icons/hi";
 import { LuTrash2 } from "react-icons/lu";
 import { RxDotsVertical } from "react-icons/rx";
 import { TbMusicShare } from "react-icons/tb";
 import { TiUserAddOutline } from "react-icons/ti";
 import { twMerge } from "tailwind-merge";
+
+import { addSongToInterests } from "@/actions/interests.actions";
+import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
+import { shareSong } from "@/lib/share";
+import { useSessionStore } from "@/store/useSessionStore";
+
 import AddToPlaylist from "./AddToPlaylist";
 import DropdownMenu from "./DropdownMenu";
+
+import type { Song } from "@/types";
 
 const SongOptions = ({
   song,
@@ -155,7 +158,7 @@ const AddToInterests = ({ songId }: { songId: number }) => {
       return;
     }
 
-    const { error } = await addSongToProfile(songId);
+    const { error } = await addSongToInterests(songId);
 
     if (error) {
       onError(error);

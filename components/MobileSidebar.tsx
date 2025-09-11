@@ -4,14 +4,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 import { useFocusTrap } from "@/hooks/useFocusTrap";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import DownloadApplication from "./DownloadApplication";
 import Library from "./Library";
 import Loader from "./Loader";
-
-import { shouldReduceMotion } from "@/lib/reduceMotion";
-import type { Song } from "@/types";
 import OpenSettingsButton from "./OpenSettingsButton";
+
+import type { Song } from "@/types";
 
 const MobileSidebarTrigger = ({
   openMobileSidebar,

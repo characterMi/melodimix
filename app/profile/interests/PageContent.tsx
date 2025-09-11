@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteInterest } from "@/actions/deleteInterest";
+import { deleteInterest } from "@/actions/interests.actions";
 import NoSongFallback from "@/components/NoSongFallback";
 import SongItem from "@/components/SongItem";
 import Spinner from "@/components/Spinner";

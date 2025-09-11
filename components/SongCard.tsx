@@ -1,15 +1,18 @@
 "use client";
 
-import { useLoadImage } from "@/hooks/useLoadImage";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
-import { shareSong } from "@/lib/share";
-import type { SongWithAuthor } from "@/types";
 import { useRouter } from "next/navigation";
 import { FaShareAlt } from "react-icons/fa";
 import { twMerge } from "tailwind-merge";
+
+import { useLoadImage } from "@/hooks/useLoadImage";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
+import { shareSong } from "@/lib/share";
+
 import Author from "./Author";
 import PlayButton from "./PlayButton";
 import SongCover from "./SongCover";
+
+import type { SongWithAuthor } from "@/types";
 
 interface Props {
   data: SongWithAuthor;

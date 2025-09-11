@@ -1,14 +1,17 @@
+import { TbMinus, TbPlus } from "react-icons/tb";
+import { twMerge } from "tailwind-merge";
+
 import { useCreateOrUpdatePlaylist } from "@/hooks/useCreateOrUpdatePlaylist";
 import { useSearchSong } from "@/hooks/useSearchSong";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
-import type { SongWithAuthor } from "@/types";
-import { TbMinus, TbPlus } from "react-icons/tb";
-import { twMerge } from "tailwind-merge";
+
 import Button from "./Button";
 import Input from "./Input";
 import Modal from "./Modal";
 import SearchInput from "./SearchInput";
 import VariantButton from "./VariantButton";
+
+import type { SongWithAuthor } from "@/types";
 
 const SongCard = ({
   data,

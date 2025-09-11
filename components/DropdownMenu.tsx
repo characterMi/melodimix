@@ -1,11 +1,5 @@
 "use client";
 
-import { shouldReduceMotion } from "@/lib/reduceMotion";
-import type {
-  DropdownMenuItemProps,
-  DropdownMenuSubContentProps,
-  DropdownMenuSubTriggerProps,
-} from "@radix-ui/react-dropdown-menu";
 import {
   Content,
   Group,
@@ -21,6 +15,14 @@ import {
 import { forwardRef } from "react";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
+
+import { shouldReduceMotion } from "@/lib/reduceMotion";
+
+import type {
+  DropdownMenuItemProps,
+  DropdownMenuSubContentProps,
+  DropdownMenuSubTriggerProps,
+} from "@radix-ui/react-dropdown-menu";
 
 type Props = {
   triggerProps: {

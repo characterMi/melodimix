@@ -1,10 +1,11 @@
 "use client";
 
+import { twMerge } from "tailwind-merge";
+
 import { useGetSongById } from "@/hooks/useGetSongById";
 import { useLoadSongUrl } from "@/hooks/useLoadSongUrl";
 import { usePlayerStore } from "@/store/usePlayerStore";
 
-import { twMerge } from "tailwind-merge";
 import Loader from "./Loader";
 import PlayerContent from "./PlayerContent";
 

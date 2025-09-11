@@ -1,9 +1,8 @@
-import { createPlaylist } from "@/actions/createPlaylist";
+import { createPlaylist, updatePlaylist } from "@/actions/playlist.actions";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { updatePlaylist } from "../actions/updatePlaylist";
 import { useAuthModal } from "../store/useAuthModal";
 import { usePlaylistModal } from "../store/usePlaylistModal";
 import { useSession } from "./useSession";

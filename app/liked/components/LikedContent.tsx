@@ -1,6 +1,6 @@
 "use client";
 
-import { getLikedSongs } from "@/actions/getLikedSongs";
+import { getLikedSongs } from "@/actions/song.actions";
 import LikeButton from "@/components/LikeButton";
 import Loader from "@/components/Loader";
 import LoadMore from "@/components/LoadMore";

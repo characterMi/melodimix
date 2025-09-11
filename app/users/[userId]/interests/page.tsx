@@ -1,4 +1,4 @@
-import { getUserInterests } from "@/actions/getUserInterests";
+import { getUserInterests } from "@/actions/interests.actions";
 import PageContent from "./PageContent";
 
 const UsersPage = async ({ params }: { params: { userId: string } }) => {

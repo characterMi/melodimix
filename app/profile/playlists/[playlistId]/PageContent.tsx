@@ -1,6 +1,6 @@
 "use client";
 
-import { updatePlaylist } from "@/actions/updatePlaylist";
+import { updatePlaylist } from "@/actions/playlist.actions";
 import NoSongFallback from "@/components/NoSongFallback";
 import SongItem from "@/components/SongItem";
 import Spinner from "@/components/Spinner";

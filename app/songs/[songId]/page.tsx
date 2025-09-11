@@ -1,5 +1,4 @@
-import { getArtistSongs } from "@/actions/getArtistSongs";
-import { getSong } from "@/actions/getSong";
+import { getArtistSongs, getSong } from "@/actions/song.actions";
 import Author from "@/components/Author";
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";

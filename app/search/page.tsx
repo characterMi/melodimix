@@ -1,4 +1,4 @@
-import { getSongs } from "@/actions/getSongs";
+import { getSongs } from "@/actions/song.actions";
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
 import MainContent from "@/components/MainContent";

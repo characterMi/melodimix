@@ -1,15 +1,18 @@
 "use client";
 
-import useOnPlay from "@/hooks/useOnPlay";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
-import { usePlayerStore } from "@/store/usePlayerStore";
-import type { Song } from "@/types";
 import { useRouter } from "next/navigation";
 import { MdArrowOutward } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
+
+import useOnPlay from "@/hooks/useOnPlay";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
+import { usePlayerStore } from "@/store/usePlayerStore";
+
 import AddSongButton from "./AddSongButton";
 import NoSongFallback from "./NoSongFallback";
 import SongItem from "./SongItem";
+
+import type { Song } from "@/types";
 
 const Library = ({ songs, isMobile }: { songs: Song[]; isMobile?: true }) => {
   const activeId = usePlayerStore((state) => state.activeId);

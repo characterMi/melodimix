@@ -1,4 +1,4 @@
-import { getUserPlaylists } from "@/actions/getUserPlaylists";
+import { getUserPlaylists } from "@/actions/playlist.actions";
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
 import MainContent from "@/components/MainContent";

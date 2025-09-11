@@ -1,4 +1,4 @@
-import { deleteSong } from "@/actions/deleteSong";
+import { deleteSong } from "@/actions/song.actions";
 import DropdownMenu from "@/components/DropdownMenu";
 import Spinner from "@/components/Spinner";
 import VariantButton from "@/components/VariantButton";

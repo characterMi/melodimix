@@ -1,10 +1,10 @@
 import { BiArrowToRight } from "react-icons/bi";
 import { IoShuffleOutline } from "react-icons/io5";
 import { PiRepeatOnce } from "react-icons/pi";
+import { twMerge } from "tailwind-merge";
 
 import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { usePlayerStore, type PlayerType } from "@/store/usePlayerStore";
-import { twMerge } from "tailwind-merge";
 
 const PlayerTypeButton = ({ playerType }: { playerType: PlayerType }) => {
   const handleChangePlayerType = usePlayerStore((state) => state.setPlayerType);

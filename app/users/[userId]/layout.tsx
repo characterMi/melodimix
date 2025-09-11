@@ -1,4 +1,4 @@
-import { getUserById } from "@/actions/getUserById";
+import { getUserById } from "@/actions/user.actions";
 import Header from "@/components/Header";
 import MainContent from "@/components/MainContent";
 import { openGraph, twitter } from "@/constants";

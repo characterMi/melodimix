@@ -1,3 +1,5 @@
+import { useRef, useTransition } from "react";
+
 import { likeSong } from "@/actions/likeSong";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
@@ -5,9 +7,9 @@ import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { useAuthModal } from "@/store/useAuthModal";
 import { useLikedPageData } from "@/store/useLikedPageData";
 import { useLikedSongs } from "@/store/useLikedSongs";
-import type { Song } from "@/types";
-import { useRef, useTransition } from "react";
 import { useSession } from "./useSession";
+
+import type { Song } from "@/types";
 
 export const useLikeSong = (song: Song) => {
   const btnRef = useRef<HTMLButtonElement>(null);

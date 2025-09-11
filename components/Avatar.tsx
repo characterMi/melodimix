@@ -4,7 +4,7 @@ import { FaCamera, FaUser } from "react-icons/fa";
 import { twMerge } from "tailwind-merge";
 import Input from "./Input";
 
-export const Avatar = ({
+const Avatar = ({
   avatarUrl,
   isSubmitting,
 }: {
@@ -86,3 +86,5 @@ export const Avatar = ({
     </>
   );
 };
+
+export default Avatar;

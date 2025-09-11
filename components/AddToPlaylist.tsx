@@ -1,18 +1,21 @@
-import { updatePlaylist } from "@/actions/updatePlaylist";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { AiOutlinePlus } from "react-icons/ai";
+import { MdArrowOutward } from "react-icons/md";
+import { twMerge } from "tailwind-merge";
+
+import { updatePlaylist } from "@/actions/playlist.actions";
 import { useSession } from "@/hooks/useSession";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { useAuthModal } from "@/store/useAuthModal";
 import { usePlaylistModal } from "@/store/usePlaylistModal";
-import { Playlist } from "@/types";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { AiOutlinePlus } from "react-icons/ai";
-import { MdArrowOutward } from "react-icons/md";
-import { twMerge } from "tailwind-merge";
+
 import DropdownMenu from "./DropdownMenu";
 import Loader from "./Loader";
+
+import type { Playlist } from "@/types";
 
 const PlaylistItem = ({
   playlist,

@@ -1,12 +1,15 @@
 "use client";
 
+import { twMerge } from "tailwind-merge";
+
 import { useLoadImage } from "@/hooks/useLoadImage";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { usePlayerStore } from "@/store/usePlayerStore";
-import type { Song } from "@/types";
-import { twMerge } from "tailwind-merge";
+
 import Author from "./Author";
 import SongCover from "./SongCover";
+
+import type { Song } from "@/types";
 
 interface SongTitleProps {
   id: number;

@@ -1,4 +1,4 @@
-import { getPlaylistSongs } from "@/actions/getPlaylistSongs";
+import { getPlaylistSongs } from "@/actions/song.actions";
 import { openGraph, twitter } from "@/constants";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import type { Metadata } from "next";

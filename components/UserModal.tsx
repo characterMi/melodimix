@@ -1,19 +1,19 @@
 import { useTransition } from "react";
 
-import { updateUserData } from "@/actions/updateUserData";
+import { updateUserData } from "@/actions/user.actions";
 import { useSession } from "@/hooks/useSession";
+import { setPersistSessionCookie } from "@/lib/getPersistSessionCookie";
 import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
 import { useSessionStore } from "@/store/useSessionStore";
 import { useUserModal } from "@/store/useUserModal";
 
-import { Avatar } from "./Avatar";
+import Avatar from "./Avatar";
 import Button from "./Button";
 import Input from "./Input";
 import Loader from "./Loader";
 import Modal from "./Modal";
 
-import { setPersistSessionCookie } from "@/lib/getPersistSessionCookie";
-import { onSuccess } from "@/lib/onSuccess";
 import type { AuthResponse, Session } from "@supabase/supabase-js";
 
 const UpdateUserForm = ({

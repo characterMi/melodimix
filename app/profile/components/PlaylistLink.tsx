@@ -6,7 +6,7 @@ import { FiTrash2 } from "react-icons/fi";
 import { MdOutlineEdit } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
 
-import { deletePlaylist } from "@/actions/deletePlaylist";
+import { deletePlaylist } from "@/actions/playlist.actions";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
 import { shouldReduceMotion } from "@/lib/reduceMotion";

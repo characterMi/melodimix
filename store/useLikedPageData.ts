@@ -1,4 +1,4 @@
-import { getLikedSongs } from "@/actions/getLikedSongs";
+import { getLikedSongs } from "@/actions/song.actions";
 import { LIMIT } from "@/app/liked/components/LikedContent";
 import type { Song } from "@/types";
 import { create } from "zustand";

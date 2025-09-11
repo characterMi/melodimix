@@ -1,5 +1,5 @@
-import { getUserById } from "@/actions/getUserById";
-import { getUserPlaylists } from "@/actions/getUserPlaylists";
+import { getUserPlaylists } from "@/actions/playlist.actions";
+import { getUserById } from "@/actions/user.actions";
 import { Playlist } from "@/types";
 import PageContent from "./components/PageContent";
 

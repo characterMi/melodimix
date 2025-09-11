@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getCurrentUser } from "./getCurrentUser";
+import { getCurrentUser } from "./user.actions";
 
 export const likeSong = async (
   isLiked: boolean,

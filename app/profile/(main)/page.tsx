@@ -1,4 +1,4 @@
-import { getUserSongs } from "@/actions/getUserSongs";
+import { getUserSongs } from "@/actions/song.actions";
 import PageContent from "./PageContent";
 
 export const metadata = {

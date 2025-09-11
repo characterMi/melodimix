@@ -1,7 +1,9 @@
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { TbMusicShare } from "react-icons/tb";
+import { twMerge } from "tailwind-merge";
 
 import { usePlayer } from "@/hooks/usePlayer";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { shareSong } from "@/lib/share";
 
 import Duration from "./Duration";
@@ -11,9 +13,7 @@ import PlayerSongCard from "./PlayerSongCard";
 import PlayerTypeButton from "./PlayerTypeButton";
 import Slider from "./Slider";
 
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 import type { Song } from "@/types";
-import { twMerge } from "tailwind-merge";
 
 const PlayerContent = ({
   song,
