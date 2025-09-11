@@ -39,11 +39,7 @@ const PageContent = ({
         {songs.map((song) => (
           <div className="flex items-center gap-x-4 w-full group">
             <div className="flex-1 overflow-hidden">
-              <SongItem
-                data={song}
-                onClick={(id) => onPlay(id)}
-                showAuthor={false}
-              />
+              <SongItem data={song} onClick={(id) => onPlay(id)} />
             </div>
 
             <FlipArrow
