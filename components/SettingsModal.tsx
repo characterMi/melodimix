@@ -57,9 +57,7 @@ const SettingsModal = () => {
     vibration:
       getItemFromLocalStorage("vibration", ["true", "false"], "true") ===
       "true",
-    "reduce-motion":
-      getItemFromLocalStorage("reduce-motion", ["true", "false"], "false") ===
-      "true",
+    "reduce-motion": shouldReduceMotion,
   });
   const { isOpen, onClose } = useSettingsModal();
 
