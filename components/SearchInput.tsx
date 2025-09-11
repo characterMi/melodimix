@@ -38,6 +38,7 @@ const SearchInput = ({ placeholder }: { placeholder: string }) => {
         onChange={(e) => setValue(e.target.value)}
         role="searchbox"
         aria-label="Search for a song..."
+        className="border-none"
       />
 
       {value && (

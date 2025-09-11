@@ -1,16 +1,15 @@
 import { type KeyboardEvent, type RefObject, useCallback, useRef } from "react";
-
 import { createPortal } from "react-dom";
 import { GoArrowLeft } from "react-icons/go";
 import { twMerge } from "tailwind-merge";
 
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useLoadImage } from "@/hooks/useLoadImage";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import SongCover from "./SongCover";
 import SongOptions from "./SongOptions";
 
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 import type { Song } from "@/types";
 
 const MobilePlayer = ({
@@ -44,9 +43,9 @@ const MobilePlayer = ({
   return createPortal(
     <div
       className={twMerge(
-        "w-full h-sm-screen bg-gradient-to-t from-black to-emerald-800 fixed top-0 left-0 z-[100] sm:hidden duration-300 flex flex-col justify-between items-center overflow-x-hidden overflow-y-auto mobile-player__container",
-        !shouldReduceMotion && "transition-transform",
-        isMobilePlayerOpen ? "translate-y-0" : "translate-y-full"
+        "w-full h-sm-screen bg-gradient-to-t from-black to-emerald-800 fixed top-0 left-0 z-[100] sm:hidden flex flex-col justify-between items-center overflow-x-hidden overflow-y-auto mobile-player__container",
+        isMobilePlayerOpen ? "translate-y-0" : "translate-y-full",
+        !shouldReduceMotion && "transition-transform duration-300"
       )}
       ref={mobilePlayerRef}
       aria-hidden={!isMobilePlayerOpen}

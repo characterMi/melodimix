@@ -62,13 +62,14 @@ export const uploadSong = async (
   }
 
   const uniqueId = crypto.randomUUID();
+  const path = `${title} - ${artist}-${uniqueId}`;
 
   const uploadSongPromise = supabaseClient.storage
     .from("songs")
-    .upload(`song-${title}-${uniqueId}`, songFile);
+    .upload(`song-${path}`, songFile);
   const uploadImagePromise = supabaseClient.storage
     .from("images")
-    .upload(`image-${title}-${uniqueId}`, imageFile);
+    .upload(`image-${path}`, imageFile);
 
   const [
     { data: songData, error: songError },

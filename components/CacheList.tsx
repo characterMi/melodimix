@@ -57,11 +57,12 @@ const CacheList = ({
                         border: `1px solid ${color}`,
                       }}
                       className={twMerge(
-                        "after:!bottom-1 after:!duration-[50ms]",
+                        "after:!bottom-1",
                         isSelected
                           ? "after:!border-white"
                           : "after:!border-transparent",
-                        !shouldReduceMotion && "after:!transition-[border]"
+                        !shouldReduceMotion &&
+                          "after:!transition-[border] after:!duration-[50ms]"
                       )}
                     />
                   </button>

@@ -33,7 +33,7 @@ const settingItems = [
   },
   {
     type: "button",
-    title: "Cache Usage",
+    title: "Cache usage",
     icon: GrStorage,
     onClick: () => useManageCacheModal.getState().onOpen(),
   },
@@ -46,7 +46,7 @@ const settingItems = [
   },
   {
     type: "button",
-    title: "Downloaded Songs",
+    title: "Downloaded songs",
     icon: HiOutlineCloudDownload,
     onClick: () => useDownloadedSongsModal.getState().onOpen(),
   },
@@ -69,8 +69,9 @@ const SettingsModal = () => {
       description="Manage Application settings"
       isOpen={isOpen}
       handleChange={(open) => !open && onClose()}
+      containerClassName="flex flex-col gap-20 justify-between size-full pt-12 md:pt-10 md:pb-4"
     >
-      <div className="xss:max-w-[90%] mx-auto flex flex-col gap-6 my-14">
+      <div className="flex flex-col gap-6 xss:px-6 sm:px-6 md:px-0">
         {settingItems.map(({ title, type, name, icon: Icon, onClick }, i) => (
           <Fragment key={title}>
             {i !== 0 && <hr className="border-none h-[1px] bg-neutral-600" />}
@@ -97,8 +98,8 @@ const SettingsModal = () => {
                 <Root
                   checked={checkBoxes[name!]}
                   className={twMerge(
-                    "relative h-[16px] w-[32px] rounded-full bg-white shadow-none outline-none focus:shadow-[0_0_0_2px] focus:shadow-emerald-400 data-[state=checked]:bg-emerald-400 duration-100",
-                    !shouldReduceMotion && "transition-shadow"
+                    "relative h-[16px] w-[32px] rounded-full bg-white shadow-none outline-none focus:shadow-[0_0_0_2px] focus:shadow-emerald-400 data-[state=checked]:bg-emerald-400",
+                    !shouldReduceMotion && "transition-shadow duration-100"
                   )}
                   name={name}
                   aria-label={title}
@@ -117,8 +118,8 @@ const SettingsModal = () => {
                 >
                   <Thumb
                     className={twMerge(
-                      "block size-[12px] translate-x-[2px] rounded-full bg-black duration-100 will-change-transform data-[state=checked]:translate-x-[18px]",
-                      !shouldReduceMotion && "transition-transform"
+                      "block size-[12px] translate-x-[2px] rounded-full bg-black will-change-transform data-[state=checked]:translate-x-[18px]",
+                      !shouldReduceMotion && "transition-transform duration-100"
                     )}
                   />
                 </Root>
@@ -128,7 +129,7 @@ const SettingsModal = () => {
         ))}
       </div>
 
-      <pre className="flex items-center justify-center text-xs text-neutral-400 mt-6">
+      <pre className="flex items-center justify-center text-xs text-neutral-400">
         Created with{" "}
         <AiFillHeart
           size={16}

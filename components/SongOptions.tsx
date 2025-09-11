@@ -38,14 +38,14 @@ const SongOptions = ({
       ),
     }}
     contentProps={{
-      className: "w-[200px] gap-3 mb-4",
+      className: "w-[200px] gap-4 mb-4",
     }}
   >
     <SaveToDownloads songUrl={songUrl} song={song} />
 
     <DeleteSongFromCache songUrl={songUrl} />
 
-    <AddSongToProfile songId={song.id} />
+    <AddToInterests songId={song.id} />
 
     {renderShareButton && (
       <DropdownMenu.Item
@@ -141,7 +141,7 @@ const DeleteSongFromCache = ({ songUrl }: { songUrl: string }) => {
   );
 };
 
-const AddSongToProfile = ({ songId }: { songId: number }) => {
+const AddToInterests = ({ songId }: { songId: number }) => {
   const session = useSessionStore((state) => state.session);
 
   const onClick = async () => {
@@ -173,7 +173,7 @@ const AddSongToProfile = ({ songId }: { songId: number }) => {
       )}
       onClick={onClick}
     >
-      Add to Profile
+      Add to Interests
       <TiUserAddOutline size={18} aria-hidden />
     </DropdownMenu.Item>
   );
