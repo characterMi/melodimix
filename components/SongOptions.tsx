@@ -165,7 +165,7 @@ const AddToInterests = ({ songId }: { songId: number }) => {
       return;
     }
 
-    onSuccess("Song added to profile.");
+    onSuccess("Song added to interests.");
   };
 
   return (
