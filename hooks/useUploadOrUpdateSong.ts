@@ -1,6 +1,6 @@
 import { useSession } from "@/hooks/useSession";
 import { useRouter } from "next/navigation";
-import { useEffect, useTransition } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
@@ -10,8 +10,19 @@ import { useUploadModal } from "../store/useUploadModal";
 import { updateSong } from "../utils/updateSong";
 import { uploadSong } from "../utils/uploadSong";
 
+export type UploadPhase =
+  | "none"
+  | "validating"
+  | "creating"
+  | "updating"
+  | "uploading";
+
 export const useUploadOrUpdateSong = () => {
-  const [isUploading, startTransition] = useTransition();
+  const [phase, setPhase] = useState<UploadPhase>("none");
+  const { current: onPhaseChange } = useRef((phase: UploadPhase) =>
+    setPhase(phase)
+  );
+
   const { isOpen, onClose, clearInitialData, initialData } = useUploadModal();
   const { addOne: addUploadedSongToSongs, updateOne: updateUploadedSong } =
     useHomePageData((state) => ({
@@ -19,13 +30,15 @@ export const useUploadOrUpdateSong = () => {
       updateOne: state.updateOne,
     }));
   const addUploadedSongToUserSongs = useUserSongs((state) => state.addOneSong);
+
   const { session } = useSession();
+
   const router = useRouter();
 
   const isEditing = !!initialData;
 
-  const handleSubmit = (formData: FormData) => {
-    if (!isOpen || isUploading) return;
+  const handleSubmit = async (formData: FormData) => {
+    if (!isOpen || phase !== "none") return;
 
     if (!session?.user) {
       onError("Unauthenticated User.");
@@ -40,37 +53,43 @@ export const useUploadOrUpdateSong = () => {
       return;
     }
 
-    startTransition(async () => {
-      if (isEditing) {
-        const { error, updatedSong } = await updateSong(formData, {
+    if (isEditing) {
+      const { error, updatedSong } = await updateSong(
+        formData,
+        {
           id: initialData.id,
           img_path: initialData.img_path,
           song_path: initialData.song_path,
           created_at: initialData.created_at,
-        });
+        },
+        onPhaseChange
+      );
 
-        if (error) {
-          onError(error);
-          return;
-        }
+      setPhase("none");
 
-        updateUploadedSong(updatedSong!);
-      } else {
-        const { error, uploadedSong } = await uploadSong(formData);
-
-        if (error) {
-          onError(error);
-          return;
-        }
-
-        addUploadedSongToUserSongs(uploadedSong!);
-        addUploadedSongToSongs(uploadedSong!);
+      if (error) {
+        onError(error);
+        return;
       }
 
-      onSuccess(`Song ${isEditing ? "updated" : "created"}!`);
-      router.refresh();
-      onClose();
-    });
+      updateUploadedSong(updatedSong!);
+    } else {
+      const { error, uploadedSong } = await uploadSong(formData, onPhaseChange);
+
+      setPhase("none");
+
+      if (error) {
+        onError(error);
+        return;
+      }
+
+      addUploadedSongToUserSongs(uploadedSong!);
+      addUploadedSongToSongs(uploadedSong!);
+    }
+
+    onSuccess(`Song ${isEditing ? "updated" : "created"}!`);
+    router.refresh();
+    onClose();
   };
 
   useEffect(() => {
@@ -82,7 +101,7 @@ export const useUploadOrUpdateSong = () => {
   return {
     isEditing,
     handleSubmit,
-    isUploading,
+    phase,
     isUploadModalOpen: isOpen,
     onUploadModalClose: onClose,
     initialData,

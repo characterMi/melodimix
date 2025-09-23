@@ -8,7 +8,7 @@ const UploadModal = () => {
   const {
     isEditing,
     handleSubmit,
-    isUploading,
+    phase,
     isUploadModalOpen,
     onUploadModalClose,
     initialData,
@@ -27,7 +27,7 @@ const UploadModal = () => {
         <Input
           defaultValue={isEditing ? initialData?.title : ""}
           name="title"
-          disabled={isUploading}
+          disabled={phase !== "none"}
           placeholder="Song title"
           required
           aria-label="Enter the song title"
@@ -37,7 +37,7 @@ const UploadModal = () => {
         <Input
           defaultValue={isEditing ? initialData?.artist : ""}
           name="artist"
-          disabled={isUploading}
+          disabled={phase !== "none"}
           placeholder="Song artist"
           required
           aria-label="Enter the artist's name"
@@ -52,7 +52,7 @@ const UploadModal = () => {
           <Input
             name="song"
             id="song"
-            disabled={isUploading}
+            disabled={phase !== "none"}
             type="file"
             accept=".mp3"
             required={!isEditing}
@@ -67,16 +67,22 @@ const UploadModal = () => {
           <Input
             name="img"
             id="img"
-            disabled={isUploading}
+            disabled={phase !== "none"}
             type="file"
             accept="image/*"
             required={!isEditing}
           />
         </div>
 
-        <Button disabled={isUploading} type="submit">
-          {isEditing && (isUploading ? "Updating..." : "Update")}
-          {!isEditing && (isUploading ? "Uploading the music..." : "Create")}
+        <Button disabled={phase !== "none"} type="submit">
+          {/* {isEditing && (isUploading ? "Updating..." : "Update")}
+          {!isEditing && (isUploading ? "Uploading the music..." : "Create")} */}
+          {phase === "none" && isEditing && "Update"}
+          {phase === "none" && !isEditing && "Create"}
+          {phase === "validating" && "Validating user input..."}
+          {phase === "updating" && "Updating the music..."}
+          {phase === "creating" && "Creating the music..."}
+          {phase === "uploading" && "Uploading the files..."}
         </Button>
       </form>
     </Modal>

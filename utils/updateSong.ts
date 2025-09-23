@@ -2,6 +2,7 @@ import { revalidatePath } from "@/actions/revalidatePath";
 import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
 import { supabaseClient } from "@/lib/supabaseClient";
 
+import type { UploadPhase } from "@/hooks/useUploadOrUpdateSong";
 import type { SongWithAuthor } from "@/types";
 
 export const updateSong = async (
@@ -11,7 +12,8 @@ export const updateSong = async (
     img_path: string;
     song_path: string;
     created_at: string;
-  }
+  },
+  onPhaseChange: (phase: UploadPhase) => void
 ): Promise<
   | {
       error: string;
@@ -22,6 +24,9 @@ export const updateSong = async (
       error?: undefined;
     }
 > => {
+  // First phase (validating)
+  onPhaseChange("validating");
+
   const {
     data: { user },
   } = await supabaseClient.auth.getUser();
@@ -93,6 +98,8 @@ export const updateSong = async (
     );
   }
 
+  // Second phase (updating)
+  onPhaseChange("updating");
   const [dbUpdateResult, imageUpdateResult, songUpdateResult] =
     await Promise.all(updates);
 
