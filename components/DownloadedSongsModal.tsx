@@ -82,7 +82,7 @@ const SongsList = ({
   };
 
   return (
-    <div className="space-y-6 w-full pt-4">
+    <div className="space-y-6 w-full py-6">
       {rawUrls.map((url, index) => (
         <Fragment key={url}>
           {index !== 0 && <hr className="border-none h-[1px] bg-neutral-600" />}
