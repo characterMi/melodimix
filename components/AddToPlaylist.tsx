@@ -109,7 +109,7 @@ const Playlists = ({ songId }: { songId: number }) => {
     <div
       className={twMerge(
         "flex flex-col gap-y-2 flex-1 w-full pt-2",
-        loading || playlists.length <= 0 && "justify-center items-center"
+        (loading || playlists.length <= 0) && "justify-center items-center"
       )}
     >
       {loading && <Loader className="min-w-8" />}
