@@ -13,7 +13,6 @@ import VariantButton from "./VariantButton";
 
 const DownloadedSongsModal = () => {
   const { isOpen, onClose } = useDownloadedSongsModal();
-  const { status, rawUrls, deleteSong } = useGetDownloadedSongs();
 
   return (
     <Modal
@@ -24,26 +23,35 @@ const DownloadedSongsModal = () => {
     >
       <div className="h-[30rem]">
         <hr />
-        <div
-          className={twMerge(
-            "flex gap-2 justify-center pt-6 h-full",
-            status !== "loaded" && "items-center"
-          )}
-        >
-          {status === "loading" && <Loader className="min-w-8" />}
 
-          {status === "loaded" && (
-            <SongsList rawUrls={rawUrls} deleteSong={deleteSong} />
-          )}
-
-          {status === "error" && (
-            <p className="text-rose-50">
-              Error while getting the downloaded songs! ⚠️
-            </p>
-          )}
-        </div>
+        <DownloadedSongs />
       </div>
     </Modal>
+  );
+};
+
+const DownloadedSongs = () => {
+  const { status, rawUrls, deleteSong } = useGetDownloadedSongs();
+
+  return (
+    <div
+      className={twMerge(
+        "flex gap-2 justify-center h-full",
+        status !== "loaded" && "items-center"
+      )}
+    >
+      {status === "loading" && <Loader className="min-w-8" />}
+
+      {status === "loaded" && (
+        <SongsList rawUrls={rawUrls} deleteSong={deleteSong} />
+      )}
+
+      {status === "error" && (
+        <p className="text-rose-50">
+          Error while getting the downloaded songs! ⚠️
+        </p>
+      )}
+    </div>
   );
 };
 
