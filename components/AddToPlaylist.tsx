@@ -114,7 +114,7 @@ const Playlists = ({ songId }: { songId: number }) => {
     >
       {loading && <Loader className="min-w-8" />}
       
-      {!loading && playlists.length > 0 
+      {!loading && (playlists.length > 0 
         ? playlists.map((playlist) => (
             <PlaylistItem playlist={playlist} songId={songId} key={playlist.id} />
           ))
@@ -124,7 +124,7 @@ const Playlists = ({ songId }: { songId: number }) => {
             {!session && " Login to create one."}
           </p>
         )
-      }
+      )}
     </div>
   );
 };
