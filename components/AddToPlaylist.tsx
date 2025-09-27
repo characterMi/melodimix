@@ -105,19 +105,27 @@ const Playlists = ({ songId }: { songId: number }) => {
     })();
   }, [session, isUserLoading]);
 
-  if (loading) return <Loader className="min-w-8" />;
-
-  return playlists.length > 0 ? (
-    <div className="flex flex-col gap-y-2 flex-1 w-full pt-2">
-      {playlists.map((playlist) => (
-        <PlaylistItem playlist={playlist} songId={songId} key={playlist.id} />
-      ))}
+  return (
+    <div
+      className={twMerge(
+        "flex flex-col gap-y-2 flex-1 w-full pt-2",
+        loading || playlists.length <= 0 && "justify-center items-center"
+      )}
+    >
+      {loading && <Loader className="min-w-8" />}
+      
+      {!loading && playlists.length > 0 
+        ? playlists.map((playlist) => (
+            <PlaylistItem playlist={playlist} songId={songId} key={playlist.id} />
+          ))
+        : (
+          <p className="text-neutral-400 text-sm">
+            No playlists found.
+            {!session && " Login to create one."}
+          </p>
+        )
+      }
     </div>
-  ) : (
-    <p className="text-neutral-400 text-sm">
-      No playlists found.
-      {!session && " Login to create one."}
-    </p>
   );
 };
 
@@ -172,7 +180,7 @@ const AddToPlaylist = ({ songId }: { songId: number }) => (
       </DropdownMenu.Group>
       <DropdownMenu.Separator className="mt-2 mb-1" />
 
-      <DropdownMenu.Group className="flex flex-1 overflow-y-auto flex-col items-center justify-center p-0">
+      <DropdownMenu.Group className="flex flex-1 overflow-y-auto flex-col p-0">
         <Playlists songId={songId} />
       </DropdownMenu.Group>
     </DropdownMenu.SubContent>
