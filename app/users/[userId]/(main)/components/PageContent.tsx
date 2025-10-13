@@ -6,7 +6,6 @@ import LoadMore from "@/components/LoadMore";
 import NoSongFallback from "@/components/NoSongFallback";
 import SongItem from "@/components/SongItem";
 import { useOnPlay } from "@/hooks/useOnPlay";
-import { usePlayerStore } from "@/store/usePlayerStore";
 import {
   useCurrentUserPageData,
   useUsersPageData,
@@ -48,10 +47,7 @@ const PageContent = ({
 }) => {
   const addAll = useUsersPageData((state) => state.addAll);
   const pageData = useCurrentUserPageData(userId);
-
   const onPlay = useOnPlay(pageData?.songs ?? []);
-  const activeId = usePlayerStore((state) => state.activeId);
-
   const router = useRouter();
 
   const songsToRender = useMemo(() => {
@@ -87,10 +83,7 @@ const PageContent = ({
     );
 
   return (
-    <div
-      style={{ marginBottom: activeId ? "7rem" : "0" }}
-      className="flex flex-col gap-y-2 w-full"
-    >
+    <div className="flex flex-col gap-y-2 w-full">
       <div className="flex flex-col gap-2 w-full">
         {(pageData?.songs.length ?? 0) === 0 &&
           initialSongs.map((song) => (

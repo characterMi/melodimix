@@ -4,7 +4,6 @@ import { twMerge } from "tailwind-merge";
 
 import useOnPlay from "@/hooks/useOnPlay";
 import { useSearchSong } from "@/hooks/useSearchSong";
-import { usePlayerStore } from "@/store/usePlayerStore";
 
 import FlipArrow from "@/components/FlipArrow";
 import NoSongFallback from "../../components/NoSongFallback";
@@ -15,7 +14,6 @@ import { useRouter } from "next/navigation";
 
 const SearchContent = ({ songs }: { songs: SongWithAuthor[] }) => {
   const { filteredSongs, isSearching } = useSearchSong(songs);
-  const activeId = usePlayerStore((state) => state.activeId);
   const onPlay = useOnPlay(filteredSongs);
 
   const router = useRouter();
@@ -33,7 +31,6 @@ const SearchContent = ({ songs }: { songs: SongWithAuthor[] }) => {
     <div
       className={twMerge(
         "flex flex-col gap-y-2 w-full px-6",
-        activeId && "mb-28",
         isSearching && "opacity-50"
       )}
     >

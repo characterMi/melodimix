@@ -1,7 +1,9 @@
 "use client";
 
+import { usePlayerStore } from "@/store/usePlayerStore";
 import { useScrollProgress } from "@/store/useScrollProgress";
 import { usePathname } from "next/navigation";
+
 import { type RefObject, useEffect, useRef } from "react";
 
 const SaveScrollProgress = ({
@@ -35,11 +37,13 @@ const SaveScrollProgress = ({
 };
 
 const MainContent = ({ children }: { children: React.ReactNode }) => {
+  const activeId = usePlayerStore((state) => state.activeId);
   const container = useRef<HTMLDivElement>(null);
 
   return (
     <section
       className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto"
+      style={{ paddingBottom: activeId ? "124px" : "0" }}
       ref={container}
     >
       <SaveScrollProgress container={container} />

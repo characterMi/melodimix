@@ -5,7 +5,6 @@ import SongItem from "@/components/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { sharePlaylist } from "@/lib/share";
-import { usePlayerStore } from "@/store/usePlayerStore";
 import { Playlist, SongWithAuthor } from "@/types";
 import Link from "next/link";
 import { IoShareSocialOutline } from "react-icons/io5";
@@ -19,7 +18,6 @@ type Props = {
 
 const PageContent = ({ songs, errMessage, playlist }: Props) => {
   const onPlay = useOnPlay(songs);
-  const activeId = usePlayerStore((state) => state.activeId);
   const playlistSongsCount = playlist?.song_ids.length || 0;
 
   if (errMessage || songs.length <= 0)
@@ -39,10 +37,7 @@ const PageContent = ({ songs, errMessage, playlist }: Props) => {
     );
 
   return (
-    <div
-      style={{ marginBottom: activeId ? "7rem" : "0" }}
-      className="flex flex-col gap-6 w-full"
-    >
+    <div className="flex flex-col gap-6 w-full">
       <div>
         <h2 className="text-2xl sm:text-3xl font-thin inline mr-4">
           <span className="font-bold">{playlist?.name}</span> by{" "}

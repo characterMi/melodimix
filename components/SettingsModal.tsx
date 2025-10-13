@@ -127,15 +127,11 @@ const SettingsModal = () => {
         ))}
       </div>
 
-      <pre className="flex items-center justify-center text-xs text-neutral-400">
-        Created with{" "}
-        <AiFillHeart
-          size={16}
-          className="text-green-500 mr-2"
-          aria-label="Love"
-        />
+      <p className="flex items-center justify-center text-xs text-neutral-400 gap-1">
+        Created with
+        <AiFillHeart size={16} className="text-green-500" aria-label="Love" />
         by <b className="gradient-text">Abolfazl Taghadosi</b>
-      </pre>
+      </p>
     </Modal>
   );
 };

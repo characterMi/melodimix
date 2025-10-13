@@ -4,7 +4,6 @@ import FlipArrow from "@/components/FlipArrow";
 import NoSongFallback from "@/components/NoSongFallback";
 import SongItem from "@/components/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
-import { usePlayerStore } from "@/store/usePlayerStore";
 import { SongWithAuthor } from "@/types";
 import { useRouter } from "next/navigation";
 
@@ -16,7 +15,6 @@ const PageContent = ({
   error: string | null;
 }) => {
   const onPlay = useOnPlay(songs);
-  const activeId = usePlayerStore((state) => state.activeId);
 
   const router = useRouter();
 
@@ -31,10 +29,7 @@ const PageContent = ({
   }
 
   return (
-    <div
-      style={{ marginBottom: activeId ? "7rem" : "0" }}
-      className="flex flex-col gap-6 w-full"
-    >
+    <div className="flex flex-col gap-6 w-full">
       <div className="flex flex-col gap-2">
         {songs.map((song) => (
           <div className="flex items-center gap-x-4 w-full group">

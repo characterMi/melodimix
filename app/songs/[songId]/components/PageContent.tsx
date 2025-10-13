@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 
 import useOnPlay from "@/hooks/useOnPlay";
-import { usePlayerStore } from "@/store/usePlayerStore";
 
 import FlipArrow from "@/components/FlipArrow";
 import NoSongFallback from "@/components/NoSongFallback";
@@ -19,7 +18,6 @@ const PageContent = ({
   artist: string | undefined;
 }) => {
   const onPlay = useOnPlay(songs ?? []);
-  const activeId = usePlayerStore((state) => state.activeId);
   const router = useRouter();
 
   if (!songs || songs.length <= 0) {
@@ -33,10 +31,7 @@ const PageContent = ({
   }
 
   return (
-    <div
-      style={{ marginBottom: activeId ? "7rem" : "0" }}
-      className="flex flex-col gap-2 w-full"
-    >
+    <div className="flex flex-col gap-2 w-full">
       <h3 className="font-semibold text-lg mb-4">
         {songs.length === 10 ? "Top 10" : "More"} Songs by {artist}
       </h3>

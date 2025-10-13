@@ -1,7 +1,6 @@
 "use client";
 
 import NoPlaylistsFallback from "@/components/NoSongFallback";
-import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Playlist } from "@/types";
 import PlaylistItem from "./PlaylistItem";
 
@@ -12,8 +11,6 @@ const PageContent = ({
   playlists: Playlist[];
   author: string;
 }) => {
-  const activeId = usePlayerStore((state) => state.activeId);
-
   if (playlists.length === 0)
     return (
       <NoPlaylistsFallback
@@ -24,10 +21,7 @@ const PageContent = ({
     );
 
   return (
-    <div
-      style={{ marginBottom: activeId ? "7rem" : "0" }}
-      className="flex flex-col gap-y-2 w-full"
-    >
+    <div className="flex flex-col gap-y-2 w-full">
       {playlists.map((playlist) => (
         <PlaylistItem
           playlist={playlist}

@@ -9,7 +9,6 @@ import SongItem from "@/components/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
 import { useSession } from "@/hooks/useSession";
 import { useLikedPageData } from "@/store/useLikedPageData";
-import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types";
 import { useEffect, useMemo } from "react";
 
@@ -38,7 +37,6 @@ export const LikedContent = ({ initialSongs }: { initialSongs: Song[] }) => {
   } = useLikedPageData();
 
   const onPlay = useOnPlay(songs);
-  const activeId = usePlayerStore((state) => state.activeId);
   const { isLoading: isUserLoading, session } = useSession();
 
   const songsToRender = useMemo(() => {
@@ -75,7 +73,7 @@ export const LikedContent = ({ initialSongs }: { initialSongs: Song[] }) => {
     );
 
   return (
-    <div style={{ marginBottom: activeId ? "7rem" : "0" }}>
+    <>
       <div className="flex flex-col gap-2 p-6 pb-0 w-full">
         {songs.length === 0 &&
           initialSongs.map((song) => (
@@ -100,6 +98,6 @@ export const LikedContent = ({ initialSongs }: { initialSongs: Song[] }) => {
         getSongsPromise={getLikedSongs}
         limit={LIMIT}
       />
-    </div>
+    </>
   );
 };

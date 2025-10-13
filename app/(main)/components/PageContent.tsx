@@ -5,7 +5,6 @@ import NoSongFallback from "@/components/NoSongFallback";
 import SongCard from "@/components/SongCard";
 import { useOnPlay } from "@/hooks/useOnPlay";
 import { useHomePageData } from "@/store/useHomePageData";
-import { usePlayerStore } from "@/store/usePlayerStore";
 import type { SongWithAuthor } from "@/types";
 import { getSongs } from "@/utils/getSongs";
 import { useEffect, useMemo } from "react";
@@ -19,7 +18,6 @@ const PageContent = ({ initialSongs }: { initialSongs: SongWithAuthor[] }) => {
   } = useHomePageData();
 
   const onPlay = useOnPlay(songs);
-  const activeId = usePlayerStore((state) => state.activeId);
 
   const songsToRender = useMemo(() => {
     return songs.map((song) => (
@@ -37,7 +35,7 @@ const PageContent = ({ initialSongs }: { initialSongs: SongWithAuthor[] }) => {
     return <NoSongFallback className="px-6 text-xl" />;
 
   return (
-    <div style={{ marginBottom: activeId ? "7rem" : "0" }}>
+    <>
       <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-4 mt-4">
         {songs.length === 0 &&
           initialSongs.map((song) => (
@@ -62,7 +60,7 @@ const PageContent = ({ initialSongs }: { initialSongs: SongWithAuthor[] }) => {
         getSongsPromise={getSongs}
         limit={LIMIT}
       />
-    </div>
+    </>
   );
 };
 

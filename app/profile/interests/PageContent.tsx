@@ -8,7 +8,6 @@ import VariantButton from "@/components/VariantButton";
 import { useOnPlay } from "@/hooks/useOnPlay";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
-import { usePlayerStore } from "@/store/usePlayerStore";
 import type { Song } from "@/types";
 import { useState } from "react";
 import { FiTrash2 } from "react-icons/fi";
@@ -66,7 +65,6 @@ const PageContent = ({
   error: string | null;
 }) => {
   const onPlay = useOnPlay(songs);
-  const activeId = usePlayerStore((state) => state.activeId);
 
   if (error || songs.length === 0) {
     return (
@@ -78,10 +76,7 @@ const PageContent = ({
   }
 
   return (
-    <div
-      style={{ marginBottom: activeId ? "7rem" : "0" }}
-      className="flex flex-col gap-y-2 w-full"
-    >
+    <div className="flex flex-col gap-y-2 w-full">
       {songs.map((song) => (
         <div className="flex items-center gap-x-4 w-full" key={song.id}>
           <div className="flex-1 overflow-hidden">
