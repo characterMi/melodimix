@@ -149,7 +149,7 @@ const KeyboardNavigationHelper = ({
       }}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
-      tabIndex={10}
+      tabIndex={1}
       aria-description="You can use the arrow keys to navigate the song duration (hold the CTRL key to seek faster)"
     />
   );

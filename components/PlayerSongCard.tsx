@@ -27,7 +27,7 @@ const PlayerSongCard = ({
 }) => {
   const isMobile = useMediaQuery("(max-width: 639px)");
 
-  const closeMobilePlayerButton = useRef<HTMLButtonElement>(null);
+  const openMobilePlayerButton = useRef<HTMLButtonElement>(null);
 
   const { isMobilePlayerOpen, setIsMobilePlayerOpen } = usePlayerStore(
     (state) => ({
@@ -51,9 +51,9 @@ const PlayerSongCard = ({
   useEffect(() => {
     if (!isMobilePlayerOpen) return;
 
-    closeMobilePlayerButton.current?.focus();
-
-    const onPopState = () => setIsMobilePlayerOpen(false);
+    const onPopState = () => {
+      setIsMobilePlayerOpen(false);
+    };
 
     window.addEventListener("popstate", onPopState);
 
@@ -94,7 +94,7 @@ const PlayerSongCard = ({
               aria-label="Expand mobile player"
               aria-controls="mobile-player"
               aria-expanded={isMobilePlayerOpen}
-              aria-hidden={!isMobile}
+              ref={openMobilePlayerButton}
             >
               <IoIosArrowUp size={28} aria-hidden />
             </button>
@@ -102,14 +102,16 @@ const PlayerSongCard = ({
         </div>
       </div>
 
-      <MobilePlayer
-        song={song}
-        songUrl={songUrl}
-        closeMobilePlayerButton={closeMobilePlayerButton}
-        isMobilePlayerOpen={isMobilePlayerOpen}
-      >
-        {children}
-      </MobilePlayer>
+      {isMobilePlayerOpen && (
+        <MobilePlayer
+          song={song}
+          songUrl={songUrl}
+          isMobilePlayerOpen={isMobilePlayerOpen}
+          openMobilePlayerButton={openMobilePlayerButton}
+        >
+          {children}
+        </MobilePlayer>
+      )}
     </>
   );
 };

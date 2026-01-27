@@ -1,4 +1,4 @@
-import { type KeyboardEvent, type RefObject, useCallback, useRef } from "react";
+import { type KeyboardEvent, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { GoArrowLeft } from "react-icons/go";
 import { twMerge } from "tailwind-merge";
@@ -16,18 +16,19 @@ const MobilePlayer = ({
   song,
   children,
   songUrl,
-  closeMobilePlayerButton,
   isMobilePlayerOpen,
+  openMobilePlayerButton,
 }: {
   song: Song;
   children: React.ReactNode;
   songUrl: string;
-  closeMobilePlayerButton: RefObject<HTMLButtonElement>;
   isMobilePlayerOpen: boolean;
+  openMobilePlayerButton: React.RefObject<HTMLButtonElement>;
 }) => {
-  const { current: onMobilePlayerClose } = useRef(() => window.history.back());
-  const mobilePlayerRef = useRef<HTMLDivElement>(null);
+  const onMobilePlayerClose = () =>
+    mobilePlayerRef.current?.classList.add("slide-down");
   const songImage = useLoadImage(song);
+  const mobilePlayerRef = useRef<HTMLDivElement>(null);
 
   useFocusTrap<HTMLDivElement>(mobilePlayerRef, isMobilePlayerOpen);
 
@@ -40,15 +41,34 @@ const MobilePlayer = ({
     [isMobilePlayerOpen]
   );
 
+  useEffect(() => {
+    const mobilePlayerRefCurrent = mobilePlayerRef.current;
+    if (!mobilePlayerRefCurrent) return;
+
+    const onAnimationFinish = (e: AnimationEvent) => {
+      if (e.animationName === "slideDown") {
+        window.history.back();
+      }
+    };
+
+    mobilePlayerRefCurrent.addEventListener("animationend", onAnimationFinish);
+
+    return () => {
+      mobilePlayerRefCurrent.removeEventListener(
+        "animationend",
+        onAnimationFinish
+      );
+      openMobilePlayerButton.current?.focus();
+    };
+  }, []);
+
   return createPortal(
     <div
       className={twMerge(
         "w-full h-sm-screen bg-gradient-to-t from-black to-emerald-800 fixed top-0 left-0 z-[100] sm:hidden flex flex-col justify-between items-center overflow-x-hidden overflow-y-auto mobile-player__container",
-        isMobilePlayerOpen ? "translate-y-0" : "translate-y-full",
-        !shouldReduceMotion && "transition-transform duration-300"
+        !shouldReduceMotion && "slide-up"
       )}
       ref={mobilePlayerRef}
-      aria-hidden={!isMobilePlayerOpen}
       id="mobile-player"
       role="dialog"
       aria-label="Mobile player"
@@ -57,11 +77,11 @@ const MobilePlayer = ({
     >
       <div className="w-full flex justify-between items-center p-6 xss:p-8">
         <button
-          ref={closeMobilePlayerButton}
           className={twMerge(
             "hover:opacity-50 focus-visible:opacity-50 outline-none",
             !shouldReduceMotion && "transition-opacity"
           )}
+          autoFocus
           onClick={onMobilePlayerClose}
           aria-label="Close the mobile player"
         >

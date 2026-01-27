@@ -128,6 +128,14 @@ body {
   animation: scroll 12s linear infinite;
 }
 
+.slide-up {
+  animation: slideUp 0.5 ease-in-out alternate;
+}
+
+.slide-down {
+  animation: slideDown 0.5 ease-in-out alternate;
+}
+
 .retry-animation::after {
   content: "5";
   animation: retryAnimation 5s linear;
@@ -183,6 +191,24 @@ body {
 @keyframes loader {
   to {
     transform: rotate(1turn);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translate(0%, 100%);
+  }
+  100% {
+    transform: translate(0%, 0%);
+  }
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translate(0%, 0%);
+  }
+  100% {
+    transform: translate(0%, 100%);
   }
 }
 
