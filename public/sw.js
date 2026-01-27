@@ -85,15 +85,6 @@ self.addEventListener("fetch", (event) => {
     )
       return;
 
-    // Song by id...
-    if (
-      eventUrl.pathname.startsWith("/rest/v1/songs") &&
-      eventUrl.searchParams.has("id")
-    ) {
-      event.respondWith(staleWhileRevalidate(event.request, "songs-data"));
-      return;
-    }
-
     event.respondWith(networkFirst(event.request, "songs-data"));
     return;
   }
