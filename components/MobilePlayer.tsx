@@ -25,6 +25,8 @@ const MobilePlayer = ({
   isMobilePlayerOpen: boolean;
   openMobilePlayerButton: React.RefObject<HTMLButtonElement>;
 }) => {
+  const dragStartPosition = useRef(0);
+
   const onMobilePlayerClose = () =>
     mobilePlayerRef.current?.classList.add("slide-down");
   const songImage = useLoadImage(song);
@@ -46,6 +48,10 @@ const MobilePlayer = ({
     if (!mobilePlayerRefCurrent) return;
 
     const onAnimationFinish = (e: AnimationEvent) => {
+      if (e.animationName === "slideUp") {
+        (e.currentTarget as HTMLDivElement).classList.remove("slide-up");
+      }
+
       if (e.animationName === "slideDown") {
         window.history.back();
       }
@@ -65,7 +71,7 @@ const MobilePlayer = ({
   return createPortal(
     <div
       className={twMerge(
-        "w-full h-sm-screen bg-gradient-to-t from-black to-emerald-800 fixed top-0 left-0 z-[100] sm:hidden flex flex-col justify-between items-center overflow-x-hidden overflow-y-auto mobile-player__container",
+        "w-full h-sm-screen bg-gradient-to-t from-black to-emerald-800 fixed top-0 left-0 z-[100] sm:hidden flex flex-col justify-between items-center overflow-x-hidden overflow-y-auto select-none mobile-player__container",
         !shouldReduceMotion && "slide-up"
       )}
       ref={mobilePlayerRef}
@@ -78,7 +84,7 @@ const MobilePlayer = ({
       <div className="w-full flex justify-between items-center p-6 xss:p-8">
         <button
           className={twMerge(
-            "hover:opacity-50 focus-visible:opacity-50 outline-none",
+            "hover:opacity-50 focus-visible:opacity-50 outline-none z-[1]",
             !shouldReduceMotion && "transition-opacity"
           )}
           autoFocus
@@ -93,7 +99,7 @@ const MobilePlayer = ({
         <SongOptions
           song={song}
           songUrl={songUrl}
-          triggerClasses="rotate-90"
+          triggerClasses="rotate-90 z-[1]"
           triggerSize={30}
         />
       </div>
@@ -126,9 +132,34 @@ const MobilePlayer = ({
         />
       </div>
 
-      <div className="w-full flex flex-col gap-4 pb-14 p-6 xss:p-8">
+      <div className="w-full flex flex-col gap-4 pb-14 p-6 xss:p-8 z-[1]">
         {children}
       </div>
+
+      <div
+        className="size-full absolute top-0 left-0 cursor-grab pointer-events-auto"
+        onDragStart={(e) => {
+          e.currentTarget.style.setProperty("cursor", "grabbing");
+          dragStartPosition.current = e.clientY;
+        }}
+        onDrag={(e) => {
+          const progress = Math.max(0, e.clientY - dragStartPosition.current);
+
+          mobilePlayerRef.current?.style.setProperty(
+            "transform",
+            `translate(0, ${progress}px)`
+          );
+        }}
+        onDragEnd={(e) => {
+          e.currentTarget.style.setProperty("cursor", "grab");
+          if (e.clientY > window.innerHeight / 3) {
+            onMobilePlayerClose();
+          } else {
+            mobilePlayerRef.current?.classList.add("slide-up");
+          }
+        }}
+        aria-label="Hold and Drag to close the mobile player"
+      />
     </div>,
     document.body
   );
