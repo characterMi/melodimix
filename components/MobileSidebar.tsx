@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  type MouseEvent,
+  type TouchEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { twMerge } from "tailwind-merge";
 
 import { useFocusTrap } from "@/hooks/useFocusTrap";
@@ -25,6 +32,32 @@ const MobileSidebarTrigger = ({
   const [positionY, setPositionY] = useState(40);
   const [isDragging, setIsDragging] = useState(false);
 
+  const onDragStart = useCallback(() => {
+    dragTimeoutRef.current = setTimeout(() => {
+      setIsDragging(true);
+    }, 500);
+  }, []);
+
+  const onDragMove = useCallback(
+    (e: TouchEvent<HTMLButtonElement> | MouseEvent<HTMLButtonElement>) => {
+      if (!isDragging) return;
+
+      const { clientY } = (e as TouchEvent).touches
+        ? (e as TouchEvent).touches[0]
+        : (e as MouseEvent);
+
+      const newYPercentage = (clientY / window.innerHeight) * 100;
+      const clampedY = Math.max(5, Math.min(newYPercentage, 95));
+      setPositionY(clampedY);
+    },
+    [isDragging]
+  );
+
+  const onDragEnd = useCallback(() => {
+    clearTimeout(dragTimeoutRef.current);
+    setIsDragging(false);
+  }, []);
+
   useEffect(() => {
     const savedPosition = localStorage.getItem("sidebar-trigger-y");
     if (!savedPosition || isNaN(Number(savedPosition))) return;
@@ -44,29 +77,13 @@ const MobileSidebarTrigger = ({
         "fixed left-full bg-neutral-900 size-14 flex flex-col gap-y-[6px] justify-center items-end pl-2 rounded-r-xl z-50 md:hidden cursor-pointer",
         isDragging && "outline outline-2 outline-green-500"
       )}
-      onTouchStart={() => {
-        dragTimeoutRef.current = setTimeout(() => {
-          setIsDragging(true);
-        }, 500);
-      }}
-      onTouchEnd={() => {
-        clearTimeout(dragTimeoutRef.current);
-
-        if (isDragging) {
-          setIsDragging(false);
-        } else {
-          openMobileSidebar();
-        }
-      }}
-      onTouchMove={(e) => {
-        if (!isDragging) return;
-
-        const { clientY } = e.touches[0];
-
-        const newYPercentage = (clientY / window.innerHeight) * 100;
-        const clampedY = Math.max(5, Math.min(newYPercentage, 95));
-        setPositionY(clampedY);
-      }}
+      onTouchStart={onDragStart}
+      onMouseDown={onDragStart}
+      onTouchMove={onDragMove}
+      onMouseMove={onDragMove}
+      onTouchEnd={onDragEnd}
+      onMouseUp={onDragEnd}
+      onClick={openMobileSidebar}
       style={{
         top: `${positionY}%`,
         transform: "translateY(-50%)",
