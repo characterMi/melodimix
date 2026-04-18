@@ -54,6 +54,7 @@ const MobilePlayer = ({
       aria-label="Mobile player"
       aria-modal
       onKeyDown={onKeyDown}
+      {...(isMobilePlayerOpen ? {} : { inert: true })}
     >
       <div className="w-full flex justify-between items-center p-6 xss:p-8">
         <button

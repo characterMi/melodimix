@@ -28,6 +28,7 @@ const PlayerSongCard = ({
   const isMobile = useMediaQuery("(max-width: 639px)");
 
   const closeMobilePlayerButton = useRef<HTMLButtonElement>(null);
+  const openMobilePlayerButton = useRef<HTMLButtonElement>(null);
 
   const { isMobilePlayerOpen, setIsMobilePlayerOpen } = usePlayerStore(
     (state) => ({
@@ -53,7 +54,10 @@ const PlayerSongCard = ({
 
     closeMobilePlayerButton.current?.focus();
 
-    const onPopState = () => setIsMobilePlayerOpen(false);
+    const onPopState = () => {
+      setIsMobilePlayerOpen(false);
+      openMobilePlayerButton.current?.focus();
+    };
 
     window.addEventListener("popstate", onPopState);
 
@@ -95,6 +99,7 @@ const PlayerSongCard = ({
               aria-controls="mobile-player"
               aria-expanded={isMobilePlayerOpen}
               aria-hidden={!isMobile}
+              ref={openMobilePlayerButton}
             >
               <IoIosArrowUp size={28} aria-hidden />
             </button>
