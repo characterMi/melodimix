@@ -25,9 +25,8 @@ export const SessionProvider = () => {
       },
     } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
-        if (session && !Boolean(getPersistSessionCookie())) {
+        if (session && !Boolean(getPersistSessionCookie()))
           setPersistSessionCookie();
-        }
 
         updateSessionStore(session, false);
       }
@@ -52,12 +51,16 @@ export const SessionProvider = () => {
       (supabase.auth as any).persistSession = true;
       (supabase.auth as any).storage = new BrowserCookieAuthStorageAdapter();
 
+      const { data, error: sessionError } = await supabase.auth.getSession();
+
+      if (!data.session || sessionError) return;
+
       const {
         data: { session: refreshedSession },
-        error,
+        error: refreshSessionError,
       } = await supabase.auth.refreshSession();
 
-      if (error) {
+      if (refreshSessionError) {
         onError("Couldn't refresh the session.");
       }
 
