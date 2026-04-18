@@ -76,7 +76,7 @@ const Header = ({
           </Link>
         </div>
 
-        <AuthButtons router={router} />
+        <AuthButtons />
       </nav>
 
       {children}

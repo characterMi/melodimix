@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { FiLogOut } from "react-icons/fi";
 import { RiUserFill } from "react-icons/ri";
@@ -19,12 +19,13 @@ import Loader from "./Loader";
 
 import { onSuccess } from "@/lib/onSuccess";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
-import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { twMerge } from "tailwind-merge";
 
-const AuthButtons = ({ router }: { router: AppRouterInstance }) => {
+const AuthButtons = () => {
   const pathname = usePathname();
   const isInProfilePage = pathname.startsWith("/profile");
+
+  const router = useRouter();
 
   const clearLikedSongs = useLikedSongs((state) => state.clearLikedSongs);
   const setUserSongs = useUserSongs((state) => state.setUserSongs);
@@ -59,25 +60,25 @@ const AuthButtons = ({ router }: { router: AppRouterInstance }) => {
         <FiLogOut aria-hidden />
       </Button>
 
-      <Link
-        scroll={false}
-        href="/profile"
-        className={twMerge(
-          "rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none",
-          !shouldReduceMotion && "transition-opacity"
-        )}
-        aria-label="Go to profile page"
-      >
-        <RiUserFill size={20} className="text-black" aria-hidden />
-      </Link>
-
-      {isInProfilePage && (
+      {isInProfilePage ? (
         <Button
           onClick={onUserModalOpen}
           className="rounded-full p-2 bg-white flex items-center justify-center"
         >
           <BiDotsVerticalRounded size={20} aria-hidden />
         </Button>
+      ) : (
+        <Link
+          scroll={false}
+          href="/profile"
+          className={twMerge(
+            "rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none",
+            !shouldReduceMotion && "transition-opacity"
+          )}
+          aria-label="Go to profile page"
+        >
+          <RiUserFill size={20} className="text-black" aria-hidden />
+        </Link>
       )}
     </>
   ) : (
