@@ -11,22 +11,30 @@ const Root = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     registerServiceWorker();
 
-    toast.success("Use Alt + P to focus the Player.", {
-      style: {
-        flexDirection: "column-reverse",
-        padding: "1rem 1.2rem",
-      },
-      icon: (
-        <button
-          className="mt-2 px-2 py-1 rounded-sm bg-emerald-700/80 outline-none transition-opacity hover:opacity-50 focus-visible:opacity-50"
-          onClick={() => toast.dismiss("shortcut-toast")}
-        >
-          Got it!
-        </button>
-      ),
-      id: "shortcut-toast",
-      duration: Infinity,
-    });
+    const shouldShowShortcutHelper =
+      localStorage.getItem("show-shortcut-helper") === null;
+
+    if (shouldShowShortcutHelper) {
+      toast.success("Use Alt + P to focus the Player.", {
+        style: {
+          flexDirection: "column-reverse",
+          padding: "1rem 1.2rem",
+        },
+        icon: (
+          <button
+            className="mt-2 px-2 py-1 rounded-sm bg-emerald-700/80 outline-none transition-opacity hover:opacity-50 focus-visible:opacity-50"
+            onClick={() => {
+              toast.dismiss("shortcut-toast");
+              localStorage.setItem("show-shortcut-helper", "false");
+            }}
+          >
+            Got it!
+          </button>
+        ),
+        id: "shortcut-toast",
+        duration: Infinity,
+      });
+    }
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (!e.altKey || e.key !== "p") return;
