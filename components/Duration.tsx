@@ -141,7 +141,7 @@ const KeyboardNavigationHelper = ({
   return (
     <div
       className={twMerge(
-        "absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 size-2 rounded-full bg-green-500 hover:opacity-50 focus-visible:scale-125 active:scale-125 cursor-pointer outline-none",
+        "absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 size-2 rounded-full bg-green-500 hover:opacity-50 focus-visible:scale-125 active:scale-125 cursor-pointer outline-none duration-navigator",
         !shouldReduceMotion && "transition"
       )}
       style={{
@@ -149,7 +149,7 @@ const KeyboardNavigationHelper = ({
       }}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
-      tabIndex={10}
+      tabIndex={1}
       aria-description="You can use the arrow keys to navigate the song duration (hold the CTRL key to seek faster)"
     />
   );
