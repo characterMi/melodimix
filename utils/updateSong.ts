@@ -24,9 +24,6 @@ export const updateSong = async (
       error?: undefined;
     }
 > => {
-  // First phase (validating)
-  onPhaseChange("validating");
-
   const {
     data: { user },
   } = await supabaseClient.auth.getUser();
@@ -98,8 +95,8 @@ export const updateSong = async (
     );
   }
 
-  // Second phase (updating)
   onPhaseChange("updating");
+
   const [dbUpdateResult, imageUpdateResult, songUpdateResult] =
     await Promise.all(updates);
 

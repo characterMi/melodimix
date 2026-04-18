@@ -75,8 +75,7 @@ const UploadModal = () => {
         </div>
 
         <Button disabled={phase !== "none"} type="submit">
-          {phase === "none" && isEditing && "Update"}
-          {phase === "none" && !isEditing && "Create"}
+          {phase === "none" && (isEditing ? "Update" : "Create")}
           {phase === "validating" && "Validating user input..."}
           {phase === "updating" && "Updating the music..."}
           {phase === "creating" && "Creating the music..."}

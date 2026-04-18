@@ -1,6 +1,6 @@
 import { useSession } from "@/hooks/useSession";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
@@ -19,9 +19,6 @@ export type UploadPhase =
 
 export const useUploadOrUpdateSong = () => {
   const [phase, setPhase] = useState<UploadPhase>("none");
-  const { current: onPhaseChange } = useRef((phase: UploadPhase) =>
-    setPhase(phase)
-  );
 
   const { isOpen, onClose, clearInitialData, initialData } = useUploadModal();
   const { addOne: addUploadedSongToSongs, updateOne: updateUploadedSong } =
@@ -53,6 +50,8 @@ export const useUploadOrUpdateSong = () => {
       return;
     }
 
+    setPhase("validating");
+
     if (isEditing) {
       const { error, updatedSong } = await updateSong(
         formData,
@@ -62,7 +61,7 @@ export const useUploadOrUpdateSong = () => {
           song_path: initialData.song_path,
           created_at: initialData.created_at,
         },
-        onPhaseChange
+        setPhase
       );
 
       setPhase("none");
@@ -74,7 +73,7 @@ export const useUploadOrUpdateSong = () => {
 
       updateUploadedSong(updatedSong!);
     } else {
-      const { error, uploadedSong } = await uploadSong(formData, onPhaseChange);
+      const { error, uploadedSong } = await uploadSong(formData, setPhase);
 
       setPhase("none");
 

@@ -18,9 +18,6 @@ export const uploadSong = async (
       error?: undefined;
     }
 > => {
-  // First phase (validating)
-  onPhaseChange("validating");
-
   const {
     data: { user },
   } = await supabaseClient.auth.getUser();
@@ -66,6 +63,8 @@ export const uploadSong = async (
     return { error: "Only .mp3 audio files are allowed." };
   }
 
+  onPhaseChange("uploading");
+
   const uniqueId = crypto.randomUUID();
   const path = `${title} - ${artist}-${uniqueId}`;
 
@@ -76,8 +75,6 @@ export const uploadSong = async (
     .from("images")
     .upload(`image-${path}`, imageFile);
 
-  // Second phase (uploading)
-  onPhaseChange("uploading");
   const [
     { data: songData, error: songError },
     { data: imageData, error: imageError },
@@ -94,6 +91,8 @@ export const uploadSong = async (
     };
   }
 
+  onPhaseChange("creating");
+
   const newSong = {
     user_id: user.id,
     title: removeDuplicatedSpaces(title),
@@ -102,8 +101,6 @@ export const uploadSong = async (
     song_path: songData.path,
   };
 
-  // Last phase (creating)
-  onPhaseChange("creating");
   const { error: supabaseError, data } = await supabaseClient
     .from("songs")
     .insert(newSong)
