@@ -39,8 +39,10 @@ const Root = ({ children }: { children: React.ReactNode }) => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (!e.altKey || e.key !== "p") return;
 
+      e.preventDefault();
+
       const durationNavigator = document.querySelector<HTMLDivElement>(
-        ".duration-navigator"
+        "#duration-navigator"
       );
 
       if (!durationNavigator) {

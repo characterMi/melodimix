@@ -22,7 +22,7 @@ const Library = ({ songs, isMobile }: { songs: Song[]; isMobile?: true }) => {
 
   if (songs.length === 0) {
     return (
-      <div className="h-screen w-full">
+      <div className="h-screen w-full px-2 md:px-3">
         <AddSongButton />
         <NoSongFallback className="m-4" />
       </div>
@@ -32,8 +32,8 @@ const Library = ({ songs, isMobile }: { songs: Song[]; isMobile?: true }) => {
   return (
     <div
       className={twMerge(
-        "flex flex-col px-3",
-        activeId && !isMobile && "pb-28"
+        "flex flex-col px-2 md:px-3",
+        activeId && !isMobile && "pb-[140px]"
       )}
     >
       <AddSongButton />

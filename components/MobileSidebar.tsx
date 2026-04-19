@@ -172,7 +172,7 @@ const MobileSidebar = ({
     <>
       <div
         className={twMerge(
-          "fixed bg-neutral-900 flex flex-col z-50 left-0 top-0 h-screen w-[200px] min-[360px]:w-[300px] sm:w-[360px] md:hidden",
+          "fixed bg-neutral-900 flex flex-col z-50 left-0 top-0 h-screen w-[200px] min-[300px]:w-[280px] min-[360px]:w-[300px] sm:w-[360px] md:hidden",
           !shouldReduceMotion && "transition-transform",
           isActive ? "translate-x-0" : "-translate-x-full"
         )}

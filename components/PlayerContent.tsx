@@ -31,7 +31,7 @@ const PlayerContent = ({
 
   return (
     <>
-      <Duration song={sound.song} />
+      <Duration song={sound.song} hasShortcut />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 h-full relative">
         <PlayerSongCard song={song} songUrl={songUrl} playerType={playerType}>
@@ -52,7 +52,7 @@ const PlayerContent = ({
               aria-label="Share the song"
               onClick={() => shareSong(song.title, song.artist, song.id)}
               className={twMerge(
-                "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none hidden xss:block",
+                "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none hidden xss:block z-[1]",
                 !shouldReduceMotion && "transition-opacity"
               )}
             >
@@ -62,7 +62,7 @@ const PlayerContent = ({
 
           <Duration song={sound.song} isMobilePlayer />
 
-          <div className="w-full flex items-center justify-between">
+          <div className="w-full flex items-center justify-between z-[1]">
             <LikeButton song={song} size="lg" />
 
             <PlayerControls

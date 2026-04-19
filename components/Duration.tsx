@@ -7,9 +7,11 @@ import Slider from "./Slider";
 function Duration({
   song,
   isMobilePlayer,
+  hasShortcut,
 }: {
   song: HTMLAudioElement | null;
   isMobilePlayer?: true;
+  hasShortcut?: true;
 }) {
   const {
     currentDuration,
@@ -22,7 +24,7 @@ function Duration({
   } = useSongDuration(song);
 
   return (
-    <div className="w-full h-10 flex items-center justify-center">
+    <div className="w-full h-[40px] flex items-center justify-center z-[1]">
       <p
         className={twMerge(
           "relative pr-3 z-[1] whitespace-nowrap duration-el",
@@ -57,6 +59,7 @@ function Duration({
           song={song}
           durationPercentage={currentDurationPercentage}
           setDurationPercentage={setCurrentDurationPercentage}
+          id={hasShortcut ? "duration-navigator" : undefined}
         />
       </Slider>
 
@@ -88,10 +91,12 @@ const KeyboardNavigationHelper = ({
   song,
   durationPercentage,
   setDurationPercentage,
+  id,
 }: {
   song: HTMLAudioElement | null;
   durationPercentage: number;
   setDurationPercentage: Dispatch<SetStateAction<number>>;
+  id?: string;
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -141,15 +146,16 @@ const KeyboardNavigationHelper = ({
   return (
     <div
       className={twMerge(
-        "absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 size-2 rounded-full bg-green-500 hover:opacity-50 focus-visible:scale-125 active:scale-125 cursor-pointer outline-none duration-navigator",
+        "absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 size-2 rounded-full bg-green-500 hover:opacity-50 focus-visible:scale-125 active:scale-125 cursor-pointer outline-none",
         !shouldReduceMotion && "transition"
       )}
       style={{
         left: `${durationPercentage}%`,
       }}
+      id={id}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
-      tabIndex={1}
+      tabIndex={0}
       aria-description="You can use the arrow keys to navigate the song duration (hold the CTRL key to seek faster)"
     />
   );
