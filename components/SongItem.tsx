@@ -99,7 +99,7 @@ const SongItem = ({
     >
       <div className="relative rounded-md min-w-12 h-12 overflow-hidden bg-neutral-950">
         <SongCover
-          src={imageUrl || "/images/liked.png"}
+          src={imageUrl || "/images/song.png"}
           alt={"Cover art for: " + data.title}
           width={50}
           height={50}

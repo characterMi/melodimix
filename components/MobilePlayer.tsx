@@ -1,5 +1,6 @@
 import {
   type KeyboardEvent,
+  type MouseEvent,
   type RefObject,
   type TouchEvent,
   useCallback,
@@ -32,7 +33,13 @@ const MobilePlayer = ({
   isMobilePlayerOpen: boolean;
 }) => {
   const { current: onMobilePlayerClose } = useRef(() => window.history.back());
-  const dragPosInfo = useRef({ start: 0, current: 0 });
+  const dragPosData = useRef({
+    start: 0,
+    current: 0,
+    isDragging: false,
+    hasContainerScrolled: false,
+  });
+  const contentContainer = useRef<HTMLDivElement>(null);
   const mobilePlayerRef = useRef<HTMLDivElement>(null);
   const songImage = useLoadImage(song);
 
@@ -47,36 +54,59 @@ const MobilePlayer = ({
     [isMobilePlayerOpen]
   );
 
-  const onDragStart = useCallback(({ touches }: TouchEvent<HTMLDivElement>) => {
+  const onDragStart = useCallback((e: TouchEvent | MouseEvent) => {
     if (!mobilePlayerRef.current) return;
 
-    dragPosInfo.current.start = touches[0].clientY;
+    dragPosData.current.isDragging = true;
+    dragPosData.current.start = (e as TouchEvent).touches
+      ? (e as TouchEvent).touches[0].clientY
+      : (e as MouseEvent).clientY;
     mobilePlayerRef.current.style.transition = "none";
+
+    (e.target as HTMLDivElement).style.cursor = "grabbing";
   }, []);
 
-  const onDrag = useCallback(({ touches }: TouchEvent<HTMLDivElement>) => {
-    if (!mobilePlayerRef.current) return;
+  const onDrag = useCallback((e: TouchEvent | MouseEvent) => {
+    if (
+      !mobilePlayerRef.current ||
+      !dragPosData.current.isDragging ||
+      dragPosData.current.hasContainerScrolled
+    )
+      return;
+
+    if (contentContainer.current && contentContainer.current.scrollTop > 0) {
+      dragPosData.current.hasContainerScrolled = true;
+      return;
+    }
+
+    const { clientY } = (e as TouchEvent).touches
+      ? (e as TouchEvent).touches[0]
+      : (e as MouseEvent);
 
     const dragPos = Math.max(
       0,
-      Math.min(
-        window.innerHeight,
-        touches[0].clientY - dragPosInfo.current.start
-      )
+      Math.min(window.innerHeight * 0.95, clientY - dragPosData.current.start)
     );
 
-    dragPosInfo.current.current = dragPos;
+    dragPosData.current.current = dragPos;
 
     mobilePlayerRef.current.style.transform = `translateY(${dragPos}px)`;
   }, []);
 
-  const onDragEnd = useCallback(() => {
+  const onDragEnd = useCallback((e: TouchEvent | MouseEvent) => {
     if (!mobilePlayerRef.current) return;
+
+    if (contentContainer.current && contentContainer.current.scrollTop <= 0) {
+      dragPosData.current.hasContainerScrolled = false;
+    }
+
+    dragPosData.current.isDragging = false;
+    (e.target as HTMLDivElement).style.removeProperty("cursor");
 
     mobilePlayerRef.current.style.removeProperty("transition");
     mobilePlayerRef.current.style.removeProperty("transform");
 
-    if (dragPosInfo.current.current > window.innerHeight / 3) {
+    if (dragPosData.current.current > window.innerHeight / 3) {
       onMobilePlayerClose();
     }
   }, []);
@@ -85,7 +115,7 @@ const MobilePlayer = ({
     // @ts-ignore
     <div
       className={twMerge(
-        "w-full h-sm-screen bg-gradient-to-t from-black to-emerald-800 fixed top-0 left-0 z-[100] sm:hidden flex flex-col justify-between items-center overflow-x-hidden overflow-y-auto mobile-player__container",
+        "w-full h-sm-screen bg-gradient-to-t from-black to-emerald-800 fixed top-0 left-0 z-[100] overflow-hidden sm:hidden",
         isMobilePlayerOpen ? "translate-y-0" : "translate-y-full",
         !shouldReduceMotion && "transition-transform duration-300"
       )}
@@ -98,38 +128,15 @@ const MobilePlayer = ({
       onKeyDown={onKeyDown}
       {...(isMobilePlayerOpen ? {} : { inert: "true" })}
     >
-      <div className="w-full flex justify-between items-center p-6 xss:p-8">
-        <button
-          ref={closeMobilePlayerButton}
-          className={twMerge(
-            "hover:opacity-50 z-[1] focus-visible:opacity-50 outline-none",
-            !shouldReduceMotion && "transition-opacity"
-          )}
-          onClick={onMobilePlayerClose}
-          aria-label="Close the mobile player"
-        >
-          <GoArrowLeft size={32} aria-hidden />
-        </button>
-
-        <h2 className="text-2xl text-neutral-200 font-thin">Now playing</h2>
-
-        <SongOptions
-          song={song}
-          songUrl={songUrl}
-          triggerClasses="rotate-90 z-[1]"
-          triggerSize={30}
-        />
-      </div>
-
       {/* Backdrop */}
       <SongCover
-        src={songImage || "/images/liked.png"}
+        src={songImage || "/images/song.png"}
         alt={""}
         aria-hidden
         width={1}
         height={1}
         className={twMerge(
-          "size-full absolute z-[-1]",
+          "size-full absolute z-[-1] opacity-50",
           isMobilePlayerOpen && "blur-lg"
         )}
         renderErrorFallback={false}
@@ -139,27 +146,57 @@ const MobilePlayer = ({
         aria-hidden
       />
 
-      <div className="relative min-h-[250px] max-w-[90vw] aspect-square rounded-xl overflow-hidden bg-black mx-6 xss:mx-8">
-        <SongCover
-          src={songImage || "/images/liked.png"}
-          alt={`Album cover for ${song.title}`}
-          width={1000}
-          height={1000}
-          className="h-full shadow-2xl"
+      <div
+        className="size-full flex flex-col justify-between items-center relative overflow-x-hidden overflow-y-auto"
+        ref={contentContainer}
+      >
+        <div className="w-full flex justify-between items-center p-6 xss:p-8">
+          <button
+            ref={closeMobilePlayerButton}
+            className={twMerge(
+              "hover:opacity-50 z-[1] focus-visible:opacity-50 outline-none",
+              !shouldReduceMotion && "transition-opacity"
+            )}
+            onClick={onMobilePlayerClose}
+            aria-label="Close the mobile player"
+          >
+            <GoArrowLeft size={32} aria-hidden />
+          </button>
+
+          <h2 className="text-2xl text-neutral-200 font-thin">Now playing</h2>
+
+          <SongOptions
+            song={song}
+            songUrl={songUrl}
+            triggerClasses="rotate-90 z-[1]"
+            triggerSize={30}
+          />
+        </div>
+
+        <div className="relative min-h-[250px] max-w-[90vw] aspect-square rounded-xl overflow-hidden bg-black mx-6 xss:mx-8">
+          <SongCover
+            src={songImage || "/images/song.png"}
+            alt={`Album cover for ${song.title}`}
+            width={1000}
+            height={1000}
+            className="h-full shadow-2xl"
+          />
+        </div>
+
+        <div className="w-full flex flex-col gap-4 pb-14 p-6 xss:p-8">
+          {children}
+        </div>
+
+        <div
+          onPointerDown={onDragStart}
+          onTouchMove={onDrag}
+          onMouseMove={onDrag}
+          onTouchEnd={onDragEnd}
+          onMouseUp={onDragEnd}
+          className="size-full absolute top-0 left-0 cursor-grab"
+          aria-label="Drag to close the Mobile player"
         />
       </div>
-
-      <div className="w-full flex flex-col gap-4 pb-14 p-6 xss:p-8">
-        {children}
-      </div>
-
-      <div
-        onTouchStart={onDragStart}
-        onTouchMove={onDrag}
-        onTouchEnd={onDragEnd}
-        className="size-full absolute top-0 left-0"
-        aria-label="Drag to close the Mobile player (Touch devices only)"
-      />
     </div>,
     document.body
   );

@@ -148,7 +148,7 @@ export function usePlayer(song: Song, songUrl: string) {
     // Media Session Setup
     const clearMediaSessionMetadata = initializeMediaSession({
       song,
-      songImageUrl: songImageUrl || "/images/liked.png",
+      songImageUrl: songImageUrl || "/images/song.png",
       callbacks: {
         play: () => audio.play(),
         pause: () => audio.pause(),

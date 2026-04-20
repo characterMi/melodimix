@@ -4,7 +4,7 @@ import { useSupabaseClient } from "./useSupabaseClient";
 export const useLoadImage = (song: Song | null) => {
   const supabaseClient = useSupabaseClient();
 
-  if (!song) return null;
+  if (!song || !song.img_path) return null;
 
   const { data: imageData } = supabaseClient.storage
     .from("images")

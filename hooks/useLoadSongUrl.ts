@@ -4,7 +4,7 @@ import { useSupabaseClient } from "./useSupabaseClient";
 export const useLoadSongUrl = (song: Song) => {
   const supabaseClient = useSupabaseClient();
 
-  if (!song) {
+  if (!song || !song.song_path) {
     return "";
   }
 
