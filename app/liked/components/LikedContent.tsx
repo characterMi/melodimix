@@ -6,11 +6,12 @@ import Loader from "@/components/Loader";
 import LoadMore from "@/components/LoadMore";
 import NoSongFallback from "@/components/NoSongFallback";
 import SongItem from "@/components/SongItem";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import useOnPlay from "@/hooks/useOnPlay";
 import { useSession } from "@/hooks/useSession";
 import { useLikedPageData } from "@/store/useLikedPageData";
 import type { Song } from "@/types";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 export const LIMIT = 25;
 
@@ -32,24 +33,25 @@ const SongCard = ({
 
 export const LikedContent = ({ initialSongs }: { initialSongs: Song[] }) => {
   const {
-    pageData: { songs, page },
+    data: songs,
+    page,
     addAll,
-  } = useLikedPageData();
+  } = useInfiniteScroll(initialSongs, useLikedPageData(), LIMIT);
 
   const onPlay = useOnPlay(songs);
   const { isLoading: isUserLoading, session } = useSession();
 
   const songsToRender = useMemo(() => {
+    if (songs.length === 0) {
+      return initialSongs.map((song) => (
+        <SongCard key={song.id} onPlay={onPlay} song={song} />
+      ));
+    }
+
     return songs.map((song) => (
       <SongCard key={song.id} onPlay={onPlay} song={song} />
     ));
   }, [songs]);
-
-  useEffect(() => {
-    if (initialSongs.length > 0 && songs.length === 0) {
-      addAll(initialSongs, initialSongs.length === LIMIT ? page + 1 : page);
-    }
-  }, [initialSongs]);
 
   if (isUserLoading) {
     return <Loader className="flex justify-center md:px-6 md:justify-start" />;
@@ -64,24 +66,18 @@ export const LikedContent = ({ initialSongs }: { initialSongs: Song[] }) => {
     );
   }
 
-  if (initialSongs.length === 0)
+  if (initialSongs.length === 0) {
     return (
       <NoSongFallback
         className="mx-6 mt-4"
         fallbackText="There is nothing here."
       />
     );
+  }
 
   return (
     <>
-      <div className="flex flex-col gap-2 p-6 pb-0 w-full">
-        {songs.length === 0 &&
-          initialSongs.map((song) => (
-            <SongCard key={song.id} onPlay={onPlay} song={song} />
-          ))}
-
-        {songsToRender}
-      </div>
+      <div className="flex flex-col gap-2 p-6 pb-0 w-full">{songsToRender}</div>
 
       <LoadMore
         initialStatus={

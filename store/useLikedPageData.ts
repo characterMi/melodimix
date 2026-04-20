@@ -4,7 +4,7 @@ import type { Song } from "@/types";
 import { create } from "zustand";
 
 type Store = {
-  pageData: { page: number; songs: Song[] };
+  pageData: { page: number; data: Song[] };
   addOne: (song: Song) => void;
   addAll: (songs: Song[], page: number) => void;
   removeOne: (songId: number) => void;
@@ -12,38 +12,38 @@ type Store = {
 };
 
 export const useLikedPageData = create<Store>((set) => ({
-  pageData: { page: 0, songs: [] },
+  pageData: { page: 0, data: [] },
   addAll: (songs, page) => {
     set(({ pageData }) => ({
       pageData: {
         page,
-        songs: [...pageData.songs, ...songs],
+        data: [...pageData.data, ...songs],
       },
     }));
   },
   addOne: (song) => {
     set(({ pageData }) => {
-      if (pageData.songs.length % LIMIT === 0) {
-        pageData.songs.pop();
+      if (pageData.data.length % LIMIT === 0) {
+        pageData.data.pop();
       }
 
       const songs =
-        pageData.songs.length > 0 ? [song, ...pageData.songs] : pageData.songs;
+        pageData.data.length > 0 ? [song, ...pageData.data] : pageData.data;
 
       return {
         pageData: {
           page: pageData.page,
-          songs,
+          data: songs,
         },
       };
     });
   },
   removeOne: (songId) =>
     set(({ pageData }) => {
-      const songs = pageData.songs.filter((song) => song.id !== songId);
+      const songs = pageData.data.filter((song) => song.id !== songId);
 
-      if (pageData.songs.length % LIMIT === 0) {
-        getLikedSongs(1, pageData.songs.length)
+      if (pageData.data.length % LIMIT === 0) {
+        getLikedSongs(1, pageData.data.length)
           .then((songs) => {
             // songs = [Song]
             const newSong = songs[0];
@@ -55,7 +55,7 @@ export const useLikedPageData = create<Store>((set) => ({
       return {
         pageData: {
           page: pageData.page,
-          songs,
+          data: songs,
         },
       };
     }),
@@ -63,7 +63,7 @@ export const useLikedPageData = create<Store>((set) => ({
     set(() => ({
       pageData: {
         page: 0,
-        songs: [],
+        data: [],
       },
     }));
   },

@@ -3,33 +3,35 @@
 import LoadMore from "@/components/LoadMore";
 import NoSongFallback from "@/components/NoSongFallback";
 import SongCard from "@/components/SongCard";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { useOnPlay } from "@/hooks/useOnPlay";
 import { useHomePageData } from "@/store/useHomePageData";
 import type { SongWithAuthor } from "@/types";
 import { getSongs } from "@/utils/getSongs";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 export const LIMIT = 20;
 
 const PageContent = ({ initialSongs }: { initialSongs: SongWithAuthor[] }) => {
   const {
-    pageData: { songs, page },
+    data: songs,
+    page,
     addAll,
-  } = useHomePageData();
+  } = useInfiniteScroll(initialSongs, useHomePageData(), LIMIT);
 
   const onPlay = useOnPlay(songs);
 
   const songsToRender = useMemo(() => {
+    if (songs.length === 0) {
+      return initialSongs.map((song) => (
+        <SongCard key={song.id} onClick={onPlay} data={song} />
+      ));
+    }
+
     return songs.map((song) => (
       <SongCard key={song.id} onClick={onPlay} data={song} />
     ));
   }, [songs]);
-
-  useEffect(() => {
-    if (initialSongs.length > 0 && songs.length === 0) {
-      addAll(initialSongs, initialSongs.length === LIMIT ? page + 1 : page);
-    }
-  }, [initialSongs]);
 
   if (initialSongs.length === 0)
     return <NoSongFallback className="px-6 text-xl" />;
@@ -37,11 +39,6 @@ const PageContent = ({ initialSongs }: { initialSongs: SongWithAuthor[] }) => {
   return (
     <>
       <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-4 mt-4">
-        {songs.length === 0 &&
-          initialSongs.map((song) => (
-            <SongCard key={song.id} onClick={onPlay} data={song} />
-          ))}
-
         {songsToRender}
       </section>
 

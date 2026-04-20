@@ -3,36 +3,36 @@ import type { SongWithAuthor } from "@/types";
 import { create } from "zustand";
 
 type Store = {
-  pageData: { page: number; songs: SongWithAuthor[] };
+  pageData: { page: number; data: SongWithAuthor[] };
   addOne: (song: SongWithAuthor) => void;
   addAll: (songs: SongWithAuthor[], page: number) => void;
   updateOne: (newData: SongWithAuthor) => void;
 };
 
 export const useHomePageData = create<Store>((set) => ({
-  pageData: { page: 0, songs: [] },
+  pageData: { page: 0, data: [] },
   addAll(songs, page) {
     set(({ pageData }) => ({
       pageData: {
         page,
-        songs: [...pageData.songs, ...songs],
+        data: [...pageData.data, ...songs],
       },
     }));
   },
   addOne(song) {
     set(({ pageData }) => {
       // Removing duplicate data...
-      if (pageData.songs.length % LIMIT === 0) {
-        pageData.songs.pop();
+      if (pageData.data.length % LIMIT === 0) {
+        pageData.data.pop();
       }
 
       const songs =
-        pageData.songs.length > 0 ? [song, ...pageData.songs] : pageData.songs;
+        pageData.data.length > 0 ? [song, ...pageData.data] : pageData.data;
 
       return {
         pageData: {
           page: pageData.page,
-          songs,
+          data: songs,
         },
       };
     });
@@ -41,7 +41,7 @@ export const useHomePageData = create<Store>((set) => ({
     set(({ pageData }) => ({
       pageData: {
         page: pageData.page,
-        songs: pageData.songs.map((song) => {
+        data: pageData.data.map((song) => {
           if (song.id === newData.id) {
             return newData;
           }
