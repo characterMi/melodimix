@@ -34,6 +34,9 @@ const MobileSidebarTrigger = ({
 
   const onDragStart = useCallback(() => {
     dragTimeoutRef.current = setTimeout(() => {
+      if (localStorage.getItem("vibration") !== "false")
+        navigator.vibrate?.(50);
+
       setIsDragging(true);
     }, 500);
   }, []);
