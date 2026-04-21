@@ -15,7 +15,7 @@ import Loader from "./Loader";
 type InputProps = {
   phase: UploadPhase;
   isEditing: boolean;
-  uploadProgress: number | null;
+  uploadProgress: number;
 };
 
 type PreviewProps = {
@@ -44,7 +44,7 @@ export const SongInput = ({ phase, isEditing, uploadProgress }: InputProps) => {
         disabled={phase !== "none"}
         onClick={() => input.current?.click()}
         className={twMerge(
-          "px-6 py-2 rounded-md bg-gradient-to-r from-emerald-700 to-emerald-900 outline-none hover:opacity-80 focus-visible:opacity-80",
+          "px-6 py-2 rounded-md bg-gradient-to-r from-emerald-700 to-emerald-900 outline-none hover:opacity-80 focus-visible:opacity-80 disabled:opacity-50",
           !shouldReduceMotion && "transition-opacity"
         )}
       >
@@ -201,6 +201,7 @@ const SongPreview = ({ file, onDelete }: PreviewProps) => {
                     song?.pause();
                   }
                 }}
+                autoFocus
                 className="outline-none"
               >
                 <PauseOrPlayIcon size={26} />
@@ -244,7 +245,7 @@ export const ImageInput = ({
         disabled={phase !== "none"}
         onClick={() => input.current?.click()}
         className={twMerge(
-          "px-6 py-2 rounded-md bg-gradient-to-r from-emerald-700 to-emerald-900 outline-none hover:opacity-80 focus-visible:opacity-80",
+          "px-6 py-2 rounded-md bg-gradient-to-r from-emerald-700 to-emerald-900 outline-none hover:opacity-80 focus-visible:opacity-80 disabled:opacity-50",
           !shouldReduceMotion && "transition-opacity"
         )}
       >
@@ -313,7 +314,7 @@ const UploadProgress = ({
   isHidden,
   desc,
 }: {
-  progress: number | null;
+  progress: number;
   isHidden: boolean;
   desc: string;
 }) => (
@@ -333,7 +334,7 @@ const UploadProgress = ({
       aria-description={desc}
       aria-valuemax={100}
       aria-valuemin={0}
-      aria-valuenow={progress ?? undefined}
+      aria-valuenow={progress}
       className="w-full h-2 rounded-full bg-white/10 flex items-center p-[2px]"
     >
       <span

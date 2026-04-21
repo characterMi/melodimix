@@ -1,6 +1,6 @@
 import { useSession } from "@/hooks/useSession";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
@@ -19,6 +19,10 @@ export type UploadPhase =
 
 export const useUploadOrUpdateSong = () => {
   const [phase, setPhase] = useState<UploadPhase>("none");
+  const [uploadProgress, setUploadProgress] = useState({
+    song: 0,
+    image: 0,
+  });
 
   const { isOpen, onClose, clearInitialData, initialData } = useUploadModal();
   const { addOne: addUploadedSongToSongs, updateOne: updateUploadedSong } =
@@ -33,6 +37,13 @@ export const useUploadOrUpdateSong = () => {
   const router = useRouter();
 
   const isEditing = !!initialData;
+
+  const onUploadProgress = useCallback(
+    (type: keyof typeof uploadProgress, progress: number) => {
+      setUploadProgress((prev) => ({ ...prev, [type]: progress }));
+    },
+    []
+  );
 
   const handleSubmit = async (formData: FormData) => {
     if (!isOpen || phase !== "none") return;
@@ -61,7 +72,8 @@ export const useUploadOrUpdateSong = () => {
           song_path: initialData.song_path,
           created_at: initialData.created_at,
         },
-        setPhase
+        setPhase,
+        onUploadProgress
       );
 
       setPhase("none");
@@ -73,7 +85,11 @@ export const useUploadOrUpdateSong = () => {
 
       updateUploadedSong(updatedSong!);
     } else {
-      const { error, uploadedSong } = await uploadSong(formData, setPhase);
+      const { error, uploadedSong } = await uploadSong(
+        formData,
+        setPhase,
+        onUploadProgress
+      );
 
       setPhase("none");
 
@@ -101,6 +117,7 @@ export const useUploadOrUpdateSong = () => {
     isEditing,
     handleSubmit,
     phase,
+    uploadProgress,
     isUploadModalOpen: isOpen,
     onUploadModalClose: onClose,
     initialData,

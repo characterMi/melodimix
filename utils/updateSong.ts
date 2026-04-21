@@ -3,6 +3,7 @@ import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
 import { supabaseClient } from "@/lib/supabaseClient";
 
 import type { UploadPhase } from "@/hooks/useUploadOrUpdateSong";
+import { uploadFile } from "@/lib/uploadFile";
 import type { SongWithAuthor } from "@/types";
 
 export const updateSong = async (
@@ -13,7 +14,8 @@ export const updateSong = async (
     song_path: string;
     created_at: string;
   },
-  onPhaseChange: (phase: UploadPhase) => void
+  onPhaseChange: (phase: UploadPhase) => void,
+  onUploadProgress: (type: "song" | "image", progress: number) => void
 ): Promise<
   | {
       error: string;
@@ -72,10 +74,19 @@ export const updateSong = async (
       return { error: "Uploaded file is not a valid image." };
     }
 
+    const { data, error } = await supabaseClient.storage
+      .from("images")
+      .createSignedUploadUrl(songData.img_path);
+
+    if (error) {
+      return { error: "Image upload failed." };
+    }
+
     updates.push(
-      supabaseClient.storage
-        .from("images")
-        .update(songData.img_path, imageFile, { upsert: true })
+      uploadFile(
+        { file: imageFile, type: "image", uploadUrl: data.signedUrl },
+        onUploadProgress
+      )
     );
   }
 
@@ -88,10 +99,19 @@ export const updateSong = async (
       return { error: "Only .mp3 audio files are allowed." };
     }
 
+    const { data, error } = await supabaseClient.storage
+      .from("songs")
+      .createSignedUploadUrl(songData.song_path);
+
+    if (error) {
+      return { error: "Song upload failed." };
+    }
+
     updates.push(
-      supabaseClient.storage
-        .from("songs")
-        .update(songData.song_path, songFile, { upsert: true })
+      uploadFile(
+        { file: songFile, type: "song", uploadUrl: data.signedUrl },
+        onUploadProgress
+      )
     );
   }
 

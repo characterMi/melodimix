@@ -10,6 +10,7 @@ const UploadModal = () => {
     isEditing,
     handleSubmit,
     phase,
+    uploadProgress,
     isUploadModalOpen,
     onUploadModalClose,
     initialData,
@@ -45,9 +46,17 @@ const UploadModal = () => {
           maxLength={50}
         />
 
-        <SongInput isEditing={isEditing} phase={phase} uploadProgress={50} />
+        <SongInput
+          isEditing={isEditing}
+          phase={phase}
+          uploadProgress={uploadProgress.song}
+        />
 
-        <ImageInput isEditing={isEditing} phase={phase} uploadProgress={20} />
+        <ImageInput
+          isEditing={isEditing}
+          phase={phase}
+          uploadProgress={uploadProgress.image}
+        />
 
         <hr className="my-4 border-none h-[1px] bg-white/20 rounded-full" />
 

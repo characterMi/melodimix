@@ -3,11 +3,13 @@ import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
 import { supabaseClient } from "@/lib/supabaseClient";
 
 import type { UploadPhase } from "@/hooks/useUploadOrUpdateSong";
+import { uploadFile } from "@/lib/uploadFile";
 import type { SongWithAuthor } from "@/types";
 
 export const uploadSong = async (
   formData: FormData,
-  onPhaseChange: (phase: UploadPhase) => void
+  onPhaseChange: (phase: UploadPhase) => void,
+  onUploadProgress: (type: "song" | "image", progress: number) => void
 ): Promise<
   | {
       error: string;
@@ -68,26 +70,47 @@ export const uploadSong = async (
   const uniqueId = crypto.randomUUID();
   const path = `${title} - ${artist}-${uniqueId}`;
 
-  const uploadSongPromise = supabaseClient.storage
+  const songDataPromise = supabaseClient.storage
     .from("songs")
-    .upload(`song-${path}`, songFile);
-  const uploadImagePromise = supabaseClient.storage
+    .createSignedUploadUrl(`song-${path}`);
+  const imageDataPromise = supabaseClient.storage
     .from("images")
-    .upload(`image-${path}`, imageFile);
+    .createSignedUploadUrl(`image-${path}`);
 
   const [
-    { data: songData, error: songError },
-    { data: imageData, error: imageError },
-  ] = await Promise.all([uploadSongPromise, uploadImagePromise]);
+    { data: songData, error: songDataError },
+    { data: imageData, error: imageDataError },
+  ] = await Promise.all([songDataPromise, imageDataPromise]);
 
-  if (songError || imageError) {
-    // Cleanup any uploaded files (no need to await)
-    if (songData) supabaseClient.storage.from("songs").remove([songData.path]);
-    if (imageData)
-      supabaseClient.storage.from("images").remove([imageData.path]);
+  if (songDataError || imageDataError) {
+    return {
+      error:
+        songDataError?.message || imageDataError?.message || "Upload failed.",
+    };
+  }
+
+  const uploadSongPromise = uploadFile(
+    { file: songFile, type: "song", uploadUrl: songData.signedUrl },
+    onUploadProgress
+  );
+  const uploadImagePromise = uploadFile(
+    { file: imageFile, type: "image", uploadUrl: imageData.signedUrl },
+    onUploadProgress
+  );
+
+  const [{ error: songUploadError }, { error: imageUploadError }] =
+    await Promise.all([uploadSongPromise, uploadImagePromise]);
+
+  if (songUploadError || imageUploadError) {
+    // Cleanup any uploaded files (no need for await)
+    supabaseClient.storage.from("songs").remove([songData.path]);
+    supabaseClient.storage.from("images").remove([imageData.path]);
 
     return {
-      error: songError?.message || imageError?.message || "Upload failed.",
+      error:
+        songUploadError?.message ||
+        imageUploadError?.message ||
+        "Upload failed.",
     };
   }
 
@@ -111,7 +134,7 @@ export const uploadSong = async (
     supabaseClient.storage.from("songs").remove([songData.path]);
     supabaseClient.storage.from("images").remove([imageData.path]);
 
-    return { error: "Something went wrong while uploading the song!" };
+    return { error: "Something went wrong while creating the song!" };
   }
 
   revalidatePath("/", "layout");
