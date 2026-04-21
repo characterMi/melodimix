@@ -27,7 +27,7 @@ function Duration({
     <div className="w-full h-[40px] flex items-center justify-center z-[1]">
       <p
         className={twMerge(
-          "relative pr-3 z-[1] whitespace-nowrap duration-el",
+          "relative pr-3 z-[1] whitespace-nowrap number-text",
           !isMobilePlayer &&
             "bg-black pl-2 after:w-5 after:h-full after:absolute after:left-full after:top-0 after:bg-gradient-to-r after:from-black after:pointer-events-none"
         )}
@@ -65,6 +65,7 @@ function Duration({
 
       <button
         onClick={() => setShowTotalDuration(!showTotalDuration)}
+        type="button"
         className={twMerge(
           "hover:text-neutral-400 focus-visible:text-neutral-400 outline-none",
           !shouldReduceMotion && "transition-opacity"
@@ -73,7 +74,7 @@ function Duration({
       >
         <p
           className={twMerge(
-            "relative pl-2 z-[1] whitespace-nowrap duration-el",
+            "relative pl-2 z-[1] whitespace-nowrap number-text",
             !isMobilePlayer &&
               "bg-black px-2 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:pointer-events-none"
           )}

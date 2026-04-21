@@ -5,7 +5,7 @@ type MediaSessionCallbacks = Partial<
 >;
 
 type Params = {
-  song: Song;
+  song: Pick<Song, "title" | "artist">;
   songImageUrl: string;
   callbacks: MediaSessionCallbacks;
 };

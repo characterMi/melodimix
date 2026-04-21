@@ -37,7 +37,7 @@ body {
   height: 100svh;
 }
 
-.duration-el {
+.number-text {
   font-feature-settings: "tnum";
   font-variant-numeric: tabular-nums;
 }

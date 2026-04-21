@@ -3,6 +3,7 @@ import { useUploadOrUpdateSong } from "@/hooks/useUploadOrUpdateSong";
 import Button from "./Button";
 import Input from "./Input";
 import Modal from "./Modal";
+import { ImageInput, SongInput } from "./UploadModalFileInputs";
 
 const UploadModal = () => {
   const {
@@ -44,35 +45,11 @@ const UploadModal = () => {
           maxLength={50}
         />
 
-        <div>
-          <label htmlFor="song" className="pb-1">
-            Select a song file {isEditing && "(optional)"}
-          </label>
+        <SongInput isEditing={isEditing} phase={phase} uploadProgress={50} />
 
-          <Input
-            name="song"
-            id="song"
-            disabled={phase !== "none"}
-            type="file"
-            accept=".mp3"
-            required={!isEditing}
-          />
-        </div>
+        <ImageInput isEditing={isEditing} phase={phase} uploadProgress={20} />
 
-        <div>
-          <label htmlFor="img" className="pb-1">
-            Select an image {isEditing && "(optional)"}
-          </label>
-
-          <Input
-            name="img"
-            id="img"
-            disabled={phase !== "none"}
-            type="file"
-            accept="image/*"
-            required={!isEditing}
-          />
-        </div>
+        <hr className="my-4 border-none h-[1px] bg-white/20 rounded-full" />
 
         <Button disabled={phase !== "none"} type="submit">
           {phase === "none" && (isEditing ? "Update" : "Create")}
