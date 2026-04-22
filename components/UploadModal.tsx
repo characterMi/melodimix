@@ -33,6 +33,7 @@ const UploadModal = () => {
           placeholder="Song title"
           required
           aria-label="Enter the song title"
+          className="bg-white/10 border-none outline-none rounded-md"
           maxLength={100}
         />
 
@@ -43,6 +44,7 @@ const UploadModal = () => {
           placeholder="Song artist"
           required
           aria-label="Enter the artist's name"
+          className="bg-white/10 border-none outline-none rounded-md"
           maxLength={50}
         />
 
