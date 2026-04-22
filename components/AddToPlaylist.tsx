@@ -15,6 +15,7 @@ import { usePlaylistModal } from "@/store/usePlaylistModal";
 import DropdownMenu from "./DropdownMenu";
 import Loader from "./Loader";
 
+import { usePlaylistsPageData } from "@/store/usePlaylistsPageData";
 import type { Playlist } from "@/types";
 
 const PlaylistItem = ({
@@ -25,6 +26,7 @@ const PlaylistItem = ({
   songId: number;
 }) => {
   const [isAdding, setIsAdding] = useState(false);
+  const updatePlaylistStore = usePlaylistsPageData((state) => state.updateOne);
 
   const handleClick = async () => {
     if (isAdding) return;
@@ -43,13 +45,16 @@ const PlaylistItem = ({
 
     setIsAdding(true);
 
-    const { error } = await updatePlaylist({
+    const updatedPlaylist = {
       id: playlist.id,
       name: playlist.name,
       user_id: playlist.user_id,
       song_ids: [...playlist.song_ids, songId],
       is_public: playlist.is_public,
-    });
+      created_at: playlist.created_at,
+    };
+
+    const { error } = await updatePlaylist(updatedPlaylist);
 
     if (error) {
       onError();
@@ -58,6 +63,7 @@ const PlaylistItem = ({
     }
 
     setIsAdding(false);
+    updatePlaylistStore(updatedPlaylist);
   };
 
   return (
@@ -113,18 +119,22 @@ const Playlists = ({ songId }: { songId: number }) => {
       )}
     >
       {loading && <Loader className="min-w-8" />}
-      
-      {!loading && (playlists.length > 0 
-        ? playlists.map((playlist) => (
-            <PlaylistItem playlist={playlist} songId={songId} key={playlist.id} />
+
+      {!loading &&
+        (playlists.length > 0 ? (
+          playlists.map((playlist) => (
+            <PlaylistItem
+              playlist={playlist}
+              songId={songId}
+              key={playlist.id}
+            />
           ))
-        : (
+        ) : (
           <p className="text-neutral-400 text-sm">
             No playlists found.
             {!session && " Login to create one."}
           </p>
-        )
-      )}
+        ))}
     </div>
   );
 };

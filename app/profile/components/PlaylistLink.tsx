@@ -16,13 +16,16 @@ import DropdownMenu from "@/components/DropdownMenu";
 import Spinner from "@/components/Spinner";
 import VariantButton from "@/components/VariantButton";
 
+import { usePlaylistsPageData } from "@/store/usePlaylistsPageData";
 import type { Playlist } from "@/types";
 
 type Props = {
   href: string;
   name: string;
   id: "liked" | "uploaded" | "interests" | number;
-} & Partial<Pick<Playlist, "song_ids" | "user_id" | "is_public">>;
+} & Partial<
+  Pick<Playlist, "song_ids" | "user_id" | "is_public" | "created_at">
+>;
 
 const PlaylistLink = ({ href, name, id, ...props }: Props) => {
   const pathname = usePathname();
@@ -62,6 +65,7 @@ const PlaylistLink = ({ href, name, id, ...props }: Props) => {
             user_id={props.user_id!}
             song_ids={props.song_ids!}
             is_public={props.is_public!}
+            created_at={props.created_at!}
           />
 
           <DeleteButton playlistId={id} isPublic={props.is_public!} />
@@ -105,6 +109,10 @@ const DeleteButton = ({
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
+  const removePlaylistFromPlaylistsStore = usePlaylistsPageData(
+    (state) => state.removeOne
+  );
+
   const handleDelete = async (e: React.MouseEvent) => {
     e.preventDefault();
 
@@ -129,6 +137,7 @@ const DeleteButton = ({
 
     router.replace("/profile");
     setIsDeleting(false);
+    removePlaylistFromPlaylistsStore(playlistId);
   };
 
   return (

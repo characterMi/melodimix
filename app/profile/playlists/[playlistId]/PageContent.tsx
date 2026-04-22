@@ -8,6 +8,7 @@ import VariantButton from "@/components/VariantButton";
 import { useOnPlay } from "@/hooks/useOnPlay";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
+import { usePlaylistsPageData } from "@/store/usePlaylistsPageData";
 import type { Playlist, SongWithAuthor } from "@/types";
 import { useState } from "react";
 import { FiTrash2 } from "react-icons/fi";
@@ -20,6 +21,7 @@ const DeleteSongFromPlaylistButton = ({
   newData: Playlist;
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const updatePlaylistStore = usePlaylistsPageData((state) => state.updateOne);
 
   const handleClick = async () => {
     if (isDeleting) return;
@@ -42,6 +44,7 @@ const DeleteSongFromPlaylistButton = ({
     }
 
     setIsDeleting(false);
+    updatePlaylistStore(newData);
   };
 
   return (

@@ -10,8 +10,6 @@ export type SongWithAuthor = Song & { author: string };
 
 export type Playlist = Database["public"]["Tables"]["playlists"]["Row"];
 
-export type PlaylistWithoutCreatedAt = Omit<Playlist, "created_at">;
-
 export type User = Database["public"]["Tables"]["users"]["Row"] & {
   email: string;
 };

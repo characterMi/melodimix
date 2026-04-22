@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
 import { getCurrentUser, getUserById } from "./user.actions";
 
-import type { Playlist, PlaylistWithoutCreatedAt } from "@/types";
+import type { Playlist } from "@/types";
 
 export const createPlaylist = async ({
   name,
@@ -17,20 +17,20 @@ export const createPlaylist = async ({
   isPublic: boolean;
   songIds: number[];
 }): Promise<
-  | { error: true; message: string; playlistId: null }
-  | { playlistId: string; error: false; message: null }
+  | { error: true; message: string; playlist: null }
+  | { playlist: Playlist; error: false; message: null }
 > => {
   const { supabase, user } = await getCurrentUser();
 
   if (!user) {
-    return { error: true, message: "Unauthenticated User.", playlistId: null };
+    return { error: true, message: "Unauthenticated User.", playlist: null };
   }
 
   if (typeof name !== "string") {
     return {
       error: true,
       message: "Playlist name is required!",
-      playlistId: null,
+      playlist: null,
     };
   }
 
@@ -40,7 +40,7 @@ export const createPlaylist = async ({
     return {
       error: true,
       message: "Playlist name is too long or too short!",
-      playlistId: null,
+      playlist: null,
     };
   }
 
@@ -49,28 +49,30 @@ export const createPlaylist = async ({
       error: true,
       message:
         "Too many songs in this playlist, you can't add more than 100 songs to a playlist.",
-      playlistId: null,
+      playlist: null,
     };
   }
 
   const userPlaylists = (await getUserPlaylists()) as Playlist[];
 
-  if (userPlaylists.length >= 20) {
+  if (userPlaylists.length >= 50) {
     return {
       error: true,
-      message: "You can't create more than 20 playlists.",
-      playlistId: null,
+      message: "You can't create more than 50 playlists.",
+      playlist: null,
     };
   }
 
+  const newPlaylist = {
+    name: removeDuplicatedSpaces(trimmedName),
+    user_id: user.id,
+    is_public: isPublic,
+    song_ids: songIds,
+  };
+
   const { error, data } = await supabase
     .from("playlists")
-    .insert({
-      name: removeDuplicatedSpaces(trimmedName),
-      user_id: user.id,
-      is_public: isPublic,
-      song_ids: songIds,
-    })
+    .insert(newPlaylist)
     .select("id")
     .single();
 
@@ -80,7 +82,7 @@ export const createPlaylist = async ({
     return {
       error: true,
       message: "Something went wrong while creating the playlist!",
-      playlistId: null,
+      playlist: null,
     };
   }
 
@@ -88,7 +90,15 @@ export const createPlaylist = async ({
   isPublic && revalidatePath(`/users/${user.id}/playlists`);
   isPublic && revalidatePath("/playlists");
 
-  return { playlistId: data.id, error: false, message: null };
+  return {
+    playlist: {
+      created_at: new Date().toISOString(),
+      id: data.id,
+      ...newPlaylist,
+    },
+    error: false,
+    message: null,
+  };
 };
 
 export const deletePlaylist = async (playlistId: number, isPublic: boolean) => {
@@ -119,7 +129,7 @@ export const deletePlaylist = async (playlistId: number, isPublic: boolean) => {
 };
 
 export const updatePlaylist = async (
-  newData: PlaylistWithoutCreatedAt
+  newData: Playlist
 ): Promise<
   { error: true; message: string } | { error: false; message: null }
 > => {

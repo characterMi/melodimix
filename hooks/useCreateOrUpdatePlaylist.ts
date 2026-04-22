@@ -1,6 +1,7 @@
 import { createPlaylist, updatePlaylist } from "@/actions/playlist.actions";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
+import { usePlaylistsPageData } from "@/store/usePlaylistsPageData";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuthModal } from "../store/useAuthModal";
@@ -14,6 +15,12 @@ export const useCreateOrUpdatePlaylist = () => {
   const [songIds, setSongIds] = useState<number[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const { addPlaylistToPlaylists, updatePlaylistsStore } = usePlaylistsPageData(
+    (state) => ({
+      addPlaylistToPlaylists: state.addOne,
+      updatePlaylistsStore: state.updateOne,
+    })
+  );
   const openAuthModal = useAuthModal((state) => state.onOpen);
   const { session } = useSession();
 
@@ -37,21 +44,26 @@ export const useCreateOrUpdatePlaylist = () => {
     setIsSubmitting(true);
 
     if (isEditing) {
-      const { error, message } = await updatePlaylist({
+      const updatedPlaylist = {
         id: initialData.id,
         name,
         is_public: isPublic,
         user_id: session.user.id,
         song_ids: songIds,
-      });
+        created_at: initialData.created_at,
+      };
+
+      const { error, message } = await updatePlaylist(updatedPlaylist);
 
       if (error) {
         onError(message);
         setIsSubmitting(false);
         return;
       }
+
+      updatePlaylistsStore(updatedPlaylist);
     } else {
-      const { error, message, playlistId } = await createPlaylist({
+      const { error, message, playlist } = await createPlaylist({
         name,
         isPublic: isPublic,
         songIds,
@@ -63,7 +75,8 @@ export const useCreateOrUpdatePlaylist = () => {
         return;
       }
 
-      router.push(`/profile/playlists/${playlistId}`, { scroll: false });
+      router.push(`/profile/playlists/${playlist.id}`, { scroll: false });
+      addPlaylistToPlaylists(playlist);
     }
 
     onSuccess(`Playlist ${isEditing ? "updated" : "created"}!`);

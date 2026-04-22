@@ -1,10 +1,10 @@
-import type { PlaylistWithoutCreatedAt } from "@/types";
+import type { Playlist } from "@/types";
 import { create } from "zustand";
 
 type PlaylistModalStore = Omit<ModalStore, "onOpen"> & {
-  initialData: PlaylistWithoutCreatedAt | undefined;
+  initialData: Playlist | undefined;
   clearInitialData: () => void;
-  onOpen: (data?: PlaylistWithoutCreatedAt) => void;
+  onOpen: (data?: Playlist) => void;
 };
 
 export const usePlaylistModal = create<PlaylistModalStore>((set) => ({
