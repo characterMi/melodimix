@@ -1,8 +1,8 @@
 "use client";
 
 import NoPlaylistsFallback from "@/components/NoSongFallback";
+import PlaylistItem from "@/components/PlaylistItem";
 import type { Playlist } from "@/types";
-import PlaylistItem from "./PlaylistItem";
 
 const PageContent = ({
   playlists,

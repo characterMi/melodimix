@@ -53,8 +53,8 @@ const PageContent = ({ initialSongs }: { initialSongs: SongWithAuthor[] }) => {
             : "ended"
         }
         currentPage={page}
-        setSongs={addAll}
-        getSongsPromise={getSongs}
+        setData={addAll}
+        getDataPromise={getSongs}
         limit={LIMIT}
       />
     </>

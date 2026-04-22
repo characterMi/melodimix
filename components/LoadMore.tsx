@@ -1,13 +1,12 @@
 import useInView from "@/hooks/useInView";
-import type { SongWithAuthor } from "@/types";
 import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface Props {
   initialStatus: "loadmore" | "ended";
   currentPage: number;
-  setSongs: (songs: SongWithAuthor[], page: number) => void;
-  getSongsPromise: (limit: number, offset: number) => Promise<SongWithAuthor[]>;
+  setData: (songs: any[], page: number) => void;
+  getDataPromise: (limit: number, offset: number) => Promise<any[]>;
   numberOfRetries?: number;
   limit?: number;
 }
@@ -15,8 +14,8 @@ interface Props {
 const LoadMore = ({
   initialStatus,
   currentPage,
-  setSongs,
-  getSongsPromise,
+  setData,
+  getDataPromise,
   numberOfRetries = 5,
   limit = 10,
 }: Props) => {
@@ -34,13 +33,13 @@ const LoadMore = ({
 
     setIsLoading(true);
 
-    getSongsPromise(limit, currentPage)
-      .then((songs) => {
-        if (songs.length < limit) {
+    getDataPromise(limit, currentPage)
+      .then((data) => {
+        if (data.length < limit) {
           setStatus("ended");
         }
 
-        setSongs(songs, currentPage + 1);
+        setData(data, currentPage + 1);
       })
       .catch(() => {
         setStatus("retrying");
@@ -76,7 +75,7 @@ const LoadMore = ({
           ref={ref}
           className={twMerge(status === "retrying" && "opacity-0")}
         >
-          <Text>Loading more songs...</Text>
+          <Text>Loading more...</Text>
         </div>
       )}
 
@@ -87,9 +86,9 @@ const LoadMore = ({
         </Text>
       )}
 
-      {status === "error" && <Text>Can't load more songs</Text>}
+      {status === "error" && <Text>Couldn't load more data</Text>}
 
-      {status === "ended" && currentPage !== 0 && <Text>No more songs</Text>}
+      {status === "ended" && currentPage !== 0 && <Text>No more data</Text>}
     </div>
   );
 };

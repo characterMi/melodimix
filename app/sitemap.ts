@@ -1,10 +1,15 @@
 export default async function sitemap() {
-  const staticRoutes = ["", "liked", "search", "profile", "profile/liked"].map(
-    (route) => ({
-      url: `${process.env.NEXT_PUBLIC_BASE_URL}${route}`,
-      lastModified: new Date().toISOString(),
-    })
-  );
+  const staticRoutes = [
+    "",
+    "liked",
+    "search",
+    "profile",
+    "profile/liked",
+    "playlists",
+  ].map((route) => ({
+    url: `${process.env.NEXT_PUBLIC_BASE_URL}${route}`,
+    lastModified: new Date().toISOString(),
+  }));
 
   return staticRoutes;
 }

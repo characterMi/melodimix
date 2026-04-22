@@ -90,8 +90,8 @@ export const LikedContent = ({ initialSongs }: { initialSongs: Song[] }) => {
             : "ended"
         }
         currentPage={page}
-        setSongs={addAll}
-        getSongsPromise={getLikedSongs}
+        setData={addAll}
+        getDataPromise={getLikedSongs}
         limit={LIMIT}
       />
     </>

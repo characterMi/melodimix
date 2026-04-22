@@ -44,9 +44,9 @@ export const useLikedPageData = create<Store>((set) => ({
 
       if (pageData.data.length % LIMIT === 0) {
         getLikedSongs(1, pageData.data.length)
-          .then((songs) => {
-            // songs = [Song]
-            const newSong = songs[0];
+          .then((data) => {
+            // data = [Song]
+            const newSong = data[0];
             if (newSong) songs.push(newSong);
           })
           .catch();

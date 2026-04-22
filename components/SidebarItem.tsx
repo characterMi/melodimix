@@ -3,19 +3,17 @@
 import { shouldReduceMotion } from "@/lib/reduceMotion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FC } from "react";
-import { BiSearch } from "react-icons/bi";
-import { HiHome } from "react-icons/hi";
+import type { FC } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface SidebarItemProps {
   label: string;
   href: string;
+  icon: React.ReactNode;
 }
 
-const SidebarItem: FC<SidebarItemProps> = ({ href, label }) => {
+const SidebarItem: FC<SidebarItemProps> = ({ href, label, icon }) => {
   const pathName = usePathname();
-  const iconProps = { size: 26, "aria-hidden": true };
 
   return (
     <Link
@@ -28,11 +26,7 @@ const SidebarItem: FC<SidebarItemProps> = ({ href, label }) => {
       )}
       aria-label={"Go to " + label + " page"}
     >
-      {label === "Home" ? (
-        <HiHome {...iconProps} />
-      ) : (
-        <BiSearch {...iconProps} />
-      )}
+      {icon}
       <p className="truncate w-full">{label}</p>
     </Link>
   );

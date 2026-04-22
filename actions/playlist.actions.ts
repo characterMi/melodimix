@@ -86,6 +86,7 @@ export const createPlaylist = async ({
 
   revalidatePath("/profile");
   isPublic && revalidatePath(`/users/${user.id}/playlists`);
+  isPublic && revalidatePath("/playlists");
 
   return { playlistId: data.id, error: false, message: null };
 };
@@ -111,6 +112,7 @@ export const deletePlaylist = async (playlistId: number, isPublic: boolean) => {
   if (isPublic) {
     revalidatePath(`/users/${user.id}/playlists`);
     revalidatePath(`/users/${user.id}/playlists/${playlistId}`);
+    revalidatePath("/playlists");
   }
 
   return true;
@@ -163,6 +165,7 @@ export const updatePlaylist = async (
   if (newData.is_public) {
     revalidatePath(`/users/${user.id}/playlists`);
     revalidatePath(`/users/${user.id}/playlists/${newData.id}`);
+    revalidatePath("/playlists");
   }
 
   return { error: false, message: null };
@@ -172,7 +175,7 @@ export const getUserPlaylists = async (
   userId?: string
 ): Promise<Playlist[] | { playlists: Playlist[]; author: string }> => {
   if (!userId) {
-    return getCurrentUsersPlaylists();
+    return getCurrentUserPlaylists();
   }
 
   const supabase = createClientComponentClient();
@@ -201,7 +204,7 @@ export const getUserPlaylists = async (
   return { playlists: data, author: user.name ?? "Guest" };
 };
 
-const getCurrentUsersPlaylists = async () => {
+const getCurrentUserPlaylists = async () => {
   const { supabase, user } = await getCurrentUser();
 
   if (!user) return [];
@@ -219,6 +222,24 @@ const getCurrentUsersPlaylists = async () => {
   }
 
   if (!data) {
+    return [];
+  }
+
+  return data;
+};
+
+export const getPublicPlaylists = async (limit = 20): Promise<Playlist[]> => {
+  const supabase = createClientComponentClient();
+
+  const { data, error } = await supabase
+    .from("playlists")
+    .select("*")
+    .eq("is_public", true)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error(error);
     return [];
   }
 

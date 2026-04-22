@@ -111,8 +111,8 @@ const PageContent = ({
             : "ended"
         }
         currentPage={pageData?.page ?? 0}
-        setSongs={(songs, page) => addAll(userId, songs, page)}
-        getSongsPromise={(limit, offset) =>
+        setData={(songs, page) => addAll(userId, songs, page)}
+        getDataPromise={(limit, offset) =>
           getUserSongs({ limit, offset, userId })
         }
         limit={LIMIT}

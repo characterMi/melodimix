@@ -19,6 +19,8 @@ import Loader from "./Loader";
 import OpenSettingsButton from "./OpenSettingsButton";
 
 import type { Song } from "@/types";
+import { usePathname, useRouter } from "next/navigation";
+import { TbPlaylist } from "react-icons/tb";
 
 const MobileSidebarTrigger = ({
   openMobileSidebar,
@@ -196,6 +198,7 @@ const MobileSidebar = ({
           aria-hidden={!isActive}
         >
           <div className="flex flex-col gap-4 p-4">
+            <PlaylistsPageLink />
             <OpenSettingsButton />
             <DownloadApplication />
 
@@ -222,6 +225,32 @@ const MobileSidebar = ({
         )}
       />
     </>
+  );
+};
+
+const PlaylistsPageLink = () => {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  return (
+    <a
+      href="/profile"
+      className={twMerge(
+        "flex flex-row h-auto items-center w-full gap-x-3.5 text-sm font-medium cursor-pointer hover:text-white focus-visible:text-white outline-none text-neutral-400 py-1",
+        !shouldReduceMotion && "transition-colors",
+        pathname === "/playlists" ? "text-white" : "text-neutral-400"
+      )}
+      onClick={(e) => {
+        e.preventDefault();
+
+        window.history.back();
+
+        setTimeout(() => router.push("/playlists", { scroll: false }), 100);
+      }}
+    >
+      <TbPlaylist size={24} aria-hidden />
+      Public Playlists
+    </a>
   );
 };
 
