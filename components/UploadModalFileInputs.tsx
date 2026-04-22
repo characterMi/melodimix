@@ -57,6 +57,8 @@ export const SongInput = ({ phase, isEditing, uploadProgress }: InputProps) => {
           <SongPreview
             file={selectedSong}
             onDelete={() => {
+              if (phase !== "none") return;
+
               setSelectedSong(null);
               input.current!.value = "";
             }}
@@ -258,6 +260,8 @@ export const ImageInput = ({
           <ImagePreview
             file={selectedImage}
             onDelete={() => {
+              if (phase !== "none") return;
+
               setSelectedImage(null);
               input.current!.value = "";
             }}

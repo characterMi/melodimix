@@ -12,7 +12,8 @@ import Author from "./Author";
 import PlayButton from "./PlayButton";
 import SongCover from "./SongCover";
 
-import type { SongWithAuthor } from "@/types";
+import type { Song, SongWithAuthor } from "@/types";
+import { useTransition } from "react";
 
 interface Props {
   data: SongWithAuthor;
@@ -21,7 +22,6 @@ interface Props {
 
 const SongCard = ({ data, onClick }: Props) => {
   const imagePath = useLoadImage(data);
-  const router = useRouter();
 
   function handleClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.preventDefault();
@@ -71,15 +71,7 @@ const SongCard = ({ data, onClick }: Props) => {
           <FaShareAlt className="text-black" />
         </div>
 
-        <PlayButton
-          className={twMerge(
-            "opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md translate-y-1/4 group-hover:opacity-100 group-hover:-translate-y-1/4 group-focus-visible:opacity-100 group-focus-visible:-translate-y-1/4 focus-visible:-translate-y-1/4 focus-visible:opacity-100",
-            !shouldReduceMotion && "transition"
-          )}
-          aria-label={`Go to the ${data.title} page`}
-          onClick={() => router.push(`/songs/${data.id}`, { scroll: false })}
-          role="link"
-        />
+        <SongPageLink song={data} />
       </div>
 
       <div className="flex flex-col items-start w-full py-4 gap-y-1">
@@ -94,4 +86,39 @@ const SongCard = ({ data, onClick }: Props) => {
     </button>
   );
 };
+
+const SongPageLink = ({ song }: { song: Song }) => {
+  const router = useRouter();
+  const [isLoading, startTransition] = useTransition();
+
+  const onClick = () => {
+    startTransition(() => {
+      router.push(`/songs/${song.id}`, { scroll: false });
+    });
+  };
+
+  return (
+    <PlayButton
+      className={twMerge(
+        "opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md translate-y-1/4 group-hover:opacity-100 group-hover:-translate-y-1/4 group-focus-visible:opacity-100 group-focus-visible:-translate-y-1/4 focus-visible:-translate-y-1/4 focus-visible:opacity-100",
+        !shouldReduceMotion && "transition",
+        isLoading && "p-3"
+      )}
+      aria-label={`Go to the ${song.title} page`}
+      onClick={onClick}
+      role="link"
+    >
+      {isLoading && (
+        <div
+          aria-label="Loading..."
+          className="size-full rounded-full animate-spin after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:size-2/3 after:bg-green-500 after:rounded-full"
+          style={{
+            backgroundImage: "conic-gradient(#22c55e 20%, #000000)",
+          }}
+        />
+      )}
+    </PlayButton>
+  );
+};
+
 export default SongCard;
