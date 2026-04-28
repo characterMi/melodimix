@@ -1,6 +1,5 @@
 "use client";
 
-import { Root, Thumb } from "@radix-ui/react-switch";
 import { Fragment, useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { GrStorage } from "react-icons/gr";
@@ -17,6 +16,7 @@ import { useManageCacheModal } from "@/store/useManageCacheModal";
 import { useSettingsModal } from "@/store/useSettingsModal";
 
 import Modal from "./Modal";
+import Switch from "./Switch";
 
 const settingItems = [
   {
@@ -93,12 +93,8 @@ const SettingsModal = () => {
                   <MdArrowOutward size={28} aria-hidden />
                 </button>
               ) : (
-                <Root
+                <Switch
                   checked={checkBoxes[name!]}
-                  className={twMerge(
-                    "relative h-[16px] w-[32px] rounded-full bg-white shadow-none outline-none focus:shadow-[0_0_0_2px] focus:shadow-emerald-400 data-[state=checked]:bg-emerald-400",
-                    !shouldReduceMotion && "transition-shadow duration-100"
-                  )}
                   name={name}
                   aria-label={title}
                   onCheckedChange={() =>
@@ -113,14 +109,7 @@ const SettingsModal = () => {
                       };
                     })
                   }
-                >
-                  <Thumb
-                    className={twMerge(
-                      "block size-[12px] translate-x-[2px] rounded-full bg-black will-change-transform data-[state=checked]:translate-x-[18px]",
-                      !shouldReduceMotion && "transition-transform duration-100"
-                    )}
-                  />
-                </Root>
+                />
               )}
             </div>
           </Fragment>

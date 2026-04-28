@@ -4,7 +4,10 @@ import { searchForSongs } from "@/utils/searchForSongs";
 import { useEffect, useState } from "react";
 import { useSearchMusic } from "../store/useSearch";
 
-export function useSearchSong(songs?: SongWithAuthor[]) {
+export function useSearchSong(
+  songs?: SongWithAuthor[],
+  shouldApplyFilters = false
+) {
   const searchValue = useSearchMusic((state) => state.searchValue);
   const [isSearching, setIsSearching] = useState(false);
   const [filteredSongs, setFilteredSongs] = useState(songs ?? []);

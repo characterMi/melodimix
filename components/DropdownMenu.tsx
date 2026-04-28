@@ -113,7 +113,12 @@ DropdownMenu.Item = forwardRef<HTMLDivElement, DropdownMenuItemProps>(
   )
 );
 DropdownMenu.Separator = ({ className }: { className?: string }) => (
-  <Separator className={twMerge("h-[2px] bg-neutral-800", className)} />
+  <Separator
+    className={twMerge(
+      "h-[2px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent",
+      className
+    )}
+  />
 );
 
 export default DropdownMenu;

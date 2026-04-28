@@ -1,3 +1,5 @@
+"use client";
+
 import {
   type KeyboardEvent,
   type MouseEvent,
@@ -175,6 +177,10 @@ const Draggable = ({
     const { clientY } = (e as TouchEvent).touches
       ? (e as TouchEvent).touches[0]
       : (e as MouseEvent);
+
+    if (clientY < dragPosData.current.start) {
+      dragPosData.current.start = clientY;
+    }
 
     const dragPos = Math.max(
       0,
