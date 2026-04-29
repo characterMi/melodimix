@@ -2,7 +2,7 @@ import { TbMinus, TbPlus } from "react-icons/tb";
 import { twMerge } from "tailwind-merge";
 
 import { useCreateOrUpdatePlaylist } from "@/hooks/useCreateOrUpdatePlaylist";
-import { useSearchSong } from "@/hooks/useSearchSong";
+import { useSearchData } from "@/hooks/useSearchData";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import Button from "./Button";
@@ -51,7 +51,7 @@ const SearchResults = ({
   songIds: number[];
   setSongIds: (ids: number[]) => void;
 }) => {
-  const { filteredSongs, isSearching } = useSearchSong();
+  const { searchResult: filteredSongs, isSearching } = useSearchData();
 
   return (
     <div
@@ -69,7 +69,7 @@ const SearchResults = ({
           return (
             <SongCard
               key={song.id}
-              data={song}
+              data={song as SongWithAuthor}
               isActive={isActive}
               onClick={() => {
                 setSongIds(

@@ -21,9 +21,9 @@ export const getSongs = async (
   }
 
   return (
-    data.map((song) => ({
-      ...song,
-      author: song.users.full_name ?? "Guest",
+    data.map(({ users, ...rest }) => ({
+      ...rest,
+      author: users.full_name ?? "Guest",
     })) || []
   );
 };

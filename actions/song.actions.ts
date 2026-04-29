@@ -96,9 +96,9 @@ export const getArtistSongs = async (
     return null;
   }
 
-  return data.map((song) => ({
-    ...song,
-    author: song.users.full_name ?? "Guest",
+  return data.map(({ users, ...rest }) => ({
+    ...rest,
+    author: users.full_name ?? "Guest",
   }));
 };
 
@@ -194,9 +194,9 @@ export const getSongs = async (
   }
 
   return (
-    data.map((song) => ({
-      ...song,
-      author: song.users.full_name ?? "Guest",
+    data.map(({ users, ...rest }) => ({
+      ...rest,
+      author: users.full_name ?? "Guest",
     })) || []
   );
 };
@@ -316,9 +316,9 @@ export const getPlaylistSongs = async (
   }
 
   return {
-    data: songs.map((song) => ({
-      ...song,
-      author: song.users.full_name ?? "Guest",
+    data: songs.map(({ users, ...rest }) => ({
+      ...rest,
+      author: users.full_name ?? "Guest",
     })),
     playlist: { ...data, author: data.users.full_name ?? "Guest" },
     errMessage: undefined,
@@ -383,9 +383,9 @@ const getCurrentUserPlaylistSongs = async (
   }
 
   return {
-    data: songs.map((song) => ({
-      ...song,
-      author: song.users.full_name ?? "Guest",
+    data: songs.map(({ users, ...rest }) => ({
+      ...rest,
+      author: users.full_name ?? "Guest",
     })),
     playlist: data,
     errMessage: undefined,

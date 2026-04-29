@@ -2,28 +2,28 @@ import { create } from "zustand";
 
 export type Filters = { asc: boolean } & (
   | {
-      filter: "title" | "artist" | "date";
+      sortBy: "title" | "artist" | "date";
       searchFor: "songs";
     }
   | {
-      filter: "name" | "date";
+      sortBy: "name" | "date";
       searchFor: "playlists";
     }
 );
 
-interface SearchMusicStore {
+interface SearchStore {
   searchValue: string | undefined;
   setSearchValue: (searchValue: string | undefined) => void;
   filters: Filters;
   setFilters: (newFilters: Filters) => void;
 }
 
-export const useSearchMusic = create<SearchMusicStore>((setState) => ({
+export const useSearch = create<SearchStore>((setState) => ({
   searchValue: undefined,
   setSearchValue: (searchValue) => setState({ searchValue }),
   filters: {
     asc: false,
-    filter: "title",
+    sortBy: "date",
     searchFor: "songs",
   },
   setFilters: (newFilters) => setState({ filters: newFilters }),

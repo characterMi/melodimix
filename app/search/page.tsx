@@ -1,23 +1,27 @@
+import { getPublicPlaylists } from "@/actions/playlist.actions";
 import { getSongs } from "@/actions/song.actions";
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
 import MainContent from "@/components/MainContent";
-import SearchInput from "@/components/SearchInput";
 import { Suspense } from "react";
+import SearchBox from "./SearchBox";
 import SearchContent from "./SearchContent";
 
 export const revalidate = 60 * 60 * 24;
 
 export const metadata = {
   title: "Search",
-  description: "Search for the music You want to Listen to !",
+  description: "Search for playlists and the music you want to listen to !",
 };
 
 async function GetSongs() {
   // Initial data
-  const songs = await getSongs(/* limit= */ 20);
+  const [songs, playlists] = await Promise.all([
+    getSongs(/* limit= */ 20),
+    getPublicPlaylists(),
+  ]);
 
-  return <SearchContent songs={songs} />;
+  return <SearchContent songs={songs} playlists={playlists} />;
 }
 
 const SearchPage = () => (
@@ -26,7 +30,7 @@ const SearchPage = () => (
       <div className="mb-2 flex flex-col gap-y-6">
         <h1 className="text-white font-semibold text-3xl">Search</h1>
 
-        <SearchInput placeholder="What do you want to listen to ?" />
+        <SearchBox />
       </div>
     </Header>
 
