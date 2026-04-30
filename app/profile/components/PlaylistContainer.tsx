@@ -18,9 +18,7 @@ const PlaylistContainer = ({
     href: string;
     name: string;
     id: number | "liked" | "uploaded" | "interests";
-  } & Partial<
-    Pick<Playlist, "song_ids" | "user_id" | "is_public" | "created_at">
-  >)[];
+  } & Partial<Omit<Playlist, "name" | "id">>)[];
   children: React.ReactNode;
 }) => {
   const openPlaylistModal = usePlaylistModal((state) => state.onOpen);

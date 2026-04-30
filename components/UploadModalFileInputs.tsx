@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { BsPauseFill, BsPlayFill, BsX } from "react-icons/bs";
+import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { ImAttachment } from "react-icons/im";
 import { twMerge } from "tailwind-merge";
 
@@ -8,6 +8,7 @@ import { UploadPhase } from "@/hooks/useUploadOrUpdateSong";
 import { initializeMediaSession } from "@/lib/mediaSession";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
 
+import DeleteFileButton from "./DeleteFileButton";
 import Duration from "./Duration";
 import Input from "./Input";
 import Loader from "./Loader";
@@ -176,7 +177,7 @@ const SongPreview = ({ file, onDelete }: PreviewProps) => {
         <Loader className="m-3" />
       ) : (
         <>
-          <DeleteFileButton onClick={onDelete} />
+          <DeleteFileButton onClick={onDelete} label="Remove the song" />
 
           <div className="relative">
             <Image
@@ -295,7 +296,7 @@ const ImagePreview = ({ file, onDelete }: PreviewProps) => {
 
   return (
     <div className="relative bg-white/10 p-2 size-52 rounded-md group">
-      <DeleteFileButton onClick={onDelete} />
+      <DeleteFileButton onClick={onDelete} label="Remove the image" />
 
       <img
         src={imageSrc}
@@ -353,22 +354,4 @@ const UploadProgress = ({
       />
     </span>
   </div>
-);
-
-const DeleteFileButton = ({ onClick }: { onClick: () => void }) => (
-  <button
-    className={twMerge(
-      "absolute top-0 right-0 text-sm opacity-0 group-hover:opacity-100 focus-visible:opacity-100 outline-none",
-      !shouldReduceMotion && "transition-opacity"
-    )}
-    onClick={onClick}
-  >
-    <BsX
-      size={20}
-      className={twMerge(
-        "hover:opacity-50 focus-visible:opacity-50",
-        !shouldReduceMotion && "transition-opacity"
-      )}
-    />
-  </button>
 );

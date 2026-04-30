@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+import { FiUpload } from "react-icons/fi";
 import { TbMinus, TbPlus } from "react-icons/tb";
 import { twMerge } from "tailwind-merge";
 
@@ -6,7 +8,9 @@ import { useSearchData } from "@/hooks/useSearchData";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import Button from "./Button";
+import DeleteFileButton from "./DeleteFileButton";
 import Input from "./Input";
+import Loader from "./Loader";
 import Modal from "./Modal";
 import SearchInput from "./SearchInput";
 import VariantButton from "./VariantButton";
@@ -86,6 +90,87 @@ const SearchResults = ({
   );
 };
 
+const ImageUploader = ({
+  poster,
+  setPoster,
+  disabled,
+}: {
+  poster: null | File;
+  setPoster: (file: File | null) => void;
+  disabled: boolean;
+}) => {
+  const input = useRef<HTMLInputElement>(null);
+  const [isImageLoading, setIsImageLoading] = useState(true);
+  const [imageSrc, setImageSrc] = useState("");
+
+  useEffect(() => {
+    if (!poster) return;
+
+    setIsImageLoading(true);
+    const fileObject = URL.createObjectURL(poster);
+    setImageSrc(fileObject);
+
+    return () => {
+      URL.revokeObjectURL(fileObject);
+      setImageSrc("");
+    };
+  }, [poster]);
+
+  return (
+    <div className="size-[250px] rounded-lg bg-neutral-400/10 relative flex flex-col items-center justify-center gap-2 group">
+      <input
+        type="file"
+        accept="image/*"
+        disabled={disabled}
+        onChange={(e) => setPoster(e.target.files?.[0] ?? null)}
+        className="opacity-0 size-full absolute top-0 left-0 z-[2] cursor-pointer"
+        ref={input}
+      />
+
+      <FiUpload size={62} aria-hidden />
+
+      <h3 className="font-semibold mt-4">Select a poster (optional)</h3>
+
+      <p className="text-xs gradient-text opacity-80">
+        Click and choose or Drop your file
+      </p>
+
+      <div
+        aria-label="Selected image container"
+        className="rounded-md absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 size-[95%] border border-dashed z-[1] overflow-hidden"
+      >
+        {imageSrc && (
+          <img
+            src={imageSrc}
+            alt="Uploaded image"
+            className="size-full overflow-hidden object-cover"
+            onLoad={() => setIsImageLoading(false)}
+          />
+        )}
+
+        {isImageLoading && (
+          <div className="absolute top-0 left-0 size-full bg-black/60 flex justify-center items-center backdrop-blur-md">
+            <Loader label="The image is being loaded." />
+          </div>
+        )}
+      </div>
+
+      {imageSrc && (
+        <DeleteFileButton
+          label="Remove the image"
+          className="top-[5%] right-[5%] z-[3]"
+          onClick={() => {
+            if (disabled) return;
+
+            setPoster(null);
+            input.current!.value = "";
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
 const PlaylistModal = () => {
   const {
     isEditing,
@@ -96,6 +181,8 @@ const PlaylistModal = () => {
     setName,
     isPublic,
     setIsPublic,
+    poster,
+    setPoster,
     songIds,
     setSongIds,
     isSubmitting,
@@ -122,7 +209,7 @@ const PlaylistModal = () => {
       />
 
       <div className="my-6 flex gap-2 items-center justify-between">
-        <h3 className="text-lg font-semibold text-nowrap whitespace-nowrap">
+        <h3 className="font-semibold text-nowrap whitespace-nowrap">
           Is this Playlist public?
         </h3>
 
@@ -139,10 +226,16 @@ const PlaylistModal = () => {
         />
       </div>
 
+      <ImageUploader
+        poster={poster}
+        setPoster={setPoster}
+        disabled={isSubmitting}
+      />
+
       <hr className="border-neutral-600 my-4" />
 
       <div className="mt-6 flex flex-col gap-4">
-        <h3 className="text-lg font-semibold">Search, and Add songs</h3>
+        <h3 className="font-semibold">Search, and Add songs</h3>
 
         <SearchInput placeholder="What song do you want to add to your playlist ?" />
 

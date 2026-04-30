@@ -12,6 +12,7 @@ export const useCreateOrUpdatePlaylist = () => {
   const { isOpen, onClose, initialData, clearInitialData } = usePlaylistModal();
   const [name, setName] = useState("");
   const [isPublic, setIsPublic] = useState(false);
+  const [poster, setPoster] = useState<File | null>(null);
   const [songIds, setSongIds] = useState<number[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -29,6 +30,8 @@ export const useCreateOrUpdatePlaylist = () => {
   const isEditing = !!initialData;
 
   const onSubmit = async () => {
+    if (isSubmitting) return;
+
     if (!session?.user) {
       openAuthModal();
       return;
@@ -51,9 +54,10 @@ export const useCreateOrUpdatePlaylist = () => {
         user_id: session.user.id,
         song_ids: songIds,
         created_at: initialData.created_at,
+        poster_path: initialData.poster_path,
       };
 
-      const { error, message } = await updatePlaylist(updatedPlaylist);
+      const { error, message } = await updatePlaylist(updatedPlaylist, poster);
 
       if (error) {
         onError(message);
@@ -67,6 +71,7 @@ export const useCreateOrUpdatePlaylist = () => {
         name,
         isPublic: isPublic,
         songIds,
+        playlistPoster: poster,
       });
 
       if (error) {
@@ -111,6 +116,8 @@ export const useCreateOrUpdatePlaylist = () => {
     setName,
     isPublic,
     setIsPublic,
+    poster,
+    setPoster,
     songIds,
     setSongIds,
     isSubmitting,

@@ -55,11 +55,7 @@ export const updateUserData = async (
       return { error: "Something went wrong while uploading your avatar!" };
     }
 
-    const {
-      data: { publicUrl },
-    } = supabase.storage.from("avatars").getPublicUrl(data.path);
-
-    imagePath = publicUrl;
+    imagePath = data.fullPath;
   }
 
   const userData = {

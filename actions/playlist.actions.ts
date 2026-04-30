@@ -12,10 +12,12 @@ export const createPlaylist = async ({
   name,
   isPublic,
   songIds,
+  playlistPoster,
 }: {
   name: string;
   isPublic: boolean;
   songIds: number[];
+  playlistPoster: File | null;
 }): Promise<
   | { error: true; message: string; playlist: null }
   | { playlist: Playlist; error: false; message: null }
@@ -63,11 +65,40 @@ export const createPlaylist = async ({
     };
   }
 
+  let posterPath = "";
+
+  if (playlistPoster && playlistPoster.size > 0) {
+    if (!playlistPoster.type.startsWith("image/")) {
+      return {
+        error: true,
+        message: "Uploaded file is not a valid image.",
+        playlist: null,
+      };
+    }
+
+    const { data, error } = await supabase.storage
+      .from("playlist_posters")
+      .upload(`poster-${name}-${crypto.randomUUID()}`, playlistPoster, {
+        upsert: true,
+      });
+
+    if (error) {
+      return {
+        error: true,
+        message: "Uploading the playlist poster failed.",
+        playlist: null,
+      };
+    }
+
+    posterPath = data.path;
+  }
+
   const newPlaylist = {
     name: removeDuplicatedSpaces(trimmedName),
     user_id: user.id,
     is_public: isPublic,
     song_ids: songIds,
+    poster_path: posterPath,
   };
 
   const { error, data } = await supabase
@@ -78,6 +109,7 @@ export const createPlaylist = async ({
 
   if (error || !data) {
     console.error(error);
+    supabase.storage.from("playlist_posters").remove([posterPath]);
 
     return {
       error: true,
@@ -87,8 +119,11 @@ export const createPlaylist = async ({
   }
 
   revalidatePath("/profile");
-  isPublic && revalidatePath(`/users/${user.id}/playlists`);
-  isPublic && revalidatePath("/playlists");
+  if (isPublic) {
+    revalidatePath(`/users/${user.id}/playlists`);
+    revalidatePath("/playlists");
+    revalidatePath("/search");
+  }
 
   return {
     playlist: {
@@ -123,13 +158,15 @@ export const deletePlaylist = async (playlistId: number, isPublic: boolean) => {
     revalidatePath(`/users/${user.id}/playlists`);
     revalidatePath(`/users/${user.id}/playlists/${playlistId}`);
     revalidatePath("/playlists");
+    revalidatePath("/search");
   }
 
   return true;
 };
 
 export const updatePlaylist = async (
-  newData: Playlist
+  newData: Playlist,
+  playlistPoster?: File | null
 ): Promise<
   { error: true; message: string } | { error: false; message: null }
 > => {
@@ -156,9 +193,35 @@ export const updatePlaylist = async (
     };
   }
 
+  let posterPath = newData.poster_path;
+
+  if (playlistPoster && playlistPoster.size > 0) {
+    if (!playlistPoster.type.startsWith("image/")) {
+      return { error: true, message: "Uploaded file is not a valid image." };
+    }
+
+    const { data, error } = await supabase.storage
+      .from("playlist_posters")
+      .upload(
+        newData.poster_path || `poster-${newData.name}-${crypto.randomUUID()}`,
+        playlistPoster,
+        { upsert: true }
+      );
+
+    if (error) {
+      return { error: true, message: "Uploading the playlist poster failed." };
+    }
+
+    posterPath = data.path;
+  }
+
   const { error } = await supabase
     .from("playlists")
-    .update({ ...newData, name: removeDuplicatedSpaces(trimmedName) })
+    .update({
+      ...newData,
+      name: removeDuplicatedSpaces(trimmedName),
+      poster_path: posterPath,
+    })
     .eq("user_id", user.id)
     .eq("id", newData.id);
 
@@ -176,6 +239,7 @@ export const updatePlaylist = async (
     revalidatePath(`/users/${user.id}/playlists`);
     revalidatePath(`/users/${user.id}/playlists/${newData.id}`);
     revalidatePath("/playlists");
+    revalidatePath("/search");
   }
 
   return { error: false, message: null };

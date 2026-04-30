@@ -23,9 +23,7 @@ type Props = {
   href: string;
   name: string;
   id: "liked" | "uploaded" | "interests" | number;
-} & Partial<
-  Pick<Playlist, "song_ids" | "user_id" | "is_public" | "created_at">
->;
+} & Partial<Omit<Playlist, "name" | "id">>;
 
 const PlaylistLink = ({ href, name, id, ...props }: Props) => {
   const pathname = usePathname();
@@ -66,6 +64,7 @@ const PlaylistLink = ({ href, name, id, ...props }: Props) => {
             song_ids={props.song_ids!}
             is_public={props.is_public!}
             created_at={props.created_at!}
+            poster_path={props.poster_path!}
           />
 
           <DeleteButton playlistId={id} isPublic={props.is_public!} />
