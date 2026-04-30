@@ -6,7 +6,7 @@ import useOnPlay from "@/hooks/useOnPlay";
 import { useSearchData } from "@/hooks/useSearchData";
 
 import FlipArrow from "@/components/FlipArrow";
-import PlaylistItem from "@/components/PlaylistItem";
+import PlaylistCard from "@/components/PlaylistCard";
 import NoDataFallback from "../../components/NoSongFallback";
 import SongItem from "../../components/SongItem";
 
@@ -112,11 +112,7 @@ const SongResults = ({
 
 const PlaylistResults = ({ playlists }: { playlists: Playlist[] }) => {
   return playlists.map((playlist) => (
-    <PlaylistItem
-      firstSongId={playlist.song_ids[0]}
-      playlist={playlist}
-      key={playlist.id}
-    />
+    <PlaylistCard playlist={playlist} key={playlist.id} />
   ));
 };
 

@@ -1,7 +1,7 @@
 "use client";
 
 import NoPlaylistsFallback from "@/components/NoSongFallback";
-import PlaylistItem from "@/components/PlaylistItem";
+import PlaylistCard from "@/components/PlaylistCard";
 import type { Playlist } from "@/types";
 
 const PageContent = ({
@@ -23,11 +23,7 @@ const PageContent = ({
   return (
     <div className="flex flex-col gap-y-2 w-full">
       {playlists.map((playlist) => (
-        <PlaylistItem
-          playlist={playlist}
-          firstSongId={playlist.song_ids[0]}
-          key={playlist.id}
-        />
+        <PlaylistCard playlist={playlist} key={playlist.id} />
       ))}
     </div>
   );
