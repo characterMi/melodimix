@@ -2,13 +2,13 @@
 
 import LoadMore from "@/components/LoadMore";
 import NoSongFallback from "@/components/NoSongFallback";
-import SongCard from "@/components/SongCard";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { useOnPlay } from "@/hooks/useOnPlay";
 import { useHomePageData } from "@/store/useHomePageData";
 import type { SongWithAuthor } from "@/types";
 import { getSongs } from "@/utils/getSongs";
 import { useMemo } from "react";
+import SongCard from "./SongCard";
 
 export const LIMIT = 20;
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { FaShareAlt } from "react-icons/fa";
 import { twMerge } from "tailwind-merge";
 
@@ -8,12 +9,11 @@ import { useLoadImage } from "@/hooks/useLoadImage";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { shareSong } from "@/lib/share";
 
-import Author from "./Author";
-import PlayButton from "./PlayButton";
-import SongCover from "./SongCover";
+import Author from "@/components/Author";
+import PlayButton from "@/components/PlayButton";
+import SongCover from "@/components/SongCover";
 
 import type { Song, SongWithAuthor } from "@/types";
-import { useTransition } from "react";
 
 interface Props {
   data: SongWithAuthor;
