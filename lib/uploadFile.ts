@@ -10,7 +10,7 @@ export const uploadFile = (
 ): Promise<{ error: null | Error }> => {
   const { uploadUrl, file, type } = fileData;
 
-  return new Promise((res, rej) => {
+  return new Promise((res) => {
     const xhr = new XMLHttpRequest();
     xhr.open("PUT", uploadUrl);
 
@@ -22,7 +22,7 @@ export const uploadFile = (
     });
 
     xhr.onload = () => res({ error: null });
-    xhr.onerror = () => rej({ error: new Error(`${type} upload failed.`) });
+    xhr.onerror = () => res({ error: new Error(`${type} upload failed.`) });
 
     xhr.send(file);
   });

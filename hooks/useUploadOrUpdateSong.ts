@@ -66,12 +66,7 @@ export const useUploadOrUpdateSong = () => {
     if (isEditing) {
       const { error, updatedSong } = await updateSong(
         formData,
-        {
-          id: initialData.id,
-          img_path: initialData.img_path,
-          song_path: initialData.song_path,
-          created_at: initialData.created_at,
-        },
+        initialData,
         setPhase,
         onUploadProgress
       );

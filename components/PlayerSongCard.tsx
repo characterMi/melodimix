@@ -12,6 +12,7 @@ import PlayerTypeButton from "./PlayerTypeButton";
 import SongItem from "./SongItem";
 import SongOptions from "./SongOptions";
 
+import { changeThemeColor } from "@/lib/changeThemeColor";
 import type { Song } from "@/types";
 
 const PlayerSongCard = ({
@@ -40,6 +41,8 @@ const PlayerSongCard = ({
   const openMobilePlayer = useCallback(() => {
     if (isMobilePlayerOpen) return;
 
+    changeThemeColor(song.color);
+
     // The reason we don't use router is because the router causes reload on offline mode.
     window.history.pushState(
       { isMobilePlayerOpen: true },
@@ -55,6 +58,7 @@ const PlayerSongCard = ({
     closeMobilePlayerButton.current?.focus();
 
     const onPopState = () => {
+      changeThemeColor("#065f46");
       setIsMobilePlayerOpen(false);
       openMobilePlayerButton.current?.focus();
     };

@@ -7,6 +7,7 @@ import { openGraph, twitter } from "@/constants";
 import { getCleanParamValue } from "@/lib/getCleanParamValue";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import type { Metadata } from "next";
+import Head from "next/head";
 import { Suspense } from "react";
 import PageContent from "./components/PageContent";
 import SongButtons from "./components/SongButtons";
@@ -75,7 +76,17 @@ const SongIdPage = async ({ params }: { params: { songId: string } }) => {
 
   return (
     <MainContent>
-      <Header>
+      <Head>
+        <meta name="theme-color" content={song?.color ?? "#065f46"} />
+      </Head>
+
+      <Header
+        styles={{
+          background: `linear-gradient(180deg, ${
+            song?.color ?? "#065f46"
+          }, transparent)`,
+        }}
+      >
         <div className="mt-20 mb-6 flex flex-col md:flex-row items-center gap-4 overflow-hidden">
           <div className="relative size-36 min-w-36 xss:size-40 xss:min-w-40 sm:size-44 sm:min-w-44 md:size-32 md:min-w-32 lg:size-44 lg:min-w-44 shadow-2xl">
             <SongImage song={song} />

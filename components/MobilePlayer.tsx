@@ -19,6 +19,7 @@ import { shouldReduceMotion } from "@/lib/reduceMotion";
 import SongCover from "./SongCover";
 import SongOptions from "./SongOptions";
 
+import { changeThemeColor } from "@/lib/changeThemeColor";
 import type { Song } from "@/types";
 
 const MobilePlayer = ({
@@ -53,10 +54,13 @@ const MobilePlayer = ({
     // @ts-ignore
     <div
       className={twMerge(
-        "w-full h-sm-screen bg-gradient-to-t from-black to-emerald-800 fixed top-0 left-0 z-[100] overflow-hidden sm:hidden",
+        "w-full h-sm-screen fixed top-0 left-0 z-[100] overflow-hidden sm:hidden",
         isMobilePlayerOpen ? "translate-y-0" : "translate-y-full",
         !shouldReduceMotion && "transition-transform duration-300"
       )}
+      style={{
+        background: `linear-gradient(0deg, #000000, ${song.color})`,
+      }}
       ref={mobilePlayerRef}
       aria-hidden={!isMobilePlayerOpen}
       id="mobile-player"
@@ -80,8 +84,11 @@ const MobilePlayer = ({
         renderErrorFallback={false}
       />
       <div
-        className="absolute top-0 left-0 w-full h-full z-[-1] bg-gradient-to-t from-black from-0% via-transparent via-75% to-emerald-800 to-100%"
+        className="absolute top-0 left-0 w-full h-full z-[-1]"
         aria-hidden
+        style={{
+          background: `linear-gradient(0deg, #000000 0%, transparent 75%, ${song.color} 100%)`,
+        }}
       />
 
       <div
@@ -128,6 +135,7 @@ const MobilePlayer = ({
         <Draggable
           mobilePlayerRef={mobilePlayerRef}
           contentContainer={contentContainer}
+          color={song.color}
         />
       </div>
     </div>,
@@ -138,9 +146,11 @@ const MobilePlayer = ({
 const Draggable = ({
   mobilePlayerRef,
   contentContainer,
+  color,
 }: {
   mobilePlayerRef: RefObject<HTMLDivElement>;
   contentContainer: RefObject<HTMLDivElement>;
+  color: string;
 }) => {
   const dragPosData = useRef({
     start: 0,
@@ -178,8 +188,11 @@ const Draggable = ({
       ? (e as TouchEvent).touches[0]
       : (e as MouseEvent);
 
-    if (clientY < dragPosData.current.start) {
+    if (clientY <= dragPosData.current.start) {
       dragPosData.current.start = clientY;
+      changeThemeColor("#065f46");
+    } else {
+      changeThemeColor(color);
     }
 
     const dragPos = Math.max(
@@ -207,6 +220,8 @@ const Draggable = ({
 
     if (dragPosData.current.current > window.innerHeight / 3) {
       window.history.back();
+    } else {
+      changeThemeColor(color);
     }
   }, []);
 
