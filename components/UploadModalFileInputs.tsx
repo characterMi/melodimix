@@ -340,7 +340,7 @@ const UploadProgress = ({
       aria-valuemax={100}
       aria-valuemin={0}
       aria-valuenow={progress}
-      className="w-full h-2 rounded-full bg-white/10 flex items-center p-[2px]"
+      className="w-full h-2 rounded-full bg-white/10 flex items-center p-[1px]"
     >
       <span
         aria-hidden

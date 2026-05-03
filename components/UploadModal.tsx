@@ -62,7 +62,7 @@ const UploadModal = () => {
 
         <hr className="my-4 border-none h-[1px] bg-white/20 rounded-full" />
 
-        <Button disabled={phase !== "none"} type="submit">
+        <Button disabled={phase !== "none"} type="submit" aria-live="polite">
           {phase === "none" && (isEditing ? "Update" : "Create")}
           {phase === "validating" && "Validating user input..."}
           {phase === "updating" && "Updating the music..."}

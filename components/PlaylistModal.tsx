@@ -248,6 +248,7 @@ const PlaylistModal = () => {
         onClick={onSubmit}
         disabled={name.trim() === "" || isSubmitting}
         className="w-full mt-4"
+        aria-live="polite"
       >
         {isEditing && (isSubmitting ? "Updating..." : "Update playlist")}
         {!isEditing && (isSubmitting ? "Creating..." : "Create playlist")}

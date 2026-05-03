@@ -75,12 +75,7 @@ export function useSearchData(
     const controller = new AbortController();
 
     (async () => {
-      const trimmedSearch = searchValue?.trim();
-
-      if (!trimmedSearch) {
-        setSearchResult(localSearch(""));
-        return;
-      }
+      const trimmedSearch = searchValue?.trim() ?? "";
 
       try {
         setIsSearching(true);
