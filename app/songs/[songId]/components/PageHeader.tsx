@@ -1,4 +1,4 @@
-"user client";
+"use client";
 
 import { twMerge } from "tailwind-merge";
 
@@ -12,7 +12,6 @@ import Header from "@/components/Header";
 import SongCover from "@/components/SongCover";
 
 import type { SongWithAuthor } from "@/types";
-import type { SyntheticEvent } from "react";
 
 const PageHeader = ({ song }: { song: SongWithAuthor | null }) => {
   const { colors, setColors } = useSongColors((state) => ({
@@ -22,18 +21,13 @@ const PageHeader = ({ song }: { song: SongWithAuthor | null }) => {
 
   const image = useLoadImage(song);
 
-  const onLoad = song
-    ? (e: SyntheticEvent<HTMLImageElement, Event>) =>
-        setColors(song.id, getAverageColor(e.currentTarget))
-    : undefined;
-
   return (
     <Header
-      className={twMerge(
-        !shouldReduceMotion && "transition-colors duration-200"
-      )}
+      className={twMerge(!shouldReduceMotion && "transition duration-200")}
       styles={{
-        backgroundColor: colors?.medium ?? "#065f46",
+        background: `linear-gradient(180deg, ${
+          colors?.medium ?? "#065f46"
+        }, transparent)`,
       }}
     >
       <div className="mt-20 mb-6 flex flex-col md:flex-row items-center gap-4 overflow-hidden">
@@ -45,7 +39,15 @@ const PageHeader = ({ song }: { song: SongWithAuthor | null }) => {
             height={500}
             className="object-cover size-36 xss:size-40 sm:size-44 md:size-32 lg:size-44"
             loading="eager"
-            onLoad={colors ? undefined : onLoad}
+            onLoad={
+              colors
+                ? undefined
+                : (e) => {
+                    if (!song) return;
+
+                    setColors(song.id, getAverageColor(e.currentTarget));
+                  }
+            }
           />
         </div>
 

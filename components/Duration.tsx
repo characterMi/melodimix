@@ -1,5 +1,6 @@
 import { useSongDuration } from "@/hooks/useSongDuration";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
+import { ColorEntity } from "@/store/useSongColors";
 import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import Slider from "./Slider";
@@ -8,12 +9,12 @@ function Duration({
   song,
   isMobilePlayer,
   hasShortcut,
-  bgColor,
+  colors,
 }: {
   song: HTMLAudioElement | null;
   isMobilePlayer?: true;
   hasShortcut?: true;
-  bgColor?: string;
+  colors?: ColorEntity;
 }) {
   const {
     currentDuration,
@@ -38,7 +39,7 @@ function Duration({
       </p>
 
       <Slider
-        bgColor={bgColor ?? "#059669"}
+        bgColor={colors?.light ?? "#047857"}
         value={currentDurationPercentage}
         onChange={(value) => {
           if (!song) return;
@@ -59,6 +60,7 @@ function Duration({
       >
         <KeyboardNavigationHelper
           song={song}
+          color={colors?.medium ?? "#22c55e"}
           durationPercentage={currentDurationPercentage}
           setDurationPercentage={setCurrentDurationPercentage}
           id={hasShortcut ? "duration-navigator" : undefined}
@@ -93,10 +95,12 @@ function Duration({
 const KeyboardNavigationHelper = ({
   song,
   durationPercentage,
+  color,
   setDurationPercentage,
   id,
 }: {
   song: HTMLAudioElement | null;
+  color: string;
   durationPercentage: number;
   setDurationPercentage: Dispatch<SetStateAction<number>>;
   id?: string;
@@ -149,11 +153,12 @@ const KeyboardNavigationHelper = ({
   return (
     <div
       className={twMerge(
-        "absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 size-2 rounded-full bg-green-500 hover:opacity-50 focus-visible:scale-125 active:scale-125 cursor-pointer outline-none",
+        "absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 size-2 rounded-full hover:opacity-50 focus-visible:scale-125 active:scale-125 cursor-pointer outline-none",
         !shouldReduceMotion && "transition"
       )}
       style={{
         left: `${durationPercentage}%`,
+        background: color,
       }}
       id={id}
       onFocus={() => setIsFocused(true)}

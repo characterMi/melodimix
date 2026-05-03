@@ -35,15 +35,15 @@ export const getAverageColor = (image: HTMLImageElement): ColorEntity => {
     g = Math.round(g / count);
     b = Math.round(b / count);
 
-    const light = `rgb(${Math.min(r + 20, 255)}, ${Math.min(
-      g + 20,
+    const light = `rgb(${Math.min(r + 30, 255)}, ${Math.min(
+      g + 30,
       255
-    )}, ${Math.min(b + 20, 255)})`;
+    )}, ${Math.min(b + 30, 255)})`;
     const medium = `rgb(${r}, ${g}, ${b})`;
-    const dark = `rgb(${Math.max(r - 20, 0)}, ${Math.max(
-      g - 20,
+    const dark = `rgb(${Math.max(r - 30, 0)}, ${Math.max(
+      g - 30,
       0
-    )}, ${Math.max(b - 20, 0)})`;
+    )}, ${Math.max(b - 30, 0)})`;
 
     return { light, medium, dark };
   } catch (error) {

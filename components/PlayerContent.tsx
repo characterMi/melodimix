@@ -73,11 +73,7 @@ const PlayerContent = ({
             </button>
           </div>
 
-          <Duration
-            song={sound.song}
-            bgColor={colors?.light ?? "#047857"}
-            isMobilePlayer
-          />
+          <Duration song={sound.song} colors={colors} isMobilePlayer />
 
           <div className="w-full flex items-center justify-between z-[1]">
             <LikeButton
