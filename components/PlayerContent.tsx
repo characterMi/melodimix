@@ -3,8 +3,10 @@ import { TbMusicShare } from "react-icons/tb";
 import { twMerge } from "tailwind-merge";
 
 import { usePlayer } from "@/hooks/usePlayer";
+import { getAverageColor } from "@/lib/getAverageColor";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { shareSong } from "@/lib/share";
+import { useSongColors } from "@/store/useSongColors";
 
 import Duration from "./Duration";
 import LikeButton from "./LikeButton";
@@ -24,6 +26,11 @@ const PlayerContent = ({
   songUrl: string;
   isSongLoading: boolean;
 }) => {
+  const { colors, setColors } = useSongColors((state) => ({
+    setColors: state.setSongColors,
+    colors: state.colors[song.id],
+  }));
+
   const { handlers, sound, state } = usePlayer(song, songUrl);
 
   const { handlePlay, onPlaySong, toggleMute } = handlers;
@@ -34,7 +41,13 @@ const PlayerContent = ({
       <Duration song={sound.song} hasShortcut />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 h-full relative">
-        <PlayerSongCard song={song} songUrl={songUrl} playerType={playerType}>
+        <PlayerSongCard
+          song={song}
+          songUrl={songUrl}
+          playerType={playerType}
+          colors={colors}
+          onLoad={(e) => setColors(song.id, getAverageColor(e.currentTarget))}
+        >
           <div className="flex items-center justify-between gap-1">
             <div
               className="flex flex-col gap-1 overflow-hidden w-full"
@@ -60,10 +73,18 @@ const PlayerContent = ({
             </button>
           </div>
 
-          <Duration song={sound.song} isMobilePlayer />
+          <Duration
+            song={sound.song}
+            bgColor={colors?.light ?? "#047857"}
+            isMobilePlayer
+          />
 
           <div className="w-full flex items-center justify-between z-[1]">
-            <LikeButton song={song} size="lg" />
+            <LikeButton
+              song={song}
+              size="lg"
+              color={colors?.dark ?? "#064e3b"}
+            />
 
             <PlayerControls
               isMobilePlayer
@@ -91,7 +112,7 @@ const PlayerContent = ({
             <Slider
               value={sound.volume}
               onChange={(value) => sound.setVolume(value)}
-              bgColor="bg-white"
+              bgColor="#FFFFFF"
               max={1}
               step={0.1}
               label="Volume"

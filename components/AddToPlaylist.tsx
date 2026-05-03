@@ -46,12 +46,8 @@ const PlaylistItem = ({
     setIsAdding(true);
 
     const updatedPlaylist = {
-      id: playlist.id,
-      name: playlist.name,
-      user_id: playlist.user_id,
+      ...playlist,
       song_ids: [...playlist.song_ids, songId],
-      is_public: playlist.is_public,
-      created_at: playlist.created_at,
     };
 
     const { error } = await updatePlaylist(updatedPlaylist);

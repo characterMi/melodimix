@@ -1,5 +1,4 @@
 import * as RadixSlider from "@radix-ui/react-slider";
-import { twMerge } from "tailwind-merge";
 
 interface Props {
   value?: number;
@@ -35,7 +34,10 @@ const Slider = ({
     >
       <RadixSlider.Track className="bg-neutral-600 relative grow rounded-full h-[3px] cursor-pointer">
         <RadixSlider.Range
-          className={twMerge("absolute rounded-full h-full", bgColor)}
+          className="absolute rounded-full h-full"
+          style={{
+            background: bgColor,
+          }}
           role="slider"
           aria-valuemin={0}
           aria-valuemax={max}

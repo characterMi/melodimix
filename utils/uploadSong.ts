@@ -1,10 +1,9 @@
 import { revalidatePath } from "@/actions/revalidatePath";
 import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
 import { supabaseClient } from "@/lib/supabaseClient";
+import { uploadFile } from "@/lib/uploadFile";
 
 import type { UploadPhase } from "@/hooks/useUploadOrUpdateSong";
-import { getAverageColor } from "@/lib/getAverageColor";
-import { uploadFile } from "@/lib/uploadFile";
 import type { SongWithAuthor } from "@/types";
 
 export const uploadSong = async (
@@ -117,24 +116,12 @@ export const uploadSong = async (
 
   onPhaseChange("creating");
 
-  const { color, error } = await getAverageColor(imageFile);
-
-  if (error) {
-    supabaseClient.storage.from("songs").remove([songData.path]);
-    supabaseClient.storage.from("images").remove([imageData.path]);
-
-    return {
-      error: error.message ?? "Something's wrong with the uploaded image",
-    };
-  }
-
   const newSong = {
     user_id: user.id,
     title: removeDuplicatedSpaces(title),
     artist: removeDuplicatedSpaces(artist),
     img_path: imageData.path,
     song_path: songData.path,
-    color,
   };
 
   const { error: supabaseError, data } = await supabaseClient

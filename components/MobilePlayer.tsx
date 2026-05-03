@@ -14,12 +14,12 @@ import { twMerge } from "tailwind-merge";
 
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useLoadImage } from "@/hooks/useLoadImage";
+import { changeThemeColor } from "@/lib/changeThemeColor";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import SongCover from "./SongCover";
 import SongOptions from "./SongOptions";
 
-import { changeThemeColor } from "@/lib/changeThemeColor";
 import type { Song } from "@/types";
 
 const MobilePlayer = ({
@@ -28,12 +28,14 @@ const MobilePlayer = ({
   songUrl,
   closeMobilePlayerButton,
   isMobilePlayerOpen,
+  color,
 }: {
   song: Song;
   children: React.ReactNode;
   songUrl: string;
   closeMobilePlayerButton: RefObject<HTMLButtonElement>;
   isMobilePlayerOpen: boolean;
+  color: string;
 }) => {
   const contentContainer = useRef<HTMLDivElement>(null);
   const mobilePlayerRef = useRef<HTMLDivElement>(null);
@@ -56,10 +58,10 @@ const MobilePlayer = ({
       className={twMerge(
         "w-full h-sm-screen fixed top-0 left-0 z-[100] overflow-hidden sm:hidden",
         isMobilePlayerOpen ? "translate-y-0" : "translate-y-full",
-        !shouldReduceMotion && "transition-transform duration-300"
+        !shouldReduceMotion && "transition duration-300"
       )}
       style={{
-        background: `linear-gradient(0deg, #000000, ${song.color})`,
+        background: `linear-gradient(0deg, #000000, ${color})`,
       }}
       ref={mobilePlayerRef}
       aria-hidden={!isMobilePlayerOpen}
@@ -84,10 +86,13 @@ const MobilePlayer = ({
         renderErrorFallback={false}
       />
       <div
-        className="absolute top-0 left-0 w-full h-full z-[-1]"
+        className={twMerge(
+          "absolute top-0 left-0 w-full h-full z-[-1]",
+          !shouldReduceMotion && "transition duration-300"
+        )}
         aria-hidden
         style={{
-          background: `linear-gradient(0deg, #000000 0%, transparent 75%, ${song.color} 100%)`,
+          background: `linear-gradient(0deg, #000000 0%, transparent 75%, ${color} 100%)`,
         }}
       />
 
@@ -135,7 +140,7 @@ const MobilePlayer = ({
         <Draggable
           mobilePlayerRef={mobilePlayerRef}
           contentContainer={contentContainer}
-          color={song.color}
+          color={color}
         />
       </div>
     </div>,
@@ -171,59 +176,65 @@ const Draggable = ({
     (e.target as HTMLDivElement).style.cursor = "grabbing";
   }, []);
 
-  const onDrag = useCallback((e: TouchEvent | MouseEvent) => {
-    if (
-      !mobilePlayerRef.current ||
-      !dragPosData.current.isDragging ||
-      dragPosData.current.hasContainerScrolled
-    )
-      return;
+  const onDrag = useCallback(
+    (e: TouchEvent | MouseEvent) => {
+      if (
+        !mobilePlayerRef.current ||
+        !dragPosData.current.isDragging ||
+        dragPosData.current.hasContainerScrolled
+      )
+        return;
 
-    if (contentContainer.current && contentContainer.current.scrollTop > 0) {
-      dragPosData.current.hasContainerScrolled = true;
-      return;
-    }
+      if (contentContainer.current && contentContainer.current.scrollTop > 0) {
+        dragPosData.current.hasContainerScrolled = true;
+        return;
+      }
 
-    const { clientY } = (e as TouchEvent).touches
-      ? (e as TouchEvent).touches[0]
-      : (e as MouseEvent);
+      const { clientY } = (e as TouchEvent).touches
+        ? (e as TouchEvent).touches[0]
+        : (e as MouseEvent);
 
-    if (clientY <= dragPosData.current.start) {
-      dragPosData.current.start = clientY;
-      changeThemeColor("#065f46");
-    } else {
-      changeThemeColor(color);
-    }
+      if (clientY <= dragPosData.current.start) {
+        dragPosData.current.start = clientY;
+        changeThemeColor("#065f46");
+      } else {
+        changeThemeColor(color);
+      }
 
-    const dragPos = Math.max(
-      0,
-      Math.min(window.innerHeight * 0.95, clientY - dragPosData.current.start)
-    );
+      const dragPos = Math.max(
+        0,
+        Math.min(window.innerHeight * 0.95, clientY - dragPosData.current.start)
+      );
 
-    dragPosData.current.current = dragPos;
+      dragPosData.current.current = dragPos;
 
-    mobilePlayerRef.current.style.transform = `translateY(${dragPos}px)`;
-  }, []);
+      mobilePlayerRef.current.style.transform = `translateY(${dragPos}px)`;
+    },
+    [color]
+  );
 
-  const onDragEnd = useCallback((e: TouchEvent | MouseEvent) => {
-    if (!mobilePlayerRef.current) return;
+  const onDragEnd = useCallback(
+    (e: TouchEvent | MouseEvent) => {
+      if (!mobilePlayerRef.current) return;
 
-    if (contentContainer.current && contentContainer.current.scrollTop <= 0) {
-      dragPosData.current.hasContainerScrolled = false;
-    }
+      if (contentContainer.current && contentContainer.current.scrollTop <= 0) {
+        dragPosData.current.hasContainerScrolled = false;
+      }
 
-    dragPosData.current.isDragging = false;
-    (e.target as HTMLDivElement).style.removeProperty("cursor");
+      dragPosData.current.isDragging = false;
+      (e.target as HTMLDivElement).style.removeProperty("cursor");
 
-    mobilePlayerRef.current.style.removeProperty("transition");
-    mobilePlayerRef.current.style.removeProperty("transform");
+      mobilePlayerRef.current.style.removeProperty("transition");
+      mobilePlayerRef.current.style.removeProperty("transform");
 
-    if (dragPosData.current.current > window.innerHeight / 3) {
-      window.history.back();
-    } else {
-      changeThemeColor(color);
-    }
-  }, []);
+      if (dragPosData.current.current > window.innerHeight / 3) {
+        window.history.back();
+      } else {
+        changeThemeColor(color);
+      }
+    },
+    [color]
+  );
 
   return (
     <div

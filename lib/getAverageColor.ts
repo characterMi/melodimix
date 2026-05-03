@@ -1,60 +1,53 @@
-export const getAverageColor = async (
-  file: File
-): Promise<{ error: Error; color: null } | { error: null; color: string }> => {
-  return new Promise((res) => {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+import type { ColorEntity } from "@/store/useSongColors";
 
-    if (!ctx) res({ color: "#065f46", error: null });
+const defaultColors = { dark: "#064e3b", light: "#047857", medium: "#065f46" };
 
-    const image = new Image();
+export const getAverageColor = (image: HTMLImageElement): ColorEntity => {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
 
-    image.onload = () => {
-      try {
-        const { naturalWidth, naturalHeight } = image;
+  if (!ctx) return defaultColors;
 
-        canvas.width = naturalWidth;
-        canvas.height = naturalHeight;
+  try {
+    const { naturalWidth, naturalHeight } = image;
 
-        ctx!.drawImage(image, 0, 0, naturalWidth, naturalHeight);
+    canvas.width = naturalWidth;
+    canvas.height = naturalHeight;
 
-        const { data } = ctx!.getImageData(0, 0, naturalWidth, naturalHeight);
+    ctx!.drawImage(image, 0, 0, naturalWidth, naturalHeight);
 
-        let r = 0,
-          g = 0,
-          b = 0,
-          count = 0;
+    const { data } = ctx!.getImageData(0, 0, naturalWidth, naturalHeight);
 
-        const step = 4 * 5;
-        for (let i = 0; i < data.length; i += step) {
-          r += data[i];
-          g += data[i + 1];
-          b += data[i + 2];
-          count++;
-        }
+    let r = 0,
+      g = 0,
+      b = 0,
+      count = 0;
 
-        URL.revokeObjectURL(image.src);
-        res({
-          color: `rgb(${Math.round(r / count)},${Math.round(
-            g / count
-          )},${Math.round(b / count)})`,
-          error: null,
-        });
-      } catch (error) {
-        URL.revokeObjectURL(image.src);
-        console.error(error);
-        res({
-          error: new Error("Couldn't calculate the average color."),
-          color: null,
-        });
-      }
-    };
+    const step = 4 * 5;
+    for (let i = 0; i < data.length; i += step) {
+      r += data[i];
+      g += data[i + 1];
+      b += data[i + 2];
+      count++;
+    }
 
-    image.onerror = () => {
-      URL.revokeObjectURL(image.src);
-      res({ error: new Error("Couldn't load the image."), color: null });
-    };
+    r = Math.round(r / count);
+    g = Math.round(g / count);
+    b = Math.round(b / count);
 
-    image.src = URL.createObjectURL(file);
-  });
+    const light = `rgb(${Math.min(r + 20, 255)}, ${Math.min(
+      g + 20,
+      255
+    )}, ${Math.min(b + 20, 255)})`;
+    const medium = `rgb(${r}, ${g}, ${b})`;
+    const dark = `rgb(${Math.max(r - 20, 0)}, ${Math.max(
+      g - 20,
+      0
+    )}, ${Math.max(b - 20, 0)})`;
+
+    return { light, medium, dark };
+  } catch (error) {
+    console.error(error);
+    return defaultColors;
+  }
 };

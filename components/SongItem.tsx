@@ -10,6 +10,7 @@ import Author from "./Author";
 import SongCover from "./SongCover";
 
 import type { Song } from "@/types";
+import type { SyntheticEvent } from "react";
 
 interface SongTitleProps {
   id: number;
@@ -72,6 +73,7 @@ interface SongItemProps {
   showAuthor?: boolean;
   shouldRunAnimationIfCurrentlyPlaying?: boolean;
   ariaLive?: "polite" | "assertive" | "off";
+  onPosterLoad?: (event: SyntheticEvent<HTMLImageElement, Event>) => void;
 }
 
 const SongItem = ({
@@ -81,6 +83,7 @@ const SongItem = ({
   showAuthor = true,
   shouldRunAnimationIfCurrentlyPlaying = true,
   ariaLive,
+  onPosterLoad,
 }: SongItemProps) => {
   const imageUrl = useLoadImage(data);
 
@@ -103,6 +106,7 @@ const SongItem = ({
           alt={"Cover art for: " + data.title}
           width={50}
           height={50}
+          onLoad={onPosterLoad}
         />
       </div>
 

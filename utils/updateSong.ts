@@ -1,5 +1,4 @@
 import { revalidatePath } from "@/actions/revalidatePath";
-import { getAverageColor } from "@/lib/getAverageColor";
 import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
 import { supabaseClient } from "@/lib/supabaseClient";
 import { uploadFile } from "@/lib/uploadFile";
@@ -53,27 +52,22 @@ export const updateSong = async (
     return { error: "Either Title or Artist is too long or too short!" };
   }
 
-  const updates: Promise<any>[] = [];
+  const dbUpdatePromise = supabaseClient
+    .from("songs")
+    .update({
+      title: removeDuplicatedSpaces(title),
+      artist: removeDuplicatedSpaces(artist),
+    })
+    .eq("user_id", user.id)
+    .eq("id", song.id);
 
-  let color = song.color;
+  // @ts-ignore
+  const updates: Promise<any>[] = [dbUpdatePromise];
 
   if (imageFile && imageFile.size > 0) {
     if (!imageFile.type.startsWith("image/")) {
       return { error: "Uploaded file is not a valid image." };
     }
-
-    const { color: averageColor, error: colorError } = await getAverageColor(
-      imageFile
-    );
-
-    if (colorError) {
-      return {
-        error:
-          colorError.message ?? "Something's wrong with the uploaded image.",
-      };
-    }
-
-    color = averageColor;
 
     const { data, error } = await supabaseClient.storage
       .from("images")
@@ -118,23 +112,22 @@ export const updateSong = async (
 
   onPhaseChange("updating");
 
-  const [imageUpdateResult, songUpdateResult] = await Promise.all(updates);
+  const [dbUpdateResult, imageUpdateResult, songUpdateResult] =
+    await Promise.all(updates);
 
-  if (imageUpdateResult?.error || songUpdateResult?.error) {
-    console.error(imageUpdateResult?.error, songUpdateResult?.error);
+  if (
+    dbUpdateResult.error ||
+    imageUpdateResult?.error ||
+    songUpdateResult?.error
+  ) {
+    console.error(
+      dbUpdateResult.error,
+      imageUpdateResult?.error,
+      songUpdateResult?.error
+    );
 
     return { error: "Something went wrong while updating the song!" };
   }
-
-  await supabaseClient
-    .from("songs")
-    .update({
-      title: removeDuplicatedSpaces(title),
-      artist: removeDuplicatedSpaces(artist),
-      color,
-    })
-    .eq("user_id", user.id)
-    .eq("id", song.id);
 
   revalidatePath("/", "layout");
 
@@ -144,7 +137,6 @@ export const updateSong = async (
       title,
       author: user.user_metadata.full_name ?? "Guest",
       artist,
-      color,
     },
   };
 };

@@ -7,9 +7,11 @@ import { twMerge } from "tailwind-merge";
 const LikeButton = ({
   song,
   size = "sm",
+  color = "#22c55e",
 }: {
   song: Song;
   size?: "sm" | "lg";
+  color?: string;
 }) => {
   const { isLiked, handleLike, pending, btnRef } = useLikeSong(song);
 
@@ -26,10 +28,7 @@ const LikeButton = ({
       aria-label={`Like the ${song.title} song`}
       ref={btnRef}
     >
-      <Icon
-        color={isLiked ? "#22c55e" : "white"}
-        size={size === "sm" ? 25 : 28}
-      />
+      <Icon color={isLiked ? color : "white"} size={size === "sm" ? 25 : 28} />
     </button>
   );
 };

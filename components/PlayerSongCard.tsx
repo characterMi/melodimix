@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, type SyntheticEvent } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 import { twMerge } from "tailwind-merge";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { changeThemeColor } from "@/lib/changeThemeColor";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { usePlayerStore, type PlayerType } from "@/store/usePlayerStore";
+import { ColorEntity } from "@/store/useSongColors";
 
 import LikeButton from "./LikeButton";
 import MobilePlayer from "./MobilePlayer";
@@ -12,7 +14,6 @@ import PlayerTypeButton from "./PlayerTypeButton";
 import SongItem from "./SongItem";
 import SongOptions from "./SongOptions";
 
-import { changeThemeColor } from "@/lib/changeThemeColor";
 import type { Song } from "@/types";
 
 const PlayerSongCard = ({
@@ -20,11 +21,15 @@ const PlayerSongCard = ({
   playerType,
   songUrl,
   children,
+  colors,
+  onLoad,
 }: {
   song: Song;
   playerType: PlayerType;
   songUrl: string;
   children: React.ReactNode;
+  colors: ColorEntity;
+  onLoad: (event: SyntheticEvent<HTMLImageElement, Event>) => void;
 }) => {
   const isMobile = useMediaQuery("(max-width: 639px)");
 
@@ -41,7 +46,7 @@ const PlayerSongCard = ({
   const openMobilePlayer = useCallback(() => {
     if (isMobilePlayerOpen) return;
 
-    changeThemeColor(song.color);
+    changeThemeColor(colors?.medium ?? "#065f46");
 
     // The reason we don't use router is because the router causes reload on offline mode.
     window.history.pushState(
@@ -50,7 +55,7 @@ const PlayerSongCard = ({
       window.location.href + "?isMobilePlayerOpen=true"
     );
     setIsMobilePlayerOpen(true);
-  }, [isMobilePlayerOpen]);
+  }, [isMobilePlayerOpen, colors]);
 
   useEffect(() => {
     if (!isMobilePlayerOpen) return;
@@ -79,6 +84,7 @@ const PlayerSongCard = ({
             shouldRunAnimationIfCurrentlyPlaying={false}
             onClick={isMobile ? openMobilePlayer : undefined}
             ariaLive="polite"
+            onPosterLoad={onLoad}
           />
 
           <div className="flex items-center bg-black h-full absolute top-0 right-0 pl-1 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:z-[1]">
@@ -112,6 +118,7 @@ const PlayerSongCard = ({
       </div>
 
       <MobilePlayer
+        color={colors?.medium ?? "#065f46"}
         song={song}
         songUrl={songUrl}
         closeMobilePlayerButton={closeMobilePlayerButton}

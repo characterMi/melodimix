@@ -8,10 +8,12 @@ function Duration({
   song,
   isMobilePlayer,
   hasShortcut,
+  bgColor,
 }: {
   song: HTMLAudioElement | null;
   isMobilePlayer?: true;
   hasShortcut?: true;
+  bgColor?: string;
 }) {
   const {
     currentDuration,
@@ -36,20 +38,20 @@ function Duration({
       </p>
 
       <Slider
-        bgColor="bg-emerald-600"
+        bgColor={bgColor ?? "#059669"}
         value={currentDurationPercentage}
         onChange={(value) => {
-          if (song) {
-            setCurrentDurationPercentage(value);
-            const newTime = value * ((song.duration || 0) / 100);
-            song.currentTime = newTime;
+          if (!song) return;
 
-            navigator.mediaSession?.setPositionState?.({
-              duration: song.duration,
-              playbackRate: song.playbackRate,
-              position: newTime,
-            });
-          }
+          setCurrentDurationPercentage(value);
+          const newTime = value * ((song.duration || 0) / 100);
+          song.currentTime = newTime;
+
+          navigator.mediaSession?.setPositionState?.({
+            duration: song.duration,
+            playbackRate: song.playbackRate,
+            position: newTime,
+          });
         }}
         max={100}
         step={1}
