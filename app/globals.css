@@ -78,6 +78,10 @@ body {
   animation: loader 1s infinite linear;
 }
 
+.like-button-animation {
+  --bg-color: #22c55e;
+}
+
 .like-button-animation::before,
 .like-button-animation::after {
   position: absolute;
@@ -93,15 +97,29 @@ body {
 
 .like-button-animation::before {
   top: -60%;
-  background-image: radial-gradient(circle, #22c55e 20%, transparent 20%),
-    radial-gradient(circle, transparent 20%, #22c55e 20%, transparent 30%),
-    radial-gradient(circle, #22c55e 20%, transparent 20%),
-    radial-gradient(circle, #22c55e 20%, transparent 20%),
-    radial-gradient(circle, transparent 10%, #22c55e 15%, transparent 20%),
-    radial-gradient(circle, #22c55e 20%, transparent 20%),
-    radial-gradient(circle, #22c55e 20%, transparent 20%),
-    radial-gradient(circle, #22c55e 20%, transparent 20%),
-    radial-gradient(circle, #22c55e 20%, transparent 20%);
+  background-image: radial-gradient(
+      circle,
+      var(--bg-color) 20%,
+      transparent 20%
+    ),
+    radial-gradient(
+      circle,
+      transparent 20%,
+      var(--bg-color) 20%,
+      transparent 30%
+    ),
+    radial-gradient(circle, var(--bg-color) 20%, transparent 20%),
+    radial-gradient(circle, var(--bg-color) 20%, transparent 20%),
+    radial-gradient(
+      circle,
+      transparent 10%,
+      var(--bg-color) 15%,
+      transparent 20%
+    ),
+    radial-gradient(circle, var(--bg-color) 20%, transparent 20%),
+    radial-gradient(circle, var(--bg-color) 20%, transparent 20%),
+    radial-gradient(circle, var(--bg-color) 20%, transparent 20%),
+    radial-gradient(circle, var(--bg-color) 20%, transparent 20%);
   background-size: 30% 30%, 20% 40%, 15% 35%, 20% 40%, 28% 68%, 50% 20%, 15% 45%,
     10% 40%, 18% 38%;
   background-position: 50% 120%;
@@ -110,13 +128,22 @@ body {
 
 .like-button-animation::after {
   bottom: -40%;
-  background-image: radial-gradient(circle, #22c55e 20%, transparent 20%),
-    radial-gradient(circle, #22c55e 20%, transparent 20%),
-    radial-gradient(circle, transparent 10%, #22c55e 15%, transparent 20%),
-    radial-gradient(circle, #22c55e 20%, transparent 20%),
-    radial-gradient(circle, #22c55e 20%, transparent 20%),
-    radial-gradient(circle, #22c55e 20%, transparent 20%),
-    radial-gradient(circle, #22c55e 20%, transparent 20%);
+  background-image: radial-gradient(
+      circle,
+      var(--bg-color) 20%,
+      transparent 20%
+    ),
+    radial-gradient(circle, var(--bg-color) 20%, transparent 20%),
+    radial-gradient(
+      circle,
+      transparent 10%,
+      var(--bg-color) 15%,
+      transparent 20%
+    ),
+    radial-gradient(circle, var(--bg-color) 20%, transparent 20%),
+    radial-gradient(circle, var(--bg-color) 20%, transparent 20%),
+    radial-gradient(circle, var(--bg-color) 20%, transparent 20%),
+    radial-gradient(circle, var(--bg-color) 20%, transparent 20%);
   background-size: 25% 35%, 20% 40%, 18% 58%, 20% 60%, 15% 35%, 20% 50%, 18% 38%;
   background-position: 50% 0%;
   animation: greenbottomBubbles 0.6s ease forwards;
@@ -214,9 +241,7 @@ body {
   * {
     user-select: none;
     -webkit-user-select: none;
-    user-drag: none;
     -webkit-user-drag: none;
-    touch-callout: none;
     -webkit-touch-callout: none;
   }
 

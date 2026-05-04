@@ -11,15 +11,16 @@ import { useSession } from "./useSession";
 
 import type { Song } from "@/types";
 
-export const useLikeSong = (song: Song) => {
+export const useLikeSong = (song: Song, color: string) => {
   const btnRef = useRef<HTMLButtonElement>(null);
 
   const { likedSongs, setLikedSongs, removeIdFromLikedSongs } = useLikedSongs();
   const { onOpen: onAuthModalOpen } = useAuthModal();
-  const { addOne, removeOne } = useLikedPageData((state) => ({
-    addOne: state.addOne,
-    removeOne: state.removeOne,
-  }));
+  const { addOne: addSongToLikedPage, removeOne: removeSongFromLikedPage } =
+    useLikedPageData((state) => ({
+      addOne: state.addOne,
+      removeOne: state.removeOne,
+    }));
   const [pending, startTransition] = useTransition();
 
   const isLiked = likedSongs[song.id] ?? false;
@@ -42,28 +43,29 @@ export const useLikeSong = (song: Song) => {
 
       // animation when we like a song...
       if (!isLiked && !shouldReduceMotion) {
+        btnRef.current?.style.setProperty("--bg-color", color);
         btnRef.current?.classList.add("like-button-animation");
       }
 
       // Updating the song in DB
-      const likeInformation = await likeSong(isLiked, song.id);
+      const likeResponse = await likeSong(isLiked, song.id);
 
       // Updating (the store + liked page data) based on result...
-      if (likeInformation.isLiked) {
+      if (likeResponse.isLiked) {
         setLikedSongs(song.id, true);
-        addOne(song);
+        addSongToLikedPage(song);
       } else {
         removeIdFromLikedSongs(song.id);
-        removeOne(song.id);
+        removeSongFromLikedPage(song.id);
         btnRef.current?.classList.remove("like-button-animation");
       }
 
-      if (likeInformation.error) {
-        onError(likeInformation.error);
+      if (likeResponse.error) {
+        onError(likeResponse.error);
       }
 
-      if (likeInformation.message) {
-        onSuccess(likeInformation.message);
+      if (likeResponse.message) {
+        onSuccess(likeResponse.message);
       }
     });
   };

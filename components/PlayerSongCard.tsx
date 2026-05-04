@@ -73,6 +73,12 @@ const PlayerSongCard = ({
     return () => window.removeEventListener("popstate", onPopState);
   }, [isMobilePlayerOpen]);
 
+  useEffect(() => {
+    if (!isMobilePlayerOpen) return;
+
+    changeThemeColor(colors?.medium ?? "#065f46");
+  }, [isMobilePlayerOpen, colors]);
+
   return (
     <>
       <div className="flex w-full justify-start relative">

@@ -13,7 +13,7 @@ const LikeButton = ({
   size?: "sm" | "lg";
   color?: string;
 }) => {
-  const { isLiked, handleLike, pending, btnRef } = useLikeSong(song);
+  const { isLiked, handleLike, pending, btnRef } = useLikeSong(song, color);
 
   const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
 
