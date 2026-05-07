@@ -54,7 +54,7 @@ const AuthButtons = () => {
     <>
       <Button
         onClick={handleLogOut}
-        className="bg-white px-6 py-[6px] flex gap-x-2 items-center"
+        className="bg-none bg-white px-6 py-[6px] flex gap-x-2 items-center"
       >
         Logout
         <FiLogOut aria-hidden />
@@ -63,7 +63,8 @@ const AuthButtons = () => {
       {isInProfilePage ? (
         <Button
           onClick={onUserModalOpen}
-          className="rounded-full p-2 bg-white flex items-center justify-center"
+          aria-label="Open user modal"
+          className="rounded-full p-2 bg-none bg-white flex items-center justify-center"
         >
           <BiDotsVerticalRounded size={20} aria-hidden />
         </Button>
@@ -84,14 +85,14 @@ const AuthButtons = () => {
   ) : (
     <>
       <Button
-        className="bg-transparent text-neutral-300 font-medium text-nowrap py-[6px] whitespace-nowrap"
+        className="bg-none text-neutral-300 font-medium text-nowrap py-[6px] whitespace-nowrap"
         onClick={onAuthModalOpen}
       >
         Sign up
       </Button>
 
       <Button
-        className="bg-white px-6 py-[6px] text-nowrap whitespace-nowrap"
+        className="bg-none bg-white px-6 py-[6px] text-nowrap whitespace-nowrap"
         onClick={onAuthModalOpen}
       >
         Login

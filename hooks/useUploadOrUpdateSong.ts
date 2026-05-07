@@ -1,6 +1,6 @@
 import { useSession } from "@/hooks/useSession";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
@@ -24,7 +24,7 @@ export const useUploadOrUpdateSong = () => {
     image: 0,
   });
 
-  const { isOpen, onClose, clearInitialData, initialData } = useUploadModal();
+  const { isOpen, onClose, initialData } = useUploadModal();
   const { addOne: addUploadedSongToSongs, updateOne: updateUploadedSong } =
     useHomePageData((state) => ({
       addOne: state.addOne,
@@ -101,12 +101,6 @@ export const useUploadOrUpdateSong = () => {
     router.refresh();
     onClose();
   };
-
-  useEffect(() => {
-    if (!isOpen) {
-      clearInitialData();
-    }
-  }, [isOpen]);
 
   return {
     isEditing,

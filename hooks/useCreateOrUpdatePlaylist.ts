@@ -9,7 +9,7 @@ import { usePlaylistModal } from "../store/usePlaylistModal";
 import { useSession } from "./useSession";
 
 export const useCreateOrUpdatePlaylist = () => {
-  const { isOpen, onClose, initialData, clearInitialData } = usePlaylistModal();
+  const { isOpen, onClose, initialData } = usePlaylistModal();
   const [name, setName] = useState("");
   const [isPublic, setIsPublic] = useState(false);
   const [poster, setPoster] = useState<File | null>(null);
@@ -103,7 +103,6 @@ export const useCreateOrUpdatePlaylist = () => {
       setName("");
       setIsPublic(false);
       setSongIds([]);
-      clearInitialData();
     }
   }, [isOpen]);
 

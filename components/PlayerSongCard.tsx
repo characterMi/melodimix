@@ -124,7 +124,7 @@ const PlayerSongCard = ({
       </div>
 
       <MobilePlayer
-        color={colors?.medium ?? "#065f46"}
+        color={colors?.medium ?? "#000000"}
         song={song}
         songUrl={songUrl}
         closeMobilePlayerButton={closeMobilePlayerButton}
