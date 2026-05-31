@@ -9,6 +9,8 @@ import Loader from "@/components/Loader";
 import MainContent from "@/components/MainContent";
 import { PlaylistsContent } from "./PlaylistsContent";
 
+export const revalidate = 60 * 60 * 24;
+
 export const metadata = {
   title: "Public Playlists",
   description: "Checkout public playlists created by other users!",
