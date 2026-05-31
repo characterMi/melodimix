@@ -18,5 +18,5 @@ type Store = {
 export const useSongColors = create<Store>((setState) => ({
   colors: {},
   setSongColors: (songId, colors) =>
-    setState((prev) => ({ colors: { ...prev, [songId]: colors } })),
+    setState((prev) => ({ colors: { ...prev.colors, [songId]: colors } })),
 }));

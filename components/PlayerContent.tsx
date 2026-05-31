@@ -2,6 +2,7 @@ import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { TbMusicShare } from "react-icons/tb";
 import { twMerge } from "tailwind-merge";
 
+import { defaultColors } from "@/constants";
 import { usePlayer } from "@/hooks/usePlayer";
 import { getAverageColor } from "@/lib/getAverageColor";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
@@ -66,7 +67,7 @@ const PlayerContent = ({
               onClick={() => shareSong(song.title, song.artist, song.id)}
               className={twMerge(
                 "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none hidden xss:block z-[1]",
-                !shouldReduceMotion && "transition-opacity"
+                !shouldReduceMotion && "transition-opacity",
               )}
             >
               <TbMusicShare size={28} aria-hidden />
@@ -79,7 +80,7 @@ const PlayerContent = ({
             <LikeButton
               song={song}
               size="lg"
-              color={colors?.dark ?? "#064e3b"}
+              color={colors?.dark ?? defaultColors.dark}
             />
 
             <PlayerControls
@@ -133,7 +134,7 @@ const VolumeButton = ({
     <button
       className={twMerge(
         "cursor-pointer outline-none hover:opacity-50 focus-visible:opacity-50",
-        !shouldReduceMotion && "transition-opacity"
+        !shouldReduceMotion && "transition-opacity",
       )}
       onClick={toggleMute}
       aria-label={volume === 0 ? "Unmute" : "Mute"}

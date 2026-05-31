@@ -61,7 +61,7 @@ const SearchResults = ({
     <div
       className={twMerge(
         "w-full flex flex-col gap-2",
-        isSearching && "opacity-50"
+        isSearching && "opacity-50",
       )}
     >
       {filteredSongs.length === 0 ? (
@@ -79,7 +79,7 @@ const SearchResults = ({
                 setSongIds(
                   isActive
                     ? songIds.filter((id) => id !== song.id)
-                    : [...songIds, song.id]
+                    : [...songIds, song.id],
                 );
               }}
             />
@@ -93,10 +93,12 @@ const SearchResults = ({
 const ImageUploader = ({
   poster,
   setPoster,
+  defaultPoster,
   disabled,
 }: {
   poster: null | File;
   setPoster: (file: File | null) => void;
+  defaultPoster?: string;
   disabled: boolean;
 }) => {
   const input = useRef<HTMLInputElement>(null);
@@ -139,10 +141,10 @@ const ImageUploader = ({
         aria-label="Selected image container"
         className="rounded-md absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 size-[95%] border border-dashed z-[1] overflow-hidden"
       >
-        {imageSrc && (
+        {(imageSrc || defaultPoster) && (
           <img
-            src={imageSrc}
-            alt="Uploaded image"
+            src={imageSrc || defaultPoster}
+            alt={imageSrc ? "Uploaded image" : "Current image"}
             className="size-full overflow-hidden object-cover"
             onLoad={() => setIsImageLoading(false)}
           />
@@ -221,7 +223,7 @@ const PlaylistModal = () => {
           aria-label="Make playlist public"
           className={twMerge(
             "appearance-none size-5 border-2 border-emerald-600 rounded-full checked:bg-emerald-500 checked:border-emerald-500 bg-neutral-700 cursor-pointer",
-            !shouldReduceMotion && "transition-colors"
+            !shouldReduceMotion && "transition-colors",
           )}
         />
       </div>
@@ -229,6 +231,7 @@ const PlaylistModal = () => {
       <ImageUploader
         poster={poster}
         setPoster={setPoster}
+        defaultPoster={initialData?.poster_path}
         disabled={isSubmitting}
       />
 

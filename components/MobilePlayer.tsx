@@ -29,6 +29,7 @@ const MobilePlayer = ({
   closeMobilePlayerButton,
   isMobilePlayerOpen,
   color,
+  defaultColor,
 }: {
   song: Song;
   children: React.ReactNode;
@@ -36,6 +37,7 @@ const MobilePlayer = ({
   closeMobilePlayerButton: RefObject<HTMLButtonElement>;
   isMobilePlayerOpen: boolean;
   color: string;
+  defaultColor: string;
 }) => {
   const contentContainer = useRef<HTMLDivElement>(null);
   const mobilePlayerRef = useRef<HTMLDivElement>(null);
@@ -49,7 +51,7 @@ const MobilePlayer = ({
 
       window.history.back();
     },
-    [isMobilePlayerOpen]
+    [isMobilePlayerOpen],
   );
 
   return createPortal(
@@ -58,7 +60,7 @@ const MobilePlayer = ({
       className={twMerge(
         "w-full h-sm-screen fixed top-0 left-0 z-[100] overflow-hidden sm:hidden",
         isMobilePlayerOpen ? "translate-y-0" : "translate-y-full",
-        !shouldReduceMotion && "transition duration-300"
+        !shouldReduceMotion && "transition duration-300",
       )}
       style={{
         background: `linear-gradient(0deg, #000000, ${color})`,
@@ -81,14 +83,14 @@ const MobilePlayer = ({
         height={1}
         className={twMerge(
           "size-full absolute z-[-1] opacity-50",
-          isMobilePlayerOpen && "blur-lg"
+          isMobilePlayerOpen && "blur-lg",
         )}
         renderErrorFallback={false}
       />
       <div
         className={twMerge(
           "absolute top-0 left-0 w-full h-full z-[-1]",
-          !shouldReduceMotion && "transition duration-300"
+          !shouldReduceMotion && "transition duration-300",
         )}
         aria-hidden
         style={{
@@ -105,7 +107,7 @@ const MobilePlayer = ({
             ref={closeMobilePlayerButton}
             className={twMerge(
               "hover:opacity-50 z-[1] focus-visible:opacity-50 outline-none",
-              !shouldReduceMotion && "transition-opacity"
+              !shouldReduceMotion && "transition-opacity",
             )}
             onClick={() => window.history.back()}
             aria-label="Close the mobile player"
@@ -141,10 +143,11 @@ const MobilePlayer = ({
           mobilePlayerRef={mobilePlayerRef}
           contentContainer={contentContainer}
           color={color}
+          defaultColor={defaultColor}
         />
       </div>
     </div>,
-    document.body
+    document.body,
   );
 };
 
@@ -152,10 +155,12 @@ const Draggable = ({
   mobilePlayerRef,
   contentContainer,
   color,
+  defaultColor,
 }: {
   mobilePlayerRef: RefObject<HTMLDivElement>;
   contentContainer: RefObject<HTMLDivElement>;
   color: string;
+  defaultColor: string;
 }) => {
   const dragPosData = useRef({
     start: 0,
@@ -196,21 +201,24 @@ const Draggable = ({
 
       if (clientY <= dragPosData.current.start) {
         dragPosData.current.start = clientY;
-        changeThemeColor("#065f46");
-      } else {
         changeThemeColor(color);
+      } else {
+        changeThemeColor(defaultColor);
       }
 
       const dragPos = Math.max(
         0,
-        Math.min(window.innerHeight * 0.95, clientY - dragPosData.current.start)
+        Math.min(
+          window.innerHeight * 0.95,
+          clientY - dragPosData.current.start,
+        ),
       );
 
       dragPosData.current.current = dragPos;
 
       mobilePlayerRef.current.style.transform = `translateY(${dragPos}px)`;
     },
-    [color]
+    [color, defaultColor],
   );
 
   const onDragEnd = useCallback(
@@ -233,7 +241,7 @@ const Draggable = ({
         changeThemeColor(color);
       }
     },
-    [color]
+    [color],
   );
 
   return (

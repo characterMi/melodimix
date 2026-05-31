@@ -1,3 +1,4 @@
+import { defaultColors } from "@/constants";
 import { Manifest } from "next/dist/lib/metadata/types/manifest-types";
 
 export default function manifest(): Manifest {
@@ -8,7 +9,7 @@ export default function manifest(): Manifest {
       "MelodiMix: Your Ultimate Music Destination. Discover personalized playlists, seamless streaming, and a vibrant music community. Join us today for the perfect soundtrack to every moment.",
     start_url: ".",
     orientation: "portrait",
-    theme_color: "#065f46",
+    theme_color: defaultColors.medium,
     display: "standalone",
     scope: ".",
     icons: [

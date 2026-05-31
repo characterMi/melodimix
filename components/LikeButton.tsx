@@ -21,8 +21,12 @@ const LikeButton = ({
     <button
       className={twMerge(
         "hover:opacity-50 disabled:opacity-50 disabled:cursor-not-allowed active:scale-90 focus-visible:opacity-50 outline-none relative ease-out",
-        !shouldReduceMotion && "transition duration-200"
+        !shouldReduceMotion && "transition duration-200",
       )}
+      style={{
+        // @ts-ignore
+        "--bg-color": color,
+      }}
       onClick={handleLike}
       disabled={pending}
       aria-label={`Like the ${song.title} song`}

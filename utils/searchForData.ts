@@ -3,20 +3,17 @@ import { Filters } from "@/store/useSearch";
 import type { Playlist, SongWithAuthor } from "@/types";
 
 export const searchForData = async (
-  searchValue: string | undefined,
+  searchValue: string,
   signal: AbortSignal,
   filters: Filters,
-  shouldApplyFilters: boolean
+  shouldApplyFilters: boolean,
 ): Promise<SongWithAuthor[] | Playlist[]> => {
-  if (
-    typeof searchValue !== "string" ||
-    !searchValue ||
-    searchValue.length > 50
-  )
-    return [];
+  if (typeof searchValue !== "string") return [];
 
   // Unfiltered Songs
   if (!shouldApplyFilters) {
+    if (!searchValue || searchValue.length > 50) return [];
+
     const { data, error } = await supabaseClient
       .from("songs")
       .select("*, users!public_songs_user_id_fkey(full_name)")

@@ -1,8 +1,8 @@
 import { getArtistSongs, getSong } from "@/actions/song.actions";
 import Loader from "@/components/Loader";
 import MainContent from "@/components/MainContent";
-import { openGraph, twitter } from "@/constants";
 import { getCleanParamValue } from "@/lib/getCleanParamValue";
+import { openGraph, twitter } from "@/lib/metadataGenerator";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import type { Metadata } from "next";
 import { Suspense } from "react";

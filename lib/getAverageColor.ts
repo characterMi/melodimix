@@ -1,6 +1,5 @@
+import { defaultColors } from "@/constants";
 import type { ColorEntity } from "@/store/useSongColors";
-
-const defaultColors = { dark: "#064e3b", light: "#047857", medium: "#065f46" };
 
 export const getAverageColor = (image: HTMLImageElement): ColorEntity => {
   const canvas = document.createElement("canvas");
@@ -37,12 +36,12 @@ export const getAverageColor = (image: HTMLImageElement): ColorEntity => {
 
     const light = `rgb(${Math.min(r + 30, 255)}, ${Math.min(
       g + 30,
-      255
+      255,
     )}, ${Math.min(b + 30, 255)})`;
     const medium = `rgb(${r}, ${g}, ${b})`;
     const dark = `rgb(${Math.max(r - 30, 0)}, ${Math.max(
       g - 30,
-      0
+      0,
     )}, ${Math.max(b - 30, 0)})`;
 
     return { light, medium, dark };

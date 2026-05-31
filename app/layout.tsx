@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from "next";
 import dynamic from "next/dynamic";
 import { Figtree } from "next/font/google";
 
-import { openGraph, twitter } from "@/constants";
+import { defaultColors } from "@/constants";
+import { openGraph, twitter } from "@/lib/metadataGenerator";
 
 import { ModalProvider } from "@/providers/ModalProvider";
 import { SessionProvider } from "@/providers/SessionProvider";
@@ -16,7 +17,7 @@ import "./globals.css";
 
 const PWABehaviorManager = dynamic(
   () => import("../components/PWABehaviorManager "),
-  { ssr: false }
+  { ssr: false },
 );
 
 const figtree = Figtree({ subsets: ["latin"] });
@@ -61,7 +62,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#065f46",
+  themeColor: defaultColors.medium,
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,

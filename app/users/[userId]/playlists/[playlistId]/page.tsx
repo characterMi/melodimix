@@ -1,5 +1,5 @@
 import { getPlaylistSongs } from "@/actions/song.actions";
-import { openGraph, twitter } from "@/constants";
+import { openGraph, twitter } from "@/lib/metadataGenerator";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import type { Metadata } from "next";
 import PageContent from "./PageContent";
@@ -11,7 +11,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { playlist, data } = await getPlaylistSongs(
     params.playlistId,
-    params.userId
+    params.userId,
   );
 
   if (!playlist) {
@@ -63,7 +63,7 @@ const UsersPlaylistPage = async ({
   const { userId, playlistId } = params;
   const { data, errMessage, playlist } = await getPlaylistSongs(
     playlistId,
-    userId
+    userId,
   );
 
   return (

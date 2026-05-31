@@ -1,3 +1,4 @@
+import { defaultColors } from "@/constants";
 import { useSongDuration } from "@/hooks/useSongDuration";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { ColorEntity } from "@/store/useSongColors";
@@ -32,14 +33,14 @@ function Duration({
         className={twMerge(
           "relative pr-3 z-[1] whitespace-nowrap number-text",
           !isMobilePlayer &&
-            "bg-black pl-2 after:w-5 after:h-full after:absolute after:left-full after:top-0 after:bg-gradient-to-r after:from-black after:pointer-events-none"
+            "bg-black pl-2 after:w-5 after:h-full after:absolute after:left-full after:top-0 after:bg-gradient-to-r after:from-black after:pointer-events-none",
         )}
       >
         {currentDuration}
       </p>
 
       <Slider
-        bgColor={colors?.light ?? "#047857"}
+        bgColor={colors?.light ?? defaultColors.light}
         value={currentDurationPercentage}
         onChange={(value) => {
           if (!song) return;
@@ -72,7 +73,7 @@ function Duration({
         type="button"
         className={twMerge(
           "hover:text-neutral-400 focus-visible:text-neutral-400 outline-none",
-          !shouldReduceMotion && "transition-opacity"
+          !shouldReduceMotion && "transition-opacity",
         )}
         aria-label={"Show " + (showTotalDuration ? "Remaining" : "Total")}
       >
@@ -80,7 +81,7 @@ function Duration({
           className={twMerge(
             "relative pl-2 z-[1] whitespace-nowrap number-text",
             !isMobilePlayer &&
-              "bg-black px-2 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:pointer-events-none"
+              "bg-black px-2 after:w-5 after:h-full after:absolute after:right-full after:top-0 after:bg-gradient-to-l after:from-black after:pointer-events-none",
           )}
         >
           <span className={twMerge(showTotalDuration && "opacity-0")}>-</span>
@@ -117,7 +118,7 @@ const KeyboardNavigationHelper = ({
 
       const updateDuration = (
         currDuration: number,
-        type: "forward" | "backward"
+        type: "forward" | "backward",
       ) => {
         const pos =
           type === "backward"
@@ -154,7 +155,7 @@ const KeyboardNavigationHelper = ({
     <div
       className={twMerge(
         "absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 size-2 rounded-full hover:opacity-50 focus-visible:scale-125 active:scale-125 cursor-pointer outline-none",
-        !shouldReduceMotion && "transition"
+        !shouldReduceMotion && "transition",
       )}
       style={{
         left: `${durationPercentage}%`,

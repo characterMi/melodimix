@@ -11,6 +11,7 @@ import Author from "@/components/Author";
 import Header from "@/components/Header";
 import SongCover from "@/components/SongCover";
 
+import { defaultColors } from "@/constants";
 import type { SongWithAuthor } from "@/types";
 import Head from "next/head";
 
@@ -25,7 +26,10 @@ const PageHeader = ({ song }: { song: SongWithAuthor | null }) => {
   return (
     <>
       <Head>
-        <meta name="theme-color" content={colors?.medium ?? "#065f46"} />
+        <meta
+          name="theme-color"
+          content={colors?.medium ?? defaultColors.medium}
+        />
       </Head>
 
       <Header

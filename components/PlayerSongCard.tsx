@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useRef, type SyntheticEvent } from "react";
+import { type SyntheticEvent } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 import { twMerge } from "tailwind-merge";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { changeThemeColor } from "@/lib/changeThemeColor";
+import { usePlayerSongCard } from "@/hooks/usePlayerSongCard";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
-import { usePlayerStore, type PlayerType } from "@/store/usePlayerStore";
+import { type PlayerType } from "@/store/usePlayerStore";
 import { ColorEntity } from "@/store/useSongColors";
 
 import LikeButton from "./LikeButton";
@@ -14,6 +14,7 @@ import PlayerTypeButton from "./PlayerTypeButton";
 import SongItem from "./SongItem";
 import SongOptions from "./SongOptions";
 
+import { useGetDefaultSongColor } from "@/hooks/useGetDefaultSongColor";
 import type { Song } from "@/types";
 
 const PlayerSongCard = ({
@@ -28,56 +29,17 @@ const PlayerSongCard = ({
   playerType: PlayerType;
   songUrl: string;
   children: React.ReactNode;
-  colors: ColorEntity;
+  colors: ColorEntity | undefined;
   onLoad: (event: SyntheticEvent<HTMLImageElement, Event>) => void;
 }) => {
   const isMobile = useMediaQuery("(max-width: 639px)");
-
-  const closeMobilePlayerButton = useRef<HTMLButtonElement>(null);
-  const openMobilePlayerButton = useRef<HTMLButtonElement>(null);
-
-  const { isMobilePlayerOpen, setIsMobilePlayerOpen } = usePlayerStore(
-    (state) => ({
-      isMobilePlayerOpen: state.isMobilePlayerOpen,
-      setIsMobilePlayerOpen: state.setIsMobilePlayerOpen,
-    })
-  );
-
-  const openMobilePlayer = useCallback(() => {
-    if (isMobilePlayerOpen) return;
-
-    changeThemeColor(colors?.medium ?? "#065f46");
-
-    // The reason we don't use router is because the router causes reload on offline mode.
-    window.history.pushState(
-      { isMobilePlayerOpen: true },
-      "",
-      window.location.href + "?isMobilePlayerOpen=true"
-    );
-    setIsMobilePlayerOpen(true);
-  }, [isMobilePlayerOpen, colors]);
-
-  useEffect(() => {
-    if (!isMobilePlayerOpen) return;
-
-    closeMobilePlayerButton.current?.focus();
-
-    const onPopState = () => {
-      changeThemeColor("#065f46");
-      setIsMobilePlayerOpen(false);
-      openMobilePlayerButton.current?.focus();
-    };
-
-    window.addEventListener("popstate", onPopState);
-
-    return () => window.removeEventListener("popstate", onPopState);
-  }, [isMobilePlayerOpen]);
-
-  useEffect(() => {
-    if (!isMobilePlayerOpen) return;
-
-    changeThemeColor(colors?.medium ?? "#065f46");
-  }, [isMobilePlayerOpen, colors]);
+  const defaultColor = useGetDefaultSongColor();
+  const {
+    isMobilePlayerOpen,
+    openMobilePlayer,
+    openMobilePlayerButton,
+    closeMobilePlayerButton,
+  } = usePlayerSongCard(colors, defaultColor);
 
   return (
     <>
@@ -108,7 +70,7 @@ const PlayerSongCard = ({
             <button
               className={twMerge(
                 "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none sm:hidden",
-                !shouldReduceMotion && "transition-opacity"
+                !shouldReduceMotion && "transition-opacity",
               )}
               onClick={openMobilePlayer}
               aria-label="Expand mobile player"
@@ -125,6 +87,7 @@ const PlayerSongCard = ({
 
       <MobilePlayer
         color={colors?.medium ?? "#000000"}
+        defaultColor={defaultColor}
         song={song}
         songUrl={songUrl}
         closeMobilePlayerButton={closeMobilePlayerButton}
