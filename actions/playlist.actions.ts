@@ -1,10 +1,14 @@
 "use server";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import {
+  createClientComponentClient,
+  SupabaseClient,
+} from "@supabase/auth-helpers-nextjs";
 import { revalidatePath } from "next/cache";
 
+import { isAdmin } from "@/lib/isAdmin";
 import { removeDuplicatedSpaces } from "@/lib/removeDuplicatedSpaces";
-import { getCurrentUser, getUserById } from "./user.actions";
+import { getCurrentUser, getUserById, getUserFromDB } from "./user.actions";
 
 import type { Playlist } from "@/types";
 
@@ -136,10 +140,56 @@ export const createPlaylist = async ({
   };
 };
 
-export const deletePlaylist = async (playlistId: number, isPublic: boolean) => {
+const deletePlaylistByAdmin = async (
+  playlistId: number,
+  isPublic: boolean,
+  supabase: SupabaseClient,
+) => {
+  const userFromDB = await getUserFromDB();
+
+  if (!userFromDB || !isAdmin(userFromDB)) return false;
+
+  const { data } = await supabase
+    .from("playlists")
+    .select("user_id")
+    .eq("id", playlistId)
+    .single();
+
+  if (!data) return false;
+
+  const { error } = await supabase
+    .from("playlists")
+    .delete()
+    .eq("id", playlistId);
+
+  if (error) {
+    console.error(error);
+
+    return false;
+  }
+
+  if (isPublic) {
+    revalidatePath(`/users/${data.user_id}/playlists`);
+    revalidatePath(`/users/${data.user_id}/playlists/${playlistId}`);
+    revalidatePath("/playlists");
+    revalidatePath("/search");
+  }
+
+  return true;
+};
+
+export const deletePlaylist = async (
+  playlistId: number,
+  isPublic: boolean,
+  isAdminRequesting?: true,
+) => {
   const { supabase, user } = await getCurrentUser();
 
   if (!user) return false;
+
+  if (isAdminRequesting) {
+    return deletePlaylistByAdmin(playlistId, isPublic, supabase);
+  }
 
   const { error } = await supabase
     .from("playlists")
@@ -166,7 +216,7 @@ export const deletePlaylist = async (playlistId: number, isPublic: boolean) => {
 
 export const updatePlaylist = async (
   newData: Playlist,
-  playlistPoster?: File | null
+  playlistPoster?: File | null,
 ): Promise<
   { error: true; message: string } | { error: false; message: null }
 > => {
@@ -205,7 +255,7 @@ export const updatePlaylist = async (
       .upload(
         newData.poster_path || `poster-${newData.name}-${crypto.randomUUID()}`,
         playlistPoster,
-        { upsert: true }
+        { upsert: true },
       );
 
     if (error) {
@@ -246,7 +296,7 @@ export const updatePlaylist = async (
 };
 
 export const getUserPlaylists = async (
-  userId?: string
+  userId?: string,
 ): Promise<Playlist[] | { playlists: Playlist[]; author: string }> => {
   if (!userId) {
     return getCurrentUserPlaylists();

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { HiOutlineDownload } from "react-icons/hi";
 import { LuTrash2 } from "react-icons/lu";
 import { RxDotsVertical } from "react-icons/rx";
@@ -6,6 +7,8 @@ import { TiUserAddOutline } from "react-icons/ti";
 import { twMerge } from "tailwind-merge";
 
 import { addSongToInterests } from "@/actions/interests.actions";
+import { deleteSong } from "@/actions/song.actions";
+import { isAdmin } from "@/lib/isAdmin";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
@@ -37,7 +40,7 @@ const SongOptions = ({
       className: twMerge(
         "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none",
         !shouldReduceMotion && "transition-opacity",
-        triggerClasses
+        triggerClasses,
       ),
     }}
     contentProps={{
@@ -54,7 +57,7 @@ const SongOptions = ({
       <DropdownMenu.Item
         className={twMerge(
           "font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none flex xss:hidden sm:flex items-center justify-between",
-          !shouldReduceMotion && "transition-opacity"
+          !shouldReduceMotion && "transition-opacity",
         )}
         onClick={() => shareSong(song.title, song.artist, song.id)}
       >
@@ -62,6 +65,8 @@ const SongOptions = ({
         <TbMusicShare size={18} aria-hidden />
       </DropdownMenu.Item>
     )}
+
+    <DeleteSongFromDB songId={song.id} />
 
     <DropdownMenu.Separator />
 
@@ -101,7 +106,7 @@ const SaveToDownloads = ({
     <DropdownMenu.Item
       className={twMerge(
         "font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none flex items-center justify-between",
-        !shouldReduceMotion && "transition-opacity"
+        !shouldReduceMotion && "transition-opacity",
       )}
       onClick={handleDownload}
     >
@@ -134,7 +139,7 @@ const DeleteSongFromCache = ({ songUrl }: { songUrl: string }) => {
     <DropdownMenu.Item
       className={twMerge(
         "font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none flex items-center justify-between",
-        !shouldReduceMotion && "transition-opacity"
+        !shouldReduceMotion && "transition-opacity",
       )}
       onClick={handleDelete}
     >
@@ -172,12 +177,50 @@ const AddToInterests = ({ songId }: { songId: number }) => {
     <DropdownMenu.Item
       className={twMerge(
         "font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none flex items-center justify-between",
-        !shouldReduceMotion && "transition-opacity"
+        !shouldReduceMotion && "transition-opacity",
       )}
       onClick={onClick}
     >
       Add to Interests
       <TiUserAddOutline size={18} aria-hidden />
+    </DropdownMenu.Item>
+  );
+};
+
+const DeleteSongFromDB = ({ songId }: { songId: number }) => {
+  const user = useSessionStore((state) => state.user);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  if (!user) return;
+
+  if (!isAdmin(user)) return;
+
+  const onClick = async () => {
+    if (isDeleting || !user || !isAdmin(user)) return;
+
+    setIsDeleting(true);
+    const hasDeleted = await deleteSong(songId, true);
+
+    if (hasDeleted) {
+      onSuccess("Song deleted successfully!");
+    } else {
+      onError("Couldn't delete the song.");
+    }
+
+    setIsDeleting(false);
+  };
+
+  return (
+    <DropdownMenu.Item
+      className={twMerge(
+        "font-thin !text-rose-500 text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none flex items-center justify-between disabled:opacity-50",
+        !shouldReduceMotion && "transition-opacity",
+      )}
+      onClick={onClick}
+      disabled={isDeleting}
+    >
+      {isDeleting ? "Deleting..." : "Delete this song!"}
+      <LuTrash2 size={18} aria-hidden />
     </DropdownMenu.Item>
   );
 };

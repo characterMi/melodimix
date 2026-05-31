@@ -3,8 +3,9 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { revalidatePath } from "next/cache";
 
+import { isAdmin } from "@/lib/isAdmin";
 import { normalizeArtistName } from "@/lib/normalizeArtistName";
-import { getCurrentUser } from "./user.actions";
+import { getCurrentUser, getUserFromDB } from "./user.actions";
 
 import type { Playlist, Song, SongWithAuthor } from "@/types";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -28,10 +29,61 @@ type UserSongsParams = {
   offset: number;
 } | null;
 
-export const deleteSong = async (songId: number): Promise<boolean> => {
+const deleteSongByAdmin = async (
+  songId: number,
+  supabase: SupabaseClient,
+): Promise<boolean> => {
+  const userFromDB = await getUserFromDB();
+
+  if (!userFromDB || !isAdmin(userFromDB)) return false;
+
+  const { data, error } = await supabase
+    .from("songs")
+    .select("img_path, song_path, user_id")
+    .eq("id", songId)
+    .single();
+
+  if (!data || error) return false;
+
+  const dbDeletionPromise = supabase.from("songs").delete().eq("id", songId);
+  const imageDeletionPromise = supabase.storage
+    .from("images")
+    .remove([data.img_path]);
+  const songDeletionPromise = supabase.storage
+    .from("songs")
+    .remove([data.song_path]);
+
+  const [dbDeletionResult, imageDeletionResult, songDeletionResult] =
+    await Promise.all([
+      dbDeletionPromise,
+      imageDeletionPromise,
+      songDeletionPromise,
+    ]);
+
+  if (
+    dbDeletionResult.error ||
+    imageDeletionResult.error ||
+    songDeletionResult.error
+  )
+    return false;
+
+  revalidatePath(`/users/${data.user_id}`, "layout");
+  revalidatePath("/", "layout");
+
+  return true;
+};
+
+export const deleteSong = async (
+  songId: number,
+  isAdminRequesting?: true,
+): Promise<boolean> => {
   const { supabase, user } = await getCurrentUser();
 
   if (!user) return false;
+
+  if (isAdminRequesting) {
+    return deleteSongByAdmin(songId, supabase);
+  }
 
   const { data, error } = await supabase
     .from("songs")
@@ -76,7 +128,7 @@ export const deleteSong = async (songId: number): Promise<boolean> => {
 };
 
 export const getArtistSongs = async (
-  artistName: string | undefined
+  artistName: string | undefined,
 ): Promise<Song[] | null> => {
   if (!artistName || typeof artistName !== "string") return null;
 
@@ -128,7 +180,7 @@ export const getLikedSongsWithoutLimit = async () => {
 
 export const getLikedSongs = async (
   limit: number = 25,
-  offset: number = 0
+  offset: number = 0,
 ): Promise<SongWithAuthor[]> => {
   const { user, supabase } = await getCurrentUser();
 
@@ -159,7 +211,7 @@ export const getLikedSongs = async (
 };
 
 export const getSong = async (
-  songId: string
+  songId: string,
 ): Promise<SongWithAuthor | null> => {
   const supabase = createClientComponentClient();
 
@@ -178,7 +230,7 @@ export const getSong = async (
 };
 
 export const getSongs = async (
-  limit: number = 20
+  limit: number = 20,
 ): Promise<SongWithAuthor[]> => {
   const supabase = createClientComponentClient();
 
@@ -202,7 +254,7 @@ export const getSongs = async (
 };
 
 export const getUserSongs = async (
-  params: UserSongsParams
+  params: UserSongsParams,
 ): Promise<SongWithAuthor[]> => {
   const { supabase, user } = await getCurrentUser();
 
@@ -239,7 +291,7 @@ export const getUserSongs = async (
 
 const getCurrentUserSongs = async (
   supabase: SupabaseClient,
-  currentUserId: string | undefined
+  currentUserId: string | undefined,
 ) => {
   const { data, error } = await supabase
     .from("songs")
@@ -262,7 +314,7 @@ const getCurrentUserSongs = async (
 
 export const getPlaylistSongs = async (
   playlistId: string,
-  userId?: string
+  userId?: string,
 ): Promise<PlaylistSongsResponse> => {
   if (!userId) {
     return getCurrentUserPlaylistSongs(playlistId);
@@ -326,7 +378,7 @@ export const getPlaylistSongs = async (
 };
 
 const getCurrentUserPlaylistSongs = async (
-  playlistId: string
+  playlistId: string,
 ): Promise<PlaylistSongsResponse> => {
   const { supabase, user } = await getCurrentUser();
 

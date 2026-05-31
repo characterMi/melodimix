@@ -1,5 +1,6 @@
 "use client";
 
+import { getUserFromDB } from "@/actions/user.actions";
 import {
   getPersistSessionCookie,
   setPersistSessionCookie,
@@ -10,12 +11,13 @@ import { BrowserCookieAuthStorageAdapter } from "@supabase/auth-helpers-shared";
 import { useEffect } from "react";
 
 export const SessionProvider = () => {
-  const { updateSessionStore, session, supabase } = useSessionStore(
+  const { updateSessionStore, session, supabase, setUser } = useSessionStore(
     (state) => ({
       updateSessionStore: state.updateStore,
       session: state.session,
       supabase: state.supabaseClient,
-    })
+      setUser: state.setUser,
+    }),
   );
 
   useEffect(() => {
@@ -25,8 +27,11 @@ export const SessionProvider = () => {
       },
     } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
-        if (session && !Boolean(getPersistSessionCookie()))
-          setPersistSessionCookie();
+        if (session) {
+          if (!Boolean(getPersistSessionCookie())) setPersistSessionCookie();
+
+          getUserFromDB().then(setUser);
+        }
 
         updateSessionStore(session, false);
       }
@@ -34,6 +39,7 @@ export const SessionProvider = () => {
       if (event === "SIGNED_OUT") {
         setPersistSessionCookie("", "Thu, 01 Jan 1970 00:00:00 GMT");
         updateSessionStore(null, false);
+        setUser(null);
       }
     });
 
@@ -54,6 +60,8 @@ export const SessionProvider = () => {
       const { data, error: sessionError } = await supabase.auth.getSession();
 
       if (!data.session || sessionError) return;
+
+      setUser(await getUserFromDB());
 
       const {
         data: { session: refreshedSession },

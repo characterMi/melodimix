@@ -12,7 +12,7 @@ import type { User } from "@/types";
 import type { UserMetadata } from "@supabase/supabase-js";
 
 export const updateUserData = async (
-  formData: FormData
+  formData: FormData,
 ): Promise<
   | {
       error: string;
@@ -96,6 +96,20 @@ export const getCurrentUser = async () => {
   } = await supabase.auth.getUser();
 
   return { user, supabase };
+};
+
+export const getUserFromDB = async (): Promise<User | null> => {
+  const { user, supabase } = await getCurrentUser();
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", user?.id)
+    .single();
+
+  if (error) return null;
+
+  return data as User;
 };
 
 export const getUserById = async (userId: string) => {

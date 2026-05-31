@@ -1,16 +1,24 @@
 "use client";
 
+import { deletePlaylist } from "@/actions/playlist.actions";
 import LoadMore from "@/components/LoadMore";
 import NoPlaylistFallback from "@/components/NoSongFallback";
+import Spinner from "@/components/Spinner";
+import VariantButton from "@/components/VariantButton";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { useLoadPlaylistPoster } from "@/hooks/useLoadPlaylistPoster";
+import { isAdmin } from "@/lib/isAdmin";
+import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { usePlaylistsPageData } from "@/store/usePlaylistsPageData";
+import { useSessionStore } from "@/store/useSessionStore";
 import type { Playlist } from "@/types";
 import { getPublicPlaylists } from "@/utils/getPublicPlaylists";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { LuTrash2 } from "react-icons/lu";
 import { twMerge } from "tailwind-merge";
 
 export const LIMIT = 20;
@@ -60,8 +68,8 @@ export const PlaylistsContent = ({
               ? "ended"
               : "loadmore"
             : initialPlaylists.length === LIMIT
-            ? "loadmore"
-            : "ended"
+              ? "loadmore"
+              : "ended"
         }
         currentPage={page}
         setData={addAll}
@@ -79,8 +87,8 @@ const PlaylistCard = ({ playlist }: { playlist: Playlist }) => {
     <Link
       href={`/users/${playlist.user_id}/playlists/${playlist.id}`}
       className={twMerge(
-        "w-full flex flex-col px-1 xss:px-2 bg-neutral-800 outline-none border-none rounded-md hover:-translate-y-[2%] focus-visible:-translate-y-[2%] shadow-2xl",
-        !shouldReduceMotion && "transition-transform duration-500"
+        "w-full flex flex-col px-1 xss:px-2 bg-neutral-800 outline-none border-none rounded-md hover:-translate-y-[2%] focus-visible:-translate-y-[2%] shadow-2xl group",
+        !shouldReduceMotion && "transition-transform duration-500",
       )}
     >
       <div className="rounded-md size-full relative after:absolute after:top-0 after:left-0 after:size-full after:bg-neutral-950 after:rounded-md -mt-1 xss:-mt-2">
@@ -90,6 +98,11 @@ const PlaylistCard = ({ playlist }: { playlist: Playlist }) => {
           width={200}
           height={200}
           className="object-cover size-full rounded-md relative z-[1]"
+        />
+
+        <DeletePlaylist
+          playlistId={playlist.id}
+          isPublic={playlist.is_public}
         />
       </div>
 
@@ -102,10 +115,55 @@ const PlaylistCard = ({ playlist }: { playlist: Playlist }) => {
           {playlist.song_ids.length <= 0
             ? "No song in this playlist"
             : playlist.song_ids.length === 1
-            ? "1 Song"
-            : playlist.song_ids.length + " Songs"}
+              ? "1 Song"
+              : playlist.song_ids.length + " Songs"}
         </p>
       </div>
     </Link>
+  );
+};
+
+const DeletePlaylist = ({
+  playlistId,
+  isPublic,
+}: {
+  playlistId: number;
+  isPublic: boolean;
+}) => {
+  const user = useSessionStore((state) => state.user);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  if (!user) return;
+
+  if (!isAdmin(user)) return;
+
+  const onClick = async () => {
+    if (isDeleting || !user || !isAdmin(user)) return;
+
+    setIsDeleting(true);
+    const hasDeleted = await deletePlaylist(playlistId, isPublic, true);
+
+    if (hasDeleted) {
+      onSuccess("Playlist deleted successfully!");
+    } else {
+      onError("Couldn't delete the playlist for some reason.");
+    }
+
+    setIsDeleting(false);
+  };
+
+  return (
+    <VariantButton
+      variant="error"
+      className="absolute top-2 right-2 size-8 z-[2] rounded-full opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 disabled:opacity-50"
+      disabled={isDeleting}
+      onClick={onClick}
+    >
+      {isDeleting ? (
+        <Spinner />
+      ) : (
+        <LuTrash2 size={20} aria-hidden className="text-white/80" />
+      )}
+    </VariantButton>
   );
 };
