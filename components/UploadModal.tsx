@@ -9,6 +9,7 @@ const UploadModal = () => {
   const {
     isEditing,
     handleSubmit,
+    handleCancel,
     phase,
     uploadProgress,
     isUploadModalOpen,
@@ -69,6 +70,20 @@ const UploadModal = () => {
           {phase === "creating" && "Creating the music..."}
           {phase === "uploading" && "Uploading the files..."}
         </Button>
+
+        {phase !== "none" && (
+          <Button
+            disabled={phase === "creating"}
+            type="button"
+            onClick={(e) => {
+              e.currentTarget.textContent = "Cancelling...";
+              handleCancel();
+            }}
+            className="from-rose-500 to-rose-600"
+          >
+            Cancel uploading
+          </Button>
+        )}
       </form>
     </Modal>
   );

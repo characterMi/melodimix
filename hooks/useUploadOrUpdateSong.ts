@@ -1,6 +1,6 @@
 import { useSession } from "@/hooks/useSession";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
@@ -18,6 +18,7 @@ export type UploadPhase =
   | "uploading";
 
 export const useUploadOrUpdateSong = () => {
+  const abortController = useRef(new AbortController());
   const [phase, setPhase] = useState<UploadPhase>("none");
   const [uploadProgress, setUploadProgress] = useState({
     song: 0,
@@ -42,7 +43,7 @@ export const useUploadOrUpdateSong = () => {
     (type: keyof typeof uploadProgress, progress: number) => {
       setUploadProgress((prev) => ({ ...prev, [type]: progress }));
     },
-    []
+    [],
   );
 
   const handleSubmit = async (formData: FormData) => {
@@ -56,11 +57,12 @@ export const useUploadOrUpdateSong = () => {
 
     if (!navigator.onLine) {
       onError(
-        "You're currently offline, make sure you're online, then try again."
+        "You're currently offline, make sure you're online, then try again.",
       );
       return;
     }
 
+    abortController.current = new AbortController();
     setPhase("validating");
 
     if (isEditing) {
@@ -68,13 +70,14 @@ export const useUploadOrUpdateSong = () => {
         formData,
         initialData,
         setPhase,
-        onUploadProgress
+        onUploadProgress,
+        abortController.current,
       );
 
       setPhase("none");
 
       if (error) {
-        onError(error);
+        if (error !== "AbortSignal") onError(error);
         return;
       }
 
@@ -83,13 +86,14 @@ export const useUploadOrUpdateSong = () => {
       const { error, uploadedSong } = await uploadSong(
         formData,
         setPhase,
-        onUploadProgress
+        onUploadProgress,
+        abortController.current,
       );
 
       setPhase("none");
 
       if (error) {
-        onError(error);
+        if (error !== "AbortSignal") onError(error);
         return;
       }
 
@@ -102,9 +106,17 @@ export const useUploadOrUpdateSong = () => {
     onClose();
   };
 
+  const handleCancel = () => {
+    if (phase === "creating") return;
+
+    abortController.current.abort();
+    onSuccess("Operation cancelled.");
+  };
+
   return {
     isEditing,
     handleSubmit,
+    handleCancel,
     phase,
     uploadProgress,
     isUploadModalOpen: isOpen,

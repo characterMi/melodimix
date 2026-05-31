@@ -6,10 +6,13 @@ import { uploadFile } from "@/lib/uploadFile";
 import type { UploadPhase } from "@/hooks/useUploadOrUpdateSong";
 import type { SongWithAuthor } from "@/types";
 
+const ABORT_TEXT = "AbortSignal";
+
 export const uploadSong = async (
   formData: FormData,
   onPhaseChange: (phase: UploadPhase) => void,
-  onUploadProgress: (type: "song" | "image", progress: number) => void
+  onUploadProgress: (type: "song" | "image", progress: number) => void,
+  controller: AbortController,
 ): Promise<
   | {
       error: string;
@@ -65,6 +68,11 @@ export const uploadSong = async (
     return { error: "Only .mp3 audio files are allowed." };
   }
 
+  // Before uploading, check if the user has aborted the request
+  if (controller.signal.aborted) {
+    return { error: ABORT_TEXT };
+  }
+
   onPhaseChange("uploading");
 
   const uniqueId = crypto.randomUUID();
@@ -91,20 +99,26 @@ export const uploadSong = async (
 
   const uploadSongPromise = uploadFile(
     { file: songFile, type: "song", uploadUrl: songData.signedUrl },
-    onUploadProgress
+    onUploadProgress,
+    controller.signal,
   );
   const uploadImagePromise = uploadFile(
     { file: imageFile, type: "image", uploadUrl: imageData.signedUrl },
-    onUploadProgress
+    onUploadProgress,
+    controller.signal,
   );
 
   const [{ error: songUploadError }, { error: imageUploadError }] =
     await Promise.all([uploadSongPromise, uploadImagePromise]);
 
-  if (songUploadError || imageUploadError) {
+  if (songUploadError || imageUploadError || controller.signal.aborted) {
     // Cleanup any uploaded files (no need for await)
     supabaseClient.storage.from("songs").remove([songData.path]);
     supabaseClient.storage.from("images").remove([imageData.path]);
+
+    if (controller.signal.aborted) {
+      return { error: ABORT_TEXT };
+    }
 
     return {
       error:
@@ -128,11 +142,16 @@ export const uploadSong = async (
     .from("songs")
     .insert(newSong)
     .select("id")
+    .abortSignal(controller.signal)
     .single();
 
-  if (supabaseError) {
+  if (supabaseError || controller.signal.aborted) {
     supabaseClient.storage.from("songs").remove([songData.path]);
     supabaseClient.storage.from("images").remove([imageData.path]);
+
+    if (controller.signal.aborted) {
+      return { error: ABORT_TEXT };
+    }
 
     return { error: "Something went wrong while creating the song!" };
   }

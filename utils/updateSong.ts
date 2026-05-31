@@ -6,11 +6,14 @@ import { uploadFile } from "@/lib/uploadFile";
 import type { UploadPhase } from "@/hooks/useUploadOrUpdateSong";
 import type { Song, SongWithAuthor } from "@/types";
 
+const ABORT_TEXT = "AbortSignal";
+
 export const updateSong = async (
   newData: FormData,
   song: Song,
   onPhaseChange: (phase: UploadPhase) => void,
-  onUploadProgress: (type: "song" | "image", progress: number) => void
+  onUploadProgress: (type: "song" | "image", progress: number) => void,
+  controller: AbortController,
 ): Promise<
   | {
       error: string;
@@ -52,6 +55,11 @@ export const updateSong = async (
     return { error: "Either Title or Artist is too long or too short!" };
   }
 
+  // Check if the operation is cancelled before updating
+  if (controller.signal.aborted) {
+    return { error: ABORT_TEXT };
+  }
+
   const dbUpdatePromise = supabaseClient
     .from("songs")
     .update({
@@ -59,7 +67,8 @@ export const updateSong = async (
       artist: removeDuplicatedSpaces(artist),
     })
     .eq("user_id", user.id)
-    .eq("id", song.id);
+    .eq("id", song.id)
+    .abortSignal(controller.signal);
 
   // @ts-ignore
   const updates: Promise<any>[] = [dbUpdatePromise];
@@ -71,7 +80,7 @@ export const updateSong = async (
 
     const { data, error } = await supabaseClient.storage
       .from("images")
-      .createSignedUploadUrl(song.img_path);
+      .createSignedUploadUrl(song.img_path, { upsert: true });
 
     if (error) {
       return { error: "Image upload failed." };
@@ -80,8 +89,9 @@ export const updateSong = async (
     updates.push(
       uploadFile(
         { file: imageFile, type: "image", uploadUrl: data.signedUrl },
-        onUploadProgress
-      )
+        onUploadProgress,
+        controller.signal,
+      ),
     );
   }
 
@@ -96,7 +106,7 @@ export const updateSong = async (
 
     const { data, error } = await supabaseClient.storage
       .from("songs")
-      .createSignedUploadUrl(song.song_path);
+      .createSignedUploadUrl(song.song_path, { upsert: true });
 
     if (error) {
       return { error: "Song upload failed." };
@@ -105,8 +115,9 @@ export const updateSong = async (
     updates.push(
       uploadFile(
         { file: songFile, type: "song", uploadUrl: data.signedUrl },
-        onUploadProgress
-      )
+        onUploadProgress,
+        controller.signal,
+      ),
     );
   }
 
@@ -123,8 +134,12 @@ export const updateSong = async (
     console.error(
       dbUpdateResult.error,
       imageUpdateResult?.error,
-      songUpdateResult?.error
+      songUpdateResult?.error,
     );
+
+    if (controller.signal.aborted) {
+      return { error: ABORT_TEXT };
+    }
 
     return { error: "Something went wrong while updating the song!" };
   }

@@ -6,11 +6,16 @@ export const uploadFile = (
     file: File;
     type: FileType;
   },
-  onUploadProgress: (type: FileType, progress: number) => void
+  onUploadProgress: (type: FileType, progress: number) => void,
+  abortSignal?: AbortSignal,
 ): Promise<{ error: null | Error }> => {
   const { uploadUrl, file, type } = fileData;
 
   return new Promise((res, rej) => {
+    if (abortSignal?.aborted) {
+      return rej({ error: new Error("User has aborted the request.") });
+    }
+
     const xhr = new XMLHttpRequest();
     xhr.open("PUT", uploadUrl);
 
@@ -21,8 +26,25 @@ export const uploadFile = (
       onUploadProgress(type, percent);
     });
 
-    xhr.onload = () => res({ error: null });
+    abortSignal?.addEventListener(
+      "abort",
+      () => {
+        xhr.abort();
+      },
+      { once: true },
+    );
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        res({ error: null });
+      } else {
+        rej({
+          error: new Error(`${type} upload failed.`),
+        });
+      }
+    };
     xhr.onerror = () => rej({ error: new Error(`${type} upload failed.`) });
+    xhr.onabort = () => rej({ error: new Error(`${type} upload aborted.`) });
 
     xhr.send(file);
   });
