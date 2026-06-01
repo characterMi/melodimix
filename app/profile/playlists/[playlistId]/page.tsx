@@ -1,4 +1,5 @@
-import { getPlaylistSongs } from "@/actions/song.actions";
+import { getPlaylistSongs } from "@/features/song-related/actions";
+
 import PageContent from "./PageContent";
 
 export async function generateMetadata({

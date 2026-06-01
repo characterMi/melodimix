@@ -1,16 +1,17 @@
 "use client";
 
-import { deleteInterest } from "@/actions/interests.actions";
-import NoSongFallback from "@/components/NoSongFallback";
-import SongItem from "@/components/SongItem";
-import Spinner from "@/components/Spinner";
-import VariantButton from "@/components/VariantButton";
-import { useOnPlay } from "@/hooks/useOnPlay";
-import { onError } from "@/lib/onError";
-import { onSuccess } from "@/lib/onSuccess";
-import type { Song } from "@/types";
 import { useState } from "react";
 import { FiTrash2 } from "react-icons/fi";
+
+import { deleteInterest } from "@/features/interests/actions";
+import { useOnPlay } from "@/features/player/hooks/useOnPlay";
+import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
+
+import NoSongFallback from "@/components/NoDataFallback";
+import Spinner from "@/components/Spinner";
+import VariantButton from "@/components/VariantButton";
+import SongItem from "@/features/song-related/components/SongItem";
 
 const DeleteInterest = ({
   songTitle,
@@ -26,7 +27,7 @@ const DeleteInterest = ({
 
     if (!navigator.onLine) {
       onError(
-        "You're currently offline, make sure you're online, then try again."
+        "You're currently offline, make sure you're online, then try again.",
       );
       return;
     }

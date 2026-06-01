@@ -1,14 +1,17 @@
-import { getArtistSongs, getSong } from "@/actions/song.actions";
-import Loader from "@/components/Loader";
-import MainContent from "@/components/MainContent";
-import { getCleanParamValue } from "@/lib/getCleanParamValue";
-import { openGraph, twitter } from "@/lib/metadataGenerator";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import type { Metadata } from "next";
 import { Suspense } from "react";
+
+import { getCleanParamValue } from "@/features/search/lib/getCleanParamValue";
+import { getArtistSongs, getSong } from "@/features/song-related/actions";
+import { openGraph, twitter } from "@/lib/metadataGenerator";
+
+import Loader from "@/components/Loader";
+import MainContent from "@/features/scroll-container/components/MainContent";
 import PageContent from "./components/PageContent";
 import PageHeader from "./components/PageHeader";
 import SongButtons from "./components/SongButtons";
+
+import type { Metadata } from "next";
 
 export async function generateMetadata({
   params,

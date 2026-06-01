@@ -1,12 +1,12 @@
 import Image from "next/image";
 import { Suspense } from "react";
 
-import { getPublicPlaylists } from "@/actions/playlist.actions";
+import { getPublicPlaylists } from "@/features/playlist/actions";
 import PlaylistImage from "@/public/images/playlist.png";
 
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
-import MainContent from "@/components/MainContent";
+import MainContent from "@/features/scroll-container/components/MainContent";
 import { PlaylistsContent } from "./PlaylistsContent";
 
 export const revalidate = 60 * 60 * 24;

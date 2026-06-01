@@ -1,14 +1,15 @@
 "use client";
 
-import NoSongFallback from "@/components/NoSongFallback";
-import SongItem from "@/components/SongItem";
-import useOnPlay from "@/hooks/useOnPlay";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
-import { sharePlaylist } from "@/lib/share";
-import { Playlist, SongWithAuthor } from "@/types";
 import Link from "next/link";
 import { IoShareSocialOutline } from "react-icons/io5";
 import { twMerge } from "tailwind-merge";
+
+import { shouldReduceMotion } from "@/lib/reduceMotion";
+import { sharePlaylist } from "@/lib/share";
+
+import NoSongFallback from "@/components/NoDataFallback";
+import useOnPlay from "@/features/player/hooks/useOnPlay";
+import SongItem from "@/features/song-related/components/SongItem";
 
 type Props = {
   songs: SongWithAuthor[];
@@ -46,7 +47,7 @@ const PageContent = ({ songs, errMessage, playlist }: Props) => {
             href={`/users/${playlist?.user_id}`}
             className={twMerge(
               "gradient-text hover:opacity-50 focus-visible:opacity-50 outline-none",
-              !shouldReduceMotion && "transition-opacity"
+              !shouldReduceMotion && "transition-opacity",
             )}
           >
             {playlist?.author}
@@ -56,7 +57,7 @@ const PageContent = ({ songs, errMessage, playlist }: Props) => {
         <button
           className={twMerge(
             "hover:opacity-50 focus-visible:opacity-50 outline-none mt-2",
-            !shouldReduceMotion && "transition-opacity"
+            !shouldReduceMotion && "transition-opacity",
           )}
           aria-label="Share the playlist"
           onClick={() => sharePlaylist(playlist!.name, playlist!.author)}

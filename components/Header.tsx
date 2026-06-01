@@ -1,13 +1,15 @@
 "use client";
 
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { BiSearch } from "react-icons/bi";
 import { HiHome } from "react-icons/hi";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
-import AuthButtons from "./AuthButtons";
+
+import { shouldReduceMotion } from "@/lib/reduceMotion";
+
+import AuthButtons from "../features/auth/components/AuthButtons";
 
 const Header = ({
   children,
@@ -24,7 +26,7 @@ const Header = ({
     <header
       className={twMerge(
         "h-fit bg-gradient-to-b from-emerald-800 p-6",
-        className
+        className,
       )}
       style={styles}
     >
@@ -34,7 +36,7 @@ const Header = ({
             onClick={() => router.back()}
             className={twMerge(
               "rounded-full bg-black flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none p-[1.5px]",
-              !shouldReduceMotion && "transition-opacity"
+              !shouldReduceMotion && "transition-opacity",
             )}
             aria-label="Go back to the previous page (from browser's history)"
           >
@@ -45,7 +47,7 @@ const Header = ({
             onClick={() => router.forward()}
             className={twMerge(
               "rounded-full bg-black flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none p-[1.5px]",
-              !shouldReduceMotion && "transition-opacity"
+              !shouldReduceMotion && "transition-opacity",
             )}
             aria-label="Go to the next page (from browser's history)"
           >
@@ -59,7 +61,7 @@ const Header = ({
             href="/"
             className={twMerge(
               "rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none",
-              !shouldReduceMotion && "transition-opacity"
+              !shouldReduceMotion && "transition-opacity",
             )}
             aria-label="Go to home page"
           >
@@ -71,7 +73,7 @@ const Header = ({
             href="/search"
             className={twMerge(
               "rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none",
-              !shouldReduceMotion && "transition-opacity"
+              !shouldReduceMotion && "transition-opacity",
             )}
             aria-label="Go to search page"
           >

@@ -1,11 +1,12 @@
-import { getLikedSongs } from "@/actions/song.actions";
-import Header from "@/components/Header";
-import Loader from "@/components/Loader";
-import MainContent from "@/components/MainContent";
-import LikedImage from "@/public/images/liked.png";
-import type { SongWithAuthor } from "@/types";
 import Image from "next/image";
 import { Suspense } from "react";
+
+import { getLikedSongs } from "@/features/song-related/actions";
+import LikedImage from "@/public/images/liked.png";
+
+import Header from "@/components/Header";
+import Loader from "@/components/Loader";
+import MainContent from "@/features/scroll-container/components/MainContent";
 import { LikedContent } from "./components/LikedContent";
 
 export const metadata = {

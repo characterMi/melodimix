@@ -1,35 +1,39 @@
 "use client";
 
+import Head from "next/head";
 import { twMerge } from "tailwind-merge";
 
-import { useLoadImage } from "@/hooks/useLoadImage";
-import { getAverageColor } from "@/lib/getAverageColor";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
-import { useSongColors } from "@/store/useSongColors";
-
-import Author from "@/components/Author";
-import Header from "@/components/Header";
-import SongCover from "@/components/SongCover";
-
 import { defaultColors } from "@/constants";
-import type { SongWithAuthor } from "@/types";
-import Head from "next/head";
+import { getAverageColor } from "@/features/player/lib/getAverageColor";
+import { usePlayerStore } from "@/features/player/store/usePlayerStore";
+import { useSongColors } from "@/features/player/store/useSongColors";
+import { useLoadImage } from "@/features/song-related/hooks/useLoadImage";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
+
+import Header from "@/components/Header";
+import Author from "@/features/song-related/components/Author";
+import SongCover from "@/features/song-related/components/SongCover";
 
 const PageHeader = ({ song }: { song: SongWithAuthor | null }) => {
   const { colors, setColors } = useSongColors((state) => ({
     colors: state.colors[song?.id ?? NaN],
     setColors: state.setSongColors,
   }));
+  const isMobilePlayerOpen = usePlayerStore(
+    (state) => state.isMobilePlayerOpen,
+  );
 
   const image = useLoadImage(song);
 
   return (
     <>
       <Head>
-        <meta
-          name="theme-color"
-          content={colors?.medium ?? defaultColors.medium}
-        />
+        {!isMobilePlayerOpen && (
+          <meta
+            name="theme-color"
+            content={colors?.medium ?? defaultColors.medium}
+          />
+        )}
       </Head>
 
       <Header

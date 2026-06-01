@@ -1,5 +1,5 @@
-import { getUserSongs } from "@/actions/song.actions";
-import type { Song } from "@/types";
+import { getUserSongs } from "@/features/song-related/actions";
+
 import PageContent from "./components/PageContent";
 
 const UsersPage = async ({ params }: { params: { userId: string } }) => {

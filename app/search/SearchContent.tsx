@@ -2,15 +2,13 @@
 
 import { useRouter } from "next/navigation";
 
-import useOnPlay from "@/hooks/useOnPlay";
-import { useSearchData } from "@/hooks/useSearchData";
+import useOnPlay from "@/features/player/hooks/useOnPlay";
+import { useSearchData } from "@/features/search/hooks/useSearchData";
 
 import FlipArrow from "@/components/FlipArrow";
-import PlaylistCard from "@/components/PlaylistCard";
-import NoDataFallback from "../../components/NoSongFallback";
-import SongItem from "../../components/SongItem";
-
-import type { Playlist, SongWithAuthor } from "@/types";
+import NoDataFallback from "@/components/NoDataFallback";
+import PlaylistCard from "@/features/playlist/components/PlaylistCard";
+import SongItem from "@/features/song-related/components/SongItem";
 
 const SearchContent = ({
   songs,
@@ -24,7 +22,7 @@ const SearchContent = ({
       songs,
       playlists,
     },
-    true
+    true,
   );
 
   if (searchResult.length === 0)

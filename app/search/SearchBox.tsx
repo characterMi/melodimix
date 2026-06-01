@@ -1,14 +1,16 @@
 "use client";
 
-import DropdownMenu from "@/components/DropdownMenu";
-import SearchInput from "@/components/SearchInput";
-import Switch from "@/components/Switch";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
-import { useSearch } from "@/store/useSearch";
 import { type MouseEvent, useCallback } from "react";
 import { GoSortAsc, GoSortDesc } from "react-icons/go";
 import { MdFilterList } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
+
+import { useSearch } from "@/features/search/store/useSearch";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
+
+import DropdownMenu from "@/components/DropdownMenu";
+import Switch from "@/components/Switch";
+import SearchInput from "@/features/search/components/SearchInput";
 
 const filterItems = {
   songs: [
@@ -31,7 +33,7 @@ const SearchBox = () => {
   const stopPropagation = useCallback(
     (e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) =>
       e.stopPropagation(),
-    []
+    [],
   );
 
   return (
@@ -122,7 +124,7 @@ const SearchBox = () => {
           <DropdownMenu.Item
             className={twMerge(
               "flex items-center justify-between hover:opacity-50 focus-visible:opacity-50 font-thin cursor-pointer outline-none",
-              !shouldReduceMotion && "transition-opacity"
+              !shouldReduceMotion && "transition-opacity",
             )}
             onClick={(e) => {
               stopPropagation(e);

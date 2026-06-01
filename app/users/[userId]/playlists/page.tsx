@@ -1,7 +1,7 @@
-import { getUserPlaylists } from "@/actions/playlist.actions";
-import { getUserById } from "@/actions/user.actions";
-import { Playlist } from "@/types";
-import PageContent from "./components/PageContent";
+import { getUserPlaylists } from "@/features/playlist/actions";
+import { getUserById } from "@/features/user-related/actions";
+
+import PageContent from "./PageContent";
 
 export async function generateMetadata({
   params,

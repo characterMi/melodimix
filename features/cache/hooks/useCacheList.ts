@@ -1,0 +1,46 @@
+import { useManageCacheModal } from "@/features/cache/store/useManageCacheModal";
+import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
+import { useState } from "react";
+
+export const useCacheList = (cacheNames: CacheKeys[], cacheData: CacheData) => {
+  const closeModal = useManageCacheModal((state) => state.onClose);
+  const [selectedCaches, setSelectedCaches] = useState(cacheNames);
+
+  const selectedCacheSize = selectedCaches.reduce(
+    (sum, cacheName) => sum + cacheData[cacheName],
+    0,
+  );
+
+  function handleClickOnCacheItem(
+    cacheName: CacheKeys,
+    isCurrentItemSelected: boolean,
+  ) {
+    if (isCurrentItemSelected) {
+      setSelectedCaches((prev) => prev.filter((item) => item !== cacheName));
+    } else {
+      setSelectedCaches((prev) => [...prev, cacheName]);
+    }
+  }
+
+  async function handleClearCache() {
+    if (selectedCacheSize === 0) return;
+
+    try {
+      await Promise.allSettled(
+        selectedCaches.map((name) => caches.delete(name)),
+      );
+      onSuccess("Cache cleared successfully.");
+      closeModal();
+    } catch (error) {
+      onError("Something went wrong while clearing the cache.");
+    }
+  }
+
+  return {
+    selectedCaches,
+    selectedCacheSize,
+    handleClearCache,
+    handleClickOnCacheItem,
+  };
+};

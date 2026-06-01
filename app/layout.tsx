@@ -5,25 +5,25 @@ import { Figtree } from "next/font/google";
 import { defaultColors } from "@/constants";
 import { openGraph, twitter } from "@/lib/metadataGenerator";
 
-import { ModalProvider } from "@/providers/ModalProvider";
-import { SessionProvider } from "@/providers/SessionProvider";
+import { SessionProvider } from "@/features/auth/providers/SessionProvider";
+import { ModalProvider } from "@/features/modal/providers/ModalProvider";
 import { ToasterProvider } from "@/providers/ToasterProvider";
 
-import Player from "@/components/Player";
-import Sidebar from "@/components/Sidebar";
+import Player from "@/features/player/components/Player";
+import Sidebar from "@/features/sidebar/components/Sidebar";
 import Root from "./root";
 
 import "./globals.css";
 
 const PWABehaviorManager = dynamic(
-  () => import("../components/PWABehaviorManager "),
+  () => import("../features/pwa/components/PWABehaviorManager "),
   { ssr: false },
 );
 
 const figtree = Figtree({ subsets: ["latin"] });
 
 export const APP_NAME = "MelodiMix";
-const DESCRIPTION =
+export const DESCRIPTION =
   "MelodiMix: Your Ultimate Music Destination. Discover personalized playlists, seamless streaming, and a vibrant music community. Join us today for the perfect soundtrack to every moment.";
 
 export const metadata: Metadata = {

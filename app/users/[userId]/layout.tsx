@@ -1,9 +1,11 @@
-import { getUserById } from "@/actions/user.actions";
-import Header from "@/components/Header";
-import MainContent from "@/components/MainContent";
-import { openGraph, twitter } from "@/lib/metadataGenerator";
 import { Metadata } from "next";
 import Image from "next/image";
+
+import { getUserById } from "@/features/user-related/actions";
+import { openGraph, twitter } from "@/lib/metadataGenerator";
+
+import Header from "@/components/Header";
+import MainContent from "@/features/scroll-container/components/MainContent";
 import GradientLink from "./(main)/components/GradientLink";
 
 export async function generateMetadata({

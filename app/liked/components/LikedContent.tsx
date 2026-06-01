@@ -1,17 +1,18 @@
 "use client";
 
-import { getLikedSongs } from "@/actions/song.actions";
-import LikeButton from "@/components/LikeButton";
-import Loader from "@/components/Loader";
-import LoadMore from "@/components/LoadMore";
-import NoSongFallback from "@/components/NoSongFallback";
-import SongItem from "@/components/SongItem";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
-import useOnPlay from "@/hooks/useOnPlay";
-import { useSession } from "@/hooks/useSession";
-import { useLikedPageData } from "@/store/useLikedPageData";
-import type { Song } from "@/types";
 import { useMemo } from "react";
+
+import { useSession } from "@/features/auth/hooks/useSession";
+import { useInfiniteScroll } from "@/features/infinite-scroll/hooks/useInfiniteScroll";
+import { useLikedPageData } from "@/features/infinite-scroll/store/useLikedPageData";
+import useOnPlay from "@/features/player/hooks/useOnPlay";
+import { getLikedSongs } from "@/features/song-related/actions";
+
+import Loader from "@/components/Loader";
+import NoSongFallback from "@/components/NoDataFallback";
+import LoadMore from "@/features/infinite-scroll/components/LoadMore";
+import LikeButton from "@/features/like-song/components/LikeButton";
+import SongItem from "@/features/song-related/components/SongItem";
 
 export const LIMIT = 25;
 
@@ -86,8 +87,8 @@ export const LikedContent = ({ initialSongs }: { initialSongs: Song[] }) => {
               ? "ended"
               : "loadmore"
             : initialSongs.length === LIMIT
-            ? "loadmore"
-            : "ended"
+              ? "loadmore"
+              : "ended"
         }
         currentPage={page}
         setData={addAll}

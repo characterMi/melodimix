@@ -1,25 +1,26 @@
 "use client";
 
-import { deletePlaylist } from "@/actions/playlist.actions";
-import LoadMore from "@/components/LoadMore";
-import NoPlaylistFallback from "@/components/NoSongFallback";
-import Spinner from "@/components/Spinner";
-import VariantButton from "@/components/VariantButton";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
-import { useLoadPlaylistPoster } from "@/hooks/useLoadPlaylistPoster";
-import { isAdmin } from "@/lib/isAdmin";
-import { onError } from "@/lib/onError";
-import { onSuccess } from "@/lib/onSuccess";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
-import { usePlaylistsPageData } from "@/store/usePlaylistsPageData";
-import { useSessionStore } from "@/store/useSessionStore";
-import type { Playlist } from "@/types";
-import { getPublicPlaylists } from "@/utils/getPublicPlaylists";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { LuTrash2 } from "react-icons/lu";
 import { twMerge } from "tailwind-merge";
+
+import { useSessionStore } from "@/features/auth/store/useSessionStore";
+import { useInfiniteScroll } from "@/features/infinite-scroll/hooks/useInfiniteScroll";
+import { usePlaylistsPageData } from "@/features/infinite-scroll/store/usePlaylistsPageData";
+import { deletePlaylist } from "@/features/playlist/actions";
+import { useLoadPlaylistPoster } from "@/features/playlist/hooks/useLoadPlaylistPoster";
+import { getPublicPlaylists } from "@/features/playlist/utils/getPublicPlaylists";
+import { isAdmin } from "@/lib/isAdmin";
+import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
+
+import NoPlaylistFallback from "@/components/NoDataFallback";
+import Spinner from "@/components/Spinner";
+import VariantButton from "@/components/VariantButton";
+import LoadMore from "@/features/infinite-scroll/components/LoadMore";
 
 export const LIMIT = 20;
 

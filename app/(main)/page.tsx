@@ -1,8 +1,10 @@
-import { getSongs } from "@/actions/song.actions";
+import { Suspense } from "react";
+
+import { getSongs } from "@/features/song-related/actions";
+
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
-import MainContent from "@/components/MainContent";
-import { Suspense } from "react";
+import MainContent from "@/features/scroll-container/components/MainContent";
 import LikedPageLink from "./components/LikedPageLink";
 import PageContent from "./components/PageContent";
 

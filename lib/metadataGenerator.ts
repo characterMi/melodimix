@@ -1,5 +1,6 @@
-import { APP_NAME } from "@/app/layout";
 import { Metadata } from "next";
+
+import { APP_NAME } from "@/app/layout";
 
 export const openGraph = (
   props: Metadata["openGraph"],

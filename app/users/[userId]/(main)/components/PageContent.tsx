@@ -1,18 +1,19 @@
 "use client";
 
-import { getUserSongs } from "@/actions/song.actions";
-import FlipArrow from "@/components/FlipArrow";
-import LoadMore from "@/components/LoadMore";
-import NoSongFallback from "@/components/NoSongFallback";
-import SongItem from "@/components/SongItem";
-import { useOnPlay } from "@/hooks/useOnPlay";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo } from "react";
+
 import {
   useCurrentUserPageData,
   useUsersPageData,
-} from "@/store/useUsersPageData";
-import type { Song } from "@/types";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo } from "react";
+} from "@/features/infinite-scroll/store/useUsersPageData";
+import { useOnPlay } from "@/features/player/hooks/useOnPlay";
+import { getUserSongs } from "@/features/song-related/actions";
+
+import FlipArrow from "@/components/FlipArrow";
+import NoSongFallback from "@/components/NoDataFallback";
+import LoadMore from "@/features/infinite-scroll/components/LoadMore";
+import SongItem from "@/features/song-related/components/SongItem";
 
 const LIMIT = 20;
 
@@ -68,7 +69,7 @@ const PageContent = ({
         initialSongs,
         initialSongs.length === LIMIT
           ? (pageData?.page ?? 0) + 1
-          : pageData?.page ?? 0
+          : (pageData?.page ?? 0),
       );
     }
   }, []);
@@ -107,8 +108,8 @@ const PageContent = ({
               ? "ended"
               : "loadmore"
             : initialSongs.length === LIMIT
-            ? "loadmore"
-            : "ended"
+              ? "loadmore"
+              : "ended"
         }
         currentPage={pageData?.page ?? 0}
         setData={(songs, page) => addAll(userId, songs, page)}

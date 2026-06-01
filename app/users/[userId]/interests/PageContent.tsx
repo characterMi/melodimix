@@ -1,11 +1,11 @@
 "use client";
 
-import FlipArrow from "@/components/FlipArrow";
-import NoSongFallback from "@/components/NoSongFallback";
-import SongItem from "@/components/SongItem";
-import useOnPlay from "@/hooks/useOnPlay";
-import { SongWithAuthor } from "@/types";
 import { useRouter } from "next/navigation";
+
+import FlipArrow from "@/components/FlipArrow";
+import NoSongFallback from "@/components/NoDataFallback";
+import useOnPlay from "@/features/player/hooks/useOnPlay";
+import SongItem from "@/features/song-related/components/SongItem";
 
 const PageContent = ({
   songs,

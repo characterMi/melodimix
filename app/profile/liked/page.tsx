@@ -1,4 +1,5 @@
-import { getLikedSongsWithoutLimit } from "@/actions/song.actions";
+import { getLikedSongsWithoutLimit } from "@/features/song-related/actions";
+
 import PageContent from "./PageContent";
 
 export const metadata = {

@@ -1,17 +1,18 @@
 "use client";
 
-import { updatePlaylist } from "@/actions/playlist.actions";
-import NoSongFallback from "@/components/NoSongFallback";
-import SongItem from "@/components/SongItem";
-import Spinner from "@/components/Spinner";
-import VariantButton from "@/components/VariantButton";
-import { useOnPlay } from "@/hooks/useOnPlay";
-import { onError } from "@/lib/onError";
-import { onSuccess } from "@/lib/onSuccess";
-import { usePlaylistsPageData } from "@/store/usePlaylistsPageData";
-import type { Playlist, SongWithAuthor } from "@/types";
 import { useState } from "react";
 import { FiTrash2 } from "react-icons/fi";
+
+import { usePlaylistsPageData } from "@/features/infinite-scroll/store/usePlaylistsPageData";
+import { useOnPlay } from "@/features/player/hooks/useOnPlay";
+import { updatePlaylist } from "@/features/playlist/actions";
+import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
+
+import NoSongFallback from "@/components/NoDataFallback";
+import Spinner from "@/components/Spinner";
+import VariantButton from "@/components/VariantButton";
+import SongItem from "@/features/song-related/components/SongItem";
 
 const DeleteSongFromPlaylistButton = ({
   songTitle,
@@ -28,7 +29,7 @@ const DeleteSongFromPlaylistButton = ({
 
     if (!navigator.onLine) {
       onError(
-        "You're currently offline, make sure you're online, then try again."
+        "You're currently offline, make sure you're online, then try again.",
       );
       return;
     }

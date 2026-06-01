@@ -2,13 +2,11 @@
 
 import { useRouter } from "next/navigation";
 
-import useOnPlay from "@/hooks/useOnPlay";
+import useOnPlay from "@/features/player/hooks/useOnPlay";
 
 import FlipArrow from "@/components/FlipArrow";
-import NoSongFallback from "@/components/NoSongFallback";
-import SongItem from "@/components/SongItem";
-
-import type { Song } from "@/types";
+import NoSongFallback from "@/components/NoDataFallback";
+import SongItem from "@/features/song-related/components/SongItem";
 
 const PageContent = ({
   songs,

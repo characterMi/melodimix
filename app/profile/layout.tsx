@@ -1,14 +1,15 @@
-import { getUserPlaylists } from "@/actions/playlist.actions";
+import Image from "next/image";
+import { type ReactNode, Suspense } from "react";
+
+import { getUserPlaylists } from "@/features/playlist/actions";
+
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
-import MainContent from "@/components/MainContent";
+import MainContent from "@/features/scroll-container/components/MainContent";
 import ProfileImage from "@/public/images/profile.png";
-import type { Playlist } from "@/types";
-import Image from "next/image";
-import React, { Suspense } from "react";
 import PlaylistContainer from "./components/PlaylistContainer";
 
-async function GetPlaylists({ children }: { children: React.ReactNode }) {
+async function GetPlaylists({ children }: { children: ReactNode }) {
   const playlists = (await getUserPlaylists()) as Playlist[];
 
   const playlistsList = [

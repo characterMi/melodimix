@@ -1,8 +1,9 @@
 "use client";
 
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
+
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 const GradientLink = ({ href, text }: { href: string; text: string }) => (
   <Link
@@ -10,7 +11,7 @@ const GradientLink = ({ href, text }: { href: string; text: string }) => (
     href={href}
     className={twMerge(
       "font-semibold text-sm gradient-text outline-none hover:opacity-50 focus-visible:opacity-50 inline-block",
-      !shouldReduceMotion && "transition-opacity"
+      !shouldReduceMotion && "transition-opacity",
     )}
   >
     {text}

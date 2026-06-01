@@ -1,13 +1,14 @@
 "use client";
 
-import Loader from "@/components/Loader";
-import { useSession } from "@/hooks/useSession";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
-import { usePlaylistModal } from "@/store/usePlaylistModal";
-import type { Playlist } from "@/types";
 import { useEffect, useRef } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { twMerge } from "tailwind-merge";
+
+import { useSession } from "@/features/auth/hooks/useSession";
+import { usePlaylistModal } from "@/features/playlist/store/usePlaylistModal";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
+
+import Loader from "@/components/Loader";
 import PlaylistLink from "./PlaylistLink";
 
 const PlaylistContainer = ({
@@ -71,7 +72,7 @@ const PlaylistContainer = ({
           onClick={() => openPlaylistModal()}
           className={twMerge(
             "absolute top-0 right-0 w-12 h-[calc(100%-1px)] pb-2 bg-neutral-900 flex items-center justify-center outline-none hover:text-neutral-400 focus-visible:text-neutral-400 after:absolute after:top-0 after:right-full after:w-6 after:h-full after:bg-gradient-to-l after:from-neutral-900 after:to-transparent after:pointer-events-none",
-            !shouldReduceMotion && "transition"
+            !shouldReduceMotion && "transition",
           )}
         >
           <AiOutlinePlus size={24} aria-hidden />

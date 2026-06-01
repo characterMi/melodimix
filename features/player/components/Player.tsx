@@ -1,0 +1,56 @@
+"use client";
+
+import { twMerge } from "tailwind-merge";
+
+import { useGetSongById } from "@/features/player/hooks/useGetSongById";
+import { useLoadSongUrl } from "@/features/player/hooks/useLoadSongUrl";
+import { usePlayerStore } from "@/features/player/store/usePlayerStore";
+
+import Loader from "../../../components/Loader";
+import PlayerContent from "./PlayerContent";
+
+const Player = () => {
+  const activeId = usePlayerStore((state) => state.activeId);
+
+  const { song, isLoading } = useGetSongById(activeId);
+
+  const songUrl = useLoadSongUrl(song!);
+
+  if (!activeId) return null;
+
+  return (
+    <div
+      className={twMerge(
+        "fixed bottom-0 bg-black w-full py-2 rounded-t-2xl px-4 player z-30",
+        !song && "h-[124px]",
+      )}
+      role="region"
+      aria-label="Music Player"
+    >
+      <section className="h-full w-full relative" aria-busy={isLoading}>
+        {song && (
+          <PlayerContent
+            song={song}
+            songUrl={songUrl}
+            isSongLoading={isLoading}
+            key={songUrl}
+          />
+        )}
+
+        {isLoading && (
+          <div
+            className="w-full h-28 z-50 bg-black/60 backdrop-blur-sm"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+            }}
+          >
+            <Loader className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+          </div>
+        )}
+      </section>
+    </div>
+  );
+};
+export default Player;

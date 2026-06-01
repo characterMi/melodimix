@@ -1,9 +1,10 @@
 "use client";
 
-import { useGetLikedSongs } from "@/hooks/useGetLikedSongs";
-import { registerServiceWorker } from "@/lib/registerServiceWorker";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+
+import { useGetLikedSongs } from "@/features/like-song/hooks/useGetLikedSongs";
+import { registerServiceWorker } from "@/features/pwa/lib/registerServiceWorker";
 
 const Root = ({ children }: { children: React.ReactNode }) => {
   useGetLikedSongs();
@@ -42,7 +43,7 @@ const Root = ({ children }: { children: React.ReactNode }) => {
       e.preventDefault();
 
       const durationNavigator = document.querySelector<HTMLDivElement>(
-        "#duration-navigator"
+        "#duration-navigator",
       );
 
       if (!durationNavigator) {

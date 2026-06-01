@@ -1,8 +1,11 @@
-import { getPlaylistSongs } from "@/actions/song.actions";
-import { openGraph, twitter } from "@/lib/metadataGenerator";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import type { Metadata } from "next";
+
+import { getPlaylistSongs } from "@/features/song-related/actions";
+import { openGraph, twitter } from "@/lib/metadataGenerator";
+
 import PageContent from "./PageContent";
+
+import type { Metadata } from "next";
 
 export async function generateMetadata({
   params,

@@ -1,6 +1,7 @@
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { MdArrowOutward } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
+
+import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 const FlipArrow = ({
   label,
@@ -21,7 +22,7 @@ const FlipArrow = ({
       className={twMerge(
         "text-white overflow-hidden relative outline-none hover:opacity-50 focus-visible:opacity-50 cursor-pointer",
         `h-[${size}px]`,
-        !shouldReduceMotion && "transition-opacity"
+        !shouldReduceMotion && "transition-opacity",
       )}
       onClick={onClick}
       onKeyDown={
@@ -42,7 +43,7 @@ const FlipArrow = ({
         aria-hidden
         className={twMerge(
           "group-hover:-translate-y-full group-focus-visible:-translate-y-full",
-          !shouldReduceMotion && "transition-transform"
+          !shouldReduceMotion && "transition-transform",
         )}
       />
       <MdArrowOutward
@@ -50,7 +51,7 @@ const FlipArrow = ({
         aria-hidden
         className={twMerge(
           "absolute top-0 left-0 translate-y-full w-full h-full group-hover:translate-y-0 group-focus-visible:translate-y-0",
-          !shouldReduceMotion && "transition-transform"
+          !shouldReduceMotion && "transition-transform",
         )}
       />
     </div>

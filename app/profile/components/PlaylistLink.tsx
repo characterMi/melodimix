@@ -6,18 +6,16 @@ import { FiTrash2 } from "react-icons/fi";
 import { MdOutlineEdit } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
 
-import { deletePlaylist } from "@/actions/playlist.actions";
+import { usePlaylistsPageData } from "@/features/infinite-scroll/store/usePlaylistsPageData";
+import { deletePlaylist } from "@/features/playlist/actions";
+import { usePlaylistModal } from "@/features/playlist/store/usePlaylistModal";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
 import { shouldReduceMotion } from "@/lib/reduceMotion";
-import { usePlaylistModal } from "@/store/usePlaylistModal";
 
 import DropdownMenu from "@/components/DropdownMenu";
 import Spinner from "@/components/Spinner";
 import VariantButton from "@/components/VariantButton";
-
-import { usePlaylistsPageData } from "@/store/usePlaylistsPageData";
-import type { Playlist } from "@/types";
 
 type Props = {
   href: string;
@@ -36,7 +34,7 @@ const PlaylistLink = ({ href, name, id, ...props }: Props) => {
       className={twMerge(
         "text-white snap-start text-nowrap whitespace-nowrap relative group hover:text-emerald-300 focus-visible:text-emerald-300 outline-none pb-4 px-8",
         pathname === href && "border-b border-emerald-500",
-        !shouldReduceMotion && "transition"
+        !shouldReduceMotion && "transition",
       )}
     >
       <h2 className="text-xl font-thin">{name}</h2>
@@ -75,7 +73,7 @@ const PlaylistLink = ({ href, name, id, ...props }: Props) => {
 };
 
 const UpdateButton = (
-  props: Required<Omit<Props, "href" | "id"> & { id: number }>
+  props: Required<Omit<Props, "href" | "id"> & { id: number }>,
 ) => {
   const openModal = usePlaylistModal((state) => state.onOpen);
 
@@ -83,7 +81,7 @@ const UpdateButton = (
     <DropdownMenu.Item
       className={twMerge(
         "text-white cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none",
-        !shouldReduceMotion && "transition-opacity"
+        !shouldReduceMotion && "transition-opacity",
       )}
       onClick={() => openModal(props)}
     >
@@ -109,7 +107,7 @@ const DeleteButton = ({
   const router = useRouter();
 
   const removePlaylistFromPlaylistsStore = usePlaylistsPageData(
-    (state) => state.removeOne
+    (state) => state.removeOne,
   );
 
   const handleDelete = async (e: React.MouseEvent) => {
@@ -119,7 +117,7 @@ const DeleteButton = ({
 
     if (!navigator.onLine) {
       onError(
-        "You're currently offline, make sure you're online, then try again."
+        "You're currently offline, make sure you're online, then try again.",
       );
       return;
     }
@@ -143,7 +141,7 @@ const DeleteButton = ({
     <DropdownMenu.Item
       className={twMerge(
         "text-white cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none disabled:opacity-50 disabled:cursor-not-allowed",
-        !shouldReduceMotion && "transition-opacity"
+        !shouldReduceMotion && "transition-opacity",
       )}
       disabled={isDeleting}
       onClick={handleDelete}

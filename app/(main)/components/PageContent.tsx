@@ -1,13 +1,14 @@
 "use client";
 
-import LoadMore from "@/components/LoadMore";
-import NoSongFallback from "@/components/NoSongFallback";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
-import { useOnPlay } from "@/hooks/useOnPlay";
-import { useHomePageData } from "@/store/useHomePageData";
-import type { SongWithAuthor } from "@/types";
-import { getSongs } from "@/utils/getSongs";
 import { useMemo } from "react";
+
+import { useInfiniteScroll } from "@/features/infinite-scroll/hooks/useInfiniteScroll";
+import { useHomePageData } from "@/features/infinite-scroll/store/useHomePageData";
+import { useOnPlay } from "@/features/player/hooks/useOnPlay";
+import { getSongs } from "@/features/song-related/utils/getSongs";
+
+import NoSongFallback from "@/components/NoDataFallback";
+import LoadMore from "@/features/infinite-scroll/components/LoadMore";
 import SongCard from "./SongCard";
 
 export const LIMIT = 20;
@@ -49,8 +50,8 @@ const PageContent = ({ initialSongs }: { initialSongs: SongWithAuthor[] }) => {
               ? "ended"
               : "loadmore"
             : initialSongs.length === LIMIT
-            ? "loadmore"
-            : "ended"
+              ? "loadmore"
+              : "ended"
         }
         currentPage={page}
         setData={addAll}

@@ -1,12 +1,12 @@
 import { defaultColors } from "@/constants";
 import { Manifest } from "next/dist/lib/metadata/types/manifest-types";
+import { APP_NAME, DESCRIPTION } from "./layout";
 
 export default function manifest(): Manifest {
   return {
-    name: "MelodiMix",
-    short_name: "MelodiMix",
-    description:
-      "MelodiMix: Your Ultimate Music Destination. Discover personalized playlists, seamless streaming, and a vibrant music community. Join us today for the perfect soundtrack to every moment.",
+    name: APP_NAME,
+    short_name: APP_NAME,
+    description: DESCRIPTION,
     start_url: ".",
     orientation: "portrait",
     theme_color: defaultColors.medium,

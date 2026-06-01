@@ -1,10 +1,10 @@
 "use client";
 
-import LikeButton from "@/components/LikeButton";
-import NoSongFallback from "@/components/NoSongFallback";
-import SongItem from "@/components/SongItem";
-import { useOnPlay } from "@/hooks/useOnPlay";
-import type { Song } from "@/types";
+import { useOnPlay } from "@/features/player/hooks/useOnPlay";
+
+import NoSongFallback from "@/components/NoDataFallback";
+import LikeButton from "@/features/like-song/components/LikeButton";
+import SongItem from "@/features/song-related/components/SongItem";
 
 const PageContent = ({ songs }: { songs: Song[] }) => {
   const onPlay = useOnPlay(songs);

@@ -1,18 +1,19 @@
-import { deleteSong } from "@/actions/song.actions";
-import DropdownMenu from "@/components/DropdownMenu";
-import Spinner from "@/components/Spinner";
-import VariantButton from "@/components/VariantButton";
-import { onError } from "@/lib/onError";
-import { onSuccess } from "@/lib/onSuccess";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
-import { useUploadModal } from "@/store/useUploadModal";
-import { useUserSongs } from "@/store/useUserSongsStore";
-import type { Song } from "@/types";
 import { useState } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { FiTrash2 } from "react-icons/fi";
 import { MdOutlineEdit } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
+
+import { deleteSong } from "@/features/song-related/actions";
+import { useUploadModal } from "@/features/upload-song/store/useUploadModal";
+import { useUserSongs } from "@/features/user-related/store/useUserSongsStore";
+import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
+import { shouldReduceMotion } from "@/lib/reduceMotion";
+
+import DropdownMenu from "@/components/DropdownMenu";
+import Spinner from "@/components/Spinner";
+import VariantButton from "@/components/VariantButton";
 
 const Options = ({ song }: { song: Song }) => {
   return (
@@ -42,7 +43,7 @@ const UpdateButton = ({ song }: { song: Song }) => {
     <DropdownMenu.Item
       className={twMerge(
         "text-white cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none",
-        !shouldReduceMotion && "transition-opacity"
+        !shouldReduceMotion && "transition-opacity",
       )}
       onClick={() => openModal(song)}
     >
@@ -68,7 +69,7 @@ const DeleteButton = ({ songId }: { songId: number }) => {
 
     if (!navigator.onLine) {
       onError(
-        "You're currently offline, make sure you're online, then try again."
+        "You're currently offline, make sure you're online, then try again.",
       );
       return;
     }
@@ -91,7 +92,7 @@ const DeleteButton = ({ songId }: { songId: number }) => {
     <DropdownMenu.Item
       className={twMerge(
         "text-white cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none disabled:opacity-50 disabled:cursor-not-allowed",
-        !shouldReduceMotion && "transition-opacity"
+        !shouldReduceMotion && "transition-opacity",
       )}
       disabled={isDeleting}
       onClick={handleDelete}
