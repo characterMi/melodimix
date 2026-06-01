@@ -6,7 +6,7 @@ import { uploadFile } from "@/lib/uploadFile";
 import type { UploadPhase } from "@/hooks/useUploadOrUpdateSong";
 import type { Song, SongWithAuthor } from "@/types";
 
-const ABORT_TEXT = "AbortSignal";
+const ABORT_ERROR = "AbortSignal";
 
 export const updateSong = async (
   newData: FormData,
@@ -57,7 +57,7 @@ export const updateSong = async (
 
   // Check if the operation is cancelled before updating
   if (controller.signal.aborted) {
-    return { error: ABORT_TEXT };
+    return { error: ABORT_ERROR };
   }
 
   const dbUpdatePromise = supabaseClient
@@ -123,25 +123,31 @@ export const updateSong = async (
 
   onPhaseChange("updating");
 
-  const [dbUpdateResult, imageUpdateResult, songUpdateResult] =
-    await Promise.all(updates);
+  try {
+    const [dbUpdateResult, imageUpdateResult, songUpdateResult] =
+      await Promise.all(updates);
 
-  if (
-    dbUpdateResult.error ||
-    imageUpdateResult?.error ||
-    songUpdateResult?.error
-  ) {
-    console.error(
-      dbUpdateResult.error,
-      imageUpdateResult?.error,
-      songUpdateResult?.error,
-    );
+    if (
+      dbUpdateResult.error ||
+      imageUpdateResult?.error ||
+      songUpdateResult?.error
+    ) {
+      console.error(
+        dbUpdateResult.error,
+        imageUpdateResult?.error,
+        songUpdateResult?.error,
+      );
 
-    if (controller.signal.aborted) {
-      return { error: ABORT_TEXT };
+      if (controller.signal.aborted) {
+        return { error: ABORT_ERROR };
+      }
+
+      return { error: "Something went wrong while updating the song!" };
     }
+  } catch {
+    if (controller.signal.aborted) return { error: ABORT_ERROR };
 
-    return { error: "Something went wrong while updating the song!" };
+    return { error: "Something went wrong." };
   }
 
   revalidatePath("/", "layout");
