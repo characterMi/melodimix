@@ -3,10 +3,9 @@
 import { type MouseEvent, useCallback } from "react";
 import { GoSortAsc, GoSortDesc } from "react-icons/go";
 import { MdFilterList } from "react-icons/md";
-import { twMerge } from "tailwind-merge";
 
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { useSearch } from "@/features/search/store/useSearch";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import DropdownMenu from "@/components/DropdownMenu";
 import Switch from "@/components/Switch";
@@ -122,9 +121,8 @@ const SearchBox = () => {
           <DropdownMenu.Separator />
 
           <DropdownMenu.Item
-            className={twMerge(
-              "flex items-center justify-between hover:opacity-50 focus-visible:opacity-50 font-thin cursor-pointer outline-none",
-              !shouldReduceMotion && "transition-opacity",
+            className={cnWithReduceMotion(
+              "flex items-center transition-opacity justify-between hover:opacity-50 focus-visible:opacity-50 font-thin cursor-pointer outline-none",
             )}
             onClick={(e) => {
               stopPropagation(e);

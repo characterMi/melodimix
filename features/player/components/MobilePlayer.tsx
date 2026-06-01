@@ -5,9 +5,9 @@ import { createPortal } from "react-dom";
 import { GoArrowLeft } from "react-icons/go";
 import { twMerge } from "tailwind-merge";
 
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { useLoadImage } from "@/features/song-related/hooks/useLoadImage";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { useMobilePlayerDrag } from "../hooks/useMobilePlayerDrag";
 
 import SongCover from "@/features/song-related/components/SongCover";
@@ -55,10 +55,9 @@ const MobilePlayer = ({
   return createPortal(
     // @ts-ignore
     <div
-      className={twMerge(
-        "w-full h-sm-screen fixed top-0 left-0 z-[100] overflow-hidden sm:hidden",
+      className={cnWithReduceMotion(
+        "w-full h-sm-screen fixed top-0 left-0 z-[100] transition duration-300 overflow-hidden sm:hidden",
         isMobilePlayerOpen ? "translate-y-0" : "translate-y-full",
-        !shouldReduceMotion && "transition duration-300",
       )}
       style={{
         background: `linear-gradient(0deg, #000000, ${color})`,
@@ -86,9 +85,8 @@ const MobilePlayer = ({
         renderErrorFallback={false}
       />
       <div
-        className={twMerge(
-          "absolute top-0 left-0 w-full h-full z-[-1]",
-          !shouldReduceMotion && "transition duration-300",
+        className={cnWithReduceMotion(
+          "absolute top-0 left-0 w-full transition duration-300 h-full z-[-1]",
         )}
         aria-hidden
         style={{
@@ -103,9 +101,8 @@ const MobilePlayer = ({
         <div className="w-full flex justify-between items-center p-6 xss:p-8">
           <button
             ref={closeMobilePlayerButton}
-            className={twMerge(
-              "hover:opacity-50 z-[1] focus-visible:opacity-50 outline-none",
-              !shouldReduceMotion && "transition-opacity",
+            className={cnWithReduceMotion(
+              "hover:opacity-50 z-[1] focus-visible:opacity-50 transition-opacity outline-none",
             )}
             onClick={() => window.history.back()}
             aria-label="Close the mobile player"

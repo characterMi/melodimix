@@ -1,10 +1,12 @@
 import { Fragment } from "react";
 import { CheckmarkIcon } from "react-hot-toast";
-import { twMerge } from "tailwind-merge";
 
 import { useCacheList } from "@/features/cache/hooks/useCacheList";
 import { formatBytes } from "@/features/cache/lib/formatBytes";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
+import {
+  cnWithReduceMotion,
+  shouldReduceMotion,
+} from "@/features/reduce-motion/lib";
 
 import Button from "@/components/Button";
 
@@ -57,13 +59,11 @@ const CacheList = ({
                         animationDelay: i * 0.1 + "s",
                         border: `1px solid ${color}`,
                       }}
-                      className={twMerge(
-                        "after:!bottom-1",
+                      className={cnWithReduceMotion(
+                        "after:!bottom-1 after:!transition-[border] after:!duration-[50ms]",
                         isSelected
                           ? "after:!border-white"
                           : "after:!border-transparent",
-                        !shouldReduceMotion &&
-                          "after:!transition-[border] after:!duration-[50ms]",
                       )}
                     />
                   </button>
@@ -76,9 +76,8 @@ const CacheList = ({
                 </div>
 
                 <p
-                  className={twMerge(
-                    "text-sm opacity-80 group-hover:opacity-100 underline",
-                    !shouldReduceMotion && "transition-opacity",
+                  className={cnWithReduceMotion(
+                    "text-sm opacity-80 group-hover:opacity-100 underline transition-opacity",
                   )}
                   style={{ textDecorationColor: color }}
                 >

@@ -3,7 +3,7 @@
 import { twMerge } from "tailwind-merge";
 
 import { usePlayerStore } from "@/features/player/store/usePlayerStore";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
+import { shouldReduceMotion } from "@/features/reduce-motion/lib";
 import { useLoadImage } from "../hooks/useLoadImage";
 
 import Author from "./Author";

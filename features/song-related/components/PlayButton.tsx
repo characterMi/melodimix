@@ -1,7 +1,6 @@
 import { FaPlay } from "react-icons/fa";
-import { twMerge } from "tailwind-merge";
 
-import { shouldReduceMotion } from "@/lib/reduceMotion";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 
 import type { ComponentProps } from "react";
 
@@ -9,9 +8,8 @@ type Props = ComponentProps<"div"> & { onClick: () => void };
 
 const PlayButton = ({ onClick, className, children, ...props }: Props) => (
   <div
-    className={twMerge(
-      "rounded-full flex items-center justify-center bg-green-500 size-12 min-w-12 drop-shadow-md hover:scale-105 focus-visible:scale-105 outline-none",
-      !shouldReduceMotion && "transition-transform",
+    className={cnWithReduceMotion(
+      "rounded-full flex transition-transform items-center justify-center bg-green-500 size-12 min-w-12 drop-shadow-md hover:scale-105 focus-visible:scale-105 outline-none",
       className,
     )}
     onClick={(e) => {

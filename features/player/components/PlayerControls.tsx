@@ -1,8 +1,7 @@
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { FaBackwardStep, FaForwardStep } from "react-icons/fa6";
 import { twMerge } from "tailwind-merge";
-
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 const PlayerControls = ({
   isMobilePlayer,
@@ -28,9 +27,8 @@ const PlayerControls = ({
     >
       <button
         aria-label="Previous song"
-        className={twMerge(
-          "text-black sm:text-neutral-400 size-[32px] sm:size-[24px] p-2 sm:p-0 rounded-full bg-white sm:bg-transparent cursor-pointer hover:opacity-50 sm:hover:text-white focus-visible:opacity-50 sm:focus-visible:text-white outline-none",
-          !shouldReduceMotion && "transition-opacity",
+        className={cnWithReduceMotion(
+          "text-black sm:text-neutral-400 size-[32px] sm:size-[24px] p-2 sm:p-0 rounded-full bg-white sm:bg-transparent cursor-pointer hover:opacity-50 sm:hover:text-white focus-visible:opacity-50 sm:focus-visible:text-white outline-none transition-opacity",
         )}
         onClick={() => onPlaySong("previous")}
       >
@@ -39,27 +37,24 @@ const PlayerControls = ({
 
       <button
         onClick={handlePlay}
-        className={twMerge(
-          "flex items-center justify-center size-14 sm:size-10 rounded-full bg-white p-1 cursor-pointer overflow-hidden relative hover:opacity-50 focus-visible:opacity-50 outline-none",
-          !shouldReduceMotion && "transition-opacity",
+        className={cnWithReduceMotion(
+          "flex items-center justify-center size-14 sm:size-10 rounded-full bg-white p-1 cursor-pointer overflow-hidden relative hover:opacity-50 focus-visible:opacity-50 outline-none transition-opacity",
         )}
         aria-label={(isMusicPlaying ? "Pause" : "Play") + " the song"}
         aria-pressed={isMusicPlaying}
       >
         <PauseOrPlayIcon
           size={30}
-          className={twMerge(
-            "text-black",
-            !shouldReduceMotion && "transition-opacity",
+          className={cnWithReduceMotion(
+            "text-black transition-opacity",
             isSongLoading ? "opacity-0" : "opacity-100",
           )}
           aria-hidden
         />
 
         <div
-          className={twMerge(
-            "absolute size-6 rounded-full border-4 animate-spin border-black after:size-3 after:bg-white after:absolute after:bottom-3/4 after:rotate-45",
-            !shouldReduceMotion && "transition-opacity",
+          className={cnWithReduceMotion(
+            "absolute size-6 rounded-full border-4 animate-spin border-black after:size-3 after:bg-white after:absolute after:bottom-3/4 after:rotate-45 transition-opacity",
             isSongLoading ? "opacity-100" : "opacity-0",
           )}
         >
@@ -69,9 +64,8 @@ const PlayerControls = ({
 
       <button
         onClick={() => onPlaySong("next")}
-        className={twMerge(
-          "text-black sm:text-neutral-400 size-[32px] sm:size-[24px] p-2 sm:p-0 rounded-full bg-white sm:bg-transparent cursor-pointer hover:opacity-50 sm:hover:text-white focus-visible:opacity-50 sm:focus-visible:text-white outline-none",
-          !shouldReduceMotion && "transition-opacity",
+        className={cnWithReduceMotion(
+          "text-black sm:text-neutral-400 size-[32px] sm:size-[24px] p-2 sm:p-0 rounded-full bg-white sm:bg-transparent cursor-pointer hover:opacity-50 sm:hover:text-white focus-visible:opacity-50 sm:focus-visible:text-white outline-none transition-opacity",
         )}
         aria-label="Next song"
       >

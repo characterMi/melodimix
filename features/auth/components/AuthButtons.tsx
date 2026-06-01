@@ -5,17 +5,16 @@ import { usePathname, useRouter } from "next/navigation";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { FiLogOut } from "react-icons/fi";
 import { RiUserFill } from "react-icons/ri";
-import { twMerge } from "tailwind-merge";
 
 import { useSession } from "@/features/auth/hooks/useSession";
 import { useAuthModal } from "@/features/auth/store/useAuthModal";
 import { useLikedPageData } from "@/features/infinite-scroll/store/useLikedPageData";
 import { useLikedSongs } from "@/features/like-song/store/useLikedSongs";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { useUserModal } from "@/features/user-related/store/useUserModal";
 import { useUserSongs } from "@/features/user-related/store/useUserSongsStore";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import Button from "../../../components/Button";
 import Loader from "../../../components/Loader";
@@ -71,9 +70,8 @@ const AuthButtons = () => {
         <Link
           scroll={false}
           href="/profile"
-          className={twMerge(
-            "rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none",
-            !shouldReduceMotion && "transition-opacity",
+          className={cnWithReduceMotion(
+            "rounded-full p-[9px] bg-white flex transition-opacity items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none",
           )}
           aria-label="Go to profile page"
         >

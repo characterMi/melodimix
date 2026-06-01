@@ -4,8 +4,8 @@ import { TbMinus, TbPlus } from "react-icons/tb";
 import { twMerge } from "tailwind-merge";
 
 import { useCreateOrUpdatePlaylist } from "@/features/playlist/hooks/useCreateOrUpdatePlaylist";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { useSearchData } from "@/features/search/hooks/useSearchData";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import Button from "../../../components/Button";
 import DeleteFileButton from "../../../components/DeleteFileButton";
@@ -219,9 +219,8 @@ const PlaylistModal = () => {
           onChange={(e) => setIsPublic(e.target.checked)}
           disabled={isSubmitting}
           aria-label="Make playlist public"
-          className={twMerge(
-            "appearance-none size-5 border-2 border-emerald-600 rounded-full checked:bg-emerald-500 checked:border-emerald-500 bg-neutral-700 cursor-pointer",
-            !shouldReduceMotion && "transition-colors",
+          className={cnWithReduceMotion(
+            "appearance-none size-5 border-2 transition-colors border-emerald-600 rounded-full checked:bg-emerald-500 checked:border-emerald-500 bg-neutral-700 cursor-pointer",
           )}
         />
       </div>

@@ -1,11 +1,10 @@
 import { IoIosArrowUp } from "react-icons/io";
-import { twMerge } from "tailwind-merge";
 
 import { useGetDefaultSongColor } from "@/features/player/hooks/useGetDefaultSongColor";
 import { usePlayerSongCard } from "@/features/player/hooks/usePlayerSongCard";
 import { ColorEntity } from "@/features/player/store/useSongColors";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import SongItem from "@/features/song-related/components/SongItem";
 import LikeButton from "../../like-song/components/LikeButton";
@@ -67,9 +66,8 @@ const PlayerSongCard = ({
             </div>
 
             <button
-              className={twMerge(
-                "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none sm:hidden",
-                !shouldReduceMotion && "transition-opacity",
+              className={cnWithReduceMotion(
+                "cursor-pointer hover:opacity-50 focus-visible:opacity-50 transition-opacity outline-none sm:hidden",
               )}
               onClick={openMobilePlayer}
               aria-label="Expand mobile player"

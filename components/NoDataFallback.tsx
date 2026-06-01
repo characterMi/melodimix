@@ -1,10 +1,9 @@
 "use client";
 
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { useRouter } from "next/navigation";
 import { RxReload } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
-
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 type Props = {
   className?: string;
@@ -29,9 +28,8 @@ const NoDataFallBack = ({
       <p>{fallbackText}</p>
       {showButton && (
         <button
-          className={twMerge(
-            "flex items-center gap-x-1 underline outline-none hover:text-white focus-visible:text-white",
-            !shouldReduceMotion && "transition-colors",
+          className={cnWithReduceMotion(
+            "flex items-center gap-x-1 transition-colors underline outline-none hover:text-white focus-visible:text-white",
           )}
           onClick={() => router.refresh()}
         >

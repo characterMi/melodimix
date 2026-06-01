@@ -2,12 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
-import { twMerge } from "tailwind-merge";
 
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { getCleanParamValue } from "@/features/search/lib/getCleanParamValue";
 import { useSearch } from "@/features/search/store/useSearch";
 import { useDebounce } from "@/hooks/useDebounce";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import Input from "../../../components/Input";
 
@@ -51,9 +50,8 @@ const SearchInput = ({
         <button
           onClick={() => setValue("")}
           aria-label="Clear the search input"
-          className={twMerge(
-            "px-2.5 hover:opacity-50 focus-visible:opacity-50 outline-none",
-            !shouldReduceMotion && "transition-opacity",
+          className={cnWithReduceMotion(
+            "px-2.5 hover:opacity-50 transition-opacity focus-visible:opacity-50 outline-none",
           )}
         >
           <IoClose size={24} aria-hidden />

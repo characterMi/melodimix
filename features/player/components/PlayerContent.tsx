@@ -1,12 +1,11 @@
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { TbMusicShare } from "react-icons/tb";
-import { twMerge } from "tailwind-merge";
 
 import { defaultColors } from "@/constants";
 import { usePlayer } from "@/features/player/hooks/usePlayer";
 import { getAverageColor } from "@/features/player/lib/getAverageColor";
 import { useSongColors } from "@/features/player/store/useSongColors";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { shareSong } from "@/lib/share";
 
 import Slider from "../../../components/Slider";
@@ -63,9 +62,8 @@ const PlayerContent = ({
             <button
               aria-label="Share the song"
               onClick={() => shareSong(song.title, song.artist, song.id)}
-              className={twMerge(
-                "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none hidden xss:block z-[1]",
-                !shouldReduceMotion && "transition-opacity",
+              className={cnWithReduceMotion(
+                "cursor-pointer hover:opacity-50 transition-opacity focus-visible:opacity-50 outline-none hidden xss:block z-[1]",
               )}
             >
               <TbMusicShare size={28} aria-hidden />
@@ -130,9 +128,8 @@ const VolumeButton = ({
 
   return (
     <button
-      className={twMerge(
-        "cursor-pointer outline-none hover:opacity-50 focus-visible:opacity-50",
-        !shouldReduceMotion && "transition-opacity",
+      className={cnWithReduceMotion(
+        "cursor-pointer outline-none hover:opacity-50 transition-opacity focus-visible:opacity-50",
       )}
       onClick={toggleMute}
       aria-label={volume === 0 ? "Unmute" : "Mute"}

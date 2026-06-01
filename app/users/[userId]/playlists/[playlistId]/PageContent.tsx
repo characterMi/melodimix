@@ -2,9 +2,8 @@
 
 import Link from "next/link";
 import { IoShareSocialOutline } from "react-icons/io5";
-import { twMerge } from "tailwind-merge";
 
-import { shouldReduceMotion } from "@/lib/reduceMotion";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { sharePlaylist } from "@/lib/share";
 
 import NoSongFallback from "@/components/NoDataFallback";
@@ -45,9 +44,8 @@ const PageContent = ({ songs, errMessage, playlist }: Props) => {
           <Link
             scroll={false}
             href={`/users/${playlist?.user_id}`}
-            className={twMerge(
-              "gradient-text hover:opacity-50 focus-visible:opacity-50 outline-none",
-              !shouldReduceMotion && "transition-opacity",
+            className={cnWithReduceMotion(
+              "gradient-text hover:opacity-50 transition-opacity focus-visible:opacity-50 outline-none",
             )}
           >
             {playlist?.author}
@@ -55,9 +53,8 @@ const PageContent = ({ songs, errMessage, playlist }: Props) => {
         </h2>
 
         <button
-          className={twMerge(
-            "hover:opacity-50 focus-visible:opacity-50 outline-none mt-2",
-            !shouldReduceMotion && "transition-opacity",
+          className={cnWithReduceMotion(
+            "hover:opacity-50 focus-visible:opacity-50 transition-opacity outline-none mt-2",
           )}
           aria-label="Share the playlist"
           onClick={() => sharePlaylist(playlist!.name, playlist!.author)}

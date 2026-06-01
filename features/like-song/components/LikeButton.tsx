@@ -1,9 +1,8 @@
 "use client";
 
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { twMerge } from "tailwind-merge";
 
-import { shouldReduceMotion } from "@/lib/reduceMotion";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { useLikeSong } from "../hooks/useLikeSong";
 
 const LikeButton = ({
@@ -21,9 +20,8 @@ const LikeButton = ({
 
   return (
     <button
-      className={twMerge(
-        "hover:opacity-50 disabled:opacity-50 disabled:cursor-not-allowed active:scale-90 focus-visible:opacity-50 outline-none relative ease-out",
-        !shouldReduceMotion && "transition duration-200",
+      className={cnWithReduceMotion(
+        "hover:opacity-50 disabled:opacity-50 transition duration-200 disabled:cursor-not-allowed active:scale-90 focus-visible:opacity-50 outline-none relative ease-out",
       )}
       style={{
         // @ts-ignore

@@ -4,15 +4,14 @@ import { LuTrash2 } from "react-icons/lu";
 import { RxDotsVertical } from "react-icons/rx";
 import { TbMusicShare } from "react-icons/tb";
 import { TiUserAddOutline } from "react-icons/ti";
-import { twMerge } from "tailwind-merge";
 
 import { useSessionStore } from "@/features/auth/store/useSessionStore";
 import { addSongToInterests } from "@/features/interests/actions";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { deleteSong } from "@/features/song-related/actions";
 import { isAdmin } from "@/lib/isAdmin";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { shareSong } from "@/lib/share";
 
 import AddToPlaylist from "@/features/playlist/components/AddToPlaylist";
@@ -35,9 +34,8 @@ const SongOptions = ({
     triggerProps={{
       element: <RxDotsVertical size={triggerSize} aria-hidden />,
       label: "Options...",
-      className: twMerge(
-        "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none",
-        !shouldReduceMotion && "transition-opacity",
+      className: cnWithReduceMotion(
+        "cursor-pointer hover:opacity-50 transition-opacity focus-visible:opacity-50 outline-none",
         triggerClasses,
       ),
     }}
@@ -53,9 +51,8 @@ const SongOptions = ({
 
     {renderShareButton && (
       <DropdownMenu.Item
-        className={twMerge(
-          "font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none flex xss:hidden sm:flex items-center justify-between",
-          !shouldReduceMotion && "transition-opacity",
+        className={cnWithReduceMotion(
+          "font-thin text-sm cursor-pointer transition-opacity hover:opacity-50 focus-visible:opacity-50 outline-none flex xss:hidden sm:flex items-center justify-between",
         )}
         onClick={() => shareSong(song.title, song.artist, song.id)}
       >
@@ -102,9 +99,8 @@ const SaveToDownloads = ({
 
   return (
     <DropdownMenu.Item
-      className={twMerge(
-        "font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none flex items-center justify-between",
-        !shouldReduceMotion && "transition-opacity",
+      className={cnWithReduceMotion(
+        "font-thin text-sm cursor-pointer transition-opacity hover:opacity-50 focus-visible:opacity-50 outline-none flex items-center justify-between",
       )}
       onClick={handleDownload}
     >
@@ -135,9 +131,8 @@ const DeleteSongFromCache = ({ songUrl }: { songUrl: string }) => {
 
   return (
     <DropdownMenu.Item
-      className={twMerge(
-        "font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none flex items-center justify-between",
-        !shouldReduceMotion && "transition-opacity",
+      className={cnWithReduceMotion(
+        "font-thin text-sm cursor-pointer transition-opacity hover:opacity-50 focus-visible:opacity-50 outline-none flex items-center justify-between",
       )}
       onClick={handleDelete}
     >
@@ -173,9 +168,8 @@ const AddToInterests = ({ songId }: { songId: number }) => {
 
   return (
     <DropdownMenu.Item
-      className={twMerge(
-        "font-thin text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none flex items-center justify-between",
-        !shouldReduceMotion && "transition-opacity",
+      className={cnWithReduceMotion(
+        "font-thin text-sm cursor-pointer transition-opacity hover:opacity-50 focus-visible:opacity-50 outline-none flex items-center justify-between",
       )}
       onClick={onClick}
     >
@@ -210,9 +204,8 @@ const DeleteSongFromDB = ({ songId }: { songId: number }) => {
 
   return (
     <DropdownMenu.Item
-      className={twMerge(
-        "font-thin !text-rose-500 text-sm cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none flex items-center justify-between disabled:opacity-50",
-        !shouldReduceMotion && "transition-opacity",
+      className={cnWithReduceMotion(
+        "font-thin !text-rose-500 text-sm transition-opacity cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none flex items-center justify-between disabled:opacity-50",
       )}
       onClick={onClick}
       disabled={isDeleting}

@@ -1,8 +1,7 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { FaCamera, FaUser } from "react-icons/fa";
-import { twMerge } from "tailwind-merge";
 
-import { shouldReduceMotion } from "@/lib/reduceMotion";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 
 import Input from "@/components/Input";
 
@@ -38,9 +37,8 @@ const Avatar = ({
   return (
     <>
       <button
-        className={twMerge(
-          "size-44 flex items-center justify-center relative bg-emerald-600 outline-none hover:opacity-50 focus-visible:opacity-50 rounded-full",
-          !shouldReduceMotion && "transition-opacity",
+        className={cnWithReduceMotion(
+          "size-44 flex items-center justify-center relative bg-emerald-600 outline-none hover:opacity-50 focus-visible:opacity-50 rounded-full transition-opacity",
         )}
         onClick={() => {
           if (isSubmitting) return;

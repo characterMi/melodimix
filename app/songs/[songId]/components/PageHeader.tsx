@@ -1,14 +1,13 @@
 "use client";
 
 import Head from "next/head";
-import { twMerge } from "tailwind-merge";
 
 import { defaultColors } from "@/constants";
 import { getAverageColor } from "@/features/player/lib/getAverageColor";
 import { usePlayerStore } from "@/features/player/store/usePlayerStore";
 import { useSongColors } from "@/features/player/store/useSongColors";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { useLoadImage } from "@/features/song-related/hooks/useLoadImage";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import Header from "@/components/Header";
 import Author from "@/features/song-related/components/Author";
@@ -37,7 +36,7 @@ const PageHeader = ({ song }: { song: SongWithAuthor | null }) => {
       </Head>
 
       <Header
-        className={twMerge(!shouldReduceMotion && "transition duration-200")}
+        className={cnWithReduceMotion("transition duration-200")}
         styles={{
           background: `linear-gradient(180deg, ${
             colors?.medium ?? "transparent"

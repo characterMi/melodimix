@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { HiOutlineDownload } from "react-icons/hi";
-import { twMerge } from "tailwind-merge";
 
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { onSuccess } from "@/lib/onSuccess";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 interface RelatedApp {
   platform: "webapp";
@@ -69,9 +68,8 @@ const DownloadApplication = () => {
 
   return (
     <button
-      className={twMerge(
-        "download-btn flex flex-row h-auto items-center w-full gap-x-[14px] text-sm font-medium cursor-pointer hover:text-white focus-visible:text-white outline-none text-neutral-400 py-1 disabled:cursor-not-allowed disabled:opacity-50",
-        !shouldReduceMotion && "transition-colors",
+      className={cnWithReduceMotion(
+        "download-btn flex flex-row h-auto transition-colors items-center w-full gap-x-[14px] text-sm font-medium cursor-pointer hover:text-white focus-visible:text-white outline-none text-neutral-400 py-1 disabled:cursor-not-allowed disabled:opacity-50",
       )}
       onClick={handleDownload}
       disabled={isAppInstalled}

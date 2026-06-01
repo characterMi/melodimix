@@ -12,8 +12,8 @@ import {
 import { TbPlaylist } from "react-icons/tb";
 import { twMerge } from "tailwind-merge";
 
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import Loader from "../../../components/Loader";
 import DownloadApplication from "../../pwa/components/DownloadApplication";
@@ -104,17 +104,15 @@ const MobileSidebarTrigger = ({
         aria-hidden
       />
       <span
-        className={twMerge(
-          "h-1 rounded-full w-[85%] bg-white",
-          !shouldReduceMotion && "transition-transform",
+        className={cnWithReduceMotion(
+          "h-1 rounded-full w-[85%] bg-white transition-transform",
           isActive && "rotate-45 -mt-[10px]",
         )}
         aria-hidden
       />
       <span
-        className={twMerge(
-          "h-1 rounded-full w-[85%] bg-white",
-          !shouldReduceMotion && "transition-transform",
+        className={cnWithReduceMotion(
+          "h-1 rounded-full w-[85%] bg-white transition-transform",
           isActive && "-rotate-45 -mt-[10px]",
         )}
         aria-hidden
@@ -174,9 +172,8 @@ const MobileSidebar = ({
   return (
     <>
       <div
-        className={twMerge(
-          "fixed bg-neutral-900 flex flex-col z-50 left-0 top-0 h-screen w-[200px] min-[300px]:w-[280px] min-[360px]:w-[300px] sm:w-[360px] md:hidden",
-          !shouldReduceMotion && "transition-transform",
+        className={cnWithReduceMotion(
+          "fixed bg-neutral-900 flex flex-col z-50 left-0 top-0 h-screen w-[200px] min-[300px]:w-[280px] min-[360px]:w-[300px] sm:w-[360px] md:hidden transition-transform",
           isActive ? "translate-x-0" : "-translate-x-full",
         )}
         ref={sidebarContainerRef}
@@ -189,7 +186,7 @@ const MobileSidebar = ({
         <aside
           ref={sidebarRef}
           id="sidebar"
-          className={twMerge(
+          className={cnWithReduceMotion(
             "overflow-y-auto",
             !isActive && "pointer-events-none invisible",
           )}
@@ -216,9 +213,8 @@ const MobileSidebar = ({
       <div
         onClick={openMobileSidebar}
         aria-hidden
-        className={twMerge(
-          "md:hidden fixed w-screen h-screen top-0 left-0 bg-black/35 backdrop-blur-sm",
-          !shouldReduceMotion && "transition-opacity",
+        className={cnWithReduceMotion(
+          "md:hidden fixed w-screen h-screen top-0 left-0 transition-opacity bg-black/35 backdrop-blur-sm",
           isActive ? "z-40 opacity-100" : "-z-10 opacity-0",
         )}
       />
@@ -233,9 +229,8 @@ const PlaylistsPageLink = () => {
   return (
     <a
       href="/profile"
-      className={twMerge(
-        "flex flex-row h-auto items-center w-full gap-x-3.5 text-sm font-medium cursor-pointer hover:text-white focus-visible:text-white outline-none text-neutral-400 py-1",
-        !shouldReduceMotion && "transition-colors",
+      className={cnWithReduceMotion(
+        "flex flex-row h-auto items-center w-full gap-x-3.5 transition-colors text-sm font-medium cursor-pointer hover:text-white focus-visible:text-white outline-none text-neutral-400 py-1",
         pathname === "/playlists" ? "text-white" : "text-neutral-400",
       )}
       onClick={(e) => {

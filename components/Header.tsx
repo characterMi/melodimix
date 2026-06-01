@@ -7,7 +7,7 @@ import { HiHome } from "react-icons/hi";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
 
-import { shouldReduceMotion } from "@/lib/reduceMotion";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 
 import AuthButtons from "../features/auth/components/AuthButtons";
 
@@ -34,9 +34,8 @@ const Header = ({
         <div className="hidden md:flex gap-x-2 items-center">
           <button
             onClick={() => router.back()}
-            className={twMerge(
-              "rounded-full bg-black flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none p-[1.5px]",
-              !shouldReduceMotion && "transition-opacity",
+            className={cnWithReduceMotion(
+              "rounded-full bg-black flex items-center transition-opacity justify-center hover:opacity-50 focus-visible:opacity-50 outline-none p-[1.5px]",
             )}
             aria-label="Go back to the previous page (from browser's history)"
           >
@@ -45,9 +44,8 @@ const Header = ({
 
           <button
             onClick={() => router.forward()}
-            className={twMerge(
-              "rounded-full bg-black flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none p-[1.5px]",
-              !shouldReduceMotion && "transition-opacity",
+            className={cnWithReduceMotion(
+              "rounded-full bg-black flex items-center transition-opacity justify-center hover:opacity-50 focus-visible:opacity-50 outline-none p-[1.5px]",
             )}
             aria-label="Go to the next page (from browser's history)"
           >
@@ -59,9 +57,8 @@ const Header = ({
           <Link
             scroll={false}
             href="/"
-            className={twMerge(
-              "rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none",
-              !shouldReduceMotion && "transition-opacity",
+            className={cnWithReduceMotion(
+              "rounded-full p-[9px] bg-white flex items-center transition-opacity justify-center hover:opacity-50 focus-visible:opacity-50 outline-none",
             )}
             aria-label="Go to home page"
           >
@@ -71,9 +68,8 @@ const Header = ({
           <Link
             scroll={false}
             href="/search"
-            className={twMerge(
-              "rounded-full p-[9px] bg-white flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none",
-              !shouldReduceMotion && "transition-opacity",
+            className={cnWithReduceMotion(
+              "rounded-full p-[9px] bg-white flex items-center transition-opacity justify-center hover:opacity-50 focus-visible:opacity-50 outline-none",
             )}
             aria-label="Go to search page"
           >

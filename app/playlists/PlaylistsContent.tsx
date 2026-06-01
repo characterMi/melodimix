@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { LuTrash2 } from "react-icons/lu";
-import { twMerge } from "tailwind-merge";
 
 import { useSessionStore } from "@/features/auth/store/useSessionStore";
 import { useInfiniteScroll } from "@/features/infinite-scroll/hooks/useInfiniteScroll";
@@ -12,10 +11,10 @@ import { usePlaylistsPageData } from "@/features/infinite-scroll/store/usePlayli
 import { deletePlaylist } from "@/features/playlist/actions";
 import { useLoadPlaylistPoster } from "@/features/playlist/hooks/useLoadPlaylistPoster";
 import { getPublicPlaylists } from "@/features/playlist/utils/getPublicPlaylists";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { isAdmin } from "@/lib/isAdmin";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import NoPlaylistFallback from "@/components/NoDataFallback";
 import Spinner from "@/components/Spinner";
@@ -87,9 +86,8 @@ const PlaylistCard = ({ playlist }: { playlist: Playlist }) => {
   return (
     <Link
       href={`/users/${playlist.user_id}/playlists/${playlist.id}`}
-      className={twMerge(
-        "w-full flex flex-col px-1 xss:px-2 bg-neutral-800 outline-none border-none rounded-md hover:-translate-y-[2%] focus-visible:-translate-y-[2%] shadow-2xl group",
-        !shouldReduceMotion && "transition-transform duration-500",
+      className={cnWithReduceMotion(
+        "w-full flex flex-col px-1 xss:px-2 bg-neutral-800 outline-none border-none rounded-md hover:-translate-y-[2%] focus-visible:-translate-y-[2%] shadow-2xl group transition-transform duration-500",
       )}
     >
       <div className="rounded-md size-full relative after:absolute after:top-0 after:left-0 after:size-full after:bg-neutral-950 after:rounded-md -mt-1 xss:-mt-2">

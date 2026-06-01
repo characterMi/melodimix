@@ -2,10 +2,12 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { ImAttachment } from "react-icons/im";
-import { twMerge } from "tailwind-merge";
 
 import { initializeMediaSession } from "@/features/player/lib/mediaSession";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
+import {
+  cnWithReduceMotion,
+  shouldReduceMotion,
+} from "@/features/reduce-motion/lib";
 import { UploadPhase } from "../hooks/useUploadOrUpdateSong";
 
 import DeleteFileButton from "@/components/DeleteFileButton";
@@ -44,9 +46,8 @@ export const SongInput = ({ phase, isEditing, uploadProgress }: InputProps) => {
         type="button"
         disabled={phase !== "none"}
         onClick={() => input.current?.click()}
-        className={twMerge(
-          "px-6 py-2 rounded-md bg-gradient-to-r from-emerald-700 to-emerald-900 outline-none hover:opacity-80 focus-visible:opacity-80 disabled:opacity-50",
-          !shouldReduceMotion && "transition-opacity",
+        className={cnWithReduceMotion(
+          "px-6 py-2 rounded-md bg-gradient-to-r transition-opacity from-emerald-700 to-emerald-900 outline-none hover:opacity-80 focus-visible:opacity-80 disabled:opacity-50",
         )}
       >
         Select a song file {isEditing && "(optional)"}
@@ -190,9 +191,8 @@ const SongPreview = ({ file, onDelete }: PreviewProps) => {
             />
 
             <div
-              className={twMerge(
-                "absolute top-0 left-0 size-full rounded-md bg-black/60 cursor-pointer opacity-0 hover:opacity-100 focus-within:opacity-100 flex justify-center items-center",
-                !shouldReduceMotion && "transition-opacity",
+              className={cnWithReduceMotion(
+                "absolute top-0 left-0 size-full rounded-md transition-opacity bg-black/60 cursor-pointer opacity-0 hover:opacity-100 focus-within:opacity-100 flex justify-center items-center",
               )}
             >
               <button
@@ -247,9 +247,8 @@ export const ImageInput = ({
         type="button"
         disabled={phase !== "none"}
         onClick={() => input.current?.click()}
-        className={twMerge(
-          "px-6 py-2 rounded-md bg-gradient-to-r from-emerald-700 to-emerald-900 outline-none hover:opacity-80 focus-visible:opacity-80 disabled:opacity-50",
-          !shouldReduceMotion && "transition-opacity",
+        className={cnWithReduceMotion(
+          "px-6 py-2 rounded-md transition-opacity bg-gradient-to-r from-emerald-700 to-emerald-900 outline-none hover:opacity-80 focus-visible:opacity-80 disabled:opacity-50",
         )}
       >
         Select an image {isEditing && "(optional)"}

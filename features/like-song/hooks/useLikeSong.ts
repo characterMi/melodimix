@@ -5,9 +5,9 @@ import { useAuthModal } from "@/features/auth/store/useAuthModal";
 import { useLikedPageData } from "@/features/infinite-scroll/store/useLikedPageData";
 import { likeSong } from "@/features/like-song/actions";
 import { useLikedSongs } from "@/features/like-song/store/useLikedSongs";
+import { shouldReduceMotion } from "@/features/reduce-motion/lib";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 export const useLikeSong = (song: Song, color: string) => {
   const btnRef = useRef<HTMLButtonElement>(null);

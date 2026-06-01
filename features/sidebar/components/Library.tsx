@@ -6,7 +6,7 @@ import { twMerge } from "tailwind-merge";
 
 import useOnPlay from "@/features/player/hooks/useOnPlay";
 import { usePlayerStore } from "@/features/player/store/usePlayerStore";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 
 import NoSongFallback from "@/components/NoDataFallback";
 import SongItem from "@/features/song-related/components/SongItem";
@@ -51,9 +51,8 @@ const Library = ({ songs, isMobile }: { songs: Song[]; isMobile?: true }) => {
         <div className="flex items-center justify-center py-6">
           <a
             href="/profile"
-            className={twMerge(
-              "inline-flex items-center justify-center gap-2 text-neutral-400 hover:text-white focus-visible:text-white outline-none",
-              !shouldReduceMotion && "transition-colors",
+            className={cnWithReduceMotion(
+              "inline-flex items-center justify-center gap-2 text-neutral-400 hover:text-white focus-visible:text-white outline-none transition-colors",
             )}
             onClick={(e) => {
               e.preventDefault();

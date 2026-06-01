@@ -1,7 +1,5 @@
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { ComponentProps } from "react";
-import { twMerge } from "tailwind-merge";
-
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 type Props = {
   variant?: "primary" | "secondary" | "error";
@@ -21,9 +19,8 @@ const VariantButton = ({
 }: Props) => {
   return (
     <button
-      className={twMerge(
-        "cursor-pointer size-6 bg-gradient-to-b border rounded-sm flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none",
-        !shouldReduceMotion && "transition-opacity",
+      className={cnWithReduceMotion(
+        "cursor-pointer size-6 bg-gradient-to-b transition-opacity border rounded-sm flex items-center justify-center hover:opacity-50 focus-visible:opacity-50 outline-none",
         variantClasses[variant],
         className,
       )}

@@ -2,14 +2,13 @@ import { useState } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { FiTrash2 } from "react-icons/fi";
 import { MdOutlineEdit } from "react-icons/md";
-import { twMerge } from "tailwind-merge";
 
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { deleteSong } from "@/features/song-related/actions";
 import { useUploadModal } from "@/features/upload-song/store/useUploadModal";
 import { useUserSongs } from "@/features/user-related/store/useUserSongsStore";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import DropdownMenu from "@/components/DropdownMenu";
 import Spinner from "@/components/Spinner";
@@ -20,9 +19,9 @@ const Options = ({ song }: { song: Song }) => {
     <DropdownMenu
       triggerProps={{
         element: <BiDotsVerticalRounded size={20} aria-label="Options..." />,
-        className: `hover:opacity-50 focus-visible:opacity-50 outline-none ${
-          !shouldReduceMotion ? "transition-opacity" : ""
-        }`,
+        className: cnWithReduceMotion(
+          "hover:opacity-50 transition-opacity focus-visible:opacity-50 outline-none",
+        ),
         label: `Open options for ${song.title} song`,
       }}
       contentProps={{
@@ -41,9 +40,8 @@ const UpdateButton = ({ song }: { song: Song }) => {
 
   return (
     <DropdownMenu.Item
-      className={twMerge(
-        "text-white cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none",
-        !shouldReduceMotion && "transition-opacity",
+      className={cnWithReduceMotion(
+        "text-white cursor-pointer transition-opacity hover:opacity-50 focus-visible:opacity-50 outline-none",
       )}
       onClick={() => openModal(song)}
     >
@@ -90,9 +88,8 @@ const DeleteButton = ({ songId }: { songId: number }) => {
 
   return (
     <DropdownMenu.Item
-      className={twMerge(
-        "text-white cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none disabled:opacity-50 disabled:cursor-not-allowed",
-        !shouldReduceMotion && "transition-opacity",
+      className={cnWithReduceMotion(
+        "text-white cursor-pointer transition-opacity hover:opacity-50 focus-visible:opacity-50 outline-none disabled:opacity-50 disabled:cursor-not-allowed",
       )}
       disabled={isDeleting}
       onClick={handleDelete}

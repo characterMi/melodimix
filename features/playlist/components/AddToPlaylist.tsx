@@ -9,9 +9,9 @@ import { useAuthModal } from "@/features/auth/store/useAuthModal";
 import { usePlaylistsPageData } from "@/features/infinite-scroll/store/usePlaylistsPageData";
 import { updatePlaylist } from "@/features/playlist/actions";
 import { usePlaylistModal } from "@/features/playlist/store/usePlaylistModal";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import DropdownMenu from "../../../components/DropdownMenu";
 import Loader from "../../../components/Loader";
@@ -62,9 +62,8 @@ const PlaylistItem = ({
 
   return (
     <DropdownMenu.Item
-      className={twMerge(
-        "cursor-pointer hover:opacity-50 focus-visible:opacity-50 opacity-80 outline-none w-full flex items-center justify-between disabled:opacity-25 text-sm font-thin",
-        !shouldReduceMotion && "transition-opacity",
+      className={cnWithReduceMotion(
+        "cursor-pointer hover:opacity-50 focus-visible:opacity-50 opacity-80 outline-none w-full flex items-center justify-between disabled:opacity-25 text-sm font-thin transition-opacity",
       )}
       disabled={isAdding}
       onClick={handleClick}
@@ -107,7 +106,7 @@ const Playlists = ({ songId }: { songId: number }) => {
 
   return (
     <div
-      className={twMerge(
+      className={cnWithReduceMotion(
         "flex flex-col gap-y-2 flex-1 w-full pt-2",
         (loading || playlists.length <= 0) && "justify-center items-center",
       )}
@@ -151,9 +150,8 @@ const CreatePlaylist = () => {
 
   return (
     <DropdownMenu.Item
-      className={twMerge(
-        "text-white cursor-pointer hover:text-neutral-400 focus-visible:text-neutral-400 outline-none",
-        !shouldReduceMotion && "transition-colors",
+      className={cnWithReduceMotion(
+        "text-white cursor-pointer transition-colors hover:text-neutral-400 focus-visible:text-neutral-400 outline-none",
       )}
       aria-label="Create a new playlist"
       onClick={onOpen}
@@ -167,8 +165,7 @@ const AddToPlaylist = ({ songId }: { songId: number }) => (
   <DropdownMenu.Sub>
     <DropdownMenu.SubTrigger
       className={twMerge(
-        "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none",
-        !shouldReduceMotion && "transition-opacity",
+        "cursor-pointer hover:opacity-50 transition-opacity focus-visible:opacity-50 outline-none",
       )}
     >
       Add to playlist

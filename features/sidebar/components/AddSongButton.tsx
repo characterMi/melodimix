@@ -1,11 +1,10 @@
 import { AiOutlinePlus } from "react-icons/ai";
 import { TbPlaylist } from "react-icons/tb";
-import { twMerge } from "tailwind-merge";
 
 import { useSession } from "@/features/auth/hooks/useSession";
 import { useAuthModal } from "@/features/auth/store/useAuthModal";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { useUploadModal } from "@/features/upload-song/store/useUploadModal";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 const AddSongButton = () => {
   const openAuthModal = useAuthModal((state) => state.onOpen);
@@ -29,9 +28,8 @@ const AddSongButton = () => {
 
       <button
         onClick={handleClick}
-        className={twMerge(
-          "text-neutral-400 cursor-pointer hover:text-white focus-visible:text-white outline-none",
-          !shouldReduceMotion && "transition-colors",
+        className={cnWithReduceMotion(
+          "text-neutral-400 cursor-pointer transition-colors hover:text-white focus-visible:text-white outline-none",
         )}
         aria-label="Upload a song..."
       >

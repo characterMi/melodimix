@@ -1,11 +1,10 @@
 "use client";
 
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import Link from "next/link";
 import { FaArrowUp } from "react-icons/fa";
 import { MdArrowOutward } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
-
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 interface Props {
   name: string;
@@ -18,9 +17,8 @@ const Author = ({ name, userId, shouldHighlight }: Props) => (
     scroll={false}
     href={`/users/${userId}`}
     onClick={(e) => e.stopPropagation()}
-    className={twMerge(
-      "inline-flex items-center gap-[2px] hover:opacity-50 focus-visible:opacity-50 outline-none truncate",
-      !shouldReduceMotion && "transition-opacity",
+    className={cnWithReduceMotion(
+      "inline-flex items-center gap-[2px] transition-opacity hover:opacity-50 focus-visible:opacity-50 outline-none truncate",
     )}
   >
     <span

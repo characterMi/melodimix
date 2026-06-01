@@ -16,7 +16,7 @@ import { forwardRef } from "react";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
 
-import { shouldReduceMotion } from "@/lib/reduceMotion";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 
 import type {
   DropdownMenuItemProps,
@@ -45,10 +45,9 @@ const DropdownMenu = ({ triggerProps, contentProps, children }: Props) => {
     <Root modal={false}>
       <Trigger
         aria-label={triggerProps.label}
-        className={twMerge(
-          "cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none",
-          !shouldReduceMotion && "transition-opacity",
-          triggerProps.className
+        className={cnWithReduceMotion(
+          "cursor-pointer hover:opacity-50 transition-opacity focus-visible:opacity-50 outline-none",
+          triggerProps.className,
         )}
         tabIndex={triggerProps.tabIndex}
       >
@@ -74,7 +73,7 @@ DropdownMenu.SubTrigger = forwardRef<
     {...props}
     className={twMerge(
       "font-thin text-sm flex items-center justify-between gap-2",
-      props.className
+      props.className,
     )}
     ref={ref}
   >
@@ -110,13 +109,13 @@ DropdownMenu.Item = forwardRef<HTMLDivElement, DropdownMenuItemProps>(
     <Item {...props} ref={ref}>
       {props.children}
     </Item>
-  )
+  ),
 );
 DropdownMenu.Separator = ({ className }: { className?: string }) => (
   <Separator
     className={twMerge(
       "h-[2px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent",
-      className
+      className,
     )}
   />
 );

@@ -7,13 +7,15 @@ import { HiOutlineCloudDownload } from "react-icons/hi";
 import { MdAnimation, MdArrowOutward } from "react-icons/md";
 import { PiVibrateBold } from "react-icons/pi";
 import { TbMessageReport } from "react-icons/tb";
-import { twMerge } from "tailwind-merge";
 
 import { useDownloadedSongsModal } from "@/features/cache/store/useDownloadedSongsModal";
 import { useManageCacheModal } from "@/features/cache/store/useManageCacheModal";
+import {
+  cnWithReduceMotion,
+  shouldReduceMotion,
+} from "@/features/reduce-motion/lib";
 import { useSettingsModal } from "@/features/settings/store/useSettingsModal";
 import { getItemFromLocalStorage } from "@/lib/getItemFromLocalStorage";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import Switch from "../../../components/Switch";
 import Modal from "../../modal/components/Modal";
@@ -84,9 +86,8 @@ const SettingsModal = () => {
               {type === "button" ? (
                 <button
                   onClick={onClick}
-                  className={twMerge(
-                    "hover:opacity-50 focus-visible:opacity-50",
-                    !shouldReduceMotion && "transition-opacity",
+                  className={cnWithReduceMotion(
+                    "hover:opacity-50 focus-visible:opacity-50 transition-opacity",
                   )}
                   aria-label={title}
                 >

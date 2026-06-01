@@ -1,10 +1,11 @@
 import { getItemFromLocalStorage } from "@/lib/getItemFromLocalStorage";
+import { ClassNameValue, twMerge } from "tailwind-merge";
 
 export const shouldReduceMotion = (() => {
   const storedValue = getItemFromLocalStorage(
     "reduce-motion",
     ["true", "false"],
-    "false"
+    "false",
   );
 
   if (storedValue === "true") return true;
@@ -15,3 +16,10 @@ export const shouldReduceMotion = (() => {
 
   return false;
 })();
+
+export const cnWithReduceMotion = (...classes: ClassNameValue[]) => {
+  return twMerge(
+    ...classes,
+    shouldReduceMotion && "transition-none delay-0 duration-0 animate-none",
+  );
+};

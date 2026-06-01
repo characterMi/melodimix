@@ -4,14 +4,13 @@ import { useState } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { FiTrash2 } from "react-icons/fi";
 import { MdOutlineEdit } from "react-icons/md";
-import { twMerge } from "tailwind-merge";
 
 import { usePlaylistsPageData } from "@/features/infinite-scroll/store/usePlaylistsPageData";
 import { deletePlaylist } from "@/features/playlist/actions";
 import { usePlaylistModal } from "@/features/playlist/store/usePlaylistModal";
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { onError } from "@/lib/onError";
 import { onSuccess } from "@/lib/onSuccess";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 
 import DropdownMenu from "@/components/DropdownMenu";
 import Spinner from "@/components/Spinner";
@@ -31,10 +30,9 @@ const PlaylistLink = ({ href, name, id, ...props }: Props) => {
       scroll={false}
       href={href}
       key={href}
-      className={twMerge(
+      className={cnWithReduceMotion(
         "text-white snap-start text-nowrap whitespace-nowrap relative group hover:text-emerald-300 focus-visible:text-emerald-300 outline-none pb-4 px-8",
-        pathname === href && "border-b border-emerald-500",
-        !shouldReduceMotion && "transition",
+        pathname === href && "border-b border-emerald-500 transition",
       )}
     >
       <h2 className="text-xl font-thin">{name}</h2>
@@ -46,9 +44,10 @@ const PlaylistLink = ({ href, name, id, ...props }: Props) => {
             element: (
               <BiDotsVerticalRounded size={20} aria-label="Options..." />
             ),
-            className: `absolute top-0 left-full -translate-x-2/3 opacity-0 hover:opacity-100 hover:text-emerald-300 hover:scale-105 group-hover:opacity-100 focus-visible:text-emerald-300 focus-visible:scale-105 focus-visible:opacity-100 group-focus-visible:opacity-100 outline-none ${
-              pathname === href ? "block" : "hidden"
-            } ${!shouldReduceMotion ? "transition" : ""}`,
+            className: cnWithReduceMotion(
+              "absolute top-0 left-full transition -translate-x-2/3 opacity-0 hover:opacity-100 hover:text-emerald-300 hover:scale-105 group-hover:opacity-100 focus-visible:text-emerald-300 focus-visible:scale-105 focus-visible:opacity-100 group-focus-visible:opacity-100 outline-none",
+              pathname === href ? "block" : "hidden",
+            ),
             label: `Open options for ${name} playlist`,
           }}
           contentProps={{
@@ -79,9 +78,8 @@ const UpdateButton = (
 
   return (
     <DropdownMenu.Item
-      className={twMerge(
-        "text-white cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none",
-        !shouldReduceMotion && "transition-opacity",
+      className={cnWithReduceMotion(
+        "text-white cursor-pointer transition-opacity hover:opacity-50 focus-visible:opacity-50 outline-none",
       )}
       onClick={() => openModal(props)}
     >
@@ -139,9 +137,8 @@ const DeleteButton = ({
 
   return (
     <DropdownMenu.Item
-      className={twMerge(
-        "text-white cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none disabled:opacity-50 disabled:cursor-not-allowed",
-        !shouldReduceMotion && "transition-opacity",
+      className={cnWithReduceMotion(
+        "text-white transition-opacity cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none disabled:opacity-50 disabled:cursor-not-allowed",
       )}
       disabled={isDeleting}
       onClick={handleDelete}

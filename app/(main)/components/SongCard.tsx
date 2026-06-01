@@ -3,10 +3,9 @@
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { FaShareAlt } from "react-icons/fa";
-import { twMerge } from "tailwind-merge";
 
+import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { useLoadImage } from "@/features/song-related/hooks/useLoadImage";
-import { shouldReduceMotion } from "@/lib/reduceMotion";
 import { shareSong } from "@/lib/share";
 
 import Author from "@/features/song-related/components/Author";
@@ -38,9 +37,8 @@ const SongCard = ({ data, onClick }: Props) => {
   return (
     <button
       onClick={() => onClick(data.id)}
-      className={twMerge(
-        "relative group flex flex-col text-left rounded-md overflow-hidden gap-x-4 bg-neutral-400/5 cursor-pointer hover:bg-neutral-400/10 focus-visible:bg-neutral-400/10 outline-none p-3",
-        !shouldReduceMotion && "transition-colors",
+      className={cnWithReduceMotion(
+        "relative group transition-colors flex flex-col text-left rounded-md overflow-hidden gap-x-4 bg-neutral-400/5 cursor-pointer hover:bg-neutral-400/10 focus-visible:bg-neutral-400/10 outline-none p-3",
       )}
       aria-label={"Play the " + data.title + " song"}
     >
@@ -56,9 +54,8 @@ const SongCard = ({ data, onClick }: Props) => {
 
       <div className="absolute bottom-24 right-5">
         <div
-          className={twMerge(
-            "opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md translate-y-2/4 group-hover:opacity-100 group-hover:-translate-y-2/4 hover:scale-105 group-focus-visible:opacity-100 group-focus-visible:-translate-y-2/4 focus-visible:opacity-100 focus-visible:translate-y-3/4 focus-visible:scale-105 outline-none",
-            !shouldReduceMotion && "transition delay-75",
+          className={cnWithReduceMotion(
+            "opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md translate-y-2/4 group-hover:opacity-100 group-hover:-translate-y-2/4 hover:scale-105 group-focus-visible:opacity-100 group-focus-visible:-translate-y-2/4 focus-visible:opacity-100 focus-visible:translate-y-3/4 focus-visible:scale-105 outline-none transition delay-75",
           )}
           aria-label="Share the song"
           onClick={handleClick}
@@ -97,9 +94,8 @@ const SongPageLink = ({ song }: { song: Song }) => {
 
   return (
     <PlayButton
-      className={twMerge(
-        "opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md translate-y-1/4 group-hover:opacity-100 group-hover:-translate-y-1/4 group-focus-visible:opacity-100 group-focus-visible:-translate-y-1/4 focus-visible:-translate-y-1/4 focus-visible:opacity-100",
-        !shouldReduceMotion && "transition",
+      className={cnWithReduceMotion(
+        "opacity-0 rounded-full flex items-center bg-green-500 p-4 drop-shadow-md translate-y-1/4 group-hover:opacity-100 group-hover:-translate-y-1/4 group-focus-visible:opacity-100 group-focus-visible:-translate-y-1/4 transition focus-visible:-translate-y-1/4 focus-visible:opacity-100",
         isLoading && "p-3",
       )}
       aria-label={`Go to the ${song.title} page`}
