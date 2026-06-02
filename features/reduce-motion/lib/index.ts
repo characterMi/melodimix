@@ -22,7 +22,7 @@ export const cnWithReduceMotion = (...classes: ClassValue[]) => {
   return twMerge(
     clsx(
       ...classes,
-      shouldReduceMotion && "transition-none delay-0 duration-0 animate-none",
+      shouldReduceMotion && "transition-none delay-0 duration-0",
     ),
   );
 };

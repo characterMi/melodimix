@@ -92,15 +92,17 @@ const ImageUploader = ({
   poster,
   setPoster,
   defaultPoster,
+  isPlaylistModalOpen,
   disabled,
 }: {
   poster: null | File;
   setPoster: (file: File | null) => void;
   defaultPoster?: string;
+  isPlaylistModalOpen: boolean;
   disabled: boolean;
 }) => {
   const input = useRef<HTMLInputElement>(null);
-  const [isImageLoading, setIsImageLoading] = useState(true);
+  const [isImageLoading, setIsImageLoading] = useState(false);
   const [imageSrc, setImageSrc] = useState("");
 
   useEffect(() => {
@@ -116,6 +118,15 @@ const ImageUploader = ({
     };
   }, [poster]);
 
+  useEffect(() => {
+    if (isPlaylistModalOpen) return;
+
+    URL.revokeObjectURL(imageSrc);
+    setImageSrc("");
+    setIsImageLoading(false);
+    input.current!.value = "";
+  }, [isPlaylistModalOpen]);
+
   return (
     <div className="size-[250px] rounded-lg bg-neutral-400/10 relative flex flex-col items-center justify-center gap-2 group">
       <input
@@ -123,7 +134,7 @@ const ImageUploader = ({
         accept="image/*"
         disabled={disabled}
         onChange={(e) => setPoster(e.target.files?.[0] ?? null)}
-        className="opacity-0 size-full absolute top-0 left-0 z-[2] cursor-pointer"
+        className="opacity-0 size-full absolute top-0 left-0 z-[2]"
         ref={input}
       />
 
@@ -229,6 +240,7 @@ const PlaylistModal = () => {
         poster={poster}
         setPoster={setPoster}
         defaultPoster={initialData?.poster_path}
+        isPlaylistModalOpen={isPlaylistModalOpen}
         disabled={isSubmitting}
       />
 

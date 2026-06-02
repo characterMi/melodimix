@@ -103,6 +103,7 @@ export const useCreateOrUpdatePlaylist = () => {
       setName("");
       setIsPublic(false);
       setSongIds([]);
+      setPoster(null);
     }
   }, [isOpen]);
 

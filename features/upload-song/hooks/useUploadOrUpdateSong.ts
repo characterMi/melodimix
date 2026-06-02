@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useSession } from "@/features/auth/hooks/useSession";
 import { useHomePageData } from "@/features/infinite-scroll/store/useHomePageData";
@@ -112,6 +112,16 @@ export const useUploadOrUpdateSong = () => {
     abortController.current.abort();
     onSuccess("Operation cancelled.");
   };
+
+  useEffect(() => {
+    setUploadProgress({ image: 0, song: 0 });
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen && phase !== "none") {
+      handleCancel();
+    }
+  }, [isOpen, phase]);
 
   return {
     isEditing,

@@ -79,7 +79,7 @@ const MobilePlayer = ({
         width={1}
         height={1}
         className={twMerge(
-          "size-full absolute z-[-1] opacity-50",
+          "size-full absolute z-[-1] opacity-80",
           isMobilePlayerOpen && "blur-lg",
         )}
         renderErrorFallback={false}

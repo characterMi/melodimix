@@ -18,17 +18,17 @@ import type { AuthResponse, Session } from "@supabase/supabase-js";
 
 const UpdateUserForm = ({
   session,
+  user,
   closeUserModal,
   refreshSession,
 }: {
   session: Session;
+  user: User | null;
   closeUserModal: () => void;
   refreshSession: () => Promise<AuthResponse>;
 }) => {
   const [isSubmitting, startTransition] = useTransition();
   const updateSessionStore = useSessionStore((state) => state.updateStore);
-
-  const user = session.user.user_metadata;
 
   const handleSubmit = (formData: FormData) => {
     if (isSubmitting) return;
@@ -73,17 +73,22 @@ const UpdateUserForm = ({
     });
   };
 
+  const userFromSession = session.user.user_metadata;
+
   return (
     <form
       action={handleSubmit}
       className="flex flex-col items-center gap-8 w-full"
     >
-      <Avatar avatarUrl={user.avatar_url} isSubmitting={isSubmitting} />
+      <Avatar
+        avatarUrl={user?.avatar_url ?? userFromSession.avatar_url}
+        isSubmitting={isSubmitting}
+      />
 
       <div className="flex flex-col gap-4 w-full">
         <Input
           name="name"
-          defaultValue={user.name ?? "Guest"}
+          defaultValue={user?.name ?? userFromSession.name ?? "Guest"}
           type="text"
           disabled={isSubmitting}
           placeholder="Name"
@@ -94,7 +99,7 @@ const UpdateUserForm = ({
 
         <Input
           name="fullname"
-          defaultValue={user.full_name ?? "Guest"}
+          defaultValue={user?.full_name ?? userFromSession.full_name ?? "Guest"}
           type="text"
           placeholder="Full name"
           required
@@ -104,7 +109,7 @@ const UpdateUserForm = ({
         />
 
         <div className="flex w-full rounded-sm bg-neutral-700 border bg-transparent px-3 py-3 text-sm cursor-not-allowed opacity-50 select-all">
-          {user.email}
+          {user?.email ?? userFromSession.email}
         </div>
       </div>
 
@@ -118,6 +123,7 @@ const UpdateUserForm = ({
 const UserModal = () => {
   const { isOpen, onClose } = useUserModal();
   const { session, isLoading: isUserLoading, supabaseClient } = useSession();
+  const user = useSessionStore((state) => state.user);
 
   return (
     <Modal
@@ -139,6 +145,7 @@ const UserModal = () => {
           {!isUserLoading && session && (
             <UpdateUserForm
               session={session}
+              user={user}
               closeUserModal={onClose}
               refreshSession={async () => {
                 return await supabaseClient.auth.refreshSession(session);
