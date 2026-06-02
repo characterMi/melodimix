@@ -83,7 +83,9 @@ const SongsList = ({
     }
   };
 
-  return (
+  return rawUrls.length <= 0 ? (
+    <p className="text-rose-100">There is no song in the cache.</p>
+  ) : (
     <div className="space-y-6 w-full py-6">
       {rawUrls.map((url, index) => (
         <Fragment key={url}>
