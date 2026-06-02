@@ -4,6 +4,8 @@
  * automatically injects a new meta tag whenever we change the page.
  */
 
+"use client";
+
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useThemeColor } from "../store/useThemeColor";
