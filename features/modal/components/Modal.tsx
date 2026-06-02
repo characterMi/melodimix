@@ -1,26 +1,30 @@
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
 import { IoMdClose } from "react-icons/io";
 
+import { useGetDefaultSongColor } from "@/features/player/hooks/useGetDefaultSongColor";
+import { changeThemeColor } from "@/features/pwa/lib/changeThemeColor";
+
 const Root = dynamic(() =>
-  import("@radix-ui/react-dialog").then((mod) => mod.Root)
+  import("@radix-ui/react-dialog").then((mod) => mod.Root),
 );
 const Portal = dynamic(() =>
-  import("@radix-ui/react-dialog").then((mod) => mod.Portal)
+  import("@radix-ui/react-dialog").then((mod) => mod.Portal),
 );
 const Overlay = dynamic(() =>
-  import("@radix-ui/react-dialog").then((mod) => mod.Overlay)
+  import("@radix-ui/react-dialog").then((mod) => mod.Overlay),
 );
 const Content = dynamic(() =>
-  import("@radix-ui/react-dialog").then((mod) => mod.Content)
+  import("@radix-ui/react-dialog").then((mod) => mod.Content),
 );
 const Title = dynamic(() =>
-  import("@radix-ui/react-dialog").then((mod) => mod.Title)
+  import("@radix-ui/react-dialog").then((mod) => mod.Title),
 );
 const Description = dynamic(() =>
-  import("@radix-ui/react-dialog").then((mod) => mod.Description)
+  import("@radix-ui/react-dialog").then((mod) => mod.Description),
 );
 const Close = dynamic(() =>
-  import("@radix-ui/react-dialog").then((mod) => mod.Close)
+  import("@radix-ui/react-dialog").then((mod) => mod.Close),
 );
 
 interface Props {
@@ -40,6 +44,16 @@ const Modal = ({
   title,
   containerClassName,
 }: Props) => {
+  const defaultThemeColor = useGetDefaultSongColor();
+
+  useEffect(() => {
+    if (isOpen) {
+      changeThemeColor("#262626");
+    } else {
+      changeThemeColor(defaultThemeColor);
+    }
+  }, [isOpen, defaultThemeColor]);
+
   return (
     <Root open={isOpen} defaultOpen={isOpen} onOpenChange={handleChange}>
       <Portal>

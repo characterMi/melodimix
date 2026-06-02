@@ -10,6 +10,7 @@ import { ModalProvider } from "@/features/modal/providers/ModalProvider";
 import { ToasterProvider } from "@/providers/ToasterProvider";
 
 import Player from "@/features/player/components/Player";
+import ThemeColorManager from "@/features/pwa/components/ThemeColorManager";
 import Sidebar from "@/features/sidebar/components/Sidebar";
 import Root from "./root";
 
@@ -86,6 +87,7 @@ export default function RootLayout({
       <body className={figtree.className}>
         <SessionProvider />
         <PWABehaviorManager />
+        <ThemeColorManager />
         <ToasterProvider />
         <ModalProvider />
         <Root>

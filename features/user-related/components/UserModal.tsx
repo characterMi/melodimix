@@ -28,7 +28,10 @@ const UpdateUserForm = ({
   refreshSession: () => Promise<AuthResponse>;
 }) => {
   const [isSubmitting, startTransition] = useTransition();
-  const updateSessionStore = useSessionStore((state) => state.updateStore);
+  const { updateSessionStore, updateUser } = useSessionStore((state) => ({
+    updateSessionStore: state.updateStore,
+    updateUser: state.setUser,
+  }));
 
   const handleSubmit = (formData: FormData) => {
     if (isSubmitting) return;
@@ -68,6 +71,14 @@ const UpdateUserForm = ({
         { ...session, user: { ...session.user, user_metadata: updatedUser! } },
         false,
       );
+      updateUser({
+        avatar_url: updatedUser!.avatar_url,
+        email: updatedUser!.email,
+        full_name: updatedUser!.full_name,
+        id: updatedUser!.id,
+        name: updatedUser!.name,
+        role: "user",
+      });
       onSuccess("Your profile has been updated!");
       closeUserModal();
     });

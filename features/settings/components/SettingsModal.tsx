@@ -118,7 +118,7 @@ const SettingsModal = () => {
       </div>
 
       <p className="flex items-center justify-center text-xs text-neutral-400 gap-1">
-        Created with
+        Designed & Coded with
         <AiFillHeart size={16} className="text-green-500" aria-label="Love" />
         by <b className="gradient-text">Abolfazl Taghadosi</b>
       </p>

@@ -1,4 +1,4 @@
-import { changeThemeColor } from "@/features/player/lib/changeThemeColor";
+import { changeThemeColor } from "@/features/pwa/lib/changeThemeColor";
 import {
   type MouseEvent,
   type RefObject,
@@ -86,7 +86,7 @@ export const useMobilePlayerDrag = (
       mobilePlayerRef.current.style.removeProperty("transition");
       mobilePlayerRef.current.style.removeProperty("transform");
 
-      if (dragPosData.current.current > window.innerHeight / 3) {
+      if (dragPosData.current.current > window.innerHeight / 4) {
         window.history.back();
       } else {
         changeThemeColor(color);

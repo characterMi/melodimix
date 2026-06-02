@@ -60,6 +60,10 @@ export async function generateMetadata({
   };
 }
 
+export const viewport = {
+  themeColor: "#171717",
+};
+
 async function GetArtistSongs({ artist }: { artist: string | undefined }) {
   const songs = await getArtistSongs(artist);
 

@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef } from "react";
 
-import { changeThemeColor } from "@/features/player/lib/changeThemeColor";
 import { usePlayerStore } from "@/features/player/store/usePlayerStore";
 import { ColorEntity } from "@/features/player/store/useSongColors";
+import { changeThemeColor } from "@/features/pwa/lib/changeThemeColor";
 
 export const usePlayerSongCard = (
   colors: ColorEntity | undefined,

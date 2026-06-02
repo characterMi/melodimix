@@ -46,72 +46,78 @@ export const useUploadOrUpdateSong = () => {
     [],
   );
 
-  const handleSubmit = async (formData: FormData) => {
-    if (!isOpen || phase !== "none") return;
+  const handleSubmit = useCallback(
+    async (formData: FormData) => {
+      if (!isOpen || phase !== "none") return;
 
-    if (!session?.user) {
-      onError("Unauthenticated User.");
+      if (!session?.user) {
+        onError("Unauthenticated User.");
 
-      return;
-    }
-
-    if (!navigator.onLine) {
-      onError(
-        "You're currently offline, make sure you're online, then try again.",
-      );
-      return;
-    }
-
-    abortController.current = new AbortController();
-    setPhase("validating");
-
-    if (isEditing) {
-      const { error, updatedSong } = await updateSong(
-        formData,
-        initialData,
-        setPhase,
-        onUploadProgress,
-        abortController.current,
-      );
-
-      setPhase("none");
-
-      if (error) {
-        if (error !== "AbortSignal") onError(error);
         return;
       }
 
-      updateUploadedSong(updatedSong!);
-    } else {
-      const { error, uploadedSong } = await uploadSong(
-        formData,
-        setPhase,
-        onUploadProgress,
-        abortController.current,
-      );
-
-      setPhase("none");
-
-      if (error) {
-        if (error !== "AbortSignal") onError(error);
+      if (!navigator.onLine) {
+        onError(
+          "You're currently offline, make sure you're online, then try again.",
+        );
         return;
       }
 
-      addUploadedSongToUserSongs(uploadedSong!);
-      addUploadedSongToSongs(uploadedSong!);
-    }
+      abortController.current = new AbortController();
+      setPhase("validating");
+      onSuccess(
+        `Started the process of ${isEditing ? "editing" : "uploading"}, do not close the modal.`,
+      );
 
-    onSuccess(`Song ${isEditing ? "updated" : "created"}!`);
-    router.refresh();
-    onClose();
-  };
+      if (isEditing) {
+        const { error, updatedSong } = await updateSong(
+          formData,
+          initialData,
+          setPhase,
+          onUploadProgress,
+          abortController.current,
+        );
 
-  const handleCancel = () => {
+        setPhase("none");
+
+        if (error) {
+          if (error !== "AbortSignal") onError(error);
+          return;
+        }
+
+        updateUploadedSong(updatedSong!);
+      } else {
+        const { error, uploadedSong } = await uploadSong(
+          formData,
+          setPhase,
+          onUploadProgress,
+          abortController.current,
+        );
+
+        setPhase("none");
+
+        if (error) {
+          if (error !== "AbortSignal") onError(error);
+          return;
+        }
+
+        addUploadedSongToUserSongs(uploadedSong!);
+        addUploadedSongToSongs(uploadedSong!);
+      }
+
+      onSuccess(`Song ${isEditing ? "updated" : "created"}!`);
+      router.refresh();
+      onClose();
+    },
+    [isOpen, phase, session, isEditing, initialData],
+  );
+
+  const handleCancel = useCallback(() => {
     if (phase === "creating") return;
 
     abortController.current.abort();
     onSuccess("Operation cancelled.");
-  };
+  }, [phase]);
 
   useEffect(() => {
     setUploadProgress({ image: 0, song: 0 });
