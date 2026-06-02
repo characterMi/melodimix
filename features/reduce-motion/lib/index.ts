@@ -1,5 +1,6 @@
 import { getItemFromLocalStorage } from "@/lib/getItemFromLocalStorage";
-import { ClassNameValue, twMerge } from "tailwind-merge";
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export const shouldReduceMotion = (() => {
   const storedValue = getItemFromLocalStorage(
@@ -17,9 +18,11 @@ export const shouldReduceMotion = (() => {
   return false;
 })();
 
-export const cnWithReduceMotion = (...classes: ClassNameValue[]) => {
+export const cnWithReduceMotion = (...classes: ClassValue[]) => {
   return twMerge(
-    ...classes,
-    shouldReduceMotion && "transition-none delay-0 duration-0 animate-none",
+    clsx(
+      ...classes,
+      shouldReduceMotion && "transition-none delay-0 duration-0 animate-none",
+    ),
   );
 };
