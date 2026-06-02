@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSession } from "../../auth/hooks/useSession";
 import { usePlaylistModal } from "../store/usePlaylistModal";
+import { uploadPlaylistPoster } from "../utils/uploadPlaylistPoster";
 
 export const useCreateOrUpdatePlaylist = () => {
   const { isOpen, onClose, initialData } = usePlaylistModal();
@@ -46,6 +47,16 @@ export const useCreateOrUpdatePlaylist = () => {
 
     setIsSubmitting(true);
 
+    const uploadRes = await uploadPlaylistPoster(
+      initialData?.poster_path || `poster-${name}-${crypto.randomUUID()}`,
+      poster,
+    );
+
+    if (uploadRes === "ERR") {
+      setIsSubmitting(false);
+      return;
+    }
+
     if (isEditing) {
       const updatedPlaylist = {
         id: initialData.id,
@@ -54,10 +65,10 @@ export const useCreateOrUpdatePlaylist = () => {
         user_id: session.user.id,
         song_ids: songIds,
         created_at: initialData.created_at,
-        poster_path: initialData.poster_path,
+        poster_path: uploadRes,
       };
 
-      const { error, message } = await updatePlaylist(updatedPlaylist, poster);
+      const { error, message } = await updatePlaylist(updatedPlaylist);
 
       if (error) {
         onError(message);
@@ -71,7 +82,7 @@ export const useCreateOrUpdatePlaylist = () => {
         name,
         isPublic: isPublic,
         songIds,
-        playlistPoster: poster,
+        posterPath: uploadRes,
       });
 
       if (error) {
