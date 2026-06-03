@@ -28,6 +28,7 @@ const PlaylistLink = ({ href, name, id, ...props }: Props) => {
   return (
     <Link
       scroll={false}
+      draggable={false}
       href={href}
       key={href}
       className={cnWithReduceMotion(

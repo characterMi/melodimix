@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import {
+  type PointerEvent,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 
 import { useSession } from "@/features/auth/hooks/useSession";
@@ -23,26 +29,7 @@ const PlaylistContainer = ({
 }) => {
   const openPlaylistModal = usePlaylistModal((state) => state.onOpen);
 
-  const playlistContainer = useRef<HTMLDivElement>(null);
   const { session, isLoading: isUserLoading } = useSession();
-
-  useEffect(() => {
-    const el = playlistContainer.current;
-    if (!el) return;
-
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY === 0) return;
-
-      el.scrollLeft += e.deltaY;
-      e.preventDefault();
-    };
-
-    el.addEventListener("wheel", handleWheel, { passive: false });
-
-    return () => {
-      el.removeEventListener("wheel", handleWheel);
-    };
-  }, []);
 
   if (isUserLoading) return <Loader className="ml-4" />;
 
@@ -57,15 +44,12 @@ const PlaylistContainer = ({
 
   return (
     <>
-      <div className="sticky top-0 z-[1] bg-neutral-900/95 pt-2 md:pt-4 md:backdrop-blur-sm">
-        <div
-          ref={playlistContainer}
-          className="w-full flex h-full overflow-x-auto snap-x snap-mandatory snap-always pl-2 pr-12"
-        >
+      <div className="sticky top-0 z-[1] bg-neutral-900/95 pt-2 md:pt-4 md:backdrop-blur-sm overflow-hidden">
+        <LinksContainer>
           {playlistsList.map((playlist) => (
             <PlaylistLink key={playlist.href} {...playlist} />
           ))}
-        </div>
+        </LinksContainer>
 
         <button
           onClick={() => openPlaylistModal()}
@@ -81,6 +65,82 @@ const PlaylistContainer = ({
 
       {children}
     </>
+  );
+};
+
+const LinksContainer = ({ children }: { children: ReactNode }) => {
+  const dragStartPos = useRef(0);
+  const storedLeft = useRef(0);
+  const playlistContainer = useRef<HTMLDivElement>(null);
+
+  const [isDragging, setIsDragging] = useState(false);
+
+  const onDragStart = (e: PointerEvent) => {
+    setIsDragging(true);
+    dragStartPos.current = e.clientX + storedLeft.current * -1;
+
+    document.body.style.cursor = "grabbing";
+  };
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const onDrag = (e: globalThis.TouchEvent | globalThis.MouseEvent) => {
+      if (!playlistContainer.current || !isDragging) return;
+
+      const { clientX } = (e as globalThis.TouchEvent).touches
+        ? (e as globalThis.TouchEvent).touches[0]
+        : (e as globalThis.MouseEvent);
+
+      if (clientX >= dragStartPos.current) {
+        dragStartPos.current = clientX;
+      }
+
+      const clampedDragX = Math.min(
+        0,
+        Math.max(
+          -(
+            playlistContainer.current.scrollWidth -
+            playlistContainer.current.offsetWidth +
+            // 56 is the amount of padding right on the container plus some extra pixels
+            56
+          ),
+          clientX - dragStartPos.current,
+        ),
+      );
+
+      storedLeft.current = clampedDragX;
+
+      playlistContainer.current.style.transform = `translateX(${clampedDragX}px)`;
+    };
+
+    const onDragEnd = () => {
+      setIsDragging(false);
+      document.body.style.removeProperty("cursor");
+    };
+
+    window.addEventListener("touchmove", onDrag, { signal: controller.signal });
+    window.addEventListener("mousemove", onDrag, { signal: controller.signal });
+    window.addEventListener("touchend", onDragEnd, {
+      signal: controller.signal,
+    });
+    window.addEventListener("mouseup", onDragEnd, {
+      signal: controller.signal,
+    });
+
+    return () => {
+      controller.abort();
+    };
+  }, [isDragging]);
+
+  return (
+    <div
+      onPointerDown={onDragStart}
+      ref={playlistContainer}
+      className="w-full flex h-full pl-2 pr-12 cursor-grab relative"
+    >
+      {children}
+    </div>
   );
 };
 

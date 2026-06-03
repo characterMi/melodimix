@@ -90,7 +90,7 @@ const PlaylistCard = ({ playlist }: { playlist: Playlist }) => {
         "w-full flex flex-col px-1 xss:px-2 bg-neutral-800 outline-none border-none rounded-md hover:-translate-y-[2%] focus-visible:-translate-y-[2%] shadow-2xl group transition-transform duration-500",
       )}
     >
-      <div className="rounded-md size-full relative after:absolute after:top-0 after:left-0 after:size-full after:bg-neutral-950 after:rounded-md -mt-1 xss:-mt-2">
+      <div className="rounded-md size-full aspect-square relative after:absolute after:top-0 after:left-0 after:size-full after:bg-neutral-950 after:rounded-md -mt-1 xss:-mt-2">
         <Image
           src={poster ?? "/images/playlist.png"}
           alt={playlist.name}
