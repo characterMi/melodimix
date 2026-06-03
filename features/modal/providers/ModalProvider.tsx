@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import AuthModal from "@/features/auth/components/AuthModal";
 import DownloadedSongsModal from "@/features/cache/components/DownloadedSongsModal";
 import ManageCacheModal from "@/features/cache/components/ManageCacheModal";
+import PlaylistDetailsModal from "@/features/playlist/components/PlaylistDetailsModal";
 import PlaylistModal from "@/features/playlist/components/PlaylistModal";
 import SettingsModal from "@/features/settings/components/SettingsModal";
 import UploadModal from "@/features/upload-song/components/UploadModal";
@@ -27,6 +28,7 @@ export const ModalProvider = () => {
       <ManageCacheModal />
       <DownloadedSongsModal />
       <PlaylistModal />
+      <PlaylistDetailsModal />
       <UserModal />
     </>
   );

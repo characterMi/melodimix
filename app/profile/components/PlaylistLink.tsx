@@ -1,20 +1,9 @@
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { BiDotsVerticalRounded } from "react-icons/bi";
-import { FiTrash2 } from "react-icons/fi";
-import { MdOutlineEdit } from "react-icons/md";
 
-import { usePlaylistsPageData } from "@/features/infinite-scroll/store/usePlaylistsPageData";
-import { deletePlaylist } from "@/features/playlist/actions";
-import { usePlaylistModal } from "@/features/playlist/store/usePlaylistModal";
+import { usePlaylistDetailsModal } from "@/features/playlist/store/usePlaylistDetailsModal";
 import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
-import { onError } from "@/lib/onError";
-import { onSuccess } from "@/lib/onSuccess";
-
-import DropdownMenu from "@/components/DropdownMenu";
-import Spinner from "@/components/Spinner";
-import VariantButton from "@/components/VariantButton";
 
 type Props = {
   href: string;
@@ -24,6 +13,9 @@ type Props = {
 
 const PlaylistLink = ({ href, name, id, ...props }: Props) => {
   const pathname = usePathname();
+  const openPlaylistDetailsModal = usePlaylistDetailsModal(
+    (state) => state.onOpen,
+  );
 
   return (
     <Link
@@ -40,119 +32,28 @@ const PlaylistLink = ({ href, name, id, ...props }: Props) => {
 
       {/* Playlists are editable, except for "liked", "uploaded", and "interests" songs */}
       {id !== "liked" && id !== "uploaded" && id !== "interests" && (
-        <DropdownMenu
-          triggerProps={{
-            element: (
-              <BiDotsVerticalRounded size={20} aria-label="Options..." />
-            ),
-            className: cnWithReduceMotion(
-              "absolute top-0 left-full transition -translate-x-2/3 opacity-0 hover:opacity-100 hover:text-emerald-300 hover:scale-105 group-hover:opacity-100 focus-visible:text-emerald-300 focus-visible:scale-105 focus-visible:opacity-100 group-focus-visible:opacity-100 outline-none",
-              pathname === href ? "block" : "hidden",
-            ),
-            label: `Open options for ${name} playlist`,
-          }}
-          contentProps={{
-            className: "w-[160px] gap-4",
-          }}
+        <button
+          aria-label={`Open options for ${name} playlist`}
+          className={cnWithReduceMotion(
+            "absolute top-0 left-full transition -translate-x-2/3 opacity-0 hover:opacity-100 hover:text-emerald-300 hover:scale-105 group-hover:opacity-100 focus-visible:text-emerald-300 focus-visible:scale-105 focus-visible:opacity-100 group-focus-visible:opacity-100 outline-none",
+            pathname === href ? "block" : "hidden",
+          )}
+          onClick={() =>
+            openPlaylistDetailsModal({
+              id,
+              name,
+              user_id: props.user_id!,
+              song_ids: props.song_ids!,
+              is_public: props.is_public!,
+              created_at: props.created_at!,
+              poster_path: props.poster_path!,
+            })
+          }
         >
-          <UpdateButton
-            name={name}
-            id={id}
-            user_id={props.user_id!}
-            song_ids={props.song_ids!}
-            is_public={props.is_public!}
-            created_at={props.created_at!}
-            poster_path={props.poster_path!}
-          />
-
-          <DeleteButton playlistId={id} isPublic={props.is_public!} />
-        </DropdownMenu>
+          <BiDotsVerticalRounded size={20} aria-hidden />
+        </button>
       )}
     </Link>
-  );
-};
-
-const UpdateButton = (
-  props: Required<Omit<Props, "href" | "id"> & { id: number }>,
-) => {
-  const openModal = usePlaylistModal((state) => state.onOpen);
-
-  return (
-    <DropdownMenu.Item
-      className={cnWithReduceMotion(
-        "text-white cursor-pointer transition-opacity hover:opacity-50 focus-visible:opacity-50 outline-none",
-      )}
-      onClick={() => openModal(props)}
-    >
-      <VariantButton
-        variant="secondary"
-        className="w-full py-4 text-sm gap-1"
-        tabIndex={-1}
-      >
-        Edit playlist <MdOutlineEdit size={16} />
-      </VariantButton>
-    </DropdownMenu.Item>
-  );
-};
-
-const DeleteButton = ({
-  playlistId,
-  isPublic,
-}: {
-  playlistId: number;
-  isPublic: boolean;
-}) => {
-  const [isDeleting, setIsDeleting] = useState(false);
-  const router = useRouter();
-
-  const removePlaylistFromPlaylistsStore = usePlaylistsPageData(
-    (state) => state.removeOne,
-  );
-
-  const handleDelete = async (e: React.MouseEvent) => {
-    e.preventDefault();
-
-    if (isDeleting) return;
-
-    if (!navigator.onLine) {
-      onError(
-        "You're currently offline, make sure you're online, then try again.",
-      );
-      return;
-    }
-
-    setIsDeleting(true);
-
-    const isDeleted = await deletePlaylist(playlistId, isPublic);
-
-    if (!isDeleted) {
-      onError();
-    } else {
-      onSuccess("Playlist deleted.");
-    }
-
-    router.replace("/profile");
-    setIsDeleting(false);
-    removePlaylistFromPlaylistsStore(playlistId);
-  };
-
-  return (
-    <DropdownMenu.Item
-      className={cnWithReduceMotion(
-        "text-white transition-opacity cursor-pointer hover:opacity-50 focus-visible:opacity-50 outline-none disabled:opacity-50 disabled:cursor-not-allowed",
-      )}
-      disabled={isDeleting}
-      onClick={handleDelete}
-    >
-      <VariantButton
-        variant="error"
-        className="w-full py-4 text-sm gap-1"
-        tabIndex={-1}
-      >
-        Delete playlist
-        {isDeleting ? <Spinner size="small" /> : <FiTrash2 size={16} />}
-      </VariantButton>
-    </DropdownMenu.Item>
   );
 };
 

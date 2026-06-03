@@ -75,7 +75,7 @@ const PageContent = ({
   if (errMessage || songs.length === 0)
     return (
       <NoSongFallback
-        className="-mt-2"
+        className="-mt-1"
         fallbackText={errMessage || "No song in this playlist."}
       />
     );
