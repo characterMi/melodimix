@@ -43,8 +43,13 @@ const LoadMore = ({
         setData(data, currentPage + 1);
       })
       .catch(() => {
-        setStatus("retrying");
-        retries.current += 1;
+        if (navigator.onLine) {
+          setStatus("retrying");
+          retries.current += 1;
+          return;
+        }
+
+        setStatus("error");
       })
       .finally(() => {
         setTimeout(() => setIsLoading(false), 500);
@@ -68,6 +73,17 @@ const LoadMore = ({
       clearTimeout(retryTimeout.current);
     };
   }, [status]);
+
+  useEffect(() => {
+    const handleOnline = () => {
+      setStatus("loadmore");
+      retries.current = 0;
+    };
+
+    window.addEventListener("online", handleOnline);
+
+    return () => window.removeEventListener("online", handleOnline);
+  }, []);
 
   return (
     <div className="flex justify-center items-center py-8 relative">

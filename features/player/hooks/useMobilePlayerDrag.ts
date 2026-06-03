@@ -4,6 +4,7 @@ import {
   type RefObject,
   type TouchEvent,
   useCallback,
+  useEffect,
   useRef,
 } from "react";
 
@@ -12,6 +13,7 @@ export const useMobilePlayerDrag = (
   contentContainer: RefObject<HTMLDivElement>,
   color: string,
   defaultColor: string,
+  isMobilePlayerOpen: boolean,
 ) => {
   const dragPosData = useRef({
     start: 0,
@@ -94,6 +96,15 @@ export const useMobilePlayerDrag = (
     },
     [color],
   );
+
+  useEffect(() => {
+    dragPosData.current = {
+      start: 0,
+      current: 0,
+      isDragging: false,
+      hasContainerScrolled: false,
+    };
+  }, [isMobilePlayerOpen]);
 
   return { onDragStart, onDrag, onDragEnd };
 };

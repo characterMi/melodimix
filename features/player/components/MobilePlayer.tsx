@@ -39,6 +39,7 @@ const MobilePlayer = ({
     contentContainer,
     color,
     defaultColor,
+    isMobilePlayerOpen,
   );
 
   useFocusTrap<HTMLDivElement>(mobilePlayerRef, isMobilePlayerOpen);
