@@ -77,6 +77,7 @@ const PlayerContent = ({
               song={song}
               size="lg"
               color={colors?.dark ?? defaultColors.dark}
+              colorLight={colors?.light ?? defaultColors.light}
             />
 
             <PlayerControls

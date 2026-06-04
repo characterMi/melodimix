@@ -9,10 +9,12 @@ const LikeButton = ({
   song,
   size = "sm",
   color = "#22c55e",
+  colorLight = "#4ade80",
 }: {
   song: Song;
   size?: "sm" | "lg";
   color?: string;
+  colorLight?: string;
 }) => {
   const { isLiked, handleLike, pending, btnRef } = useLikeSong(song, color);
 
@@ -25,7 +27,7 @@ const LikeButton = ({
       )}
       style={{
         // @ts-ignore
-        "--bg-color": color,
+        "--bg-color": colorLight,
       }}
       onClick={handleLike}
       disabled={pending}

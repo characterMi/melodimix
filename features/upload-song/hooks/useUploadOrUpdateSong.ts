@@ -1,5 +1,6 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 
 import { useSession } from "@/features/auth/hooks/useSession";
 import { useHomePageData } from "@/features/infinite-scroll/store/useHomePageData";
@@ -46,6 +47,12 @@ export const useUploadOrUpdateSong = () => {
     [],
   );
 
+  const onPhaseChange = useCallback((newPhase: UploadPhase) => {
+    flushSync(() => {
+      setPhase(newPhase);
+    });
+  }, []);
+
   const handleSubmit = useCallback(
     async (formData: FormData) => {
       if (!isOpen || phase !== "none") return;
@@ -60,20 +67,26 @@ export const useUploadOrUpdateSong = () => {
         onError(
           "You're currently offline, make sure you're online, then try again.",
         );
+
         return;
       }
 
-      abortController.current = new AbortController();
-      setPhase("validating");
-      onSuccess(
-        `Started the process of ${isEditing ? "editing" : "uploading"}, do not close the modal.`,
-      );
+      // We need immediate update, can't let react scheduler to run this later, so we prioritize this call over the others
+      // by using flushSync
+      flushSync(() => {
+        abortController.current = new AbortController();
+        setPhase("validating");
+        onSuccess(
+          `Started the process of ${isEditing ? "editing" : "uploading"}, do not close the modal.`,
+          { duration: 5 },
+        );
+      });
 
       if (isEditing) {
         const { error, updatedSong } = await updateSong(
           formData,
           initialData,
-          setPhase,
+          onPhaseChange,
           onUploadProgress,
           abortController.current,
         );
@@ -89,7 +102,7 @@ export const useUploadOrUpdateSong = () => {
       } else {
         const { error, uploadedSong } = await uploadSong(
           formData,
-          setPhase,
+          onPhaseChange,
           onUploadProgress,
           abortController.current,
         );
