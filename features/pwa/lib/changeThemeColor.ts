@@ -1,7 +1,7 @@
-import { useThemeColor } from "@/features/pwa/store/useThemeColor";
-
 export const changeThemeColor = (color: string) => {
-  const themeMeta = useThemeColor.getState().meta;
+  const themeMeta = document.querySelector<HTMLMetaElement>(
+    "meta[name=theme-color]",
+  );
 
   if (!themeMeta || themeMeta.content === color) return;
 

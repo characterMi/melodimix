@@ -2,7 +2,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 
-import { usePlaylistDetailsModal } from "@/features/playlist/store/usePlaylistDetailsModal";
+import { usePlaylistModal } from "@/features/playlist/store/usePlaylistModal";
 import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 
 type Props = {
@@ -13,9 +13,7 @@ type Props = {
 
 const PlaylistLink = ({ href, name, id, ...props }: Props) => {
   const pathname = usePathname();
-  const openPlaylistDetailsModal = usePlaylistDetailsModal(
-    (state) => state.onOpen,
-  );
+  const openPlaylistModal = usePlaylistModal((state) => state.onOpen);
 
   return (
     <Link
@@ -39,7 +37,7 @@ const PlaylistLink = ({ href, name, id, ...props }: Props) => {
             pathname === href ? "block" : "hidden",
           )}
           onClick={() =>
-            openPlaylistDetailsModal({
+            openPlaylistModal({
               id,
               name,
               user_id: props.user_id!,

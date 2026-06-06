@@ -1,3 +1,4 @@
+import { onSuccess } from "@/lib/onSuccess";
 import { create } from "zustand";
 
 type UploadModalStore = Omit<ModalStore, "onOpen"> & {
@@ -8,6 +9,12 @@ type UploadModalStore = Omit<ModalStore, "onOpen"> & {
 export const useUploadModal = create<UploadModalStore>((setState) => ({
   isOpen: false,
   initialData: undefined,
-  onOpen: (data?: Song) => setState({ isOpen: true, initialData: data }),
+  onOpen: (data?: Song) => {
+    onSuccess(
+      "When started the upload process, do not close the modal, or it'll cancel the uploading.",
+      { duration: 5 },
+    );
+    setState({ isOpen: true, initialData: data });
+  },
   onClose: () => setState({ isOpen: false, initialData: undefined }),
 }));

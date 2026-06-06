@@ -68,6 +68,8 @@ const PlaylistContainer = ({
   );
 };
 
+const PADDING_RIGHT = 56;
+
 const LinksContainer = ({ children }: { children: ReactNode }) => {
   const dragStartPos = useRef(0);
   const storedLeft = useRef(0);
@@ -102,8 +104,10 @@ const LinksContainer = ({ children }: { children: ReactNode }) => {
           -(
             playlistContainer.current.scrollWidth -
             playlistContainer.current.offsetWidth +
-            // 56 is the amount of padding right on the container plus some extra pixels
-            56
+            (playlistContainer.current.scrollWidth >
+            playlistContainer.current.offsetWidth
+              ? PADDING_RIGHT
+              : 0)
           ),
           clientX - dragStartPos.current,
         ),

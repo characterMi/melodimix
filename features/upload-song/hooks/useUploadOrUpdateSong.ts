@@ -48,6 +48,8 @@ export const useUploadOrUpdateSong = () => {
   );
 
   const onPhaseChange = useCallback((newPhase: UploadPhase) => {
+    // We need immediate update, can't let react scheduler to run this later, so we prioritize this call over the others
+    // by using flushSync
     flushSync(() => {
       setPhase(newPhase);
     });
@@ -71,16 +73,8 @@ export const useUploadOrUpdateSong = () => {
         return;
       }
 
-      // We need immediate update, can't let react scheduler to run this later, so we prioritize this call over the others
-      // by using flushSync
-      flushSync(() => {
-        abortController.current = new AbortController();
-        setPhase("validating");
-        onSuccess(
-          `Started the process of ${isEditing ? "editing" : "uploading"}, do not close the modal.`,
-          { duration: 5 },
-        );
-      });
+      abortController.current = new AbortController();
+      onPhaseChange("validating");
 
       if (isEditing) {
         const { error, updatedSong } = await updateSong(
@@ -91,7 +85,7 @@ export const useUploadOrUpdateSong = () => {
           abortController.current,
         );
 
-        setPhase("none");
+        onPhaseChange("none");
 
         if (error) {
           if (error !== "AbortSignal") onError(error);
@@ -107,7 +101,7 @@ export const useUploadOrUpdateSong = () => {
           abortController.current,
         );
 
-        setPhase("none");
+        onPhaseChange("none");
 
         if (error) {
           if (error !== "AbortSignal") onError(error);

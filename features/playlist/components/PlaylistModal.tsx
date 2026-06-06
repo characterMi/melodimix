@@ -1,11 +1,17 @@
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FiUpload } from "react-icons/fi";
 import { TbMinus, TbPlus } from "react-icons/tb";
 import { twMerge } from "tailwind-merge";
 
+import { usePlaylistsPageData } from "@/features/infinite-scroll/store/usePlaylistsPageData";
 import { useCreateOrUpdatePlaylist } from "@/features/playlist/hooks/useCreateOrUpdatePlaylist";
 import { cnWithReduceMotion } from "@/features/reduce-motion/lib";
 import { useSearchData } from "@/features/search/hooks/useSearchData";
+import { onError } from "@/lib/onError";
+import { onSuccess } from "@/lib/onSuccess";
+import { deletePlaylist } from "../actions";
+import { useLoadPlaylistPoster } from "../hooks/useLoadPlaylistPoster";
 
 import Button from "../../../components/Button";
 import DeleteFileButton from "../../../components/DeleteFileButton";
@@ -182,6 +188,61 @@ const ImageUploader = ({
   );
 };
 
+const DeletePlaylist = ({
+  playlistId,
+  isPublic,
+  onPlaylistModalClose,
+}: {
+  playlistId: number;
+  isPublic: boolean;
+  onPlaylistModalClose: () => void;
+}) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
+
+  const removePlaylistFromPlaylistsStore = usePlaylistsPageData(
+    (state) => state.removeOne,
+  );
+
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (isDeleting) return;
+
+    if (!navigator.onLine) {
+      onError(
+        "You're currently offline, make sure you're online, then try again.",
+      );
+      return;
+    }
+
+    setIsDeleting(true);
+
+    const isDeleted = await deletePlaylist(playlistId, isPublic);
+
+    if (!isDeleted) {
+      onError();
+    } else {
+      onSuccess("Playlist deleted.");
+      onPlaylistModalClose();
+      router.replace("/profile");
+      removePlaylistFromPlaylistsStore(playlistId);
+    }
+
+    setIsDeleting(false);
+  };
+
+  return (
+    <Button
+      className="from-rose-500 to-rose-600 w-full mt-4"
+      disabled={isDeleting}
+      onClick={handleDelete}
+    >
+      {isDeleting ? "Deleting..." : "Delete playlist"}
+    </Button>
+  );
+};
+
 const PlaylistModal = () => {
   const {
     isEditing,
@@ -199,6 +260,7 @@ const PlaylistModal = () => {
     isSubmitting,
     onSubmit,
   } = useCreateOrUpdatePlaylist();
+  const playlistPoster = useLoadPlaylistPoster(initialData);
 
   return (
     <Modal
@@ -239,7 +301,7 @@ const PlaylistModal = () => {
       <ImageUploader
         poster={poster}
         setPoster={setPoster}
-        defaultPoster={initialData?.poster_path}
+        defaultPoster={playlistPoster ?? undefined}
         isPlaylistModalOpen={isPlaylistModalOpen}
         disabled={isSubmitting}
       />
@@ -265,6 +327,14 @@ const PlaylistModal = () => {
         {isEditing && (isSubmitting ? "Updating..." : "Update playlist")}
         {!isEditing && (isSubmitting ? "Creating..." : "Create playlist")}
       </Button>
+
+      {isEditing && (
+        <DeletePlaylist
+          isPublic={initialData!.is_public}
+          playlistId={initialData!.id}
+          onPlaylistModalClose={onPlaylistModalClose}
+        />
+      )}
     </Modal>
   );
 };
