@@ -12,7 +12,7 @@ export const useUploadModal = create<UploadModalStore>((setState) => ({
   onOpen: (data?: Song) => {
     onSuccess(
       "When started the upload process, do not close the modal, or it'll cancel the uploading.",
-      { duration: 5 },
+      { duration: 5000 },
     );
     setState({ isOpen: true, initialData: data });
   },

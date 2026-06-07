@@ -34,7 +34,7 @@ const PageHeader = ({ song }: { song: SongWithAuthor | null }) => {
         }, transparent)`,
       }}
     >
-      <UpdateThemeColor color={colors} />
+      <UpdateThemeColor colors={colors} />
 
       <div className="mt-20 mb-6 flex flex-col md:flex-row items-center gap-4 overflow-hidden">
         <div className="relative size-36 min-w-36 xss:size-40 xss:min-w-40 sm:size-44 sm:min-w-44 md:size-32 md:min-w-32 lg:size-44 lg:min-w-44 shadow-2xl">
@@ -97,7 +97,7 @@ const PageHeader = ({ song }: { song: SongWithAuthor | null }) => {
   );
 };
 
-const UpdateThemeColor = ({ color }: { color: ColorEntity | undefined }) => {
+const UpdateThemeColor = ({ colors }: { colors: ColorEntity | undefined }) => {
   const pathname = usePathname();
   const isMobilePlayerOpen = usePlayerStore(
     (state) => state.isMobilePlayerOpen,
@@ -106,8 +106,8 @@ const UpdateThemeColor = ({ color }: { color: ColorEntity | undefined }) => {
   useEffect(() => {
     if (isMobilePlayerOpen) return;
 
-    changeThemeColor(color?.medium ?? "#171717");
-  }, [pathname, color, isMobilePlayerOpen]);
+    changeThemeColor(colors?.medium ?? "#171717");
+  }, [pathname, colors, isMobilePlayerOpen]);
 
   return null;
 };

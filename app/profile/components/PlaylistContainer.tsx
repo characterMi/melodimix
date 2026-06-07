@@ -141,7 +141,7 @@ const LinksContainer = ({ children }: { children: ReactNode }) => {
     <div
       onPointerDown={onDragStart}
       ref={playlistContainer}
-      className="w-full flex h-full pl-2 pr-12 cursor-grab relative"
+      className="w-full flex pl-2 pr-12 cursor-grab relative"
     >
       {children}
     </div>

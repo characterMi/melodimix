@@ -1,6 +1,6 @@
 import { useSupabaseClient } from "@/features/supabase/hooks/useSupabaseClient";
 
-export const useLoadPlaylistPoster = (playlist?: Playlist) => {
+export const useLoadPlaylistPoster = (playlist: Playlist | undefined) => {
   const supabaseClient = useSupabaseClient();
 
   if (!playlist || !playlist.poster_path) return null;
