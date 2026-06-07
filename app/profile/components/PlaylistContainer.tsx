@@ -44,7 +44,7 @@ const PlaylistContainer = ({
 
   return (
     <>
-      <div className="sticky top-0 z-[1] bg-neutral-900/95 pt-2 md:pt-4 md:backdrop-blur-sm overflow-hidden">
+      <div className="sticky top-0 z-[1] bg-neutral-900/95 pt-2 md:pt-4 md:backdrop-blur-sm overflow-hidden mb-6">
         <LinksContainer>
           {playlistsList.map((playlist) => (
             <PlaylistLink key={playlist.href} {...playlist} />
@@ -60,7 +60,7 @@ const PlaylistContainer = ({
           <AiOutlinePlus size={24} aria-hidden />
         </button>
 
-        <hr className="mb-6 border-none bg-neutral-600 h-[1px]" />
+        <hr className="border-none bg-neutral-600 h-[1px]" />
       </div>
 
       {children}
