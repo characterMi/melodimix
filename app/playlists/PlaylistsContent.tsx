@@ -96,7 +96,7 @@ const PlaylistCard = ({ playlist }: { playlist: Playlist }) => {
           alt={playlist.name}
           width={200}
           height={200}
-          className="object-cover size-full rounded-md relative z-[1]"
+          className="object-cover size-full rounded-md absolute top-0 left-0 z-[1]"
         />
 
         <DeletePlaylist

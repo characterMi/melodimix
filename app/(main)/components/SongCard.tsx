@@ -48,7 +48,7 @@ const SongCard = ({ data, onClick }: Props) => {
           alt={"Cover art for: " + data.title}
           width={130}
           height={130}
-          className="w-full"
+          className="w-full absolute top-0 left-0"
         />
       </div>
 

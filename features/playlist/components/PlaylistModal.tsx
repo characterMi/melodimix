@@ -191,10 +191,12 @@ const ImageUploader = ({
 const DeletePlaylist = ({
   playlistId,
   isPublic,
+  isSubmitting,
   onPlaylistModalClose,
 }: {
   playlistId: number;
   isPublic: boolean;
+  isSubmitting: boolean;
   onPlaylistModalClose: () => void;
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -235,7 +237,7 @@ const DeletePlaylist = ({
   return (
     <Button
       className="from-rose-500 to-rose-600 w-full mt-4"
-      disabled={isDeleting}
+      disabled={isDeleting || isSubmitting}
       onClick={handleDelete}
     >
       {isDeleting ? "Deleting..." : "Delete playlist"}
@@ -332,6 +334,7 @@ const PlaylistModal = () => {
         <DeletePlaylist
           isPublic={initialData!.is_public}
           playlistId={initialData!.id}
+          isSubmitting={isSubmitting}
           onPlaylistModalClose={onPlaylistModalClose}
         />
       )}
